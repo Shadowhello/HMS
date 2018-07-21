@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<outline xmlns="http://wkhtmltopdf.org/outline">
+  <item title="" page="0" link="" backLink=""/>
+  <item title="" page="1" link="__WKANCHOR_0" backLink="__WKANCHOR_1">
+    <item title="体检小结(Summary)" page="3" link="__WKANCHOR_2" backLink="__WKANCHOR_3"/>
+    <item title="体检建议(Suggestions)" page="4" link="__WKANCHOR_4" backLink="__WKANCHOR_5"/>
+    <item title="体检项目结果" page="6" link="__WKANCHOR_6" backLink="__WKANCHOR_7"/>
+    <item title="常见医疗保健相关知识（保健处方）" page="24" link="__WKANCHOR_8" backLink="__WKANCHOR_9"/>
+  </item>
+</outline>

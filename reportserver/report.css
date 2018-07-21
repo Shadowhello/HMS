@@ -1,0 +1,270 @@
+/* 初始化*/
+
+body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div{
+    margin:0;
+    padding:0;
+    border:0;
+}
+
+body{
+    background:#fff;
+    color:#333;
+    font-size:12px;
+    margin-top:5px;
+    font-family:"SimSun","宋体","Arial Narrow";
+}
+ul,ol{
+    list-style-type:none;
+}
+select,input,img,select{
+    vertical-align:middle;
+}
+
+/* 首页 体检编号等值下划线 */
+.line{
+    position:relative;
+    top:-10px;
+    border:2px solid #000;
+}
+/* 首页 体检编号等标签下划线 */
+.line2{
+    position:relative;
+    top:-10px;
+    border:0px solid #000;
+}
+.page {
+    width:1240px;
+    height:1754px;
+    border:solid #060;
+}
+
+.user{
+    text-align:center;
+    left:0px;
+    top:-50px;
+    width:1240px;
+    height:1754px;
+    border: green solid 0px;
+}
+
+/*背景图*/
+.image{
+    position:relative;
+    display:inline-block;
+    left:0px;
+    top:0px;
+    width:1240px;
+    height:1800;
+    border:0px solid #000;
+}
+/* 人员信息标签 */
+.user_tag{
+    position:relative;  /*absolute*/
+    display:inline-block;
+    text-align:left;
+    left:0px;
+    top:-700px;
+    height:auto;
+    width:700px;
+    border:0px solid #000;
+    font-size: 28px;          /*文字大小*/
+    font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+/* 体检编号 */
+.user_space{
+    position:absolute;
+    left:400px;
+    width:500px;
+}
+.user_line{
+    position:relative; /*相对定位 */
+    left:100px;
+    height:2px;
+    width:600px;
+    border:none;
+    border-top:2px ridge green;
+}
+
+.user_line2{
+    position:relative;
+    left:300px;
+    height:2px;
+    width:200px;
+    border:none;
+    border-top:2px ridge green;
+}
+
+.user_line21{
+    position:absolute;
+    display:inline-block;
+    left:160px;
+    height:2px;
+    top:100px;
+    width:200px;
+    border:none;
+    border-top:2px ridge green;
+}
+
+.user_line22{
+    position:absolute;
+    display:inline-block;
+    left:160px;
+    height:2px;
+    top:160px;
+    width:200px;
+    border:none;
+    border-top:2px ridge green;
+}
+
+.user_td{
+    font-size: 28px;          /*文字大小*/
+    font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+    align:center;
+    valign:middle;
+}
+
+.page_2{
+    position:relative;
+    top:100px;
+    text-align:left;
+    left:0px;
+    width:1240px;
+    height:auto;
+}
+
+.tj_pb{
+    position:relative;  /*absolute*/
+    display:inline-block;
+    text-align:left;
+    left:0px;
+    height:auto;
+    font-size: 28px;          /*文字大小*/
+    font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+.tj_xj{
+    position:relative;
+    top:50px;
+    left:0px;
+    width:auto;
+    height:auto;
+    font-size: 16px;          /*文字大小*/
+    font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+.tj_xj_content{
+     position:relative;
+     left:0px;
+     top:50px;
+     height:auto;
+     width:auto;
+     font-size: 28px;          /*文字大小*/
+     font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+     font-family:微软雅黑;    /*文本的字体*/
+     font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+.tj_xj_content2{
+    height:35px;
+}
+
+/*
+table, tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid !important;
+		}
+*/
+
+.user_table{
+    border-top:0px solid #000;
+}
+
+table{
+    align:left;
+    height:auto;
+    width:100%;
+    font-size: 24px;          /*文字大小*/
+    font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+    border-top:5px solid #000;
+}
+
+/*表格 页眉 */
+caption{
+    text-align:left;
+    font-size: 28px;          /*文字大小*/
+    font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+/* 表格 数据头*/
+thead{
+    text-align:left;
+    display:table-header-group
+}
+
+/*表格 数据行 */
+tbody{
+    align:left;
+    font-size: 24px;          /*文字大小*/
+    font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+    border-top:5px solid #000;
+    border-bottom:5px solid #000;
+}
+
+/*表格 页脚 */
+tfoot{
+    text-align:right;
+    border-top:5px solid #000;
+    page-break-inside: avoid !important;
+}
+
+tr{
+    page-break-inside:avoid;
+    page-break-after:auto;
+}
+/*表格 数据行 */
+td{
+    width:25%;
+    height:35px;
+}
+
+/*表格 数据行  异常 */
+.table_td{
+    color:#FF0000;
+    font-weight:700;
+}
+
+
+/*表格 数据行 */
+.table_td_pacs{
+    align:left;
+    font-size: 26px;          /*文字大小*/
+    font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+.table_td_pacs_line{
+    border-bottom:5px solid #000;
+}
+
+.sign{
+    background-image:url('F:/HMS/reportserver/sign.png');
+    background-repeat:no-repeat;
+    background-position:right;
+    background-size:400px 300px;
+    border-top:0px solid #000;
+}

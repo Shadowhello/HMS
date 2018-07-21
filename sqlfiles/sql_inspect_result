@@ -1,0 +1,34 @@
+WITH XMBH1 AS (
+	SELECT XMBH FROM TJ_XMDM WHERE LBBM IN (SELECT LBBM FROM TJ_XMLB WHERE  SFZH='0')
+),
+XMBHS AS (
+	SELECT XMBH FROM TJ_XMDM WHERE LBBM IN (SELECT LBBM FROM TJ_XMLB WHERE XMLX IN ('1','3'))
+),
+T1 AS (
+SELECT DABH,TJBH,NL,DWBH,DEPART,ZJYS,QDRQ FROM TJ_TJDJB WHERE  DWBH=$key_dwbh AND QD='1' AND (del <> '1' or del is null) AND SUMOVER='1'
+)
+
+SELECT T1.TJBH AS '体检编号',
+         TJ_TJDAB.XM AS '姓名',
+          (case TJ_TJDAB.XB when 1 then '男' when 2 then '女' else '' end) AS '性别',
+         T1.NL AS '年龄',
+         TJ_TJDAB.SJHM AS '手机号码',
+         TJ_TJDAB.SFZH AS '身份证号',
+         substring(convert(char,T1.QDRQ,120),1,10) AS '签到日期',
+         (select MC from TJ_DWDMB where DWBH=T1.DWBH) as '单位名称',
+         T1.DEPART AS '部门',
+         (select ygxm from tj_ygdm where yggh=T1.ZJYS ) as '总检医生',
+
+TJ_TJJLMXB.XMMC AS '项目名称',
+
+(CASE WHEN XMBH IN (SELECT XMBH FROM XMBH1) THEN TJ_TJJLMXB.JG WHEN XMBH='700036' THEN TJ_TJJLMXB.JG ELSE TJ_TJJLMXB.ZD END ) AS '结果'
+
+FROM T1
+
+INNER JOIN TJ_TJDAB ON T1.DABH=TJ_TJDAB.DABH
+
+INNER JOIN TJ_TJJLMXB ON T1.TJBH=TJ_TJJLMXB.TJBH
+
+AND ZHBH IN (SELECT XMBH FROM XMBHS ) AND TJ_TJJLMXB.SFZH='0'
+
+ORDER BY T1.TJBH,TJ_TJJLMXB.ksbm,TJ_TJJLMXB.zhbh,TJ_TJJLMXB.xssx
