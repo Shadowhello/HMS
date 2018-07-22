@@ -1,7 +1,13 @@
 from widgets.bwidget import *
-from utils.readparas import GolParasMixin
+from utils.readparas import GolParasMixin,GolParasMixin2
 
 # 定制化组件
+class Lable(QLabel):
+
+    def __init__(self):
+        super(Lable,self).__init__()
+        self.setMinimumWidth(75)
+        self.setStyleSheet('''font: 75 11pt '黑体';color: rgb(0, 85, 255);''')
 
 # 窗口带日志、登录信息、数据库链接功能
 class Widget(GolParasMixin,QWidget):
@@ -10,6 +16,11 @@ class Widget(GolParasMixin,QWidget):
         super(Widget,self).__init__(parent)
         self.init()
 
+# 窗口带日志、登录信息、数据库链接功能
+class PacsWidget(GolParasMixin2, QWidget):
+    def __init__(self, parent=None):
+        super(PacsWidget, self).__init__(parent)
+        self.init()
 
 # 体检编号
 class QTJBH(QLineEdit):
@@ -195,6 +206,16 @@ class SerialNoButton(QToolButton):
     @property
     def collectColor(self):
         return self.collect_color
+
+# PACS检查列表
+class PacsInspectResultTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(PacsInspectResultTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        pass
 
 # 抽血历史采集筛选列表
 class CollectHistoryTable(TableWidget):

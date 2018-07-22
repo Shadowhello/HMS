@@ -47,7 +47,9 @@ def set_env(termial=False):
         passwd=gol.get_value('tjxt_passwd', 'admin2389'),
         port=gol.get_value2('tjxt_port', 1433)
     )
+    pacs_session = get_pacs_session()
     gol.set_value("tjxt_session_local", session)
     gol.set_value("tjxt_session_thread", session)
+    gol.set_value("pacs_session_local", pacs_session)
     if termial:
         gol.print_paras()
