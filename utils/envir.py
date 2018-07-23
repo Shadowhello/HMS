@@ -48,8 +48,10 @@ def set_env(termial=False):
         port=gol.get_value2('tjxt_port', 1433)
     )
     pacs_session = get_pacs_session()
+    pis_session = get_pis_session()
     gol.set_value("tjxt_session_local", session)
     gol.set_value("tjxt_session_thread", session)
-    gol.set_value("pacs_session_local", pacs_session)
+    gol.set_value("pacs_session", pacs_session)
+    gol.set_value("pis_session", pis_session)
     if termial:
         gol.print_paras()

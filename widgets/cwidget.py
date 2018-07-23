@@ -1,5 +1,7 @@
 from widgets.bwidget import *
 from utils.readparas import GolParasMixin,GolParasMixin2
+from utils.base import str2
+from functools import partial
 
 # 定制化组件
 class Lable(QLabel):
@@ -36,6 +38,7 @@ class QTJBH(QLineEdit):
         self.returnPressed.connect(self.validate)
 
     def validate(self):
+        print(self.text())
         if len(self.text())!=9:
             mes_about(self, "体检编号：%s不是9位，请重新输入！" %self.text())
             self.setText('')
@@ -217,6 +220,36 @@ class PacsInspectResultTable(TableWidget):
     def load_set(self, datas, heads=None):
         pass
 
+# PIS检查列表
+class PisInspectResultTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(PisInspectResultTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                if col_value:
+                    item = QTableWidgetItem(str2(col_value))
+                    item.setTextAlignment(Qt.AlignCenter)
+                else:
+                    item = QTableWidgetItem('')
+                self.setItem(row_index, col_index, item)
+
+# LIS检查列表
+class LisInspectResultTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(LisInspectResultTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        pass
+
 # 抽血历史采集筛选列表
 class CollectHistoryTable(TableWidget):
 
@@ -247,12 +280,39 @@ class CollectHistoryTable(TableWidget):
 # 报告追踪列表
 class ReportTrackTable(TableWidget):
 
+    tjqy = None      # 体检区域
+    tjlx = None      # 体检类型
+
     def __init__(self, heads, parent=None):
         super(ReportTrackTable, self).__init__(heads, parent)
 
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
-        pass
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                if col_value:
+                    if  col_index in [3,7,8,11,12]:
+                        item = QTableWidgetItem(col_value)
+                    else:
+                        item = QTableWidgetItem(str2(col_value))
+                    if col_index not in [9,10,12]:
+                        item.setTextAlignment(Qt.AlignCenter)
+                    # self.resizeColumnToContents()
+                else:
+                    item = QTableWidgetItem('')
+                self.setItem(row_index, col_index, item)
+
+        # 特殊设置
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.horizontalHeader().setMinimumSectionSize(60)
+        # self.horizontalHeader().setMaximumSectionSize(300)
+        self.horizontalHeader().setStretchLastSection(True)
+        # self.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+
+
 
 # 慢病疑似筛选列表
 class SlowHealthTable(TableWidget):
@@ -510,15 +570,31 @@ class ReportTypeGroup(QHBoxLayout):
     def initUI(self):
         self.is_check = QCheckBox('报告类型：')
         self.cb_report_type = QComboBox()
-        self.report_type = OrderedDict([('所有',0),('贵宾',1),('招工',2),('职业病',3),('外出',4),('加急',5)])
-        self.cb_report_type.addItems(list(self.report_type.keys()))
+        # self.report_type = OrderedDict([('所有',0),('普通',1),('贵宾',1),('招工',2),('职业病',3),('外出',4),('加急',5)])
+        self.cb_report_type.addItems(['所有','普通','招工','贵宾','职业病','从业','重点','投诉'])
+        self.cb_report_type.setCurrentText('所有')
         self.cb_report_type.setDisabled(True)
+        self.cb_report_type.setMinimumWidth(80)
 
     def on_cb_check(self, p_int):
         if p_int:
             self.cb_report_type.setDisabled(False)
         else:
             self.cb_report_type.setDisabled(True)
+
+    @property
+    def get_tjlx(self):
+        return self.cb_report_type.currentText()
+
+    @property
+    def where_tjlx(self):
+        if self.is_check.isChecked():
+            if self.cb_report_type.currentText() == '所有':
+                return False
+            else:
+                return ''' AND TJLX = '%s' ''' %self.cb_report_type.currentText()
+        return False
+
 
 # 楼层区域组件
 class AreaGroup(QHBoxLayout):
@@ -528,9 +604,10 @@ class AreaGroup(QHBoxLayout):
         self.is_check = QCheckBox('体检区域：')
         self.is_check.stateChanged.connect(self.on_cb_check)
         self.cb_area = QComboBox()
-        self.cb_area.addItems(['所有','明州', '江东', '明州1楼', '明州2楼', '明州三楼', '车管所', '外出', '其他'])
+        self.cb_area.addItems(['所有','明州', '江东', '明州1楼', '明州2楼', '明州3楼', '车管所', '外出', '其他'])
         self.cb_area.setCurrentText('所有')
         self.cb_area.setDisabled(True)
+        self.cb_area.setMinimumWidth(80)
         self.addWidget(self.is_check)
         self.addWidget(self.cb_area)
 
@@ -539,6 +616,22 @@ class AreaGroup(QHBoxLayout):
             self.cb_area.setDisabled(False)
         else:
             self.cb_area.setDisabled(True)
+
+    @property
+    def get_area(self):
+        return self.cb_area.currentText()
+
+    @property
+    def where_tjqy(self):
+        if self.is_check.isChecked():
+            if self.cb_area.currentText() == '所有':
+                return False
+            elif self.cb_area.currentText() == '明州':
+                return ''' AND TJQY IN ('明州1楼','明州1楼','明州3楼') '''
+            else:
+                return ''' AND TJQY='%s' ''' % self.cb_area.currentText()
+        else:
+            return False
 
 class DepartGroup(QHBoxLayout):
 
@@ -614,7 +707,8 @@ class DateGroup(QHBoxLayout):
         self.addSpacing(10)
         self.addWidget(self.end)
 
-    def get_where_text(self):
+    @property
+    def where_date(self):
         if self.jsrq.currentText() == '登记日期':
             return ''' DJRQ >= '%s' AND DJRQ <= '%s' ''' %(self.start.text(),self.end.text())
 
@@ -628,6 +722,10 @@ class DateGroup(QHBoxLayout):
             return ''' SHRQ >= '%s' AND SHRQ <= '%s' ''' %(self.start.text(),self.end.text())
         else:
             return ''' TJRQ >= '%s' AND TJRQ <= '%s' ''' % (self.start.text(), self.end.text())
+
+    @property
+    def get_date_range(self):
+        return self.start.text(), self.end.text()
 
 # 复合控件，金额组
 class MoneyGroup(QHBoxLayout):
@@ -694,6 +792,13 @@ class TUintGroup(QHBoxLayout):
         self.unit.setBhs(p1_dict)
         self.unit.setPys(p2_dict)
 
+    @property
+    def where_dwmc(self):
+        if self.cb_check.isChecked():
+            return self.unit.where_dwmc
+        else:
+            return False
+
 # 体检单位
 class TUint(QLineEdit):
 
@@ -713,6 +818,14 @@ class TUint(QLineEdit):
 
         self.textChanged.connect(self.on_dwmc_match)
         self.listView.clicked.connect(self.completeText)
+
+    # 获取单位名称
+    @property
+    def where_dwmc(self):
+        if self.text():
+            return ''' AND DWMC = '%s' ''' %self.text()
+        else:
+            return False
 
     # 设置编号列表
     def setBhs(self,dwbhs):
@@ -753,7 +866,6 @@ class TUint(QLineEdit):
             self.listView.move(self.mapToGlobal(pos).x(), self.mapToGlobal(pos).y())  # 绝对位置
             #self.listView.move(self.mapFromGlobal(pos).x(), self.mapFromGlobal(pos).y())  # 相对位置
             self.listView.show()
-
         else:
             self.listView.setHidden(True)
 
@@ -822,6 +934,18 @@ class WhereSearchGroup(QGridLayout):
         self.setContentsMargins(10, 10, 10, 10)  # 设置外间距
         self.setColumnStretch(14, 1)  # 设置列宽，添加空白项的
 
+    @property
+    def date_range(self):
+        return self.s_date.get_date_range
+
+    @property
+    def where_tjqy(self):
+        return self.s_area.where_tjqy
+
+    @property
+    def where_dwmc(self):
+        return self.s_dwbh.where_dwmc
+
 # 快速检索组 体检编号、姓名、手机号码、身份证号
 class QuickSearchGroup(QGridLayout):
 
@@ -853,8 +977,21 @@ class QuickSearchGroup(QGridLayout):
         self.setContentsMargins(10, 10, 10, 10)  #设置外间距
         self.setColumnStretch(6, 1)             #设置列宽，添加空白项的
 
+        self.s_tjbh.returnPressed.connect(partial(self.getText,'tjbh'))
+        self.s_xm.returnPressed.connect(partial(self.getText, 'xm'))
+        self.s_sjhm.returnPressed.connect(partial(self.getText,'sjhm'))
+        self.s_sfzh.returnPressed.connect(partial(self.getText, 'sfzh'))
 
+    def setText(self,p_tjbh=None,p_xm=None,p_sjhm=None,p_sfzh=None):
+        self.s_tjbh.setText(p_tjbh)
+        self.s_xm.setText(p_xm)
+        self.s_sjhm.setText(p_sjhm)
+        self.s_sfzh.setText(p_sfzh)
 
+    #
+    def getText(self,p_key):
+        if p_key == 'tjbh':
+            print(self.s_tjbh.text())
 
 # 左右，左边是为目录，右边为TAB界面
 class DirTabWidget(QSplitter):

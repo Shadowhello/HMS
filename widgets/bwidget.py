@@ -9,8 +9,20 @@ import pandas as pd
 from utils.base import desktop
 from queue import Queue
 
+def singleton(cls):
+    '''
+    :param cls:
+    :return:
+    '''
+    instances = {}
 
+    def _singleton(*args,**kw):
+        if cls not in instances:
+            instances[cls] = cls(*args,**kw)
 
+        return instances[cls]
+
+    return _singleton
 
 '''
 获取主执行文件路径的最佳方法是用sys.argv[0]，它可能是一个相对路径，所以再取一下abspath
