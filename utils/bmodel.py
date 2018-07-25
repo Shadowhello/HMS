@@ -111,3 +111,38 @@ class MT_TJ_CZJLB(BaseModel):
             'jlnr': str2(getattr(self, "jlnr")),
             'ck':'查看'
         }
+
+# 设备表
+class MT_TJ_EQUIP(BaseModel):
+
+    __tablename__ = 'TJ_EQUIP'
+
+    tjbh = Column(String(16), primary_key=True)  #体检编号
+    equip_type = Column(CHAR(1), primary_key=True)  # 设备类型
+    equip_name = Column(CHAR(5), nullable=True)
+    create_time = Column(DateTime, nullable=False)
+    modify_time = Column(DateTime, nullable=False)
+    patient = Column(String(20), nullable=False)
+    file_path = Column(String(50), nullable=False)
+    operator = Column(String(20), nullable=False)
+    operate_time = Column(DateTime, nullable=False)
+    equip_jg1 = Column(String(250), nullable=False)
+    equip_jg2 = Column(String(50), nullable=False)
+    xmbh = Column(String(12), nullable=False)
+    hostname = Column(String(50), nullable=False)
+    hostip = Column(String(25), nullable=False)
+    operator2 = Column(String(20), nullable=False)
+    operate_area = Column(String(50), nullable=False)
+
+# 心电图
+class MT_DCP_files(BaseModel):
+
+    __tablename__ = 'DCP_files'
+
+    ID = Column(Integer, primary_key=True, autoincrement=True)
+    cusn = Column(String(32), nullable=False)                       #体检编号
+    department = Column(String(16), nullable=False)
+    filename = Column(String(128), nullable=False)
+    filecontent = Column(BLOB, nullable=False)
+    uploadtime = Column(DateTime, nullable=False)
+    flag = Column(CHAR(1), nullable=True)

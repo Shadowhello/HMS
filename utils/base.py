@@ -50,6 +50,19 @@ EquipAction={
     '12':'501716'
 }
 
+# 设备动作点
+EquipActionName={
+    '01':'电测听检查',
+    '02':'人体成分检查',
+    '03':'人体成分检查',
+    '04': '骨密度检查',
+    '05': '骨密度检查',
+    '06': '动脉硬化检查',
+    '07': '大肠癌检查',
+    '08':'心电图检查',
+    '11':'肺功能检查',
+    '12':'DR检查'
+}
 # 获取桌面地址
 def desktop():
     key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders',)

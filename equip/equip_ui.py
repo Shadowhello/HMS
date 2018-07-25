@@ -93,10 +93,11 @@ class EquipDataThread(QThread):
                 result = self.process_queue.get()
                 if result:
                     self.signalPost.emit('获得数据：%s' %result)
+                self.stop()
             except Exception as e:
                 print(e)
             time.sleep(self.timer)
-            self.stop()
+
 
 # 后台线程 处理是否自动录入
 class BackGroundThread(QThread):
@@ -162,13 +163,12 @@ class EquipInspect(EquipInspectUI):
         super(EquipInspect,self).__init__(parent)
         # 自动录入功能
         self.tjbh.returnPressed.connect(self.tjbh_validate)
-        # 状态更新线程：已上传
+        # 自动录入线程
+        self.background_thread = None
+        # 后台进程回传状态读取线程
         self.real_update_thread = EquipDataThread(queue)
         self.real_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
         self.real_update_thread.start()
-
-        self.background_thread = None
-
 
     def update_mes(self,p_str):
         mes_about(self,'获得设备端数据：%s' %p_str)
@@ -199,6 +199,7 @@ class EquipInspect(EquipInspectUI):
         self.table_inspect.insert(result.to_dict)
         self.gp_inspect.setTitle('检查列表（%s）' % str(self.table_inspect.rowCount()))
 
+    # 自动录入线程
     def on_thread_start(self,tjbh):
         if self.background_thread:
             self.background_thread.setStart(tjbh)
@@ -207,6 +208,18 @@ class EquipInspect(EquipInspectUI):
             self.background_thread = BackGroundThread()
             self.background_thread.setStart(tjbh)
             self.background_thread.start()
+
+    # 取后台进程返回的标记的线程
+    # def on_thread2_start(self,tjbh):
+    #     if self.real_update_thread:
+    #         self.real_update_thread.setStart(tjbh)
+    #         self.real_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
+    #         self.real_update_thread.start()
+    #     else:
+    #         self.real_update_thread = EquipDataThread(self.queue)
+    #         self.real_update_thread.setStart(tjbh)
+    #         self.real_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
+    #         self.real_update_thread.start()
 
     def closeEvent(self, *args, **kwargs):
         super(EquipInspect, self).closeEvent(*args, **kwargs)

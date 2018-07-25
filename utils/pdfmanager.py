@@ -41,11 +41,40 @@ def pdf2txt(filename):
                 pass
     return pdfStrList
 
-def parse(filename,file_type,regular=None):
+# 字符串解析
+def txtparse(filename,file_type,regular=None,error_path='D:/'):
+    info = {}
+    # 电测听
+    if file_type == '01':
+        pdfStrList = pdf2txt(filename)
+        try:
+            if pdfStrList[0][0:9].isdigit():
+                info["patient"] = ''
+                info["tjbh"] = pdfStrList[0][0:9]
+                info["file"] = pdfStrList[0][0:9] + "_01.pdf"
+                info["operate_time"] = date_format(pdfStrList[2].split('\n')[0][1:])
+            elif pdfStrList[1][0:9].isdigit():
+                info["patient"] = pdfStrList[0].split('\n')[0].strip()
+                info["tjbh"] = pdfStrList[1][0:9]
+                info["file"] = pdfStrList[1][0:9] + "_01.pdf"
+                info["operate_time"] = date_format(pdfStrList[3].split('\n')[0][5:])
+            elif pdfStrList[3][0:9].isdigit():
+                info["patient"] = ''
+                info["tjbh"] = pdfStrList[3][0:9]
+                info["file"] = pdfStrList[3][0:9] + "_01.pdf"
+                info["operate_time"] = date_format(pdfStrList[5].split('\n')[0][1:])
+            else:
+                shutil.copy2(filename, os.path.join(error_path, os.path.basename(filename)))
+        except Exception as e:
+            shutil.copy2(filename, os.path.join(error_path, os.path.basename(filename)))
+            print(e)
+            info["patient"] = ''
+            info["tjbh"] = ''
+            info["file"] = ''
+            info["operate_time"] = ''
 
-    if file_type == '01': # 电测听
-        pass
-    elif file_type == '04':  # 骨密度
+
+    elif file_type == '04':     # 骨密度
         for i,value in enumerate(pdf2txt(filename)):
             if i==5:
                 tmp = value.split('\n')[0]
@@ -62,8 +91,35 @@ def parse(filename,file_type,regular=None):
                 else:
                     shutil.copy2(filename, os.path.join(r'E:\PDF-\04\tmp',os.path.basename(filename)))
                     os.remove(filename)
+
+    elif file_type == '08':
+        # 心电图
+        new_string = "".join(pdf2txt(filename))
+        re_tjbh = re.compile(gol.get_value('regular_tjbh'), re.DOTALL)
+        re_xm = re.compile(gol.get_value('regular_xm'), re.DOTALL)
+        re_jcrq = re.compile(gol.get_value('regular_jcrq'), re.DOTALL)
+        tjbh = re_tjbh.findall(new_string)
+        xm = re_xm.findall(new_string)
+        jcrq = re_jcrq.findall(new_string)
+
+        if tjbh:
+            info["tjbh"] = tjbh[0].strip()
+            info["file"] = tjbh[0].strip() + "_08.pdf"
+        else:
+            info["tjbh"] = ''
+        if xm:
+            info["patient"] = xm[0].strip()
+        else:
+            info["patient"] = ''
+        if jcrq:
+            info["operate_time"] = jcrq[0].strip()
+        else:
+            info["operate_time"] = ''
+
     else:
         pass
+
+    return info
 
 
 
@@ -218,10 +274,16 @@ def fileiter(root_path):
         if files and not dirs:  # 必须是指定目录的下级目录
             for file in files:
                 yield os.path.join(root, file), file
+# '2018/1/28'
+# '2017/12/23'
+def date_format(date_str):
+    tmp = date_str.split('/')
+    return tmp[0]+'-'+tmp[1].zfill(2)+'-'+tmp[2].zfill(2)+' 00.00.00'
+
 
 if __name__=="__main__":
-    dir = r'E:\PDF-\04\create'
+    dir = r'E:\PDF-\01\create'
     for filename,_ in fileiter(dir):
-        parse(filename,'04')
+        print(txtparse(filename,'01'))
             # if i.isdigit():
             #     print(i)
