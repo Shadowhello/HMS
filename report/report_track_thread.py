@@ -132,7 +132,5 @@ def list2dict(results:list):
         if result[0] not in list(new_results.keys()):
             # 字典无此key，说明还未有数据，初始化列表
             new_results[result[0]] = []
-        else:
-            new_results[result[0]].append(result[1:])
-
+        new_results[result[0]].append(result[1:])
     return new_results

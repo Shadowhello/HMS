@@ -81,18 +81,26 @@ def hostip():
         return '未知IP'
 
 def str2(para):
-    # print(sys._getframe().f_code.co_name)
-    try:
-        if not para:
-            return ''
-        else:
-            if isinstance(para,str):
-                return para.encode('latin-1').decode('gbk')
+    if not para:
+        return ''
+    else:
+        if isinstance(para,str):
+            if para.isdigit():           # 是否都是数字
+                return para
+            # elif para.isdecimal():       #
+            #     return para
+            # elif para.isalnum():         #是否都是字母或数字
+            #     return para
+            # elif para.isalpha():         #是否否是字母
+            #     return para
             else:
-                return str(para)
-    except Exception as e:
-        print(e)
-        return para
+                try:
+                    return para.encode('latin-1').decode('gbk')
+                except Exception as e:
+                    print('%s 转换失败！错误信息：%s' %(para,e))
+                    return para
+        else:
+            return str(para)
 
 def cur_datetime():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())))

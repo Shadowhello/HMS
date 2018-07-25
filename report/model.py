@@ -191,9 +191,10 @@ def get_pes_sql(tjbh):
 						T1.shys,T1.shrq,T1.JCRQ,T1.JCYS from T1 
             GROUP BY T1.TJBH,T1.TMBH,T1.jsbz,T1.shys,T1.shrq,T1.JCRQ,T1.JCYS
         )
-        SELECT T2.jsbz,T2.TJBH,T2.TMBH,T2.XMHZ,
+        SELECT T2.jsbz,T2.TMBH,T2.XMHZ,
+            (select ygxm from tj_ygdm where yggh=T2.JCYS ) AS jcys,T2.JCRQ,
             (select ygxm from tj_ygdm where yggh=T2.shys ) AS shys,T2.shrq,
-            (select ygxm from tj_ygdm where yggh=T2.JCYS ) AS jcys,T2.JCRQ 
+            T2.TJBH 
         FROM T2 WHERE TJBH='%s' AND T2.TMBH IS NOT NULL;
     ''' %(tjbh,tjbh)
 

@@ -223,11 +223,19 @@ class PacsInspectResultTable(TableWidget):
             # 插入一行
             self.insertRow(row_index)
             for col_index, col_value in enumerate(row_data):
-                if col_value:
-                    item = QTableWidgetItem(str(col_value))
-                    item.setTextAlignment(Qt.AlignCenter)
+                if col_index == 0:
+                    if col_value == '已审核':
+                        item = QTableWidgetItem('已审核')
+                    else:
+                        item = QTableWidgetItem(col_value)
+                        item.setBackground(QColor("#FF0000"))
                 else:
-                    item = QTableWidgetItem('')
+                    if col_value:
+                        item = QTableWidgetItem(str(col_value))
+                        item.setTextAlignment(Qt.AlignCenter)
+                    else:
+                        item = QTableWidgetItem('')
+
                 self.setItem(row_index, col_index, item)
 
 # PIS检查列表
@@ -267,13 +275,14 @@ class MLisInspectResultTable(TableWidget):
                         item = QTableWidgetItem('已审核')
                     else:
                         item = QTableWidgetItem('未审核')
+                        item.setBackground(QColor("#FF0000"))
+                elif col_index == 2:
+                    item = QTableWidgetItem(col_value)
                 else:
-                    if col_value:
-                        item = QTableWidgetItem(str2(col_value))
-                        item.setTextAlignment(Qt.AlignCenter)
-                    else:
-                        item = QTableWidgetItem('')
+                    item = QTableWidgetItem(str2(col_value))
                 self.setItem(row_index, col_index, item)
+
+        self.resizeColumnsToContents()  # 设置列适应大小
 
 # LIS检查列表 结果详细列表
 class DLisInspectResultTable(TableWidget):
@@ -286,15 +295,23 @@ class DLisInspectResultTable(TableWidget):
         for row_index, row_data in enumerate(datas):
             # 插入一行
             self.insertRow(row_index)
-            for col_index, col_value in enumerate(row_data):
-                if col_value:
+            if row_data[3]:
+                for col_index, col_value in enumerate(row_data):
                     item = QTableWidgetItem(str2(col_value))
-                    item.setTextAlignment(Qt.AlignCenter)
-                else:
-                    item = QTableWidgetItem('')
-                self.setItem(row_index, col_index, item)
-
-        self.resizeColumnsToContents()  # 设置列适应大小
+                    item.setBackground(QColor("#FF0000"))
+                    self.setItem(row_index, col_index, item)
+            else:
+                for col_index, col_value in enumerate(row_data):
+                    item = QTableWidgetItem(str2(col_value))
+                    self.setItem(row_index, col_index, item)
+        # self.resizeColumnsToContents()  # 设置列适应大小
+        self.setColumnWidth(0, 70)
+        self.setColumnWidth(1, 70)
+        self.setColumnWidth(2, 70)
+        self.setColumnWidth(3, 70)
+        self.setColumnWidth(4, 70)
+        self.setColumnWidth(5, 70)
+        self.horizontalHeader().setStretchLastSection(True)
 
 # 抽血历史采集筛选列表
 class CollectHistoryTable(TableWidget):

@@ -104,7 +104,7 @@ class MonitorHandler(FileSystemEventHandler):
                 new_pdfinfo=dict(pdfinfo,**self.equip_info)
                 from pprint import pprint
                 pprint(new_pdfinfo)
-
+                self.process_queue.put(pdfinfo['file'])
                 # 移动文件
                 if pdfinfo['file']:
                     new_file=os.path.join(self.monitor_file_parse,pdfinfo['file'])

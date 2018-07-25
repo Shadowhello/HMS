@@ -12,7 +12,8 @@ class LisResultUI(QDialog):
 
     def initUI(self):
         #self.setWindowFlags(Qt.WindowCloseButtonHint)
-        self.setFixedSize(700,500)
+        # self.setFixedSize(700,500)
+        self.setMinimumHeight(500)
         lt_main = QVBoxLayout()
         # 上 布局
         lt_top = QHBoxLayout()
@@ -27,14 +28,14 @@ class LisResultUI(QDialog):
         lt_middle = QHBoxLayout()
         gp_middle = QGroupBox('检查列表')
         self.inspect_master_cols = OrderedDict([
-                        ('bgzt', '报告状态'),
-                        ('tjbh', '体检编号'),
+                        ('bgzt', '状态'),
                         ('tmbh', '条码编号'),
                         ('xmhz', '条码项目'),
                         ('jcys', '检验医生'),
                         ('jcsj', '检验时间'),
                         ('shys', '审核医生'),
-                        ('shsj', '审核时间')
+                        ('shsj', '审核时间'),
+                        ('tjbh', '体检编号')
                      ])
         self.inspect_detail_cols = OrderedDict([
                         ('xmbh', '项目编号'),
@@ -47,6 +48,8 @@ class LisResultUI(QDialog):
                      ])
         self.table_inspect_master = MLisInspectResultTable(self.inspect_master_cols)
         self.table_inspect_detail = DLisInspectResultTable(self.inspect_detail_cols)
+        self.table_inspect_detail.setMinimumWidth(480)
+        self.table_inspect_detail.resizeColumnsToContents()  # 设置列适应大小
 
         lt_middle.addWidget(self.table_inspect_master)
         lt_middle.addWidget(self.table_inspect_detail)
@@ -62,9 +65,9 @@ class LisResultUI(QDialog):
         self.bgsj = Lable()
         self.shys = Lable()
         self.shsj = Lable()
-        lt_bottom.addWidget(QLabel('报告医生：'))
+        lt_bottom.addWidget(QLabel('检验医生：'))
         lt_bottom.addWidget(self.bgys)
-        lt_bottom.addWidget(QLabel('报告时间：'))
+        lt_bottom.addWidget(QLabel('检验时间：'))
         lt_bottom.addWidget(self.bgsj)
         lt_bottom.addWidget(QLabel('审核医生：'))
         lt_bottom.addWidget(self.shys)
@@ -90,8 +93,16 @@ class LisResultUI(QDialog):
     #单击主的 出来子的
     def on_table_show_detail(self,tableWidgetItem):
         row = tableWidgetItem.row()
-        tjtm = self.table_inspect_master.item(row,1).text()+self.table_inspect_master.item(row,2).text()
+        tjtm = self.table_inspect_master.item(row,7).text()+self.table_inspect_master.item(row,1).text()
         self.table_inspect_detail.load(self.detail_datas.get(tjtm,[]))
+        bgys = self.table_inspect_master.item(row, 3).text()
+        bgrq = self.table_inspect_master.item(row, 4).text()
+        shys = self.table_inspect_master.item(row, 5).text()
+        shrq = self.table_inspect_master.item(row, 6).text()
+        self.bgys.setText(bgys)
+        self.bgsj.setText(bgrq)
+        self.shys.setText(shys)
+        self.shsj.setText(shrq)
 
 
 

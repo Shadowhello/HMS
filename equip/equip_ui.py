@@ -76,7 +76,7 @@ class EquipDataThread(QThread):
 
     def __init__(self,queue,timer=2):
         super(EquipDataThread, self).__init__()
-        self.running = False
+        self.running = True
         self.process_queue = queue
         self.timer = timer
 
@@ -93,9 +93,9 @@ class EquipDataThread(QThread):
                 result = self.process_queue.get()
                 if result:
                     self.signalPost.emit('获得数据：%s' %result)
-                self.stop()
             except Exception as e:
                 print(e)
+            #
             time.sleep(self.timer)
 
 
