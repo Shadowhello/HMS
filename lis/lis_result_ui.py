@@ -2,10 +2,17 @@ from widgets.cwidget import *
 
 class LisResultUI(QDialog):
 
-    def __init__(self):
-        super(LisResultUI,self).__init__()
-        self.setWindowFlags(Qt.WindowCloseButtonHint)
-        self.setFixedSize(600,500)
+    def __init__(self,title,parent=None):
+        super(LisResultUI,self).__init__(parent)
+        self.setWindowTitle(title)
+        self.initUI()
+        self.table_inspect_master.itemClicked.connect(self.on_table_show_detail)
+        # 右侧详细结果 字典
+        self.detail_datas = None
+
+    def initUI(self):
+        #self.setWindowFlags(Qt.WindowCloseButtonHint)
+        self.setFixedSize(700,500)
         lt_main = QVBoxLayout()
         # 上 布局
         lt_top = QHBoxLayout()
@@ -20,23 +27,26 @@ class LisResultUI(QDialog):
         lt_middle = QHBoxLayout()
         gp_middle = QGroupBox('检查列表')
         self.inspect_master_cols = OrderedDict([
-                        ('bgzt','报告状态'),
-                        ('xmmc','项目名称'),
-                        ('bgys', '报告医生'),
-                        ('bgsj', '报告时间'),
+                        ('bgzt', '报告状态'),
+                        ('tjbh', '体检编号'),
+                        ('tmbh', '条码编号'),
+                        ('xmhz', '条码项目'),
+                        ('jcys', '检验医生'),
+                        ('jcsj', '检验时间'),
                         ('shys', '审核医生'),
-                        ('shsj', '审核时间'),
-                        ('djsj', '登记时间'),
-                        ('jczt', '检查状态'),
+                        ('shsj', '审核时间')
                      ])
         self.inspect_detail_cols = OrderedDict([
-                        ('bgzt', '项目状态'),
                         ('xmbh', '项目编号'),
                         ('xmmc', '项目名称'),
-                        ('xmjg', '项目结果')
+                        ('xmjg', '项目结果'),
+                        ('xmzt', '项目状态'),
+                        ('ckfw', '参考范围'),
+                        ('xmdw', '项目单位')
+
                      ])
-        self.table_inspect_master = LisInspectResultTable(self.inspect_master_cols)
-        self.table_inspect_detail = LisInspectResultTable(self.inspect_detail_cols)
+        self.table_inspect_master = MLisInspectResultTable(self.inspect_master_cols)
+        self.table_inspect_detail = DLisInspectResultTable(self.inspect_detail_cols)
 
         lt_middle.addWidget(self.table_inspect_master)
         lt_middle.addWidget(self.table_inspect_detail)
@@ -66,6 +76,23 @@ class LisResultUI(QDialog):
         lt_main.addWidget(gp_bottom)
         self.setLayout(lt_main)
 
+    def setData(self,datas):
+        # 清空数据
+        self.bgys.setText('')
+        self.bgsj.setText('')
+        self.shys.setText('')
+        self.shsj.setText('')
+        #self.pacs_jg.setText('')
+        #self.pacs_zd.setText('')
+        self.table_inspect_master.load(datas['pes'])
+        self.detail_datas = datas['lis']
+
+    #单击主的 出来子的
+    def on_table_show_detail(self,tableWidgetItem):
+        row = tableWidgetItem.row()
+        tjtm = self.table_inspect_master.item(row,1).text()+self.table_inspect_master.item(row,2).text()
+        self.table_inspect_detail.load(self.detail_datas.get(tjtm,[]))
+
 
 
 
@@ -73,6 +100,6 @@ if __name__=="__main__":
     from PyQt5.QtWidgets import QApplication
     import sys
     app = QApplication(sys.argv)
-    ui = LisResultUI()
+    ui = LisResultUI('检验')
     ui.exec_()
 

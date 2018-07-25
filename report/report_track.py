@@ -3,9 +3,10 @@ from report.report_track_thread import *
 from report.model import *
 from widgets.cwidget import *
 from pis.pis_result_ui import PisResultUI
+from lis.lis_result_ui import LisResultUI
+from pacs.pacs_result_ui import PacsResultUI
 
 # 报告追踪
-
 class ReportTrack(ReportTrackUI):
 
     def __init__(self):
@@ -21,13 +22,17 @@ class ReportTrack(ReportTrackUI):
         self.btn_query.clicked.connect(self.on_btn_query_click)          # 查询
 
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
+        self.btn_pacs.clicked.connect(self.on_btn_pacs_click)
+        self.btn_lis.clicked.connect(self.on_btn_lis_click)
         ##############线程########################################################
         self.cur_tjbh = None         #最后一次选择的体检编号
         self.pis_thread = None
         self.lis_thread = None
         self.pacs_thread = None
-        ############### 对话框 #######################################
-        self.pis_ui = None
+        ############### 系统对话框 #######################################
+        self.pis_ui = None        # 病理对话框
+        self.lis_ui = None        # 检验对话框
+        self.pacs_ui = None       # 检查对话框
 
     def initParas(self):
         self.dwmc_bh = OrderedDict()
@@ -95,6 +100,9 @@ class ReportTrack(ReportTrackUI):
 
     # 进入PIS
     def on_btn_pis_click(self):
+        if not self.cur_tjbh:
+            mes_about(self,'请先选择一个人！')
+            return
         is_has = self.session.execute(has_pis_sql(self.cur_tjbh)).scalar()
         if not is_has:
             mes_about(self,'该体检顾客：%s，无病理项目！' %self.cur_tjbh)
@@ -105,23 +113,81 @@ class ReportTrack(ReportTrackUI):
             self.pis_thread.signalPost.connect(self.on_sys_refresh, type=Qt.QueuedConnection)
             self.pis_thread.start()
         else:
-            self.pis_thread = PacsResultThread()
+            self.pis_thread = PisResultThread()
             self.pis_thread.setStart(self.cur_tjbh)
             self.pis_thread.signalConnFail.connect(self.on_sys_conn_fail, type=Qt.QueuedConnection)
             self.pis_thread.signalPost.connect(self.on_sys_refresh, type=Qt.QueuedConnection)
             self.pis_thread.start()
 
+    # 进入PACS系统
+    def on_btn_pacs_click(self):
+        if not self.cur_tjbh:
+            mes_about(self,'请先选择一个人！')
+            return
+        is_has = self.session.execute(has_pacs_sql(self.cur_tjbh)).scalar()
+        if not is_has:
+            mes_about(self, '该体检顾客：%s，无放射检查项目！' % self.cur_tjbh)
+            return
+        if self.pacs_thread:
+            self.pacs_thread.setStart(self.cur_tjbh)
+            self.pacs_thread.signalConnFail.connect(self.on_sys_conn_fail, type=Qt.QueuedConnection)
+            self.pacs_thread.signalPost.connect(self.on_sys_refresh, type=Qt.QueuedConnection)
+            self.pacs_thread.start()
+        else:
+            self.pacs_thread = PacsResultThread()
+            self.pacs_thread.setStart(self.cur_tjbh)
+            self.pacs_thread.signalConnFail.connect(self.on_sys_conn_fail, type=Qt.QueuedConnection)
+            self.pacs_thread.signalPost.connect(self.on_sys_refresh, type=Qt.QueuedConnection)
+            self.pacs_thread.start()
+
+    # 进入LIS系统
+    def on_btn_lis_click(self):
+        if not self.cur_tjbh:
+            mes_about(self,'请先选择一个人！')
+            return
+        # is_has = self.session.execute(has_pis_sql(self.cur_tjbh)).scalar()
+        # if not is_has:
+        #     mes_about(self, '该体检顾客：%s，无检验项目！' % self.cur_tjbh)
+        #     return
+        if self.lis_thread:
+            self.lis_thread.setStart(self.cur_tjbh)
+            self.lis_thread.signalConnFail.connect(self.on_sys_conn_fail, type=Qt.QueuedConnection)
+            self.lis_thread.signalPost.connect(self.on_sys_refresh, type=Qt.QueuedConnection)
+            self.lis_thread.start()
+        else:
+            self.lis_thread = LisResultThread()
+            self.lis_thread.setStart(self.cur_tjbh)
+            self.lis_thread.signalConnFail.connect(self.on_sys_conn_fail, type=Qt.QueuedConnection)
+            self.lis_thread.signalPost.connect(self.on_sys_refresh, type=Qt.QueuedConnection)
+            self.lis_thread.start()
+
     # LIS、PACS、PIS 系统连接失败，提示
     def on_sys_conn_fail(self,message):
         mes_about(self,message)
 
-    def on_sys_refresh(self,results):
-        if not self.pis_ui:
-            self.pis_ui = PisResultUI(self, results)
-        else:
+    def on_sys_refresh(self,sys_name,results):
+        '''
+        :param sys_name: 系统名称 PIS，PACS，LIS
+        :param results: 数据
+        :return:
+        '''
+        if sys_name =='PIS':
+            if not self.pis_ui:
+                self.pis_ui = PisResultUI('病理系统',self)
             self.pis_ui.setData(results)
-        self.pis_ui.show()
-
+            self.pis_ui.show()
+        elif sys_name =='LIS':
+            if not self.lis_ui:
+                self.lis_ui = LisResultUI('检验系统',self)
+            self.lis_ui.setData(results)
+            self.lis_ui.show()
+        elif sys_name =='PACS':
+            if not self.pacs_ui:
+                self.pacs_ui = PacsResultUI('检查系统',self)
+            self.pacs_ui.setData(results)
+            self.pacs_ui.show()
+        else:
+            pass
 
 
 

@@ -1,13 +1,18 @@
 from widgets.cwidget import *
 from equip.model import *
 from utils.base import *
+from equip.equiphandle import *
 
-# 设备检查
-class EquipInspect(Widget):
+# 设备检查界面
+class EquipInspectUI(Widget):
 
-    def __init__(self,queue,parent=None):
-        super(EquipInspect,self).__init__(parent)
-        self.process_queue =queue
+    def __init__(self,parent=None):
+        super(EquipInspectUI,self).__init__(parent)
+        self.initPara()
+        self.initUI()
+
+    # 初始化必要参数
+    def initPara(self):
         self.inspect_cols = OrderedDict(
             [
                 ("state","状态"),
@@ -21,15 +26,7 @@ class EquipInspect(Widget):
         self.equip_no = EquipNo.get(self.equip_type, '')
         self.equip_name = EquipName.get(self.equip_type, '')
         self.equip_action = EquipAction.get(self.equip_type, '')
-        self.initUI()
-        self.tjbh.returnPressed.connect(self.tjbh_validate)
-        #
-        self.timer_update_thread = EquipDataThread(self.process_queue)
-        self.timer_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
-        self.timer_update_thread.start()
-
-    def update_mes(self,p_str):
-        mes_about(self,'获得设备端数据：%s' %p_str)
+        self.equip_entry_auto = gol.get_value('equip_entry_auto', False)
 
     def initUI(self):
         # 位置大小等
@@ -39,22 +36,23 @@ class EquipInspect(Widget):
         self.setWindowTitle("明州体检")
         self.setWindowIcon(Icon('mztj'))
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
-
         # 布局
         lt_main = QVBoxLayout(self)
         group1 = QGroupBox("体检编号")
         self.gp_inspect = QGroupBox("检查列表(0)")
         group3 = QGroupBox()
-        layout = QVBoxLayout()
+        layout = QHBoxLayout()
         layout1 = QHBoxLayout()
         layout2 = QVBoxLayout()
         layout3 = QHBoxLayout()
-
         ################# 控件区 ############################
+        self.cb_auto = QCheckBox('自动录入')
+        self.cb_auto.setChecked(gol.get_value('equip_entry_auto',False))
         self.tjbh=QTJBH()
+        self.tjbh.setFocus(Qt.OtherFocusReason)
         self.table_inspect = TableWidget(self.inspect_cols)
-
         # 添加布局
+        layout.addWidget(self.cb_auto)
         layout.addWidget(self.tjbh)
         layout2.addWidget(self.table_inspect)
         layout2.addLayout(layout1)
@@ -68,65 +66,163 @@ class EquipInspect(Widget):
         lt_main.addWidget(group3)
         self.setLayout(lt_main)
 
-    def tjbh_validate(self):
-        tjbh = self.tjbh.text()
-        if  len(tjbh)==9:
-            # 先判断项目是否完成
-            result = self.session.query(MV_EQUIP_JCMX).filter(MV_EQUIP_JCMX.tjbh == tjbh, MV_EQUIP_JCMX.xmbh == self.equip_no).scalar()
-            if result:
-                self.table_inspect.insert(result.to_dict)
-                self.gp_inspect.setTitle('留样列表（%s）' % str(self.table_inspect.rowCount()))
-            else:
-                mes_about(self,'体检顾客：%s,无检查项目：%s ' %(tjbh,self.equip_name))
-            # result = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.tjbh == tjbh,MT_TJ_CZJLB.mxbh==self.equip_no,MT_TJ_CZJLB.jllx==self.equip_action).scalar()
-            # if not result:
-                # 插入动作记录表
-
-
-
-        else:
-            mes_about(self, "请输入正确的体检编号！")
-
-        self.tjbh.setText('')
-
-    # 刷新采血列表
-    def on_table_urine_insert(self,button:SerialNoButton):
-        data=['检查中',button.collectNo,button.collectTJBH,button.collectTxt]
-        self.table_urine.insert(data)
-        self.gp_inspect.setTitle('留样列表（%s）' % str(self.table_inspect.rowCount()))
-
-# 设备数据更新线程
+# 设备数据更新线程 只读取
 class EquipDataThread(QThread):
 
     # 定义信号,定义参数为str类型
     signalPost = pyqtSignal(str)     # 更新界面
     signalExit = pyqtSignal()
+    tjbh = None
 
     def __init__(self,queue,timer=2):
         super(EquipDataThread, self).__init__()
-        self.running = True
+        self.running = False
         self.process_queue = queue
         self.timer = timer
 
     def stop(self):
         self.running = False
 
+    def setStart(self,tjbh):
+        self.tjbh = tjbh
+        self.running = True
+
     def run(self):
         while self.running:
-            print('后台线程已启动。。。')
             try:
                 result = self.process_queue.get()
-                print(result)
                 if result:
                     self.signalPost.emit('获得数据：%s' %result)
             except Exception as e:
                 print(e)
             time.sleep(self.timer)
+            self.stop()
 
+# 后台线程 处理是否自动录入
+class BackGroundThread(QThread):
+
+    # 定义信号,定义参数为str类型
+    signalPost = pyqtSignal(str)     # 更新界面
+    signalExit = pyqtSignal()
+    tjbh = None
+
+    def __init__(self):
+        super(BackGroundThread, self).__init__()
+        self.session = gol.get_value('tjxt_session_thread')
+        self.log = gol.get_value('log')
+        self.running = False
+        # 初始化 坐标
+        self.pos = {}
+        self.pos['position_tj'] = gol.get_value('position_tj')
+        self.pos['position_tjbh'] = gol.get_value('position_tjbh')
+        self.pos['position_xm'] = gol.get_value('position_xm')
+        self.pos['position_xb1'] = gol.get_value('position_xb1')
+        self.pos['position_xb2'] = gol.get_value('position_xb2')
+        self.pos['position_nl'] = gol.get_value('position_nl')
+        self.pos['position_sure'] = gol.get_value('position_sure')
+        self.pos['position_gx'] = gol.get_value('position_gx')
+        self.pos['position_cj'] = gol.get_value('position_cj')
+
+    def stop(self):
+        self.running = False
+
+    # 传递体检编号
+    def setStart(self,tjbh):
+        self.tjbh = tjbh
+        self.running = True
+
+    def run(self):
+        while self.running:
+            try:
+                if self.tjbh:
+                    result = self.session.execute(get_tjxx_sql(self.tjbh)).first()
+                    if result:
+                        tmp = {}
+                        tmp['tjbh'] = result[0]
+                        tmp['xm'] = str2(result[1])
+                        tmp['xb'] = str2(result[2])
+                        tmp['nl'] = str(result[3])
+                        autoInputXDT(tmp,self.pos)
+                        self.log.info('体检编号：%s,自动录入成功！' %self.tjbh)
+            except Exception as e:
+                self.log.info('体检编号：%s,自动录入失败,错误信息：%s' % (self.tjbh, e))
+            self.running = False
+            self.tjbh = None
+
+# 设备检查：
+# 线程1：自动录入：开启与关闭与否
+# 线程2：更新界面状态：已上传 默认检查中
+class EquipInspect(EquipInspectUI):
+
+    def __init__(self,queue,parent=None):
+        '''
+        :param queue: 跨进程队列
+        :param parent: 父窗口
+        '''
+        super(EquipInspect,self).__init__(parent)
+        # 自动录入功能
+        self.tjbh.returnPressed.connect(self.tjbh_validate)
+        # 状态更新线程：已上传
+        self.real_update_thread = EquipDataThread(queue)
+        self.real_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
+        self.real_update_thread.start()
+
+        self.background_thread = None
+
+
+    def update_mes(self,p_str):
+        mes_about(self,'获得设备端数据：%s' %p_str)
+
+    def tjbh_validate(self):
+        tjbh = self.tjbh.text()
+        if  len(tjbh)==9:
+            # 先判断项目是否完成
+            result = self.session.query(MV_EQUIP_JCMX).filter(MV_EQUIP_JCMX.tjbh == tjbh, MV_EQUIP_JCMX.xmbh == self.equip_no).scalar()
+            if result:
+                # 更新界面
+                self.on_table_insert(result)
+                # 启动后台线程
+                if self.cb_auto.isChecked():
+                    self.on_thread_start(tjbh)
+
+            else:
+                mes_about(self,'体检顾客：%s,无检查项目：%s ' %(tjbh,self.equip_name))
+
+        else:
+            mes_about(self, "请输入正确的体检编号！")
+
+        self.tjbh.setText('')
+        self.tjbh.setFocus(Qt.OtherFocusReason)
+
+    # 刷新采血列表
+    def on_table_insert(self,result):
+        self.table_inspect.insert(result.to_dict)
+        self.gp_inspect.setTitle('检查列表（%s）' % str(self.table_inspect.rowCount()))
+
+    def on_thread_start(self,tjbh):
+        if self.background_thread:
+            self.background_thread.setStart(tjbh)
+            self.background_thread.start()
+        else:
+            self.background_thread = BackGroundThread()
+            self.background_thread.setStart(tjbh)
+            self.background_thread.start()
+
+    def closeEvent(self, *args, **kwargs):
+        super(EquipInspect, self).closeEvent(*args, **kwargs)
+        try:
+            if self.background_thread:
+                self.background_thread.stop()
+                self.background_thread = None
+            if self.real_update_thread:
+                self.real_update_thread.stop()
+                self.real_update_thread = None
+        except Exception as e:
+            self.log.info("关闭时发生错误：%s " %e)
 
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    ui = EquipInspect()
+    ui = EquipInspectUI()
     ui.show()
     app.exec_()

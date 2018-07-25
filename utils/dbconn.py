@@ -44,3 +44,17 @@ def get_pis_session(hostname='10.8.200.79',dbname='eWorldPIS',user='sa',passwd='
     engine = create_engine(engine_str,echo=False)
     session = sessionmaker(bind=engine)
     return session()
+
+def get_lis_session(hostname='10.8.200.231',dbname='digitlab',user='sa',passwd='abc@123',port=1433,encoding='utf-8',echo=False):
+    '''
+    :param hostname: 主机
+    :param dbname: 数据库
+    :param user: 用户
+    :param passwd: 密码
+    :param port: 端口
+    :return:
+    '''
+    engine_str = 'mssql+pymssql://%s:%s@%s:%s/%s' %(user,passwd,hostname,port,dbname)
+    engine = create_engine(engine_str,echo=False)
+    session = sessionmaker(bind=engine)
+    return session()

@@ -136,7 +136,7 @@ class AutoUpdateThread(QThread):
     signalPost = pyqtSignal(str)     # 更新界面
     signalExit = pyqtSignal()
 
-    def __init__(self,timer=60):
+    def __init__(self,timer=360):
         super(AutoUpdateThread, self).__init__()
         self.running = True
         self.timer = timer

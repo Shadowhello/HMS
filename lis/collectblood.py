@@ -115,15 +115,15 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
             results = dict(self.session.query(MT_TJ_TJJLMXB.xmbh,MT_TJ_TJJLMXB.xmmc).filter(MT_TJ_TJJLMXB.tjbh == tjbh).all())
             xmbhs = results.keys()
             if list_in_list(['501722','501702'],xmbhs):
-                self.widget1 = PreviewWidget('该男士有前列腺彩超，请您提醒：做完前列腺彩超后，再进行留尿！')
+                self.widget1 = PreviewWidget('该顾客有前列腺彩超，请您提醒：做完前列腺彩超后，再进行留尿！')
                 self.serialno.setFocus()
 
             if list_in_list(['5004','5001'],xmbhs):
-                self.widget2 = PreviewWidget('该男士有C13/C14，请您提醒：先留尿，再做C13/C14吹气！')
+                self.widget2 = PreviewWidget('该顾客有C13/C14，请您提醒：先留尿，再做C13/C14吹气！')
                 self.serialno.setFocus()
 
             if list_in_list(['1103','1104','1105','1106','1107'],xmbhs):
-                self.widget3 = PreviewWidget('该男士有餐后血糖（OGTT），请您提醒：先留尿，再喝糖水！')
+                self.widget3 = PreviewWidget('该顾客有餐后血糖（OGTT），请您提醒：先留尿，再喝糖水！')
                 self.serialno.setFocus()
 
             return True
@@ -221,20 +221,20 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
             # 条码总数量
             tm_num = tm_num + 1
 
-        self.layout3.setHorizontalSpacing(10)  # 设置水平间距
-        self.layout3.setVerticalSpacing(10)  # 设置垂直间距
-        self.layout3.setContentsMargins(10, 10, 10, 10)  # 设置外间距
-        self.layout3.setColumnStretch(5, 1)  # 设置列宽，添加空白项的
+        self.layout3.setHorizontalSpacing(10)               # 设置水平间距
+        self.layout3.setVerticalSpacing(10)                 # 设置垂直间距
+        self.layout3.setContentsMargins(10, 10, 10, 10)     # 设置外间距
+        self.layout3.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
 
-        self.layout4.setHorizontalSpacing(10)  # 设置水平间距
-        self.layout4.setVerticalSpacing(10)  # 设置垂直间距
-        self.layout4.setContentsMargins(10, 10, 10, 10)  # 设置外间距
-        self.layout4.setColumnStretch(5, 1)  # 设置列宽，添加空白项的
+        self.layout4.setHorizontalSpacing(10)               # 设置水平间距
+        self.layout4.setVerticalSpacing(10)                 # 设置垂直间距
+        self.layout4.setContentsMargins(10, 10, 10, 10)     # 设置外间距
+        self.layout4.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
 
-        self.layout5.setHorizontalSpacing(10)  # 设置水平间距
-        self.layout5.setVerticalSpacing(10)  # 设置垂直间距
-        self.layout5.setContentsMargins(10, 10, 10, 10)  # 设置外间距
-        self.layout5.setColumnStretch(5, 1)  # 设置列宽，添加空白项的
+        self.layout5.setHorizontalSpacing(10)               # 设置水平间距
+        self.layout5.setVerticalSpacing(10)                 # 设置垂直间距
+        self.layout5.setContentsMargins(10, 10, 10, 10)     # 设置外间距
+        self.layout5.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
 
         self.ser_all.setText("%s" % str(tm_num))
         self.ser_cx.setText("%s" % str(cx_num))
@@ -300,6 +300,10 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
         self.data_obj['mxbh'] = btn_no
         self.data_obj['jlnr'] = btn_name
         self.data_obj['bz'] = btn_color
+        # 采血处可能也扫 留样管
+        if btn_type:
+            self.data_obj['jllx'] = '0011'
+            self.data_obj['jlmc'] = '留样'
         try:
             self.session.bulk_insert_mappings(MT_TJ_CZJLB, [self.data_obj])
             self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == self.user_id.text(),MT_TJ_TJJLMXB.tmbh1 == btn_no).update({MT_TJ_TJJLMXB.zxpb:'4'})

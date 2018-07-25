@@ -26,20 +26,23 @@ class MV_EQUIP_JCMX(BaseModel):
             if getattr(self, "jsbz") == '1':
                 return '已小结'
             else:
-                if getattr(self, "zxpb") == '0':
-                    return '核实'
-                elif getattr(self, "zxpb") == '1':
-                    return '已回写'
-                elif getattr(self, "zxpb") == '2':
-                    return '已登记'
-                elif getattr(self, "zxpb") == '3':
+                if getattr(self, "zxpb") == '3':
                     return '已检查'
-                elif getattr(self, "zxpb") == '4':
-                    return '已抽血'
-                elif getattr(self, "zxpb") == '5':
-                    return '已留样'
                 else:
-                    return '未结束'
+                    return '检查中'
+                # if getattr(self, "zxpb") == '0':
+                #     return '核实'
+                # elif getattr(self, "zxpb") == '1':
+                #     return '已回写'
+                # elif getattr(self, "zxpb") == '2':
+                #     return '已登记'
+                #
+                # elif getattr(self, "zxpb") == '4':
+                #     return '已抽血'
+                # elif getattr(self, "zxpb") == '5':
+                #     return '已留样'
+                # else:
+                #     return '未结束'
 
     @property
     def to_dict(self):
@@ -73,3 +76,12 @@ FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.d
 
 INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.SFZH='1'
 '''
+
+def get_tjxx_sql(tjbh):
+    return '''
+    SELECT 
+        TJ_TJDJB.TJBH,TJ_TJDAB.XM,(CASE TJ_TJDAB.XB WHEN '1' THEN '男' WHEN '2' THEN '女' ELSE '' END) AS XB,TJ_TJDJB.NL 
+    FROM TJ_TJDJB INNER JOIN TJ_TJDAB 
+        ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+        AND TJ_TJDJB.TJBH = '%s'
+    ''' %tjbh

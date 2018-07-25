@@ -49,9 +49,11 @@ def set_env(termial=False):
     )
     pacs_session = get_pacs_session()
     pis_session = get_pis_session()
+    lis_session = get_lis_session()
     gol.set_value("tjxt_session_local", session)
     gol.set_value("tjxt_session_thread", session)
     gol.set_value("pacs_session", pacs_session)
     gol.set_value("pis_session", pis_session)
+    gol.set_value("lis_session", lis_session)
     if termial:
         gol.print_paras()

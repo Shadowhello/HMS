@@ -65,6 +65,8 @@ def parse(filename,file_type,regular=None):
     else:
         pass
 
+
+
 #解析PDF
 class CPdf2TxtManager():
 

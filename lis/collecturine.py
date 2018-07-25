@@ -11,13 +11,18 @@ class CollectUrine(CollectUrine_UI):
 
     # 初始化参数
     def initParas(self):
+        # 样本类型
         results = self.session.execute(get_yblx_sql()).fetchall()
         self.yblx = dict([(str2(result[0]),result[1]) for result in results])
-        self.barCodeBuild = BarCodeBuild(path=self.tmp_file)                      # 条形码生成器
+        # 条码试管名称
+        results = self.session.execute(get_tmsg_sql()).fetchall()
+        self.tmsg = dict([(str2(result[1]), str2(result[2])) for result in results])
+        # 条形码生成器
+        self.barCodeBuild = BarCodeBuild(path=self.tmp_file)
         self.all_serialno = {}
         # 待插入的 数据对象
-        self.data_obj = {'jllx':'0010','jlmc':'抽血','tjbh':'','mxbh':'',
-                         'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'jlnr':None}
+        self.data_obj = {'jllx':'0011','jlmc':'留样','tjbh':'','mxbh':'',
+                         'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'jlnr':None,'bz':None}
 
 
 
@@ -89,9 +94,11 @@ class CollectUrine(CollectUrine_UI):
             # 添加按钮
             self.all_serialno[btn_no] = button
             # 更新按钮属性
-            button.setCollectNo(btn_no)  # 采集号码
-            button.setCollectTJBH(tjbh)  # 采集号码
+            button.setCollectNo(btn_no)  # 采集条码号码
+            button.setCollectTJBH(tjbh)  # 采集体检号码
             button.setCollectState(bool(btn_state))  # 采集状态
+            # 存储试管颜色
+            button.setCollectColor(self.tmsg.get(btn_name.split(' ')[0],''))
 
             # 根据样本类型，分到不同的位置
             if self.yblx.get(btn_name.strip(), 0) in [0, '1', '4', '5']:
@@ -126,6 +133,7 @@ class CollectUrine(CollectUrine_UI):
         btn_pos_x =button.collectPos_X     # 原条码 X 位置
         btn_pos_y = button.collectPos_Y    # 原条码 Y 位置
         btn_type = button.collectType      # 原条码 采集类型
+        btn_color = button.collectColor    # 原条码 采集颜色
         # 根据旧的 创建生成 新的
         filename = self.barCodeBuild.alter(btn_no)
         button2 = SerialNoButton(filename, btn_name)
@@ -135,6 +143,7 @@ class CollectUrine(CollectUrine_UI):
         button2.setCollectTJBH(btn_tjbh)
         button2.setCollectType(btn_type)
         button2.setCollectPos(btn_pos_x,btn_pos_y)
+        button2.setCollectColor(btn_color)
         # 更新 容器
         self.all_serialno[btn_no] = button2
         # 从UI布局中 删除旧的 添加 新的
@@ -151,6 +160,11 @@ class CollectUrine(CollectUrine_UI):
         self.data_obj['tjbh'] = btn_tjbh
         self.data_obj['mxbh'] = btn_no
         self.data_obj['jlnr'] = btn_name
+        self.data_obj['bz'] = btn_color
+        # 留样处 也可能扫血
+        if not btn_type:
+            self.data_obj['jllx'] = '0010'
+            self.data_obj['jlmc'] = '抽血'
         try:
             self.session.bulk_insert_mappings(MT_TJ_CZJLB, [self.data_obj])
             self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == btn_tjbh,

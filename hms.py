@@ -16,8 +16,6 @@ def equip_ui(ui,app):
     app.exec_()
 
 def start_run():
-
-    # from equip_dr import Equip2
     from login.login_ui import Login_UI
     from PyQt5.QtWidgets import QApplication
     import sys
@@ -38,15 +36,16 @@ def start_run():
                     from multiprocessing import Process, Queue
                     # 全局进程队列
                     gol_process_queue = Queue()
-                    Process(target=run, args=(gol_process_queue,)).start()
+                    monitor_process = Process(target=run, args=(gol_process_queue,))
+                    monitor_process.start()
                     ui = EquipManger(gol_process_queue)
                     ui.show()
                     app.exec_()
-
-
-
-
-
+                    if monitor_process.is_alive:
+                        # 停止子进程
+                        monitor_process.terminate()
+                        # 随主进程退出
+                        monitor_process.join()
 
     else:
         from main.tj_main_ui import TJ_Main_UI

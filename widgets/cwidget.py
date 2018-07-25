@@ -218,7 +218,17 @@ class PacsInspectResultTable(TableWidget):
 
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
-        pass
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                if col_value:
+                    item = QTableWidgetItem(str(col_value))
+                    item.setTextAlignment(Qt.AlignCenter)
+                else:
+                    item = QTableWidgetItem('')
+                self.setItem(row_index, col_index, item)
 
 # PIS检查列表
 class PisInspectResultTable(TableWidget):
@@ -240,15 +250,51 @@ class PisInspectResultTable(TableWidget):
                     item = QTableWidgetItem('')
                 self.setItem(row_index, col_index, item)
 
-# LIS检查列表
-class LisInspectResultTable(TableWidget):
+# LIS检查列表 总列表
+class MLisInspectResultTable(TableWidget):
 
     def __init__(self, heads, parent=None):
-        super(LisInspectResultTable, self).__init__(heads, parent)
+        super(MLisInspectResultTable, self).__init__(heads, parent)
 
-    # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
-        pass
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                if col_index == 0:
+                    if col_value == '1':
+                        item = QTableWidgetItem('已审核')
+                    else:
+                        item = QTableWidgetItem('未审核')
+                else:
+                    if col_value:
+                        item = QTableWidgetItem(str2(col_value))
+                        item.setTextAlignment(Qt.AlignCenter)
+                    else:
+                        item = QTableWidgetItem('')
+                self.setItem(row_index, col_index, item)
+
+# LIS检查列表 结果详细列表
+class DLisInspectResultTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(DLisInspectResultTable, self).__init__(heads, parent)
+
+    def load_set(self, datas, heads=None):
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                if col_value:
+                    item = QTableWidgetItem(str2(col_value))
+                    item.setTextAlignment(Qt.AlignCenter)
+                else:
+                    item = QTableWidgetItem('')
+                self.setItem(row_index, col_index, item)
+
+        self.resizeColumnsToContents()  # 设置列适应大小
 
 # 抽血历史采集筛选列表
 class CollectHistoryTable(TableWidget):
