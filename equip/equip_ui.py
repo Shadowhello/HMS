@@ -50,7 +50,7 @@ class EquipInspectUI(Widget):
         self.cb_auto.setChecked(gol.get_value('equip_entry_auto',False))
         self.tjbh=QTJBH()
         self.tjbh.setFocus(Qt.OtherFocusReason)
-        self.table_inspect = TableWidget(self.inspect_cols)
+        self.table_inspect = EquipInspectTable(self.inspect_cols)
         # 添加布局
         layout.addWidget(self.cb_auto)
         layout.addWidget(self.tjbh)
@@ -92,7 +92,7 @@ class EquipDataThread(QThread):
             try:
                 result = self.process_queue.get()
                 if result:
-                    self.signalPost.emit('获得数据：%s' %result)
+                    self.signalPost.emit(result)
             except Exception as e:
                 print(e)
             #
@@ -167,11 +167,17 @@ class EquipInspect(EquipInspectUI):
         self.background_thread = None
         # 后台进程回传状态读取线程
         self.real_update_thread = EquipDataThread(queue)
-        self.real_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
+        self.real_update_thread.signalPost.connect(self.update_state, type=Qt.QueuedConnection)
         self.real_update_thread.start()
 
-    def update_mes(self,p_str):
-        mes_about(self,'获得设备端数据：%s' %p_str)
+    def update_state(self,p_tjbh):
+        items = self.table_inspect.findItems(p_tjbh, Qt.MatchContains)
+        for item in items:
+            self.table_inspect.item(item.row(), 0).setText('已上传')
+            for col_index in range(self.table_inspect.columnCount()):
+                self.table_inspect.item(item.row(), col_index).setBackground(QColor("#f0e68c"))
+
+        # mes_about(self,'获得设备端数据：%s' %p_str)
 
     def tjbh_validate(self):
         tjbh = self.tjbh.text()
@@ -196,7 +202,7 @@ class EquipInspect(EquipInspectUI):
 
     # 刷新采血列表
     def on_table_insert(self,result):
-        self.table_inspect.insert(result.to_dict)
+        self.table_inspect.insert2(result.to_dict)
         self.gp_inspect.setTitle('检查列表（%s）' % str(self.table_inspect.rowCount()))
 
     # 自动录入线程
@@ -208,18 +214,6 @@ class EquipInspect(EquipInspectUI):
             self.background_thread = BackGroundThread()
             self.background_thread.setStart(tjbh)
             self.background_thread.start()
-
-    # 取后台进程返回的标记的线程
-    # def on_thread2_start(self,tjbh):
-    #     if self.real_update_thread:
-    #         self.real_update_thread.setStart(tjbh)
-    #         self.real_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
-    #         self.real_update_thread.start()
-    #     else:
-    #         self.real_update_thread = EquipDataThread(self.queue)
-    #         self.real_update_thread.setStart(tjbh)
-    #         self.real_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
-    #         self.real_update_thread.start()
 
     def closeEvent(self, *args, **kwargs):
         super(EquipInspect, self).closeEvent(*args, **kwargs)

@@ -81,6 +81,23 @@ def init_views(app,db):
             tjbh = tjbh
         pass
 
+    # 设备 报告上传
+    @app.route('/api/equip/upload/', methods=['POST'])
+    def equip_upload():
+        cur_path = get_cur_path(app.config['UPLOAD_FOLDER_EQUIP'])
+        file_obj = request.files['file']
+        new_file=os.path.join(cur_path, os.path.basename(file_obj.filename))
+        file_obj.save(new_file)
+        # 返回上传路径
+        file_type = os.path.basename(file_obj.filename)[-3:]
+        if file_type =='_08':
+            print('心电图：%s 文件上传成功！' %new_file)
+        elif file_type =='_01':
+            print('电测听：%s 文件上传成功！' %new_file)
+        elif file_type =='_04':
+            print('骨密度：%s 文件上传成功！' %new_file)
+        return ujson.dumps({'code': 1, 'mes': '上传成功', 'data': new_file})
+
     # 文件上传
     @app.route('/api/file/upload/', methods=['POST'])
     def file_upload():
@@ -179,3 +196,7 @@ def get_file_upload_sql(filename):
     VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s') 
     ''' %(file_prefix[0:9],file_prefix[0:5],dyear,dmonth,dday,filename,os.path.split(filename)[1],file_prefix[-6:],cur_datetime())
     return sql
+
+# 获取前缀、后缀名称
+def get_pre_suf(filename):
+    return os.path.splitext(os.path.basename(filename))

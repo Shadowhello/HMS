@@ -31,6 +31,17 @@ def request_get(url,save_file=None):
     else:
         return False
 
+# post 请求
+def api_equip_upload(url,filename):
+    file_obj = {"file": (filename, open(filename, "rb"))}
+    try:
+        response = requests.post(url,files=file_obj)
+        if response.status_code == 200:
+            return response.json()
+    except Exception as e:
+        print('URL：%s 请求失败！错误信息：%s' %(url,e))
+
+
 class APIRquest(object):
 
     def __init__(self,login_id,host,port,log):

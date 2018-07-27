@@ -210,6 +210,37 @@ class SerialNoButton(QToolButton):
     def collectColor(self):
         return self.collect_color
 
+# 设备接口检查列表
+class EquipInspectTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(EquipInspectTable, self).__init__(heads, parent)
+
+    # 插入一行 实现
+    def insert2(self,data:dict):
+        self.insertRow(self.rowCount())  # 特别含义
+        for col_index, col_name in enumerate(self.heads.keys()):
+            item = QTableWidgetItem(data[col_name])
+            if col_index ==0 and data[col_name]=='检查中':
+                item.setBackground(QColor("#ff8c00"))               # 橘黄色
+
+            self.setItem(self.rowCount() - 1, col_index, item)
+
+
+
+        self.resizeColumnsToContents()  # 设置列适应大小
+
+# 设备结果列表，追踪处用
+class EquipResultTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(EquipResultTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # list 实现
+        pass
+
 # PACS检查列表
 class PacsInspectResultTable(TableWidget):
 

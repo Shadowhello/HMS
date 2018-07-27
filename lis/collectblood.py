@@ -182,7 +182,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
             button.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
             button.customContextMenuRequested.connect(partial(self.onSerialNoBtnMenu,button))  ####右键菜单
             # 存储试管颜色
-            button.setCollectColor(self.tmsg.get(btn_name.split(' ')[0],''))
+            button.setCollectColor(self.tmsg.get(btn_name.split()[0],'未知'))
             # 根据样本类型：拒检，未拒检，再分 抽血、留样，分到不同的位置
             if button.collectCancle:
                 # 获取坐标
@@ -195,7 +195,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
                 self.layout5.addWidget(button, btn_pos_x, btn_pos_y, 1, 1)
                 jj_num = jj_num + 1
             else:
-                if self.yblx.get(btn_name.strip(),0) in [0,'1','4','5']:
+                if self.yblx.get(btn_name.split()[0],0) in [0,'1','4','5']:           # 修复
                     # 获取坐标
                     btn_pos_x = cx_num // size
                     btn_pos_y = cx_num % size

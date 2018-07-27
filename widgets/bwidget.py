@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtPrintSupport import *
-from PyQt5.QtWebEngineWidgets import *
+#from PyQt5.QtWebEngineWidgets import *
 import os,sys,time,cv2
 from collections import OrderedDict
 import pandas as pd
@@ -56,14 +56,14 @@ def mes_warn(parent,message):
 def mes_about(parent,message):
     QMessageBox.about(parent, '明州体检', message)
 
-class WebEngine(QWebEngineView):
-
-    def load(self,url):
-        self.setUrl(QUrl(url))
-
-    def setJS(self):
-        settings = QWebEngineSettings.globalSettings()
-        settings.setAttribute(QWebEngineSettings.JavascriptEnabled, True)
+# class WebEngine(QWebEngineView):
+#
+#     def load(self,url):
+#         self.setUrl(QUrl(url))
+#
+#     def setJS(self):
+#         settings = QWebEngineSettings.globalSettings()
+#         settings.setAttribute(QWebEngineSettings.JavascriptEnabled, True)
 
 class ToolButton(QToolButton):
 

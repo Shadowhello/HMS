@@ -4,8 +4,12 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFTextExtractionNotAllowed
-import re,os,shutil
+import re,os,shutil,time
 from utils import gol
+from wand.image import Image
+
+def cur_datetime():
+    return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())))
 
 # PDF转换文本
 def pdf2txt(filename):
@@ -75,22 +79,168 @@ def txtparse(filename,file_type,regular=None,error_path='D:/'):
 
 
     elif file_type == '04':     # 骨密度
-        for i,value in enumerate(pdf2txt(filename)):
-            if i==5:
-                tmp = value.split('\n')[0]
-                if len(tmp) == 9 and tmp.isdigit():
-                    try:
-                        tjbh = tmp
-                        jcys = value.split('\n')[1]
-                        jcrq = value.split('\n')[2]
-                        print(tjbh,jcys,jcrq)
-                    except Exception as e:
-                        print('文件：%s 解析错误，错误信息：%s' %(filename,e))
-                        shutil.copy2(filename, os.path.join(r'E:\PDF-\04\error', os.path.basename(filename)))
-                        os.remove(filename)
+
+        pdfStrList = pdf2txt(filename)
+        if pdfStrList[3][0:9].isdigit():
+            ######## 体检编号 ######################
+            tjbh = pdfStrList[3][0:9]
+            ######## 姓名 ######################
+            try:
+                xm = pdfStrList[1].split('\n')[0].replace(', ','')
+            except Exception as e:
+                xm = ''
+            ######## 检查日期 ######################
+            try:
+                tmp_tjbh = pdfStrList[3].split('\n')
+                if len(tmp_tjbh) == 5:
+                    jcrq = tmp_tjbh[2] + ' ' + tmp_tjbh[3]
                 else:
-                    shutil.copy2(filename, os.path.join(r'E:\PDF-\04\tmp',os.path.basename(filename)))
-                    os.remove(filename)
+                    jcrq = cur_datetime()
+            except Exception as e:
+                jcrq = cur_datetime()
+
+        elif pdfStrList[4][0:9].isdigit():
+            ######## 体检编号 ######################
+            tjbh = pdfStrList[4][0:9]
+            ######## 姓名 ######################
+            try:
+                xm = pdfStrList[1].split('\n')[0].replace(', ','')
+            except Exception as e:
+                xm = ''
+            ######## 检查日期 ######################
+            try:
+                tmp_tjbh = pdfStrList[4].split('\n')
+                if len(tmp_tjbh) == 5:
+                    jcrq = tmp_tjbh[2] + ' ' + pdfStrList[3].split('\n')[0]
+                else:
+                    jcrq = cur_datetime()
+            except Exception as e:
+                jcrq = cur_datetime()
+            #print(xm, tjbh, jcrq)
+
+        elif pdfStrList[5][0:9].isdigit():
+            ######## 体检编号 ######################
+            tjbh = pdfStrList[5][0:9]
+            ######## 姓名 ######################
+            try:
+                xm = pdfStrList[3].split('\n')[0].replace(', ','')
+            except Exception as e:
+                xm = ''
+            ######## 检查日期 ######################
+            try:
+                tmp_tjbh = pdfStrList[5].split('\n')
+                if len(tmp_tjbh) == 2:
+                    tmp_jcrq = pdfStrList[6].split('\n')
+                    if len(tmp_jcrq) == 3:
+                        jcrq = pdfStrList[6].split('\n')[0] + ' ' + pdfStrList[7].split('\n')[0]
+                    elif len(tmp_jcrq) == 4:
+                        jcrq = tmp_jcrq[0] + ' ' + tmp_jcrq[1]
+                    else:
+                        jcrq = cur_datetime()
+                elif len(tmp_tjbh) == 5:
+                    jcrq = tmp_tjbh[2] + ' ' + pdfStrList[6].split('\n')[0]
+                else:
+                    jcrq = cur_datetime()
+            except Exception as e:
+                jcrq = cur_datetime()
+            # print(pdfStrList)
+            # print(xm,tjbh,jcrq)
+
+        elif pdfStrList[6][0:9].isdigit():
+            ######## 体检编号 ######################
+            tjbh = pdfStrList[6][0:9]
+            ######## 姓名 ######################
+            try:
+                xm = pdfStrList[3].split('\n')[0].replace(', ','')
+            except Exception as e:
+                xm = ''
+            ######## 检查日期 ######################
+            try:
+                tmp_tjbh = pdfStrList[6].split('\n')
+                if len(tmp_tjbh) == 2:
+                    tmp_jcrq = pdfStrList[6].split('\n')
+                    if len(tmp_jcrq) == 3:
+                        jcrq = pdfStrList[6].split('\n')[0] + ' ' + pdfStrList[7].split('\n')[0]
+                    elif len(tmp_jcrq) == 4:
+                        jcrq = tmp_jcrq[0] + ' ' + tmp_jcrq[1]
+                    else:
+                        jcrq = cur_datetime()
+                elif len(tmp_tjbh) == 5:
+                    jcrq = tmp_tjbh[2] + ' ' + pdfStrList[6].split('\n')[0]
+                else:
+                    jcrq = cur_datetime()
+            except Exception as e:
+                jcrq = cur_datetime()
+            # print(pdfStrList)
+            # print(xm,tjbh,jcrq)
+
+        elif pdfStrList[7][0:9].isdigit():
+            ######## 体检编号 ######################
+            tjbh = pdfStrList[7][0:9]
+            ######## 姓名 ######################
+            try:
+                xm = pdfStrList[3].split('\n')[0].replace(', ','')
+            except Exception as e:
+                xm = ''
+            ######## 检查日期 ######################
+            try:
+                tmp_tjbh = pdfStrList[7].split('\n')
+                if len(tmp_tjbh) == 5:
+                    jcrq = tmp_tjbh[2] + ' ' + pdfStrList[9].split('\n')[0]
+                else:
+                    jcrq = cur_datetime()
+            except Exception as e:
+                jcrq = cur_datetime()
+
+        elif pdfStrList[18][0:9].isdigit():
+            ######## 体检编号 ######################
+            tjbh = pdfStrList[18][0:9]
+            ######## 姓名 ######################
+            try:
+                xm = pdfStrList[3].split('\n')[0].replace(', ','')
+            except Exception as e:
+                xm = ''
+            ######## 检查日期 ######################
+            try:
+                tmp_tjbh = pdfStrList[18].split('\n')
+                if len(tmp_tjbh) == 5:
+                    jcrq = tmp_tjbh[2] + ' ' + pdfStrList[20].split('\n')[0]
+                elif len(tmp_tjbh) == 6:
+                    jcrq = tmp_tjbh[2] + ' ' + tmp_tjbh[3]
+                else:
+                    jcrq = cur_datetime()
+                    print(len(tmp_tjbh),tmp_tjbh)
+            except Exception as e:
+                jcrq = cur_datetime()
+
+        else:
+            print('无法解析的文件：%s' %filename)
+            print(pdfStrList)
+            xm =''
+            tjbh = ''
+            jcrq = ''
+
+        info["patient"] = xm
+        info["tjbh"] = tjbh
+        info["file"] =  "%s_04.pdf" %tjbh
+        info["operate_time"] = jcrq
+
+        # for i,value in enumerate(pdf2txt(filename)):
+
+        #         tmp = value.split('\n')[0]
+        #         if len(tmp) == 9 and tmp.isdigit():
+        #             try:
+        #                 tjbh = tmp
+        #                 jcys = value.split('\n')[1]
+        #                 jcrq = value.split('\n')[2]
+        #                 print(tjbh,jcys,jcrq)
+        #             except Exception as e:
+        #                 print('文件：%s 解析错误，错误信息：%s' %(filename,e))
+        #                 shutil.copy2(filename, os.path.join(r'E:\PDF-\04\error', os.path.basename(filename)))
+        #                 os.remove(filename)
+        #         else:
+        #             shutil.copy2(filename, os.path.join(r'E:\PDF-\04\tmp',os.path.basename(filename)))
+        #             os.remove(filename)
 
     elif file_type == '08':
         # 心电图
@@ -114,108 +264,12 @@ def txtparse(filename,file_type,regular=None,error_path='D:/'):
         if jcrq:
             info["operate_time"] = jcrq[0].strip()
         else:
-            info["operate_time"] = ''
+            info["operate_time"] = cur_datetime()
 
     else:
         pass
 
     return info
-
-
-
-#解析PDF
-class CPdf2TxtManager():
-
-    def __init__(self):
-        '''''
-        Constructor
-        '''
-
-    def parse(self, filename,equip_type):
-        file = open(filename, 'rb')             #  以二进制读模式打开
-        praser = PDFParser(file)                #  用文件对象来创建一个pdf文档分析器
-        doc = PDFDocument()                     #  创建一个PDF文档
-        praser.set_document(doc)                #  连接分析器 与文档对象
-        doc.set_parser(praser)
-        # 提供初始化密码
-        # 如果没有密码 就创建一个空的字符串
-        doc.initialize()
-        # 检测文档是否提供txt转换，不提供就忽略
-        if not doc.is_extractable:
-            raise PDFTextExtractionNotAllowed
-        # 创建PDf 资源管理器 来管理共享资源
-        rsrcmgr = PDFResourceManager()
-        # 创建一个PDF设备对象
-        laparams = LAParams()
-        device = PDFPageAggregator(rsrcmgr, laparams=laparams)
-        # 创建一个PDF解释器对象
-        interpreter = PDFPageInterpreter(rsrcmgr, device)
-        pdfStrList = []
-        pdfinfo={"tjbh":'',"file":'','xm':'',"jcrq":'',"jcys":''}
-        # 循环遍历列表，每次处理一个page的内容
-        for page in doc.get_pages():            # doc.get_pages() 获取page列表
-            interpreter.process_page(page)
-            # 接受该页面的LTPage对象
-            layout = device.get_result()
-            for x in layout:
-                if hasattr(x, "get_text"):
-                    pdfStrList.append(x.get_text())
-                else:
-                    pass
-
-        if equip_type=='01':
-            try:
-                if int(pdfStrList[0][0:9]):
-                    pdfinfo["tjbh"]=pdfStrList[0][0:9]
-                    pdfinfo["file"] = pdfStrList[0][0:9] + "_01.pdf"
-                    pdfinfo["jcrq"]=''
-            except Exception as e:
-                try:
-                    if int(pdfStrList[1][0:9]):
-                        pdfinfo["tjbh"] = pdfStrList[1][0:9]
-                        pdfinfo["file"] = pdfStrList[1][0:9] + "_01.pdf"
-                        pdfinfo["jcrq"] = ''
-                except Exception as e:
-                    pdfinfo["tjbh"] = pdfStrList[3][0:9]
-                    pdfinfo["file"] = pdfStrList[3][0:9] + "_01.pdf"
-                    pdfinfo["jcrq"] = ''
-
-        elif equip_type == '04':  # 骨密度
-            new_string = "".join(pdfStrList)
-            print(new_string)
-        elif equip_type == '08': # 心电图
-            new_string="".join(pdfStrList)
-            re_tjbh = re.compile(gol.get_value('regular_tjbh'), re.DOTALL)
-            re_xm = re.compile(gol.get_value('regular_xm'), re.DOTALL)
-            re_jcrq = re.compile(gol.get_value('regular_jcrq'), re.DOTALL)
-            tjbh = re_tjbh.findall(new_string)
-            xm = re_xm.findall(new_string)
-            jcrq = re_jcrq.findall(new_string)
-
-            if tjbh:
-                pdfinfo["tjbh"]=tjbh[0].strip()
-                pdfinfo["file"] = tjbh[0].strip() + "_08.pdf"
-            else:
-                pdfinfo["tjbh"]=''
-            if xm:
-                pdfinfo["xm"] = xm[0].strip()
-            else:
-                pdfinfo["xm"]=''
-            if jcrq:
-                pdfinfo["jcrq"] = jcrq[0].strip()
-            else:
-                pdfinfo["jcrq"] = ''
-
-        else:
-            print("设备类型：%s，暂不支持解析，请联系管理员！" %gol.get_value('equip_type','00'))
-
-
-        if gol.get_value('system_debug',0):
-            print("文件%s  原格式：\n%s\n" %(filename,pdfStrList))
-            print("文件%s解析格式：\n%s\n" %(filename,pdfinfo))
-
-
-        return pdfinfo
 
 
 #读取PDF并进行剪切
@@ -268,6 +322,28 @@ class ReadPdf(object):
         ous.close()
 
 
+def pdf2pic(pdf):
+    name = os.path.splitext(os.path.basename(pdf))[0] # 文件名称，不带路径
+    img_obj = Image(filename=pdf, resolution=300)
+    req_image = []
+    for img in img_obj.sequence:
+        img_page = Image(image=img)
+        if name[-3:] == '_08':
+            # 心电图 顺时针旋转 90度
+            img_page.rotate(90)
+        req_image.append(img_page.make_blob('png'))
+    # 遍历req_image,保存为图片文件
+    i = 0
+    new_file = str(os.path.splitext(pdf)[0]) + '.png'
+    for img in req_image:
+        ff = open(new_file, 'wb')
+        ff.write(img)
+        ff.close()
+        i += 1
+
+    return new_file
+
+
 # 初始化-查找文件
 def fileiter(root_path):
     for root, dirs, files in os.walk(root_path):
@@ -280,10 +356,9 @@ def date_format(date_str):
     tmp = date_str.split('/')
     return tmp[0]+'-'+tmp[1].zfill(2)+'-'+tmp[2].zfill(2)+' 00.00.00'
 
-
 if __name__=="__main__":
-    dir = r'E:\PDF-\01\create'
+    dir = r'E:\PDF-\04\create'
     for filename,_ in fileiter(dir):
-        print(txtparse(filename,'01'))
+        print(txtparse(filename,'04'))
             # if i.isdigit():
             #     print(i)

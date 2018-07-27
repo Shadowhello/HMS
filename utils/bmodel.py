@@ -119,7 +119,7 @@ class MT_TJ_EQUIP(BaseModel):
 
     tjbh = Column(String(16), primary_key=True)  #体检编号
     equip_type = Column(CHAR(1), primary_key=True)  # 设备类型
-    equip_name = Column(CHAR(5), nullable=True)
+    equip_name = Column(String(16), nullable=True)
     create_time = Column(DateTime, nullable=False)
     modify_time = Column(DateTime, nullable=False)
     patient = Column(String(20), nullable=False)

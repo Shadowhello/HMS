@@ -1,4 +1,4 @@
-from .bwidget import *
+from widgets.bwidget import *
 from functools import wraps
 
 _QT5 = _QT4 = False

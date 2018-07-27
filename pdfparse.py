@@ -3,30 +3,13 @@ from watchdog.events import FileSystemEventHandler
 from utils.pdfmanager import *
 from utils.api import *
 from utils.base import *
-from utils.envir import set_env
+from utils.envir_equip import set_equip_env
 from utils.bmodel import *
 
-# 操作数据库
-def bulk_insert(session,datas):
-    try:
-        session.bulk_insert_mappings(MT_TJ_CZJLB, datas)
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        print('插入失败！错误代码：%s' %e)
-
-
-def upload_api(file_old,file_new):
-    shutil.copy2(file_old, file_new)
-    if gol.get_value('monitor_file_handle', True):
-        # 是否删除原始文件
-        os.remove(file_old)
-    # 文件上传API
-    response = upload_file(file_new)
-    if response:
-        if response['is_success'] == 1:
-            # 上传成功删除，解析文件
-            os.remove(file_new)
+# 说明：
+# 2017-09-01 0.1 版  新增设备接口，增加设备：骨密度、心电图、电测听、大便仪、超声骨密度、C13/14
+# 2018-05-01 0.2 版  重构设备接口，增加外出联网，增加设备：DR放射、肺功能（COM）
+# 2018-07-26 0.3 版  重构设备接口，增加 PDF转Pic功能，增加绩效、日志补充、HTTP上传替换SMB上传方式
 
 # 监听文件生成，解析，上传
 class MonitorHandler(FileSystemEventHandler):
@@ -50,6 +33,8 @@ class MonitorHandler(FileSystemEventHandler):
         self.monitor_file_handle = gol.get_value('monitor_file_handle', True)
         # 监听后 等待多少秒后再处理
         self.monitor_file_sleep = gol.get_value('monitor_file_sleep', 2)
+        # 上传文件请求地址
+        self.url = gol.get_value('api_equip_upload','')
         # 日志
         self.log = gol.get_value('log')
         # 设备记录表
@@ -97,27 +82,61 @@ class MonitorHandler(FileSystemEventHandler):
                 # upload(result)
                 # # self.conn.insert_cyct(result)
             elif suffix_name == '.pdf':
+                s0 = time.time()
                 # 解析PDF
                 pdfinfo=txtparse(filename,self.equip_type)
-                self.log.info("文件：%s -> %s 解析完成！" %(filename,pdfinfo['file']))
+                cost = time.time() - s0
+                self.log.info("文件：%s -> %s 解析完成！耗时：%s秒" %(filename,pdfinfo['file'],str(round(cost,2))))
                 # 合并解析信息
                 new_pdfinfo=dict(pdfinfo,**self.equip_info)
-                from pprint import pprint
-                pprint(new_pdfinfo)
-                self.process_queue.put(pdfinfo['file'])
-                # 移动文件
+                # from pprint import pprint
+                # pprint(new_pdfinfo)
                 if pdfinfo['file']:
+                    # 移动文件
                     new_file=os.path.join(self.monitor_file_parse,pdfinfo['file'])
                     shutil.copy2(filename, new_file)
                     # 上传文件
-                    # upload_api(filename,new_file)
+                    if self.url:
+                        s1 = time.time()
+                        response = api_equip_upload(self.url,new_file)
+                        if response:
+                            new_pdfinfo['file_path'] = response['data']
+                            cost = time.time()-s1
+                            self.log.info("文件%s 上传成功！耗时：%s" % (new_file, str(round(cost, 2))))
+                        else:
+                            self.log.info("文件上传失败！错误信息：请求失败！")
+                    else:
+                        self.log.info("文件上传失败！错误信息：上传地址不存在！")
+
                     # 删除文件
                     if self.monitor_file_handle:
                         os.remove(filename)
                 else:
                     new_file = None
+                s3 = time.time()
                 # 数据库更新
                 self.update_db(pdfinfo['tjbh'],new_file,new_pdfinfo)
+                cost = time.time() - s3
+                self.log.info("数据库操作完成！耗时：%s秒" % str(round(cost, 2)))
+                # 返回 消息给 UI
+                if self.process_queue:
+                    self.process_queue.put(pdfinfo['tjbh'])
+                    #self.process_queue.put('100000130') #测试
+                    self.log.info("向UI传递消息：%s" %pdfinfo['tjbh'])
+                # 转换成图片,主要应用体检报告，嵌入到HTML中
+                try:
+                    s2 = time.time()
+                    pic_file = pdf2pic(new_file)
+                    cost = time.time() - s2
+                    self.log.info("Pdf(%s)->Pic转换成功！耗时：%s秒" % (new_file, str(round(cost, 1))))
+                    response = api_equip_upload(self.url, pic_file)
+                    if response:
+                        new_pdfinfo['file_path'] = response['data']
+                        self.log.info("文件(PDF与PNG)：%s 上传成功！" %new_file)
+                    else:
+                        self.log.info("文件上传失败！错误信息：请求失败！")
+                except Exception as e:
+                    self.log.info("Pdf(%s)->Pic转换失败！错误信息：%s" % (new_file, e))
             else:
                 pass
 
@@ -168,7 +187,7 @@ class MonitorHandler(FileSystemEventHandler):
                                                                 )
             else:
                 self.session.bulk_insert_mappings(MT_TJ_EQUIP, [equip_info])
-                self.session.commit()
+            self.session.commit()
         except Exception as e:
             self.session.rollback()
             self.log.info("体检顾客：%s，更新表TJ_EQUIP失败！错误信息：%s" %(tjbh,e))
@@ -193,7 +212,7 @@ class MonitorHandler(FileSystemEventHandler):
 
 # 运行监控服务
 def run(queue=None):
-    set_env()
+    set_equip_env(False)
     log = gol.get_value('log')
     monitor_file_paths = gol.get_value('monitor_file_paths', 'C:/')
     monitor_polling_timer = gol.get_value('monitor_polling_timer', 2)
