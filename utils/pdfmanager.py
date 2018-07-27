@@ -343,7 +343,6 @@ def pdf2pic(pdf):
 
     return new_file
 
-
 # 初始化-查找文件
 def fileiter(root_path):
     for root, dirs, files in os.walk(root_path):

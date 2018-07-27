@@ -136,7 +136,8 @@ class MonitorHandler(FileSystemEventHandler):
                     else:
                         self.log.info("文件上传失败！错误信息：请求失败！")
                 except Exception as e:
-                    self.log.info("Pdf(%s)->Pic转换失败！错误信息：%s" % (new_file, e))
+                    print(e)
+                    self.log.info("Pdf(%s)->Pic转换失败！" % new_file)
             else:
                 pass
 
