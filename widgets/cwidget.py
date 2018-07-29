@@ -210,6 +210,31 @@ class SerialNoButton(QToolButton):
     def collectColor(self):
         return self.collect_color
 
+# C13/14 呼气试验 搜索列表
+class C13InspectTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(C13InspectTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                item = QTableWidgetItem(str2(col_value))
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(row_index, col_index, item)
+
+    # 插入到 吹气列表
+    def insert2(self,data):
+        pass
+
+    # 插入到完成列表
+    def insert3(self,data):
+        pass
+
 # 设备接口检查列表
 class EquipInspectTable(TableWidget):
 
@@ -225,8 +250,6 @@ class EquipInspectTable(TableWidget):
                 item.setBackground(QColor("#ff8c00"))               # 橘黄色
 
             self.setItem(self.rowCount() - 1, col_index, item)
-
-
 
         self.resizeColumnsToContents()  # 设置列适应大小
 
@@ -579,6 +602,32 @@ class TimerButton(QPushButton):
             self.num=self.num-1
             self.setText('%s(%s)'%(self.btn_name,self.num))
 
+# 倒计时标签 15分钟
+class TimerLabel(QLabel):
+
+    def __init__(self, num=900, icon=None, parent=None):
+        '''
+        :param num: 倒计时时间
+        :param icon: 按钮图标
+        :param parent:
+        '''
+        super(TimerLabel, self).__init__(parent)
+        self.num = num
+        self.count =0
+        self.setText(time.strftime('%M:%S', time.gmtime(self.count)))
+        self.timer = QTimer(self)
+        self.timer.start(1000)
+        self.timer.timeout.connect(self.on_timer_change)
+
+    def on_timer_change(self):
+        if self.count==self.num:
+            self.setText(time.strftime('%M:%S', time.gmtime(self.count)))
+            self.timer.stop()
+        else:
+            self.setText(time.strftime('%M:%S', time.gmtime(self.count)))
+            self.count = self.count + 1
+
+
 
 # # 复合控件，时间组 开始时间-结束时间
 # class StartEndDate(QWidget):
@@ -800,6 +849,13 @@ class DateGroup(QHBoxLayout):
         self.addWidget(QLabel('-'))
         self.addSpacing(10)
         self.addWidget(self.end)
+
+    def setNoChoice(self,state=True):
+        if state:
+            self.jsrq.setDisabled(True)
+        else:
+            self.jsrq.setDisabled(False)
+
 
     @property
     def where_date(self):
@@ -1166,11 +1222,12 @@ if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     # 倒计时按钮
-    #ui = TimerButton(30,'审阅')
+    # ui = TimerButton(30,'审阅')
     # 一组日期
     #ui = StartEndDate()
-    data1=  {'10000': '社区', '10001': '社区2', '10501': '新社区'}
-    data2 = {'sq': '社区', 'sq2': '社区2', 'xsq': '新社区'}
-    ui = TUint(data1,data2)
+    # data1=  {'10000': '社区', '10001': '社区2', '10501': '新社区'}
+    # data2 = {'sq': '社区', 'sq2': '社区2', 'xsq': '新社区'}
+    # ui = TUint(data1,data2)
+    ui = TimerLabel()
     ui.show()
     app.exec_()

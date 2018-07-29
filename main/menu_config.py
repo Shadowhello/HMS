@@ -96,6 +96,7 @@ SYS_MENU_TREE = {   # 系统
              # ('智能导检',{'pid': 300, 'id': 3006, 'title': '智能导检', 'tip': None, 'state': False, 'icon':'导检','is_tool':True,'shortcut':None}),
              # ('短信平台',{'pid': 300, 'id': 3007, 'title': '短信平台', 'tip': None, 'state': False, 'icon':'短信','is_tool':True,'shortcut':None})
                 ('采血留样',{'pid': 400, 'sid': 4008, 'title': '采血台', 'tip': None, 'state': True, 'icon':'采血台','is_tool':True,'shortcut':None}),
+                ('呼气试验',{'pid': 400, 'sid': 4009, 'title': '呼气室', 'tip': None, 'state': True, 'icon':'呼气室','is_tool':True,'shortcut':None}),
             ])}),
         # 体检检后管理
         ('检后管理',
@@ -188,7 +189,8 @@ SYS_MENU_MODULE_CLASS = {
     4005: {'module': None, 'class': None, 'enabled': False},
     4006: {'module': None, 'class': None, 'enabled': False},
     4007: {'module': None, 'class': None, 'enabled': False},
-    4008: {'module': 'lis.sample', 'class': 'SampleManager', 'enabled': True},    # 采血台
+    4008: {'module': 'lis.sample', 'class': 'SampleManager', 'enabled': True},       # 采血台
+    4009: {'module': 'C13.breathmanger', 'class': 'BreathManager', 'enabled': True},    # 呼气室
     5001: {'module': 'report.report', 'class': 'ReportCenter', 'enabled': True},    # 报告中心
     5002: {'module': 'mbgl.ncd', 'class': 'NCD', 'enabled': True},                  # 慢病管理
     5003: {'module': None, 'class': None, 'enabled': False},

@@ -334,16 +334,16 @@ QComboBox::down-arrow {
 }
 
 QScrollBar:vertical{
-background:#054874;
-padding:0px;
-border-radius:6px;
-max-width:12px;
+    background:#054874;
+    padding:0px;
+    border-radius:6px;
+    max-width:12px;
 }
 
 QScrollBar::handle:vertical{
-background:#377277;
-min-height:50px;
-border-radius:6px;
+    background:#377277;
+    min-height:50px;
+    border-radius:6px;
 }
 
 QScrollBar::handle:vertical:hover{
@@ -358,9 +358,6 @@ QScrollBar::add-page:vertical{
 background:none;
 }
 
-QScrollBar::sub-page:vertical{
-background:none;
-}
 
 QScrollBar::add-line:vertical{
 background:none;
@@ -370,10 +367,39 @@ QScrollBar::sub-line:vertical{
 background:none;
 }
 
+QScrollBar::add-page:vertical{
+background:none;
+}
+
 QScrollArea{
 border:0px;
 }
 
+QScrollBar:horizontal{
+    background:#054874;
+    padding-top:3px;
+    padding-bottom:3px;
+    padding-left:20px;
+    padding-right:20px;
+    }
+
+QScrollBar::handle:horizontal{
+    background:#377277;
+    border-radius:6px;
+    min-width:80px;
+    }
+
+QScrollBar::handle:horizontal:hover{
+    background:#d0d0d0;
+    }
+
+QScrollBar::add-line:horizontal{
+    background:url(:/images/resource/images/checkout/right.png) center no-repeat;
+    }
+
+QScrollBar::sub-line:horizontal{
+    background:url(:/images/resource/images/checkout/left.png) center no-repeat;
+    }
 
 QLabel#labelLoadingGamelist,
 QLabel#labelLoadingHierarchy,
@@ -389,6 +415,10 @@ QTreeWidget#treeWidgetHierarchy {
     border-image: url(resource/style/icons/gamelist-bg.png) repeat;
 }
 
+QTableView{
+    gridline-color:#E16531;
+    alternate-background-color: #e6e6e6;
+}
 
 QHeaderView::section:vertical {
     color: grey;

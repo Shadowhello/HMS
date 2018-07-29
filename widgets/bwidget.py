@@ -75,6 +75,15 @@ class ToolButton(QToolButton):
         self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         self.setAutoRaise(True)
 
+# 第一列加选择框
+    # for(int i = 0; i < 10; ++i)
+    # {
+    #     QStandardItem *item = new QStandardItem();
+    #     item->setCheckable(true);
+    #     item->setCheckState(Qt::Unchecked);
+    #     m_pModel->setItem(i, 0, item);
+    # }
+
 class TableWidget(QTableWidget):
 
     def __init__(self,heads:dict,parent=None):
@@ -86,6 +95,7 @@ class TableWidget(QTableWidget):
         self.verticalHeader().setVisible(True)  # 列表头
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)  # 表格内容不能编辑
         self.setSelectionBehavior(QAbstractItemView.SelectRows)  # 选中一行
+        self.setAlternatingRowColors(True)                       # 使用行交替颜色
         # 添加行头 必须先设置 setColumnCount
         self.setColumnCount(len(heads))
         self.setHorizontalHeaderLabels(heads.values())
