@@ -35,7 +35,7 @@ class QTJBH(QLineEdit):
         validator=QRegExpValidator(regx,self)
         self.setValidator(validator)              #根据正则做限制，只能输入数字
 
-        self.returnPressed.connect(self.validate)
+        # self.returnPressed.connect(self.validate)
 
     def validate(self):
         print(self.text())
@@ -210,8 +210,40 @@ class SerialNoButton(QToolButton):
     def collectColor(self):
         return self.collect_color
 
+# C13/14 项目对象(同一类对象同时存在且需要不同状态)
+class C13Item(object):
+
+    def __init__(self,tjbh,data=None):
+        self.tjbh = tjbh            # 体检编号
+        self.data = None            # 数据                # 解决乱码问题
+        self.state = 1              # 状态：1,2,3,4
+        self.simpleNo = None        # 样本号：对应吹气试纸
+
+    def setData(self,data:dict):
+        self.data = data
+
+    def getData(self):
+        return self.data
+
+    def setState(self,state):
+        self.state = state
+
+    def getState(self):
+        return self.state
+
+    # 设置样本编号
+    def setSimpleNo(self,sno):
+        self.simpleNo = sno
+
+    def getSimpleNo(self):
+        return self.simpleNo
+
+
 # C13/14 呼气试验 搜索列表
 class C13InspectTable(TableWidget):
+
+    # 自定义信号：删除项目信号
+    itemDroped = pyqtSignal(str)
 
     def __init__(self, heads, parent=None):
         super(C13InspectTable, self).__init__(heads, parent)
@@ -229,11 +261,48 @@ class C13InspectTable(TableWidget):
 
     # 插入到 吹气列表
     def insert2(self,data):
-        pass
+        self.insertRow(self.rowCount())
+        for col_index, col_value in enumerate(data):
+            if col_index== 6 :
+                lb_timer = TimerLabel()
+                lb_timer.timer_out.connect(partial(self.dropRow,data[0]))     # 必须传递唯一的值
+                self.setCellWidget(self.rowCount()-1,col_index,lb_timer)
+            else:
+                item = QTableWidgetItem(col_value)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(self.rowCount() - 1, col_index, item)
+
+        self.horizontalHeader().setStretchLastSection(True)
 
     # 插入到完成列表
     def insert3(self,data):
-        pass
+        self.insertRow(self.rowCount())
+        for col_index, col_value in enumerate(data):
+            item = QTableWidgetItem(col_value)
+            item.setTextAlignment(Qt.AlignCenter)
+            self.setItem(self.rowCount() - 1, col_index, item)
+
+        self.horizontalHeader().setStretchLastSection(True)
+
+    # 增量增加，不清除原来的数据
+    def insertMany(self,datas):
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(self.rowCount())
+            for col_index, col_value in enumerate(row_data):
+                item = QTableWidgetItem(str2(col_value))
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(row_index, col_index, item)
+
+    # 删除行
+    def dropRow(self,p_str):
+        items = self.findItems(p_str, Qt.MatchContains)
+        for item in items:
+            p_tjbh = self.item(item.row(), 0).text()
+            self.removeRow(item.row())
+            self.itemDroped.emit(p_tjbh)
+
 
 # 设备接口检查列表
 class EquipInspectTable(TableWidget):
@@ -605,7 +674,9 @@ class TimerButton(QPushButton):
 # 倒计时标签 15分钟
 class TimerLabel(QLabel):
 
-    def __init__(self, num=900, icon=None, parent=None):
+    timer_out = pyqtSignal()
+
+    def __init__(self, num=10, icon=None, parent=None):
         '''
         :param num: 倒计时时间
         :param icon: 按钮图标
@@ -613,19 +684,19 @@ class TimerLabel(QLabel):
         '''
         super(TimerLabel, self).__init__(parent)
         self.num = num
-        self.count =0
-        self.setText(time.strftime('%M:%S', time.gmtime(self.count)))
+        self.setText(time.strftime('%M:%S', time.gmtime(self.num)))
         self.timer = QTimer(self)
         self.timer.start(1000)
         self.timer.timeout.connect(self.on_timer_change)
 
     def on_timer_change(self):
-        if self.count==self.num:
-            self.setText(time.strftime('%M:%S', time.gmtime(self.count)))
+        if self.num ==0 :
+            self.setText(time.strftime('%H:%M:%S', time.gmtime(self.num)))
             self.timer.stop()
+            self.timer_out.emit()
         else:
-            self.setText(time.strftime('%M:%S', time.gmtime(self.count)))
-            self.count = self.count + 1
+            self.setText(time.strftime('%H:%M:%S', time.gmtime(self.num)))
+            self.num = self.num - 1
 
 
 

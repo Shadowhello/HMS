@@ -418,6 +418,7 @@ QTreeWidget#treeWidgetHierarchy {
 QTableView{
     gridline-color:#E16531;
     alternate-background-color: #e6e6e6;
+    selection-background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #c0c0d0 stop:0.5 #054874 stop:1 #377277);
 }
 
 QHeaderView::section:vertical {

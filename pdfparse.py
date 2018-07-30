@@ -193,7 +193,9 @@ class MonitorHandler(FileSystemEventHandler):
             self.session.rollback()
             self.log.info("体检顾客：%s，更新表TJ_EQUIP失败！错误信息：%s" %(tjbh,e))
 
-        # 更新 DCP_files
+        # 更新归档表 TJ_FILE_ACTIVE
+
+        # 更新 DCP_files 心电图 需要
         if filename:
             if self.equip_type=='08':
                 dcp_info = {}
