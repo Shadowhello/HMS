@@ -25,6 +25,16 @@ class BreathCheckUI(Widget):
                 ("s_time", "计时开始时间"),
                 ("e_time", "计时结束时间")
              ])
+        self.c13_cols3 = OrderedDict(
+            [
+                ("no", "样本号"),
+                ("tjbh","体检编号"),
+                ("xm","姓名"),
+                ("xb","性别"),
+                ("nl", "年龄"),
+                ("xmmc", "项目名称"),
+                ("tjqy", "体检区域")
+             ])
         self.initUI()
 
     def initUI(self):
@@ -92,7 +102,7 @@ class BreathCheckUI(Widget):
         lt_right_1.addWidget(self.table_c13_checking_2)
         self.gp_right_down_1.setLayout(lt_right_1)
         # 吹气完成的
-        self.table_c13_checked = C13InspectTable(self.c13_cols)
+        self.table_c13_checked = C13InspectTable(self.c13_cols3)
         self.table_c13_checked.verticalHeader().setVisible(False)  # 列表头
         self.gp_right_down_2 = QGroupBox('4、完成吹气：总人数 0')
         lt_right_2 = QHBoxLayout()

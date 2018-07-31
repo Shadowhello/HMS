@@ -238,7 +238,6 @@ class C13Item(object):
     def getSimpleNo(self):
         return self.simpleNo
 
-
 # C13/14 呼气试验 搜索列表
 class C13InspectTable(TableWidget):
 
@@ -286,6 +285,7 @@ class C13InspectTable(TableWidget):
 
     # 增量增加，不清除原来的数据
     def insertMany(self,datas):
+        # old_row = self.rowCount()
         # list 实现
         for row_index, row_data in enumerate(datas):
             # 插入一行
@@ -293,7 +293,7 @@ class C13InspectTable(TableWidget):
             for col_index, col_value in enumerate(row_data):
                 item = QTableWidgetItem(str2(col_value))
                 item.setTextAlignment(Qt.AlignCenter)
-                self.setItem(row_index, col_index, item)
+                self.setItem(self.rowCount() - 1, col_index, item)
 
     # 删除行
     def dropRow(self,p_str):
@@ -1287,6 +1287,61 @@ class DirTabWidget(QSplitter):
             self.left_flag = False
             self.button.setIcon(Icon("left"))
             self.lwidget.setVisible(True)
+
+class BaseUserGroup(QGroupBox):
+
+    def __init__(self):
+        super(BaseUserGroup,self).__init__()
+        self.setTitle('人员信息')
+        lt_main = QGridLayout()
+        
+        ########################控件区#####################################
+        self.user_id   = Lable()       # 体检编号
+        self.user_name = Lable()          # 姓名
+        self.user_sex =  Lable()          # 性别
+        self.user_age =  Lable()          # 年龄->自动转换出生年月
+        self.depart   =  Lable()          #班级
+        self.dwmc    =   Lable()          #单位名称
+        self.tj_qdrq =   Lable()          # 签到日期，默认当天
+        self.sjhm   =    Lable()          #手机号码
+        self.sfzh    =   Lable()          #身份证号
+        self.tj_djrq =   Lable()          # 登记日期
+        
+        ###### 布局
+        ###################基本信息  第一行##################################
+        lt_main.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)
+        lt_main.addWidget(self.user_id, 0, 1, 1, 1)
+        lt_main.addWidget(QLabel('姓    名：'), 0, 2, 1, 1)
+        lt_main.addWidget(self.user_name, 0, 3, 1, 1)
+        lt_main.addWidget(QLabel('性    别：'), 0, 4, 1, 1)
+        lt_main.addWidget(self.user_sex, 0, 5, 1, 1)
+        lt_main.addWidget(QLabel('年    龄：'), 0, 6, 1, 1)
+        lt_main.addWidget(self.user_age, 0, 7, 1, 1)
+
+        ###################基本信息  第二行##################################
+        lt_main.addWidget(QLabel('部    门：'), 1, 0, 1, 1)
+        lt_main.addWidget(self.depart, 1, 1, 1, 1)
+        lt_main.addWidget(QLabel('单位名称：'), 1, 2, 1, 1)
+        lt_main.addWidget(self.dwmc, 1, 3, 1, 3)
+        lt_main.addWidget(QLabel('签到日期：'), 1, 6, 1, 1)
+        lt_main.addWidget(self.tj_qdrq, 1, 7, 1, 1)
+
+        ###################基本信息  第三行##################################
+        lt_main.addWidget(QLabel('手机号码：'), 2, 0, 1, 1)
+        lt_main.addWidget(self.sjhm, 2, 1, 1, 1)
+        lt_main.addWidget(QLabel('身份证号：'), 2, 2, 1, 1)
+        lt_main.addWidget(self.sfzh, 2, 3, 1, 3)
+        lt_main.addWidget(QLabel('登记日期：'), 2, 6, 1, 1)
+        lt_main.addWidget(self.tj_djrq, 2, 7, 1, 1)
+        
+
+        lt_main.setHorizontalSpacing(10)                 #设置水平间距
+        lt_main.setVerticalSpacing(10)                   #设置垂直间距
+        lt_main.setContentsMargins(10, 10, 10, 10)       #设置外间距
+        lt_main.setColumnStretch(11, 1)                  #设置列宽，添加空白项的
+        self.setLayout(lt_main)
+
+
 
 
 if __name__ == '__main__':

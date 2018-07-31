@@ -39,6 +39,6 @@ def get_nocheck2_sql(up_time):
             FROM TJ_TJDJB a 
 				INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH 
 					AND  (a.del <> '1' or a.del is null) and a.QD='1' 
-					AND a.QDRQ>='%s'  AND  a.QDRQ<substring(convert(char,dateadd(day,-1,getdate()),120),1,10)
+					AND a.QDRQ>='%s'  AND  a.QDRQ<substring(convert(char,dateadd(day,1,getdate()),120),1,10)
 				INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
     ''' %up_time
