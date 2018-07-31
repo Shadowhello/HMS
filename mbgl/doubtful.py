@@ -92,9 +92,9 @@ class Doubtful(Widget):
 
         search_group.setLayout(search_layout)
 
-        search_group2 = QGroupBox('快速检索')
-        search_layout2 = QuickSearchGroup()
-        search_group2.setLayout(search_layout2)
+
+        self.gp_quick_search = QuickSearchGroup()
+
         self.cols = OrderedDict([('tjbh','体检编号'),
                                  ('xm','姓名'),
                                  ('xb','性别'),
@@ -127,7 +127,7 @@ class Doubtful(Widget):
         lt_bottom.addWidget(self.table)
 
         lt_top.addWidget(search_group)
-        lt_top.addWidget(search_group2)
+        lt_top.addWidget(self.gp_quick_search)
 
         main_layout.addLayout(lt_top)
         #main_layout.addStretch()

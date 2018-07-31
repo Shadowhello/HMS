@@ -23,6 +23,9 @@ class BreathCheck(BreathCheckUI):
         self.simpleno_2 = 0     # 明州2楼
         self.simpleno_3 = 0     # 明州3楼
         self.simpleno_4 = 0     # 江东
+        # 待插入的 数据对象
+        self.data_obj = {'jllx':'0026','jlmc':'C13/14吹气','tjbh':'','mxbh':'5001',
+                         'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'jlnr':None,'bz':None}
         # 绑定信号
         self.btn_update.clicked.connect(partial(self.on_btn_update_click,self.lb_update.text()))
         self.le_tjbh.returnPressed.connect(self.on_le_tjbh_press)
@@ -46,7 +49,6 @@ class BreathCheck(BreathCheckUI):
             self.c13_items[result[0]] = C13Item(result[0])
         self.gp_left.setTitle('1、待测：总人数 %s 人' % str(self.table_c13_nocheck.rowCount()))
         self.lb_update.setText(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))))
-
 
     # 刷新待测列表
     def on_btn_update_click(self,up_time):
@@ -127,9 +129,10 @@ class BreathCheck(BreathCheckUI):
                     # 新表增加
                     self.table_c13_checked.insert3(data)
                     # 更新数据库 TJ_CZJLB  TJ_TJJLMXB
-                    cz_data = ['0026',tjbh,'5001',self.login_id,cur_datetime(),self.login_area,'',self.login_name,'C13/14吹气',str(c13_item_obj.getSimpleNo())]
+                    self.data_obj['tjbh'] = tjbh
+                    self.data_obj['bz'] = str(c13_item_obj.getSimpleNo())
                     try:
-                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [cz_data])
+                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [self.data_obj])
                         self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == '5001').update({MT_TJ_TJJLMXB.zxpb: '3'})
                         self.session.commit()
                     except Exception as e:
@@ -144,6 +147,9 @@ class BreathCheck(BreathCheckUI):
                 mes_about(self,'该顾客已完成吹气！')
         else:
             mes_about(self,'该顾客不存在，请尝试刷新或确认该顾客有C13项目！')
+
+        # 清空体检编号
+        self.le_tjbh.setText('')
 
     # 吹气列表
     def on_table_checking2_insert(self,tjbh:str):

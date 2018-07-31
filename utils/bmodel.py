@@ -42,6 +42,41 @@ class MT_TJ_TJJLMXB(BaseModel):
     tmxh = Column(String(20), nullable=True)
     tmbh1 = Column(String(20), nullable=False)
 
+    @property
+    def item_state(self):
+        if getattr(self, "qzjs", '') == '1':
+            return '已拒检'
+        else:
+            if getattr(self, "jsbz", '') == '1':
+                return '已小结'
+            else:
+                if getattr(self, "zxpb", '') == '0':
+                    return '核实'
+                elif getattr(self, "zxpb", '') == '1':
+                    return '已回写'
+                elif getattr(self, "zxpb", '') == '2':
+                    return '已接收'
+                elif getattr(self, "zxpb", '') == '3':
+                    return '已检查'
+                elif getattr(self, "zxpb", '') == '4':
+                    return '已抽血'
+                elif getattr(self, "zxpb", '') == '5':
+                    return '已留样'
+                else:
+                    return '未知'
+
+    @property
+    def item_result(self):
+        return {
+            'xmmc':str2(getattr(self, "xmmc", '')),
+            'xmbh': getattr(self, "xmbh", ''),
+            'state': self.item_state,
+            'ksbm':getattr(self, "ksbm", ''),
+            'btn_dy':'',                                    # 打印
+            'btn_jj':'',                                    # 拒检
+            'btn_hs':''                                     # 核实
+        }
+
 class MT_TJ_DW(BaseModel):
 
     __tablename__ = 'TJ_DWDMB'

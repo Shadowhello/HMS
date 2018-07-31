@@ -40,13 +40,11 @@ class CollectHistory_UI(Widget):
 
         gp_where_search.setLayout(lt_where_search)
         # 子布局 右
-        gp_quick_search = QGroupBox('快速检索')
-        lt_quick_search = QHBoxLayout()
-        gp_quick_search.setLayout(lt_quick_search)
+        self.gp_quick_search = QuickSearchGroup()
 
         # 添加布局
         lt_top.addWidget(gp_where_search)
-        lt_top.addWidget(gp_quick_search)
+        lt_top.addWidget(self.gp_quick_search)
         ############ 下布局 ########################
         self.collect_cols = OrderedDict([
                                 ("zt", '状态'),
@@ -68,9 +66,7 @@ class CollectHistory_UI(Widget):
         # 设置列宽
         self.table_history.setColumnWidth(0, 40)
         self.table_history.setColumnWidth(5, 150)
-
         lt_bottom.addWidget(self.table_history)
-
 
         # 添加主布局
         lt_main.addLayout(lt_top)

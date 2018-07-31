@@ -3,6 +3,13 @@ from utils.readparas import GolParasMixin,GolParasMixin2
 from utils.base import str2
 from functools import partial
 
+# 加粗字体
+def get_font():
+    font = QFont()
+    font.setBold(True)
+    font.setWeight(75)
+    return font
+
 # 定制化组件
 class Lable(QLabel):
 
@@ -16,6 +23,12 @@ class Widget(GolParasMixin,QWidget):
 
     def __init__(self,parent=None):
         super(Widget,self).__init__(parent)
+        self.init()
+
+# 窗口带日志、登录信息、数据库链接功能
+class Dialog(GolParasMixin, QDialog):
+    def __init__(self, parent=None):
+        super(Dialog, self).__init__(parent)
         self.init()
 
 # 窗口带日志、登录信息、数据库链接功能
@@ -50,16 +63,9 @@ class QXM(QLineEdit):
         super(QXM, self).__init__(parent)
 
         self.setPlaceholderText("输姓名回车，支持模糊匹配")
-        regx = QRegExp("[0-9]+$")
-        validator = QRegExpValidator(regx, self)
-        self.setValidator(validator)  # 根据正则做限制，只能输入数字
-
-        self.returnPressed.connect(self.validate)
-
-    def validate(self):
-        if len(self.text()) != 9:
-            mes_about(self, "体检编号：%s不是9位，请重新输入！" % self.text())
-            self.setText('')
+        # regx = QRegExp("[0-9]+$")
+        # validator = QRegExpValidator(regx, self)
+        # self.setValidator(validator)  # 根据正则做限制，只能输入数字
 
 # 手机号码
 class QSJHM(QLineEdit):
@@ -462,6 +468,64 @@ class CollectHistoryTable(TableWidget):
 
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
+
+# 抽血历史采集筛选列表
+class ItemsStateTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(ItemsStateTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+
+        for row_index, row_data in enumerate(datas):
+            self.insertRow(row_index)                # 插入一行
+            for col_index, col_name in enumerate(heads.keys()):
+                data = row_data[col_name]
+                item = QTableWidgetItem(data)
+                if col_index == 0:
+                    if data == '已小结':
+                        pass
+                    elif data in ['已检查','已抽血','已留样']:
+                        item.setBackground(QColor("#f0e68c"))
+                    elif data == '核实':
+                        item.setBackground(QColor("#FF0000"))
+                    elif data == '已拒检':
+                        item.setBackground(QColor("#008000"))
+                    elif data == '已接收':
+                        item.setBackground(QColor("#b0c4de"))
+                    elif data == '已回写':
+                        item.setBackground(QColor("#1e90ff"))
+                elif col_index == 4:
+                    item = QTableWidgetItem('打印')
+                    item.setFont(get_font())
+                    item.setBackground(QColor(218, 218, 218))
+                    item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+                elif col_index == 5:
+                    if row_data[list(heads.keys())[0]] in ['已小结','已拒检']:
+                        item = QTableWidgetItem('')
+                    else:
+                        item = QTableWidgetItem('拒检')
+                        item.setFont(get_font())
+                        item.setBackground(QColor(218, 218, 218))
+                        item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+                elif col_index == 6:
+                    if row_data[list(heads.keys())[0]] in ['已小结','已拒检']:
+                        item = QTableWidgetItem('')
+                    else:
+                        item = QTableWidgetItem('核实')
+                        item.setFont(get_font())
+                        item.setBackground(QColor(218, 218, 218))
+                        item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+
+                self.setItem(row_index, col_index, item)
+                # 除第三列 都居中
+                if col_index!= 3:
+                    item.setTextAlignment(Qt.AlignCenter)
+
+        self.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        self.horizontalHeader().setStretchLastSection(True)
+
 
 # 报告追踪列表
 class ReportTrackTable(TableWidget):
@@ -1168,11 +1232,23 @@ class WhereSearchGroup(QGridLayout):
         return self.s_dwbh.where_dwmc
 
 # 快速检索组 体检编号、姓名、手机号码、身份证号
-class QuickSearchGroup(QGridLayout):
+class QuickSearchGroup(QGroupBox):
+
+    # 自定义 信号，封装对外使用
+    returnPressed = pyqtSignal(str,str)
 
     def __init__(self):
         super(QuickSearchGroup,self).__init__()
+        self.setTitle('快速检索')
+        self.initUI()
+        # 绑定信号槽
+        self.s_tjbh.returnPressed.connect(partial(self.getText,'tjbh'))
+        self.s_xm.returnPressed.connect(partial(self.getText, 'xm'))
+        self.s_sjhm.returnPressed.connect(partial(self.getText,'sjhm'))
+        self.s_sfzh.returnPressed.connect(partial(self.getText, 'sfzh'))
 
+    def initUI(self):
+        lt_main = QGridLayout()
         self.s_tjbh = QTJBH()
         self.s_xm = QXM()
         self.s_sjhm = QSJHM()
@@ -1181,27 +1257,23 @@ class QuickSearchGroup(QGridLayout):
         self.s_sfzh_read.setText('...')
 
         ###################基本信息  第一行##################################
-        self.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)
-        self.addWidget(self.s_tjbh, 0, 1, 1, 1)
-        self.addWidget(QLabel('姓    名：'), 0, 2, 1, 1)
-        self.addWidget(self.s_xm, 0, 3, 1, 1)
+        lt_main.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)
+        lt_main.addWidget(self.s_tjbh, 0, 1, 1, 1)
+        lt_main.addWidget(QLabel('姓    名：'), 0, 2, 1, 1)
+        lt_main.addWidget(self.s_xm, 0, 3, 1, 1)
 
         ###################基本信息  第二行##################################
-        self.addWidget(QLabel('手机号码：'), 1, 0, 1, 1)
-        self.addWidget(self.s_sjhm, 1, 1, 1, 1)
-        self.addWidget(QLabel('身份证号：'), 1, 2, 1, 1)
-        self.addWidget(self.s_sfzh, 1, 3, 1, 2)
-        self.addWidget(self.s_sfzh_read, 1, 5, 1, 1)
+        lt_main.addWidget(QLabel('手机号码：'), 1, 0, 1, 1)
+        lt_main.addWidget(self.s_sjhm, 1, 1, 1, 1)
+        lt_main.addWidget(QLabel('身份证号：'), 1, 2, 1, 1)
+        lt_main.addWidget(self.s_sfzh, 1, 3, 1, 2)
+        lt_main.addWidget(self.s_sfzh_read, 1, 5, 1, 1)
 
-        self.setHorizontalSpacing(10)            #设置水平间距
-        self.setVerticalSpacing(10)              #设置垂直间距
-        self.setContentsMargins(10, 10, 10, 10)  #设置外间距
-        self.setColumnStretch(6, 1)             #设置列宽，添加空白项的
-
-        self.s_tjbh.returnPressed.connect(partial(self.getText,'tjbh'))
-        self.s_xm.returnPressed.connect(partial(self.getText, 'xm'))
-        self.s_sjhm.returnPressed.connect(partial(self.getText,'sjhm'))
-        self.s_sfzh.returnPressed.connect(partial(self.getText, 'sfzh'))
+        lt_main.setHorizontalSpacing(10)            #设置水平间距
+        lt_main.setVerticalSpacing(10)              #设置垂直间距
+        lt_main.setContentsMargins(10, 10, 10, 10)  #设置外间距
+        lt_main.setColumnStretch(6, 1)             #设置列宽，添加空白项的
+        self.setLayout(lt_main)
 
     def setText(self,p_tjbh=None,p_xm=None,p_sjhm=None,p_sfzh=None):
         self.s_tjbh.setText(p_tjbh)
@@ -1209,10 +1281,18 @@ class QuickSearchGroup(QGridLayout):
         self.s_sjhm.setText(p_sjhm)
         self.s_sfzh.setText(p_sfzh)
 
-    #
     def getText(self,p_key):
         if p_key == 'tjbh':
-            print(self.s_tjbh.text())
+            p_text = self.s_tjbh.text()
+        elif p_key == 'xm':
+            p_text = self.s_xm.text()
+        elif p_key == 'sjhm':
+            p_text = self.s_sjhm.text()
+        elif p_key == 'sfzh':
+            p_text = self.s_sfzh.text()
+        else:
+            p_text = ''
+        self.returnPressed.emit(p_key,p_text)
 
 # 左右，左边是为目录，右边为TAB界面
 class DirTabWidget(QSplitter):
@@ -1288,24 +1368,74 @@ class DirTabWidget(QSplitter):
             self.button.setIcon(Icon("left"))
             self.lwidget.setVisible(True)
 
-class BaseUserGroup(QGroupBox):
+# 用户基础信息
+class UserBaseGroup(QGroupBox):
 
     def __init__(self):
-        super(BaseUserGroup,self).__init__()
+        super(UserBaseGroup,self).__init__()
+        self.setTitle('人员信息')
+        lt_main = QHBoxLayout()
+        ########################控件区#####################################
+        self.lb_user_id   = Lable()          # 体检编号
+        self.lb_user_name = Lable()          # 姓名
+        self.lb_user_sex =  Lable()          # 性别
+        self.lb_user_age =  Lable()          # 年龄->自动转换出生年月
+        self.lb_sjhm   =    Lable()          #手机号码
+        self.lb_sfzh    =   Lable()          #身份证号
+
+        lt_main.addWidget(QLabel('体检编号：'))
+        lt_main.addWidget(self.lb_user_id)
+        lt_main.addWidget(QLabel('姓名：'))
+        lt_main.addWidget(self.lb_user_name)
+        lt_main.addWidget(QLabel('性别：'))
+        lt_main.addWidget(self.lb_user_sex)
+        lt_main.addWidget(QLabel('年龄：'))
+        lt_main.addWidget(self.lb_user_age)
+        lt_main.addWidget(QLabel('手机号码：'))
+        lt_main.addWidget(self.lb_sjhm)
+        lt_main.addWidget(QLabel('身份证号：'))
+        lt_main.addWidget(self.lb_sfzh)
+        lt_main.addStretch()                  #设置列宽，添加空白项的
+        self.setLayout(lt_main)
+
+    # 赋值
+    def setData(self,data:dict):
+        self.clearData()
+        self.lb_user_id.setText(data.get('tjbh','未获取到'))
+        self.lb_user_name.setText(data.get('xm','未获取到'))
+        self.lb_user_sex.setText(data.get('xb','未获取到'))
+        self.lb_user_age.setText(data.get('nl','未获取到'))
+        self.lb_sjhm.setText(data.get('sjhm','未获取到'))
+        self.lb_sfzh.setText(data.get('sfzh','未获取到'))
+
+    # 清空数据
+    def clearData(self):
+        self.lb_user_id.setText('')
+        self.lb_user_name.setText('')
+        self.lb_user_sex.setText('')
+        self.lb_user_age.setText('')
+        self.lb_sjhm.setText('')
+        self.lb_sfzh.setText('')
+
+# 用户详细信息
+class UserDetailGroup(QGroupBox):
+
+    def __init__(self):
+        super(UserDetailGroup,self).__init__()
         self.setTitle('人员信息')
         lt_main = QGridLayout()
         
         ########################控件区#####################################
-        self.user_id   = Lable()       # 体检编号
-        self.user_name = Lable()          # 姓名
-        self.user_sex =  Lable()          # 性别
-        self.user_age =  Lable()          # 年龄->自动转换出生年月
-        self.depart   =  Lable()          #班级
-        self.dwmc    =   Lable()          #单位名称
-        self.tj_qdrq =   Lable()          # 签到日期，默认当天
-        self.sjhm   =    Lable()          #手机号码
-        self.sfzh    =   Lable()          #身份证号
-        self.tj_djrq =   Lable()          # 登记日期
+        self.lb_user_id   = Lable()       # 体检编号
+        self.lb_user_name = Lable()          # 姓名
+        self.lb_user_sex =  Lable()          # 性别
+        self.lb_user_age =  Lable()          # 年龄->自动转换出生年月
+        self.lb_depart   =  Lable()          #班级
+        self.lb_dwmc    =   Lable()          #单位名称
+        self.lb_tj_qdrq =   Lable()          # 签到日期，默认当天
+        self.lb_sjhm   =    Lable()          #手机号码
+        self.lb_sfzh    =   Lable()          #身份证号
+        self.lb_tj_djrq =   Lable()          # 登记日期
         
         ###### 布局
         ###################基本信息  第一行##################################
@@ -1354,6 +1484,6 @@ if __name__ == '__main__':
     # data1=  {'10000': '社区', '10001': '社区2', '10501': '新社区'}
     # data2 = {'sq': '社区', 'sq2': '社区2', 'xsq': '新社区'}
     # ui = TUint(data1,data2)
-    ui = TimerLabel()
+    ui = UserBaseGroup()
     ui.show()
     app.exec_()

@@ -20,6 +20,7 @@ class ReportTrackUI(Widget):
         gp_search = QGroupBox('条件检索')
 
         self.btn_query = ToolButton(Icon('query'),'查询')
+        self.btn_task = ToolButton(Icon('任务'), '领取')
         self.btn_export = ToolButton(Icon('导出'), '导出')
         # 追踪类型
         self.cb_track_type = TrackTypeGroup()
@@ -31,17 +32,18 @@ class ReportTrackUI(Widget):
         self.lt_where_search.addItem(self.cb_track_type, 0, 5, 1, 2)
         self.lt_where_search.addItem(self.cb_report_type, 0, 7, 1, 2)
         self.lt_where_search.addWidget(self.btn_query, 0, 9, 2, 2)
-        self.lt_where_search.addWidget(self.btn_export, 0, 11, 2, 2)
+        self.lt_where_search.addWidget(self.btn_task, 0, 11, 2, 2)
+        self.lt_where_search.addWidget(self.btn_export, 0, 13, 2, 2)
 
         gp_search.setLayout(self.lt_where_search)
 
-        gp_search2 = QGroupBox('快速检索')
-        self.lt_quick_search = QuickSearchGroup()
-        gp_search2.setLayout(self.lt_quick_search)
+        # 快速检索
+        self.gp_quick_search = QuickSearchGroup()
+
 
         # 上布局
         lt_top.addWidget(gp_search)
-        lt_top.addWidget(gp_search2)
+        lt_top.addWidget(self.gp_quick_search)
         ##########################################
         self.table_track_cols = OrderedDict([('tjzt','体检状态'),
                                              ('tjlx','客户类型'),

@@ -5,6 +5,7 @@ from widgets.cwidget import *
 from pis.pis_result_ui import PisResultUI
 from lis.lis_result_ui import LisResultUI
 from pacs.pacs_result_ui import PacsResultUI
+from report.report_item_ui import ItemsStateUI
 
 # 报告追踪
 class ReportTrack(ReportTrackUI):
@@ -17,10 +18,12 @@ class ReportTrack(ReportTrackUI):
         self.table_track.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_track.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
         self.table_track.itemClicked.connect(self.on_table_set)
-
+        # 快速检索
+        self.gp_quick_search.returnPressed.connect(self.on_quick_search)
         self.btn_export.clicked.connect(self.on_btn_export_click)       # 导出
         self.btn_query.clicked.connect(self.on_btn_query_click)          # 查询
-
+        # 功能栏
+        self.btn_item.clicked.connect(self.on_btn_item_click)
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
         self.btn_pacs.clicked.connect(self.on_btn_pacs_click)
         self.btn_lis.clicked.connect(self.on_btn_lis_click)
@@ -30,6 +33,7 @@ class ReportTrack(ReportTrackUI):
         self.lis_thread = None
         self.pacs_thread = None
         ############### 系统对话框 #######################################
+        self.item_ui = None       # 项目查看
         self.pis_ui = None        # 病理对话框
         self.lis_ui = None        # 检验对话框
         self.pacs_ui = None       # 检查对话框
@@ -43,6 +47,20 @@ class ReportTrack(ReportTrackUI):
             self.dwmc_py[result.pyjm.lower()] = str2(result.mc)
 
         self.lt_where_search.s_dwbh.setValues(self.dwmc_bh,self.dwmc_py)
+
+    def on_quick_search(self,p1_str,p2_str):
+        if p1_str == 'tjbh':
+            where_str = " TJ_TJDJB.TJBH = '%s' " %p2_str
+        elif p1_str == 'sjhm':
+            where_str = " TJ_TJDAB.SJHM = '%s' " % p2_str
+        elif p1_str == 'sfzh':
+            where_str = " TJ_TJDAB.SFZH = '%s' " % p2_str
+        else:
+            where_str = " TJ_TJDAB.XM ='%s' " % p2_str
+
+        results = self.session.execute(get_quick_search_sql(where_str)).fetchall()
+        self.table_track.load(results)
+        mes_about(self,'共检索出 %s 条数据！' %self.table_track.rowCount())
 
     # 右键功能
     def onTableMenu(self,pos):
@@ -95,8 +113,19 @@ class ReportTrack(ReportTrackUI):
         xm = self.table_track.item(row, 4).text()
         sfzh = self.table_track.item(row, 7).text()
         sjhm = self.table_track.item(row, 8).text()
-        self.lt_quick_search.setText(tjbh,xm,sjhm,sfzh)
+        self.gp_quick_search.setText(tjbh,xm,sjhm,sfzh)
         self.cur_tjbh = tjbh
+
+    #体检系统项目查看
+    def on_btn_item_click(self):
+        if not self.cur_tjbh:
+            mes_about(self,'请先选择一个人！')
+            return
+        else:
+            if not self.item_ui:
+                self.item_ui = ItemsStateUI(self.cur_tjbh, self)
+            self.item_ui.show()
+
 
     # 进入PIS
     def on_btn_pis_click(self):

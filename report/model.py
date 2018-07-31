@@ -62,7 +62,7 @@ def get_report_track_sql(tstart,tend):
 
     ''' %(tstart,tend)
 
-def get_quick_search_sql(tjbh):
+def get_quick_search_sql(where_str):
     return '''
     WITH T1 AS (
                 SELECT 
@@ -104,13 +104,10 @@ def get_quick_search_sql(tjbh):
                     (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
                     DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
                 FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND %s
 
                 AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
-
-                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
-                
-                AND TJ_TJDJB.TJBH = '%s'
-
             )
              ,T2 AS (
                         SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
@@ -123,7 +120,7 @@ def get_quick_search_sql(tjbh):
 
     ON T1.TJBH=d.TJBH 
 
-    ''' %tjbh
+    ''' %where_str
 
 def get_pis_sql(tjbh):
     return '''

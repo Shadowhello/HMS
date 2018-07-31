@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtPrintSupport import *
-#from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtWebEngineWidgets import *
 import os,sys,time,cv2
 from collections import OrderedDict
 import pandas as pd
@@ -93,7 +93,7 @@ class TableWidget(QTableWidget):
         self.setSortingEnabled(True)            # 字符串排序功能
         self.setFrameShape(QFrame.NoFrame)      # 设置无边框
         self.verticalHeader().setVisible(True)  # 列表头
-        self.setEditTriggers(QAbstractItemView.NoEditTriggers)  # 表格内容不能编辑
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)   # 表格内容不能编辑
         self.setSelectionBehavior(QAbstractItemView.SelectRows)  # 选中一行
         self.setAlternatingRowColors(True)                       # 使用行交替颜色
         # 添加行头 必须先设置 setColumnCount
