@@ -9,6 +9,7 @@ import pandas as pd
 from utils.base import desktop
 from queue import Queue
 
+
 def singleton(cls):
     '''
     :param cls:
@@ -56,14 +57,14 @@ def mes_warn(parent,message):
 def mes_about(parent,message):
     QMessageBox.about(parent, '明州体检', message)
 
-# class WebEngine(QWebEngineView):
-#
-#     def load(self,url):
-#         self.setUrl(QUrl(url))
-#
-#     def setJS(self):
-#         settings = QWebEngineSettings.globalSettings()
-#         settings.setAttribute(QWebEngineSettings.JavascriptEnabled, True)
+class WebEngine(QWebEngineView):
+
+    def load(self,url):
+        self.setUrl(QUrl(url))
+
+    def setJS(self):
+        settings = QWebEngineSettings.globalSettings()
+        settings.setAttribute(QWebEngineSettings.JavascriptEnabled, True)
 
 class ToolButton(QToolButton):
 
@@ -703,9 +704,63 @@ class SearchLineEdit(QLineEdit):
     def setButtonSlot(self, funcName):
         self.button.clicked.connect(funcName)
 
-if __name__ == '__main__':
+
+# 头像标题
+class HeadLabel(QLabel):
+
+    def __init__(self, *args, antialiasing=True, **kwargs):
+        super(HeadLabel, self).__init__(*args, **kwargs)
+        self.Antialiasing = antialiasing
+        self.setMaximumSize(200, 200)
+        self.setMinimumSize(200, 200)
+        self.radius = 100
+
+        #####################核心实现#########################
+        self.target = QPixmap(self.size())  # 大小和控件一样
+        self.target.fill(Qt.transparent)  # 填充背景为透明
+        # 加载图片并缩放和控件一样大
+        p = QPixmap("head.jpg").scaled(200, 200, Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
+
+        painter = QPainter(self.target)
+        if self.Antialiasing:
+            # 抗锯齿
+            painter.setRenderHint(QPainter.Antialiasing, True)
+            painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+            painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
+
+#         painter.setPen(# 测试圆圈
+#             QPen(Qt.red, 5, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+        path = QPainterPath()
+        path.addRoundedRect(0, 0, self.width(), self.height(), self.radius, self.radius)
+        #**** 切割为圆形 ****#
+        painter.setClipPath(path)
+#         painter.drawPath(path)  # 测试圆圈
+
+        painter.drawPixmap(0, 0, p)
+        self.setPixmap(self.target)
+        #####################核心实现#########################
+
+
+class Window(QWidget):
+
+    def __init__(self, *args, **kwargs):
+        super(Window, self).__init__(*args, **kwargs)
+        layout = QHBoxLayout(self)
+        layout.addWidget(HeadLabel(self))
+        layout.addWidget(HeadLabel(self, antialiasing=False))
+        self.setStyleSheet("background: black;")
+
+
+if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-    ui = PreviewWidget('111','11111')
-    ui.show()
-    app.exec_()
+    w = Window()
+    w.show()
+    sys.exit(app.exec_())
+
+# if __name__ == '__main__':
+#     import sys
+#     app = QApplication(sys.argv)
+#     ui = PreviewWidget('111','11111')
+#     ui.show()
+#     app.exec_()

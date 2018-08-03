@@ -19,7 +19,9 @@ class CollectHistory_UI(Widget):
 
         self.collect_time = DateTimeGroup()
         self.collect_user = UserCombox()
-        self.collect_area = AreaGroup()
+        self.collect_user.addItems([self.login_name,'所有'])
+        self.collect_area = CollectAreaGroup()
+        self.collect_area.set_area(self.login_area)
 
         self.btn_query = ToolButton(Icon('query'),'查询')
         self.btn_export = ToolButton(Icon('导出'), '导出')

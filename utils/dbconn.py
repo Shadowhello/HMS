@@ -11,7 +11,7 @@ def get_tjxt_session(hostname,dbname,user,passwd,port=1433,encoding='utf-8',echo
     :return:
     '''
     engine_str = 'mssql+pymssql://%s:%s@%s:%s/%s' %(user,passwd,hostname,port,dbname)
-    engine = create_engine(engine_str,echo=False)
+    engine = create_engine(engine_str,echo=True)
     session = sessionmaker(bind=engine)
     return session()
 

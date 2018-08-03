@@ -5,7 +5,6 @@ import time
 def cur_datetime():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())))
 
-
 class MV_CX_ALL(BaseModel):
 
     __tablename__ = 'V_CX_ALL'
@@ -85,11 +84,11 @@ def get_tmxx_sql(tjbh):
     sql='''
     WITH 
         T1 AS (
-            SELECT TJBH,XMMC,(CASE WHEN XMBH='1931' THEN TJBH+XMBH ELSE TMBH1 END) AS TMBH 
+            SELECT TJBH,XMMC,(CASE WHEN XMBH IN ('1931','5010','1926') THEN TJBH+XMBH ELSE TMBH1 END) AS TMBH 
             FROM TJ_TJJLMXB WHERE TJBH='%s' AND SFZH='1' 
             AND (
                        (XMBH IN (SELECT XMBH FROM TJ_XMDM WHERE LBBM IN (SELECT LBBM FROM TJ_XMLB WHERE XMLX='2' )) AND TMBH1 IS NOT NULL) 
-                    OR (XMBH='1931')
+                    OR (XMBH IN ('1931','5010','1926'))
                  )
         ),
         T2 AS (
@@ -141,3 +140,21 @@ def get_xmjj_sql(tjbh,tmbh,login_id,login_name,login_area):
         %(cur_datetime(),login_id,tjbh,tmbh,tjbh,tmbh,login_id,login_name,login_area,cur_datetime())
 
     return sql
+
+# 样本交接 条码数量汇总
+def get_handover_sql(t_start,t_end,area):
+    return '''
+        SELECT '%s' AS QSSJ,'%s' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,'' AS JJHS,'' AS SJRY ,'' AS SJSJ,'' AS QSRY ,'' AS QSRY 
+    
+        FROM TJ_CZJLB 
+        
+        WHERE CZSJ BETWEEN '%s' AND '%s'
+        
+        AND JLLX IN ('0010','0011')  
+        
+        AND CZQY LIKE '%s%%'
+        
+        GROUP BY CZQY,CAST(BZ AS VARCHAR)
+        
+        ORDER BY CZQY,count(*) DESC 
+    ''' %(t_start,t_end,t_start,t_end,area)

@@ -131,6 +131,12 @@ class MT_TJ_CZJLB(BaseModel):
     czqy = Column(VARCHAR(2), nullable=True)
     jlnr = Column(Text, nullable=False)
     bz = Column(Text, nullable=False)
+    jjxm = Column(VARCHAR(20), nullable=False)                              # 交接护士
+    jjsj = Column(DateTime, nullable=False)                                 # 交接时间
+    jsxm = Column(VARCHAR(20), nullable=False)                              # 签收人员
+    jssj = Column(DateTime, nullable=False)                                 # 签收时间
+    sjfs = Column(VARCHAR(20), nullable=False)                              # 送检人员
+
 
     @property
     def to_dict(self):
@@ -145,6 +151,17 @@ class MT_TJ_CZJLB(BaseModel):
             'czsj': str(getattr(self, "czsj"))[0:19],
             'jlnr': str2(getattr(self, "jlnr")),
             'ck':'查看'
+        }
+
+    @property
+    def detail(self):
+        return {
+            'tjbh': getattr(self, "tjbh"),
+            'mxbh': getattr(self, "mxbh"),
+            'czxm': str2(getattr(self, "czxm")),
+            'czqy': str2(getattr(self, "czqy")),
+            'czsj': str(getattr(self, "czsj"))[0:19],
+            'jlnr': str2(getattr(self, "jlnr"))
         }
 
 # 设备表

@@ -13,6 +13,19 @@ from pprint import pprint
 # print(response.json())          # 同json.loads(response.text)
 
 
+# 从微信端获取二维码
+def get_barcode_wx(xm,sfzh,sjhm,email='',address=''):
+    url = 'http://app.nbmzyy.com/tjadmin/patientInfoInput'
+    heads = {}
+    heads['realName'] = xm
+    heads['idCardNum'] = sfzh
+    heads['phoneNumber'] = sjhm
+    heads['email'] = ''
+    heads['address'] = ''
+    response = requests.post(url,headers=heads)
+    return response.text
+
+
 # get 请求
 def request_get(url,save_file=None):
     '''
@@ -82,3 +95,7 @@ class APIRquest(object):
                 return response.json()
         except Exception as e:
             self.log.info('API：%s 请求失败！错误：%s' %(url,e))
+
+
+if __name__=="__main__":
+    print(get_barcode_wx('test','330227199902040773','13736093855'))

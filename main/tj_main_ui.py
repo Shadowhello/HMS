@@ -6,6 +6,7 @@ from utils.base import cur_date
 from report.report import ReportCenter
 from lis.sample import SampleManager
 from mbgl.ncd import NCD
+from C13.breathmanger import BreathManager
 
 TreeItemStyle="font: 75 12pt \"微软雅黑\";"
 MainUIStyle=""

@@ -6,6 +6,7 @@ class SampleManager(DirTabWidget):
     def __init__(self):
         nodes= ['抽血采集','留样采集','样本交接','历史查询','工作量']
         super(SampleManager,self).__init__('采血台',nodes)
+        # self.addTab('留样采集')
 
     def addTab(self,title):
         super(SampleManager, self).addTab(title)
@@ -17,6 +18,11 @@ class SampleManager(DirTabWidget):
         elif title=='留样采集':
             from lis.collecturine import CollectUrine
             widget=CollectUrine()
+            self.rwidget.addPage(widget,Icon(title),title)
+
+        elif title=='样本交接':
+            from lis.collectHandover import CollectHandover
+            widget=CollectHandover()
             self.rwidget.addPage(widget,Icon(title),title)
 
         elif title=='历史查询':

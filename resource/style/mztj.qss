@@ -109,11 +109,11 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0.5 #054874 stop:
 }
 
 .QPushButton:hover{
-background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0.5 #054874 stop:1 #377277);
+    background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #383A42,stop:1 #383A42);
 }
 
 .QPushButton:pressed{
-background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #383A42,stop:1 #383A42);
+    background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #383A42,stop:1 #383A42);
 }
 
 
