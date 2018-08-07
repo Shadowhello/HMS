@@ -73,6 +73,7 @@ class TJ_Main_UI(QMainWindow):
     def openWidget(self,action):
         module = action.module
         class_name = action.cls_name   # 必须在上一句后面，因为才赋值
+        #print(module,class_name)
         if module and class_name:
             if not hasattr(self, class_name):
                 module_class = getattr(module, class_name)

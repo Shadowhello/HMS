@@ -10,6 +10,9 @@ def init():
     global global_dict
     global_dict = {}
 
+def keys():
+    return list(global_dict.keys())
+
 def set_value(key,value):
     """ 定义一个全局变量 """
     global_dict[key] = value

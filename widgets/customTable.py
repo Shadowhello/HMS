@@ -1,5 +1,7 @@
 from widgets.bwidget import *
 
+#定制表格
+
 class TableWidget(QTableWidget):
 
     def __init__(self,heads=None,parent=None):

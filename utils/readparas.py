@@ -22,6 +22,10 @@ class GolParasMixin(object):
             self.login_time = ''
             self.login_area = ''
 
+    # 获取全局参数名称
+    def get_gol_para(self,para_name):
+        return gol.get_value(para_name,'')
+
 
 class GolParasMixin2(object):
 

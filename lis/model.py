@@ -38,41 +38,6 @@ class MV_CX_ALL(BaseModel):
             'qdrq': getattr(self, "qdrq")
         }
 
-class MV_RYXX(BaseModel):
-
-    __tablename__ = 'V_RYXX'
-
-    tjbh = Column(VARCHAR(20), primary_key=True)
-    xm = Column(VARCHAR(20),nullable=False)
-    xb = Column(VARCHAR(20),nullable=False)
-    nl = Column(Integer, nullable=False)
-    sjhm = Column(VARCHAR(20), nullable=False)
-    sfzh = Column(VARCHAR(20), nullable=False)
-    depart = Column(VARCHAR(50), nullable=False)
-    dwmc = Column(VARCHAR(100), nullable=False)
-    djrq = Column(VARCHAR(20), nullable=False)
-    qdrq = Column(VARCHAR(20), nullable=False)
-
-    def to_dict(self):
-        return {
-            'tjbh':getattr(self, "tjbh"),
-            'xm': str2(getattr(self, "xm")),
-            'xb': str2(getattr(self, "xb")),
-            'nl': '%s 岁' %str(getattr(self, "nl")),
-            'sfzh': getattr(self, "sfzh"),
-            'sjhm': getattr(self, "sjhm"),
-            'depart': str2(getattr(self, "depart")),
-            'dwmc': getattr(self, "dwmc"),
-            'djrq': getattr(self, "djrq"),
-            'qdrq': getattr(self, "qdrq")
-        }
-
-class MT_TJ_PHOTO(BaseModel):
-
-    __tablename__ = 'TJ_PHOTO'
-
-    tjbh = Column(VARCHAR(16), primary_key=True)
-    picture = Column(BLOB, nullable=False)
 
 def get_tjbh_sql(tmbh):
     sql = '''
@@ -144,7 +109,9 @@ def get_xmjj_sql(tjbh,tmbh,login_id,login_name,login_area):
 # 样本交接 条码数量汇总
 def get_handover_sql(t_start,t_end,area):
     return '''
-        SELECT '%s' AS QSSJ,'%s' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,'' AS JJHS,'' AS SJRY ,'' AS SJSJ,'' AS QSRY ,'' AS QSRY 
+        SELECT '%s' AS QSSJ,'%s' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
     
         FROM TJ_CZJLB 
         
@@ -154,7 +121,8 @@ def get_handover_sql(t_start,t_end,area):
         
         AND CZQY LIKE '%s%%'
         
-        GROUP BY CZQY,CAST(BZ AS VARCHAR)
+        GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
         
-        ORDER BY CZQY,count(*) DESC 
+        ORDER BY CZQY,count(*) DESC ;
+        
     ''' %(t_start,t_end,t_start,t_end,area)

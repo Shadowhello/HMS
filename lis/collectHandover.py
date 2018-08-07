@@ -59,27 +59,30 @@ class CollectHandover(CollectHandover_UI):
             if self.table_handover_master.item(row, 8).text():
                 mes_about(self, '样本已签收，请勿重复进行样本交接！')
             else:
-                for row in self.SelectedRows(self.table_handover_master.selectedItems()):
-                    self.table_handover_master.item(row, 8).setText(self.login_name)
-                    self.table_handover_master.item(row, 9).setText(cur_datetime())
-                    #### 查询条件值
-                    t_start = self.table_handover_master.item(row, 0).text()
-                    t_end = self.table_handover_master.item(row, 1).text()
-                    czqy = self.table_handover_master.item(row, 2).text()
-                    sgys = self.table_handover_master.item(row, 3).text()
-                    try:
-                        self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
-                                                                MT_TJ_CZJLB.czqy==czqy,
-                                                                 MT_TJ_CZJLB.czsj.between(t_start, t_end),
-                                                                 cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys).update({
-                            MT_TJ_CZJLB.jsxm:self.login_name,
-                            MT_TJ_CZJLB.jssj:cur_datetime()
-                        },synchronize_session=False)
-                        self.session.commit()
-                        mes_about(self,'样本签收成功！')
-                    except Exception as e:
-                        self.session.rollback()
-                        mes_about(self,'更新数据库TJ_CZJLB 出错！错误信息：%s' %e)
+                if not self.table_handover_master.item(row, 5).text():
+                    mes_about(self, '样本还未送检，请先送检再签收！')
+                else:
+                    for row in self.SelectedRows(self.table_handover_master.selectedItems()):
+                        self.table_handover_master.item(row, 8).setText(self.login_name)
+                        self.table_handover_master.item(row, 9).setText(cur_datetime())
+                        #### 查询条件值
+                        t_start = self.table_handover_master.item(row, 0).text()
+                        t_end = self.table_handover_master.item(row, 1).text()
+                        czqy = self.table_handover_master.item(row, 2).text()
+                        sgys = self.table_handover_master.item(row, 3).text()
+                        try:
+                            self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                                    MT_TJ_CZJLB.czqy==czqy,
+                                                                     MT_TJ_CZJLB.czsj.between(t_start, t_end),
+                                                                     cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys).update({
+                                MT_TJ_CZJLB.jsxm:self.login_name,
+                                MT_TJ_CZJLB.jssj:cur_datetime()
+                            },synchronize_session=False)
+                            self.session.commit()
+                            mes_about(self,'样本签收成功！')
+                        except Exception as e:
+                            self.session.rollback()
+                            mes_about(self,'更新数据库TJ_CZJLB 出错！错误信息：%s' %e)
 
     # 判断是否选择了多行
     def SelectedRows(self,items):
@@ -107,7 +110,8 @@ class CollectHandover(CollectHandover_UI):
         sgys = self.table_handover_master.item(QTableWidgetItem.row(), 3).text()
 
         results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
-                                                         MT_TJ_CZJLB.czqy.like('%s%%' % self.collect_area.get_area),
+                                                         MT_TJ_CZJLB.czqy == czqy,
+                                                         # MT_TJ_CZJLB.czqy.like('%s%%' % self.collect_area.get_area),
                                                          MT_TJ_CZJLB.czsj.between(t_start,t_end),
                                                          cast(MT_TJ_CZJLB.bz,VARCHAR) == sgys).all()
 

@@ -27,8 +27,8 @@ class BreathCheckUI(Widget):
              ])
         self.c13_cols3 = OrderedDict(
             [
+                ("tjbh", "体检编号"),
                 ("no", "样本号"),
-                ("tjbh","体检编号"),
                 ("xm","姓名"),
                 ("xb","性别"),
                 ("nl", "年龄"),
@@ -94,7 +94,7 @@ class BreathCheckUI(Widget):
 
     def initUIRightDown(self):
         # 计时完成，待吹气
-        self.table_c13_checking_2 = C13InspectTable(self.c13_cols)
+        self.table_c13_checking_2 = C13InspectTable(self.c13_cols3)
         self.table_c13_checking_2.verticalHeader().setVisible(False)  # 列表头
         self.gp_right_down_1 = QGroupBox('3、计时完成待吹气：总人数 0')
         lt_right_1 = QHBoxLayout()

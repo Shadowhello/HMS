@@ -24,7 +24,7 @@ class BreathCheck(BreathCheckUI):
         self.simpleno_3 = 0     # 明州3楼
         self.simpleno_4 = 0     # 江东
         # 待插入的 数据对象
-        self.data_obj = {'jllx':'0026','jlmc':'C13/14吹气','tjbh':'','mxbh':'5001',
+        self.data_obj = {'jllx':'0026','jlmc':'C13/14吹气','tjbh':'','mxbh':'5001','sjfs':'',
                          'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'jlnr':None,'bz':None}
         # 绑定信号
         self.btn_update.clicked.connect(partial(self.on_btn_update_click,self.lb_update.text()))
@@ -37,6 +37,19 @@ class BreathCheck(BreathCheckUI):
     def initDatas(self,up_time=None):
         # 初始化
         if not up_time:
+            # 显示吃药丸列表
+            results = self.session.execute(get_checking1_sql()).fetchall()
+            self.table_c13_checking_1.insertMany(results)
+            self.gp_right_up.setTitle('2、吃药丸 计时中：总人数 %s' %self.table_c13_checking_1.rowCount())
+            # 显示待吹气列表
+            results = self.session.execute(get_checking2_sql()).fetchall()
+            self.table_c13_checking_2.insertMany(results)
+            self.gp_right_down_1.setTitle('3、计时完成待吹气：总人数 %s' % self.table_c13_checking_2.rowCount())
+            # 显示完成列表
+            results = self.session.execute(get_checked_sql()).fetchall()
+            self.table_c13_checked.insertMany(results)
+            self.gp_right_down_2.setTitle('4、完成吹气：总人数 %s' % self.table_c13_checked.rowCount())
+            # 显示待测列表
             results = self.session.execute(get_nocheck_sql()).fetchall()
             self.table_c13_nocheck.load(results)
         # 增量刷新
@@ -67,7 +80,7 @@ class BreathCheck(BreathCheckUI):
             # 说明 在容器中 ，根据状态判断处于哪个table 中
             c13_item_obj = self.c13_items[tjbh]
             state = c13_item_obj.getState()
-            data = c13_item_obj.getData()
+            self.data_obj['tjbh'] = tjbh
             if state == 1:
                 # 在待测列表中
                 items = self.table_c13_nocheck.findItems(tjbh, Qt.MatchContains)
@@ -90,6 +103,17 @@ class BreathCheck(BreathCheckUI):
                     # C13项目状态变更
                     c13_item_obj.setData([p_tjbh,p_xm,p_xb,p_nl,p_xmmc,p_tjqy])
                     c13_item_obj.setState(2)
+                    # 插入数据库
+                    self.data_obj['bz'] = '吃药丸'
+                    self.data_obj['sjfs'] = '2'
+                    try:
+                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [self.data_obj])
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self, '插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
+                        self.log.info('插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
+
 
             # 还处于 吃药丸中
             elif state == 2:
@@ -98,6 +122,7 @@ class BreathCheck(BreathCheckUI):
                     self.table_c13_checking_1.selectRow(items[0].row())
                 mes_about(self,'该顾客正在吃药丸计时中，请计时结束后，再操作！')
 
+            # 计时完成->吹气完成
             elif state == 3:
                 items = self.table_c13_checking_2.findItems(tjbh, Qt.MatchContains)
                 if items:
@@ -107,36 +132,25 @@ class BreathCheck(BreathCheckUI):
                     self.table_c13_checking_2.removeRow(item.row())
                     # 更新项目状态
                     c13_item_obj.setState(4)
+                    data = c13_item_obj.getData()
+                    data.insert(1, str(c13_item_obj.getSimpleNo()))
+                    # 新表增加
+                    self.table_c13_checked.insert3(data)
                     # 标题变更
                     self.gp_right_down_1.setTitle('3、计时完成待吹气：总人数 %s' % self.table_c13_checking_2.rowCount())
                     self.gp_right_down_2.setTitle('4、完成吹气：总人数 %s' %self.table_c13_checked.rowCount())
-                    # 吹气完成，设置样本号
-                    if p_tjqy == '明州1楼':
-                        self.simpleno_1 = self.simpleno_1 + 1
-                        c13_item_obj.setSimpleNo(1000+self.simpleno_1)
-                    elif p_tjqy == '明州2楼':
-                        self.simpleno_2 = self.simpleno_2 + 1
-                        c13_item_obj.setSimpleNo(2000+self.simpleno_2)
-                    elif p_tjqy == '明州3楼':
-                        self.simpleno_3 = self.simpleno_3 + 1
-                        c13_item_obj.setSimpleNo(3000+self.simpleno_3)
-                    elif p_tjqy == '江东':
-                        self.simpleno_4 = self.simpleno_4 + 1
-                        c13_item_obj.setSimpleNo(4000+self.simpleno_4)
-
-                    # 添加样本号
-                    data.insert(0,str(c13_item_obj.getSimpleNo()))
-                    # 新表增加
-                    self.table_c13_checked.insert3(data)
                     # 更新数据库 TJ_CZJLB  TJ_TJJLMXB
-                    self.data_obj['tjbh'] = tjbh
-                    self.data_obj['bz'] = str(c13_item_obj.getSimpleNo())
                     try:
-                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [self.data_obj])
+                        self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.tjbh == tjbh,MT_TJ_CZJLB.mxbh == '5001').update({
+                            MT_TJ_CZJLB.bz: '吹气完成',
+                            MT_TJ_CZJLB.sjfs: '4'
+                        },synchronize_session=False)
                         self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == '5001').update({MT_TJ_TJJLMXB.zxpb: '3'})
                         self.session.commit()
                     except Exception as e:
+                        self.session.rollback()
                         mes_about(self, '插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
+                        self.log.info('插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
             # 已完成吹气
             elif state == 4:
                 items = self.table_c13_checked.findItems(tjbh, Qt.MatchContains)
@@ -152,17 +166,45 @@ class BreathCheck(BreathCheckUI):
         self.le_tjbh.setText('')
 
     # 吹气列表
-    def on_table_checking2_insert(self,tjbh:str):
-        if tjbh in list(self.c13_items.keys()):
-            c13_item_obj = self.c13_items[tjbh]
-            # 新表增加
-            self.table_c13_checking_2.insert3(c13_item_obj.getData())
-            # 新表 标题变更
-            self.gp_right_down_1.setTitle('3、计时完成待吹气：总人数 %s' % self.table_c13_checking_2.rowCount())
-            self.gp_right_up.setTitle('2、吃药丸 计时中：总人数 %s' % self.table_c13_checking_1.rowCount())
+    def on_table_checking2_insert(self,data):
+        if data[0] in list(self.c13_items.keys()):
+            c13_item_obj = self.c13_items[data[0]]
+            # data = c13_item_obj.getData()
+            tjqy = data[5]
             # 更新项目状态
             c13_item_obj.setState(3)
-
+            # 吹气完成，设置样本号
+            if tjqy == '明州1楼':
+                self.simpleno_1 = self.simpleno_1 + 1
+                c13_item_obj.setSimpleNo(1000 + self.simpleno_1)
+            elif tjqy == '明州2楼':
+                self.simpleno_2 = self.simpleno_2 + 1
+                c13_item_obj.setSimpleNo(2000 + self.simpleno_2)
+            elif tjqy == '明州3楼':
+                self.simpleno_3 = self.simpleno_3 + 1
+                c13_item_obj.setSimpleNo(3000 + self.simpleno_3)
+            elif tjqy == '江东':
+                self.simpleno_4 = self.simpleno_4 + 1
+                c13_item_obj.setSimpleNo(4000 + self.simpleno_4)
+            # 添加样本号
+            data.insert(1,str(c13_item_obj.getSimpleNo()))
+            # 新表增加
+            self.table_c13_checking_2.insert3(data)
+            # 数量变更
+            self.gp_right_up.setTitle('2、吃药丸 计时中：总人数 %s' % self.table_c13_checking_1.rowCount())
+            self.gp_right_down_1.setTitle('3、计时完成待吹气：总人数 %s' % self.table_c13_checking_2.rowCount())
+            # 更新数据库 TJ_CZJLB
+            try:
+                self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.tjbh == data[0], MT_TJ_CZJLB.mxbh == '5001').update({
+                    MT_TJ_CZJLB.bz: '吹气中',
+                    MT_TJ_CZJLB.sjfs: '3',
+                    MT_TJ_CZJLB.jjxm: str(c13_item_obj.getSimpleNo())
+                },synchronize_session=False)
+                self.session.commit()
+            except Exception as e:
+                self.session.rollback()
+                mes_about(self, '插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
+                self.log.info('插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
 
 
 if __name__ == '__main__':

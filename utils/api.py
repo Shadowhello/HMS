@@ -1,5 +1,6 @@
 import requests
 from pprint import pprint
+import urllib.parse
 
 # 使用装饰器改写
 # 提取公共功能
@@ -13,17 +14,24 @@ from pprint import pprint
 # print(response.json())          # 同json.loads(response.text)
 
 
-# 从微信端获取二维码
+# 从微信端获取二维码图片 字节流
 def get_barcode_wx(xm,sfzh,sjhm,email='',address=''):
-    url = 'http://app.nbmzyy.com/tjadmin/patientInfoInput'
-    heads = {}
-    heads['realName'] = xm
-    heads['idCardNum'] = sfzh
-    heads['phoneNumber'] = sjhm
-    heads['email'] = ''
-    heads['address'] = ''
-    response = requests.post(url,headers=heads)
-    return response.text
+    url = 'http://10.7.200.27:8080/tjadmin/pInfoSubmit'
+    head = {}
+    head['realName'] = urllib.parse.quote(xm)
+    head['idCardNum'] = sfzh
+    head['phoneNumber'] = sjhm
+    head['email'] = ''
+    head['address'] = ''
+    head['Content-Type'] = 'application/json'
+
+    response = requests.post(url,headers=head)
+    if response.status_code==200:
+        f = open('1.png', "wb")
+        for chunk in response.iter_content(chunk_size=512):
+            if chunk:
+                f.write(chunk)
+        f.close()
 
 
 # get 请求
@@ -41,6 +49,14 @@ def request_get(url,save_file=None):
                 f.write(chunk)
         f.close()
         return True
+    else:
+        return False
+
+# get 请求 下载文件  返回二进制流
+def api_file_down(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.content
     else:
         return False
 
@@ -98,4 +114,4 @@ class APIRquest(object):
 
 
 if __name__=="__main__":
-    print(get_barcode_wx('test','330227199902040773','13736093855'))
+    print(get_barcode_wx('倩张','330227199902040663','13736093866'))

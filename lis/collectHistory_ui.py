@@ -57,10 +57,10 @@ class CollectHistory_UI(Widget):
                                 ("czsj", "采集时间"),
                                 ("czqy", "采集区域"),
                                 ("jjxm", "交接护士"),
-                                ("sjxm", "送检人员"),
-                                ("sjsj", "送检时间"),
-                                ("qsxm", "签收人员"),
-                                ("qssj", "签收时间"),
+                                ("jjsj", "交接时间"),
+                                ("sjfs", "送检人员"),
+                                ("jsxm", "签收人员"),
+                                ("jssj", "签收时间"),
                                 ("ck", "")
                             ])
         self.table_history = CollectHistoryTable(self.collect_cols)

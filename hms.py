@@ -51,9 +51,14 @@ def start_run():
                         monitor_process.terminate()
                         # 随主进程退出
                         monitor_process.join()
-    else:
+    elif gol.get_value('system_is_login',1) == 0:
         from main.tj_main_ui import TJ_Main_UI
         main_ui(TJ_Main_UI(), app)
+    else:
+        from app_selfhelp.selfHelpMachine import SelfHelpMachine
+        ui = SelfHelpMachine()
+        ui.showMaximized()
+        app.exec_()
 
 if __name__=="__main__":
     multiprocessing.freeze_support()

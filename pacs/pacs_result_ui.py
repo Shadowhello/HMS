@@ -93,26 +93,18 @@ class PacsResultUI(QDialog):
         lt_main.addWidget(gp_bottom_2)
         lt_main.addWidget(gp_bottom_3)
 
-        # self.lb_bz = QLabel('测试文字',self)
-        # self.lb_bz.setGeometry(50,50,200,200)
-        # self.lb_bz.installEventFilter(self)  #这行不能省
-        # # lt_main.addWidget(self.lb_bz)
+        self.lb_bz = StateLable(gp_bottom_2)
+        # self.lb_bz = QLabel(gp_bottom_2)
+        # self.lb_bz.setMinimumSize(200,200)
+        # self.lb_bz.setGeometry(400,-40,100,100)
+        # self.lb_bz.setStyleSheet('''font: 75 28pt "微软雅黑";color: rgb(255, 0, 0);''')
+        # self.lb_bz.setAttribute(Qt.WA_TranslucentBackground)
+        self.lb_bz.show()
         self.setLayout(lt_main)
-
-    # def eventFilter(self, watched, QEvent):
-    #     if watched ==self.lb_bz or QEvent.type() == QEvent.Paint:
-    #         self.paint()
-    #
-    # def paint(self):
-    #
-    #     painter= QPainter(self.lb_bz)
-    #     painter.setPen(Qt.blue)
-    #     # // painter.drawLine(100, 100, 200, 200);
-    #     painter.drawEllipse(30, 15, 50, 65)
-    #     painter.drawLine(0, 100, 111, 100)
 
     def on_table_refresh(self,tableWidgetItem):
         row = tableWidgetItem.row()
+        bgzt = self.table_inspect.item(row, 0).text()
         bgys = self.table_inspect.item(row, 7).text()
         bgrq = self.table_inspect.item(row, 8).text()
         shys = self.table_inspect.item(row, 9).text()
@@ -125,7 +117,10 @@ class PacsResultUI(QDialog):
         self.shsj.setText(shrq)
         self.pacs_jg.setText(xmjg)
         self.pacs_zd.setText(xmzd)
-        # self.update()
+        if bgzt=='已审核':
+            self.lb_bz.show2()
+        else:
+            self.lb_bz.show2(False)
 
     def setData(self,datas):
         # 清空数据
@@ -135,27 +130,31 @@ class PacsResultUI(QDialog):
         self.shsj.setText('')
         self.pacs_jg.setText('')
         self.pacs_zd.setText('')
+        self.lb_bz.show2(False)
         self.table_inspect.load(datas)
 
-    # def paintEvent(self, QPaintEvent):
-    #     # 先绘制父对象内容，
-    #     super(PacsResultUI,self).paintEvent(QPaintEvent)
-    #     # 再绘制自身
-    #     painter = QPainter(self.lb_bz)
-    #     # QPainter负责所有的绘制工作:在它的begin()与end()间放置了绘图代码。
-    #     # 实际的绘制工作由drawText()方法完成。
-    #     painter.begin(self.lb_bz)
-    #     self.drawText(QPaintEvent, painter)
-    #     painter.end()
-    #
-    # def drawText(self, QPaintEvent, painter):
-    #     # 反走样
-    #     painter.setRenderHint(QPainter.Antialiasing, True)
-    #     # 设置画笔颜色、宽度
-    #     painter.setPen(QPen(QColor(0, 160, 230), 2))
-    #     # 设置画刷颜色
-    #     painter.setBrush(QColor(255, 160, 90))
-    #     painter.drawText(QRect(), Qt.AlignCenter, "测试文本啊！")
+
+class StateLable(QLabel):
+
+    def __init__(self,parent):
+        super(StateLable,self).__init__(parent)
+        self.setMinimumSize(200,200)
+        self.setGeometry(400,-40,100,100)
+        self.setStyleSheet('''font: 75 28pt "微软雅黑";color: rgb(255, 0, 0);''')
+        self.setAttribute(Qt.WA_TranslucentBackground)                               #背景透明
+        self.data = open(file_ico('已审核.png'),'rb').read()
+
+    def show2(self,flag = True):
+        if flag:
+            p = QPixmap()
+            p.loadFromData(self.data)
+            self.setPixmap(p)
+        else:
+            self.clear()
+
+
+
+
 
 if __name__=="__main__":
     from PyQt5.QtWidgets import QApplication

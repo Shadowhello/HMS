@@ -123,7 +123,7 @@ def init_views(app,db):
         return ujson.dumps({'code':1,'mes':'上传成功','data':None})
 
     # 文件下载
-    @app.route('/api/file/down/<int:tjbh>/<string:filetype>', methods=['GET'])
+    @app.route('/api/file/down/<string:tjbh>/<string:filetype>', methods=['GET'])
     def file_down(tjbh,filetype):
         '''
         :param tjbh:        体检编号

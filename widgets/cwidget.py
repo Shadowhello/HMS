@@ -2,6 +2,7 @@ from widgets.bwidget import *
 from utils.readparas import GolParasMixin,GolParasMixin2
 from utils.base import str2
 from functools import partial
+from utils.readcard import IdCard
 
 # 加粗字体
 def get_font():
@@ -17,6 +18,21 @@ class Lable(QLabel):
         super(Lable,self).__init__()
         self.setMinimumWidth(75)
         self.setStyleSheet('''font: 75 11pt '黑体';color: rgb(0, 85, 255);''')
+
+# 身份证字体 绝对定位
+class IdCardLable(QLabel):
+
+    def __init__(self,parent,left:int,top:int, width:int, height:int):
+        super(IdCardLable,self).__init__(parent)
+        self.setGeometry(QRect(left,top, width, height))
+        self.setStyleSheet('''font: 75 14pt \"微软雅黑\";color: rgb(255, 0, 0);''')
+
+class IdCardLable2(QTextEdit):
+    def __init__(self,parent,left:int,top:int, width:int, height:int):
+        super(IdCardLable2,self).__init__(parent)
+        self.setGeometry(QRect(left,top, width, height))
+        self.setStyleSheet('''font: 75 14pt \"微软雅黑\";color: rgb(255, 0, 0);''')
+
 
 # 窗口带日志、登录信息、数据库链接功能
 class Widget(GolParasMixin,QWidget):
@@ -247,8 +263,8 @@ class C13Item(object):
 # C13/14 呼气试验 搜索列表
 class C13InspectTable(TableWidget):
 
-    # 自定义信号：删除项目信号
-    itemDroped = pyqtSignal(str)
+    # 自定义信号：删除项目信号  体检编号+区域：生成样本号
+    itemDroped = pyqtSignal(list)
 
     def __init__(self, heads, parent=None):
         super(C13InspectTable, self).__init__(heads, parent)
@@ -264,13 +280,19 @@ class C13InspectTable(TableWidget):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
 
+        self.setColumnWidth(0, 70)
+        self.setColumnWidth(1, 60)
+        self.setColumnWidth(2, 30)
+        self.setColumnWidth(3, 30)
+        self.horizontalHeader().setStretchLastSection(True)
+
     # 插入到 吹气列表
     def insert2(self,data):
         self.insertRow(self.rowCount())
         for col_index, col_value in enumerate(data):
             if col_index== 6 :
                 lb_timer = TimerLabel()
-                lb_timer.timer_out.connect(partial(self.dropRow,data[0]))     # 必须传递唯一的值
+                lb_timer.timer_out.connect(partial(self.dropRow,data))     # 必须传递唯一的值
                 self.setCellWidget(self.rowCount()-1,col_index,lb_timer)
             else:
                 item = QTableWidgetItem(col_value)
@@ -301,13 +323,21 @@ class C13InspectTable(TableWidget):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(self.rowCount() - 1, col_index, item)
 
+        self.setColumnWidth(0, 70)
+        self.setColumnWidth(1, 60)
+        self.setColumnWidth(2, 60)
+        self.setColumnWidth(3, 30)
+        self.setColumnWidth(4, 30)
+        self.horizontalHeader().setStretchLastSection(True)
+
     # 删除行
-    def dropRow(self,p_str):
-        items = self.findItems(p_str, Qt.MatchContains)
+    def dropRow(self,data:list):
+        tjbh = data[0]
+        items = self.findItems(tjbh, Qt.MatchContains)
         for item in items:
             p_tjbh = self.item(item.row(), 0).text()
             self.removeRow(item.row())
-            self.itemDroped.emit(p_tjbh)
+            self.itemDroped.emit(data)
 
 
 # 设备接口检查列表
@@ -485,6 +515,10 @@ class CollectHandoverTable(TableWidget):
 
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
+
+        self.setColumnWidth(0, 70)
+        self.setColumnWidth(1, 70)
+        self.setColumnWidth(4, 50)
 
 # 抽血交接记录表 详细
 class CollectHandoverDTable(TableWidget):
@@ -1295,6 +1329,8 @@ class WhereSearchGroup(QGridLayout):
     def where_dwmc(self):
         return self.s_dwbh.where_dwmc
 
+
+
 # 快速检索组 体检编号、姓名、手机号码、身份证号
 class QuickSearchGroup(QGroupBox):
 
@@ -1534,6 +1570,135 @@ class UserDetailGroup(QGroupBox):
         lt_main.setContentsMargins(10, 10, 10, 10)       #设置外间距
         lt_main.setColumnStretch(11, 1)                  #设置列宽，添加空白项的
         self.setLayout(lt_main)
+
+# 读取身份证显示界面
+class ReadChinaIdCard_UI(QDialog):
+
+    # 自定义 信号，封装对外使用
+    sendIdCard = pyqtSignal(str)
+
+    widget_style = '''
+        font: 75 14pt \"微软雅黑\";
+        background-image: url(:/resource/image/sfzback.png);'''
+
+    def __init__(self,parent=None):
+        super(ReadChinaIdCard_UI,self).__init__(parent)
+        self.setWindowTitle('明州体检')
+        self.setFixedSize(498,394)
+        self.setStyleSheet(self.widget_style)
+        self.initUI()
+        self.readidcard()
+        # 绑定信号槽
+        self.buttonBox.accepted.connect(self.on_sure)
+        self.buttonBox.rejected.connect(self.close)
+
+    def initUI(self):
+        # 给窗体再加一个widget控件，对widget设置背景图片
+        self.widget=QWidget(self)
+        self.widget.setFixedSize(498,394)
+        palette=QPalette()
+        palette.setBrush(self.backgroundRole(), QBrush(QPixmap(file_ico("sfzback.png"))))
+        self.widget.setPalette(palette)
+        self.widget.setAutoFillBackground(True)
+        # 采用绝对位置 控件组
+        self.lb_user_name = IdCardLable(self,110, 62, 61, 21)               # 姓名
+        self.lb_user_sex = IdCardLable(self,110, 84, 31, 21)                # 性别
+        self.lb_user_nation = IdCardLable(self,190, 86, 31, 21)             # 名族
+        self.lb_user_birth = IdCardLable(self,110, 111, 101, 16)            # 出生
+        self.lb_user_addr = IdCardLable(self,110, 134, 311, 16*4)             # 地址
+        self.lb_user_card = IdCardLable(self,172, 180, 271, 16)             # 身份证号
+        self.lb_user_qfjg = IdCardLable(self, 130, 220, 271, 16)            # 签发机关
+        self.lb_user_yxqx = IdCardLable(self, 130, 247, 271, 16)            # 有效期限
+        self.lb_user_zxzz = IdCardLable(self, 130, 268, 311, 21)            # 最新住址
+        # 消息 ：错误信息
+        self.lb_message = IdCardLable(self, 10, 360, 281, 21)
+        self.lb_message.setText('请放卡...')
+        # 按钮框
+        self.buttonBox=QDialogButtonBox(self)
+        self.buttonBox.addButton("确定",QDialogButtonBox.YesRole)
+        self.buttonBox.addButton("取消", QDialogButtonBox.NoRole)
+        self.buttonBox.setGeometry(QRect(320, 345, 100, 50))
+        #self.buttonBox.setCenterButtons(True)
+
+    def readidcard(self):
+        self.cur_thread = ReadThread()
+        self.cur_thread.signalPost.connect(self.setData, type=Qt.QueuedConnection)
+        self.cur_thread.signalError.connect(self.showMes, type=Qt.QueuedConnection)
+        self.cur_thread.start()
+
+    def setData(self,data:list):
+        self.lb_user_name.setText(data[0])
+        self.lb_user_sex.setText(data[1])
+        self.lb_user_nation.setText(data[2])
+        self.lb_user_birth.setText(data[3])
+        self.lb_user_addr.setText(data[4])
+        self.lb_user_addr.setWordWrap(True)
+        self.lb_user_addr.setAlignment(Qt.AlignTop)
+        self.lb_user_card.setText(data[5])
+        self.lb_user_qfjg.setText(data[6])
+        self.lb_user_qfjg.adjustSize()
+        self.lb_user_yxqx.setText(data[7])
+        self.lb_user_zxzz.setText(data[8])
+
+    # 确定
+    def on_sure(self):
+        self.sendIdCard.emit(self.lb_user_card.text())
+        self.accept()
+        self.close()
+
+    def showMes(self,message:str):
+        self.lb_message.setText(message)
+
+    def closeEvent(self, *args, **kwargs):
+        super(ReadChinaIdCard_UI, self).closeEvent(*args, **kwargs)
+        if self.cur_thread:
+            self.cur_thread.stop()
+
+class ReadThread(QThread):
+
+    # 定义信号,定义参数为str类型
+    signalError = pyqtSignal(str)     # 错误信息
+    signalPost = pyqtSignal(list)     # 更新界面
+    signalExit = pyqtSignal()
+
+    def __init__(self):
+        super(ReadThread,self).__init__()
+        self.file_wx = os.path.join(os.environ["TMP"], 'chinaidcard\wz.txt')
+        self.file_zp = os.path.join(os.environ["TMP"], 'chinaidcard\zp.bmp')
+        self.c_obj = IdCard()
+        self.runing = True
+
+    def stop(self):
+        self.runing = False
+
+    def run(self):
+        while self.runing:
+            if self.c_obj.dll_obj:
+                open_state = self.c_obj.open()
+                if open_state == 1:
+                    legal_state = self.c_obj.legal()
+                    if legal_state == 1:
+                        if self.c_obj.read(4) == 1:
+                            user_info = open(self.file_wx).read().split('\n')
+                            self.signalPost.emit(user_info)
+                            os.remove(self.file_wx)
+                            os.remove(self.file_zp)
+                            self.signalError.emit('读卡成功！')
+                        else:
+                            self.signalError.emit('读卡失败！')
+                    elif legal_state == 2:
+                        self.signalError.emit('请重新放卡...')
+                    elif legal_state == 3:
+                        self.signalError.emit('选卡失败！')
+                    else:
+                        self.signalError.emit('初始化失败！')
+                else:
+                    self.signalError.emit('动态库加载失败/端口打开失败！')
+            else:
+                self.signalError.emit('动态库加载失败！')
+
+            time.sleep(0.3)
+
 
 
 

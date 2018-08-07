@@ -77,6 +77,11 @@ class MT_TJ_TJJLMXB(BaseModel):
             'btn_hs':''                                     # 核实
         }
 
+    @property
+    def ksbm(self):
+        return getattr(self, "ksbm", ''),
+
+
 class MT_TJ_DW(BaseModel):
 
     __tablename__ = 'TJ_DWDMB'
@@ -150,8 +155,27 @@ class MT_TJ_CZJLB(BaseModel):
             'czqy': str2(getattr(self, "czqy")),
             'czsj': str(getattr(self, "czsj"))[0:19],
             'jlnr': str2(getattr(self, "jlnr")),
+            'jjxm': str2(getattr(self, "jjxm")),
+            'jjsj': self.jjsj_value,
+            'jsxm': str2(getattr(self, "jsxm")),
+            'jssj': self.jssj_value,
+            'sjfs': str2(getattr(self, "sjfs")),
             'ck':'查看'
         }
+
+    @property
+    def jjsj_value(self):
+        if getattr(self, "jjsj"):
+            return str(getattr(self, "jjsj"))[0:19]
+        else:
+            return ''
+
+    @property
+    def jssj_value(self):
+        if getattr(self, "jssj"):
+            return str(getattr(self, "jssj"))[0:19]
+        else:
+            return ''
 
     @property
     def detail(self):
@@ -198,3 +222,56 @@ class MT_DCP_files(BaseModel):
     filecontent = Column(BLOB, nullable=False)
     uploadtime = Column(DateTime, nullable=False)
     flag = Column(CHAR(1), nullable=True)
+
+class MV_RYXX(BaseModel):
+
+    __tablename__ = 'V_RYXX'
+
+    tjbh = Column(VARCHAR(20), primary_key=True)
+    xm = Column(VARCHAR(20),nullable=False)
+    xb = Column(VARCHAR(20),nullable=False)
+    nl = Column(Integer, nullable=False)
+    sjhm = Column(VARCHAR(20), nullable=False)
+    sfzh = Column(VARCHAR(20), nullable=False)
+    depart = Column(VARCHAR(50), nullable=False)
+    dwmc = Column(VARCHAR(100), nullable=False)
+    djrq = Column(VARCHAR(20), nullable=False)
+    qdrq = Column(VARCHAR(20), nullable=False)
+
+    @property
+    def to_dict(self):
+        return {
+            'tjbh':getattr(self, "tjbh"),
+            'xm': str2(getattr(self, "xm")),
+            'xb': str2(getattr(self, "xb")),
+            'nl': '%s 岁' %str(getattr(self, "nl")),
+            'sfzh': getattr(self, "sfzh"),
+            'sjhm': getattr(self, "sjhm"),
+            'depart': str2(getattr(self, "depart")),
+            'dwmc': str2(getattr(self, "dwmc")),
+            'djrq': getattr(self, "djrq"),
+            'qdrq': getattr(self, "qdrq")
+        }
+
+class MT_TJ_PHOTO(BaseModel):
+
+    __tablename__ = 'TJ_PHOTO'
+
+    tjbh = Column(VARCHAR(16), primary_key=True)
+    picture = Column(BLOB, nullable=False)
+
+
+class MT_TJ_KSDM(BaseModel):
+
+    __tablename__ = 'TJ_KSDM'
+
+    ksbm = Column(CHAR(6), primary_key=True)
+    ksmc = Column(VARCHAR(40), nullable=False)
+
+class MT_TJ_XMDM(BaseModel):
+
+    __tablename__ = 'TJ_XMDM'
+
+    xmbh = Column(VARCHAR(10), primary_key=True)
+    xmmc = Column(VARCHAR(40), nullable=False)
+    sfzh = Column(CHAR(1), nullable=False)

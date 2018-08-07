@@ -1,5 +1,6 @@
 from lis.collectHistory_ui import *
 from lis.model import *
+from utils.api import api_file_down
 
 class CollectHistory(CollectHistory_UI):
 
@@ -9,11 +10,18 @@ class CollectHistory(CollectHistory_UI):
         self.initParas()
         self.btn_query.clicked.connect(self.on_btn_query_click)
         self.gp_quick_search.returnPressed.connect(self.on_quick_search)         # 快速检索
+        self.table_history.itemClicked.connect(self.on_table_history_show)
+        # 查看采血图片 UI
+        self.pic_ui = None
 
     def initParas(self):
-        pass
+        if self.get_gol_para('api_file_down'):
+            self.show_url = self.get_gol_para('api_file_down')
+        else:
+            self.show_url = 'http://10.8.200.201:4000/api/file/down/%s/%s'
 
-    # 查询
+
+            # 查询
     def on_btn_query_click(self):
         collect_time = self.collect_time.get_where_text()
         # 检索条件
@@ -47,3 +55,54 @@ class CollectHistory(CollectHistory_UI):
         #     where_str = " TJ_TJDAB.XM ='%s' " % p2_str
 
         mes_about(self,'共检索出 %s 条数据！' %self.table_history.rowCount())
+
+    # 设置文本 和查看 照片
+    def on_table_history_show(self,QTableWidgetItem):
+        btn_name = QTableWidgetItem.text()
+        row = QTableWidgetItem.row()
+        if btn_name=='查看':
+            url = self.show_url %(self.table_history.item(row,2).text(),'000001')
+            print(url)
+            data = api_file_down(url)
+            if data:
+                if not self.pic_ui:
+                    self.pic_ui = PicDialog()
+                self.pic_ui.setData(data)
+                self.pic_ui.show()
+            else:
+                mes_about(self,'该人未拍照！')
+
+
+class PicDialog(QDialog):
+
+    def __init__(self,parent=None):
+        super(PicDialog,self).__init__(parent)
+        self.setWindowTitle('采血照片查看')
+        lt_main = QHBoxLayout()
+        self.lb_pic = PicLable()
+
+        lt_main.addWidget(self.lb_pic)
+        self.setLayout(lt_main)
+
+    # 设置二进制数据
+    def setData(self,data):
+        self.lb_pic.show2(data)
+
+
+
+class PicLable(QLabel):
+
+    def __init__(self):
+        super(PicLable,self).__init__()
+        self.setAlignment(Qt.AlignCenter)
+        self.setFixedWidth(352)
+        self.setFixedHeight(288)
+        self.setFrameShape(QFrame.Box)
+        self.setStyleSheet("border:None;")
+        # self.setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);")
+
+    def show2(self,datas):
+        # write_file(datas, filename)
+        p = QPixmap()
+        p.loadFromData(datas)          # 数据不落地,高效
+        self.setPixmap(p)
