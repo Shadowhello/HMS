@@ -97,7 +97,10 @@ class CollectHandover(CollectHandover_UI):
     def on_btn_query_click(self):
         collect_time = self.collect_time.get_where_text()
         # 检索条件
-        results = self.session.execute(get_handover_sql(collect_time[0],collect_time[1],self.collect_area.get_area)).fetchall()
+        if self.collect_area.get_area == '明州':
+            results = self.session.execute(get_handover2_sql(collect_time[0], collect_time[1], self.collect_area.get_area)).fetchall()
+        else:
+            results = self.session.execute(get_handover_sql(collect_time[0],collect_time[1],self.collect_area.get_area)).fetchall()
         self.table_handover_master.load(results)
         rowcount = self.table_handover_master.rowCount()
         self.gp_bottom_left.setTitle('样本交接汇总 (%s)' %rowcount)
@@ -108,12 +111,17 @@ class CollectHandover(CollectHandover_UI):
         t_end = self.table_handover_master.item(QTableWidgetItem.row(), 1).text()
         czqy = self.table_handover_master.item(QTableWidgetItem.row(),2).text()
         sgys = self.table_handover_master.item(QTableWidgetItem.row(), 3).text()
-
-        results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
-                                                         MT_TJ_CZJLB.czqy == czqy,
-                                                         # MT_TJ_CZJLB.czqy.like('%s%%' % self.collect_area.get_area),
-                                                         MT_TJ_CZJLB.czsj.between(t_start,t_end),
-                                                         cast(MT_TJ_CZJLB.bz,VARCHAR) == sgys).all()
+        if czqy=='明州':
+            results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                             MT_TJ_CZJLB.czqy.like('%s%%' % czqy),
+                                                             MT_TJ_CZJLB.czsj.between(t_start,t_end),
+                                                             cast(MT_TJ_CZJLB.bz,VARCHAR) == sgys).all()
+        else:
+            results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                             MT_TJ_CZJLB.czqy == czqy,
+                                                             # MT_TJ_CZJLB.czqy.like('%s%%' % self.collect_area.get_area),
+                                                             MT_TJ_CZJLB.czsj.between(t_start,t_end),
+                                                             cast(MT_TJ_CZJLB.bz,VARCHAR) == sgys).all()
 
         self.table_handover_detail.load((result.detail for result in results))
         self.gp_bottom_right.setTitle('样本交接详细 (%s)' %self.table_handover_detail.rowCount())

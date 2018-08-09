@@ -1,11 +1,14 @@
-from .report_track_ui import ReportTrackUI
-from report.report_track_thread import *
-from report.model import *
-from widgets.cwidget import *
-from pis.pis_result_ui import PisResultUI
+# 系统接口
+from app_interface.i_pacs_result_ui import PacsResultUI
+from app_interface.i_pis_result_ui import PisResultUI
+from app_interface.i_sms_ui import SmsUI
+from app_interface.i_phone_ui import PhoneUI
 from lis.lis_result_ui import LisResultUI
-from pacs.pacs_result_ui import PacsResultUI
 from report.report_item_ui import ItemsStateUI
+from report.report_track_thread import *
+from widgets.cwidget import *
+from .report_track_ui import ReportTrackUI
+
 
 # 报告追踪
 class ReportTrack(ReportTrackUI):
@@ -27,6 +30,8 @@ class ReportTrack(ReportTrackUI):
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
         self.btn_pacs.clicked.connect(self.on_btn_pacs_click)
         self.btn_lis.clicked.connect(self.on_btn_lis_click)
+        self.btn_phone.clicked.connect(self.on_btn_phone_click)
+        self.btn_sms.clicked.connect(self.on_btn_sms_click)
         ##############线程########################################################
         self.cur_tjbh = None         #最后一次选择的体检编号
         self.pis_thread = None
@@ -37,6 +42,8 @@ class ReportTrack(ReportTrackUI):
         self.pis_ui = None        # 病理对话框
         self.lis_ui = None        # 检验对话框
         self.pacs_ui = None       # 检查对话框
+        self.phone_ui = None      # 电话记录对话框
+        self.sms_ui = None        # 短信记录对话框
 
     def initParas(self):
         self.dwmc_bh = OrderedDict()
@@ -126,6 +133,27 @@ class ReportTrack(ReportTrackUI):
                 self.item_ui = ItemsStateUI(self.cur_tjbh, self)
             self.item_ui.show()
 
+    # 电话记录
+    def on_btn_phone_click(self):
+        if not self.cur_tjbh:
+            mes_about(self, '请先选择一个人！')
+            return
+        else:
+            if not self.item_ui:
+                self.phone_ui = PhoneUI(self)
+            self.phone_ui.returnPressed.emit(self.cur_tjbh)
+            self.phone_ui.show()
+
+    # 短信记录
+    def on_btn_sms_click(self):
+        if not self.cur_tjbh:
+            mes_about(self, '请先选择一个人！')
+            return
+        else:
+            if not self.sms_ui:
+                self.sms_ui = SmsUI(self)
+            self.sms_ui.returnPressed.emit(self.cur_tjbh)
+            self.sms_ui.show()
 
     # 进入PIS
     def on_btn_pis_click(self):
@@ -217,6 +245,31 @@ class ReportTrack(ReportTrackUI):
             self.pacs_ui.show()
         else:
             pass
+
+    def closeEvent(self, *args, **kwargs):
+        super(ReportTrack, self).closeEvent(*args, **kwargs)
+        try:
+            if self.lis_thread:
+                self.lis_thread.stop()
+            if self.pacs_thread:
+                self.pacs_thread.stop()
+            if self.pis_thread:
+                self.pis_thread.stop()
+        except Exception as e:
+            self.log.info("ReportTrack 线程关闭时发生错误：%s " %e)
+        try:
+            if self.lis_ui:
+                self.lis_ui.close()
+            if self.pacs_ui:
+                self.pacs_ui.close()
+            if self.pis_ui:
+                self.pis_ui.close()
+            if self.phone_ui:
+                self.phone_ui.close()
+            if self.sms_ui:
+                self.sms_ui.close()
+        except Exception as e:
+            self.log.info("ReportTrack 子UI关闭时发生错误：%s " %e)
 
 
 

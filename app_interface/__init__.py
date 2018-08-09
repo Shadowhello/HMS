@@ -1,9 +1,8 @@
-'''
-@author: zhufd
-@license: (C) Copyright 2018
-@contact: 245838515@qq.com
-@software: garner
-@file: __init__.py.py
-@time: 2018-8-4 14:30
-@desc:
-'''
+# 系统接口管理
+
+# LIS  接口
+# PACS 接口
+# PIS  接口
+# 病理 接口
+# 电话 接口
+# 短信 接口

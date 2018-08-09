@@ -1,4 +1,4 @@
-from pacs.pacs_result_ui import *
+from app_interface.i_pacs_result_ui import *
 
 class PacsResult(PacsResultUI):
 

@@ -77,9 +77,9 @@ class MT_TJ_TJJLMXB(BaseModel):
             'btn_hs':''                                     # 核实
         }
 
-    @property
-    def ksbm(self):
-        return getattr(self, "ksbm", ''),
+    # @property
+    # def ksbm(self):
+    #     return getattr(self, "ksbm", ''),
 
 
 class MT_TJ_DW(BaseModel):

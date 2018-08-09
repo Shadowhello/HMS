@@ -70,7 +70,7 @@ class ReportTrackUI(Widget):
         self.btn_pis = QPushButton(Icon('pis'),'病理系统')          # 查看 病理结果
         self.btn_equip = QPushButton(Icon('pis'), '设备系统')  # 查看 病理结果
         self.btn_phone = QPushButton(Icon('电话'),'电话记录')       # 查看电话记录
-        self.btn_mes = QPushButton(Icon('短信'),'短信记录')         # 查看短信记录
+        self.btn_sms = QPushButton(Icon('短信'),'短信记录')         # 查看短信记录
         self.btn_sd = QPushButton(Icon('体检收单'),'导检收单')      # 导检收单
         self.btn_djd = QPushButton(Icon('体检收单'),'电子导检单')   # 有拒检项目查看电子导检单
         lt_bottom.addWidget(self.btn_item)
@@ -79,7 +79,7 @@ class ReportTrackUI(Widget):
         lt_bottom.addWidget(self.btn_pis)
         lt_bottom.addWidget(self.btn_equip)
         lt_bottom.addWidget(self.btn_phone)
-        lt_bottom.addWidget(self.btn_mes)
+        lt_bottom.addWidget(self.btn_sms)
         lt_bottom.addWidget(self.btn_sd)
         lt_bottom.addWidget(self.btn_djd)
         gp_bottom.setLayout(lt_bottom)

@@ -369,6 +369,26 @@ class EquipResultTable(TableWidget):
         # list 实现
         pass
 
+# 设备结果列表，追踪处用
+class PhoneTable(TableWidget):
+    def __init__(self, heads, parent=None):
+        super(PhoneTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        for row_index, row_data in enumerate(datas):
+            self.insertRow(row_index)                # 插入一行
+            for col_index, col_name in enumerate(heads.keys()):
+                item = QTableWidgetItem(row_data[col_name])
+                self.setItem(row_index, col_index, item)
+
+        self.setColumnWidth(0, 70)
+        self.setColumnWidth(1, 70)
+        self.setColumnWidth(2, 50)
+        self.setColumnWidth(3, 70)
+        self.horizontalHeader().setStretchLastSection(True)
+        self.verticalHeader().setVisible(False)  # 列表头
+
 # PACS检查列表
 class PacsInspectResultTable(TableWidget):
 
@@ -545,7 +565,7 @@ class CollectHandoverDTable(TableWidget):
         self.setColumnWidth(4, 50)
 
 
-# 抽血历史采集筛选列表
+# 报告追踪 项目查看
 class ItemsStateTable(TableWidget):
 
     def __init__(self, heads, parent=None):
@@ -601,6 +621,9 @@ class ItemsStateTable(TableWidget):
 
         self.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
         self.horizontalHeader().setStretchLastSection(True)
+        self.setColumnWidth(0, 50)
+        self.setColumnWidth(1, 60)
+        self.setColumnWidth(2, 60)
 
 
 # 报告追踪列表
@@ -632,12 +655,16 @@ class ReportTrackTable(TableWidget):
                 self.setItem(row_index, col_index, item)
 
         # 特殊设置
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.horizontalHeader().setMinimumSectionSize(60)
-        # self.horizontalHeader().setMaximumSectionSize(300)
-        self.horizontalHeader().setStretchLastSection(True)
-        # self.horizontalHeader().setResizeMode(QHeaderView.Stretch)
-
+        if datas:
+            self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)         #所有列
+            # self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+            # self.horizontalHeader().setMinimumSectionSize(60)
+            # self.horizontalHeader().setMaximumSectionSize(300)
+            self.horizontalHeader().setStretchLastSection(True)
+            self.setColumnWidth(0, 70)
+            self.setColumnWidth(1, 60)
+            self.setColumnWidth(5, 30)
+            self.setColumnWidth(6, 30)
 
 
 # 慢病疑似筛选列表

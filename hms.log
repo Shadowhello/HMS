@@ -2194,3 +2194,2667 @@ WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy LIKE %(czq
 [2018-08-07 15:06:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
 [2018-08-07 15:18:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
 [2018-08-07 15:30:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 15:42:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 15:46:38] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-07 15:46:44] INFO [utils.config_log:22] 程序启动......
+[2018-08-07 15:46:44] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-07 15:46:44] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-07 15:46:44] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-07 15:46:44] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-07 15:46:44] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-07 15:46:47] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-07 15:46:47] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-07 15:46:47] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 15:58:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 16:10:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 16:22:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 16:34:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 16:46:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 16:58:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 17:10:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 17:22:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 17:34:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 17:46:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 17:58:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 18:10:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 18:23:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 18:35:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 18:47:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 18:59:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 19:11:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 19:23:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 19:35:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 19:47:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 19:59:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 20:11:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 20:23:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 20:35:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 20:47:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 20:59:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 21:11:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 21:23:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 21:35:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 21:47:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 21:59:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 22:11:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 22:23:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 22:35:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 22:47:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 22:59:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 23:11:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 23:23:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 23:35:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 23:47:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-07 23:59:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 00:11:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 00:23:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 00:35:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 00:47:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 00:59:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 01:11:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 01:23:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 01:35:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 01:47:37] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 01:59:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 02:11:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 02:23:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 02:35:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 02:47:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 02:59:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 03:11:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 03:23:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 03:35:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 03:47:47] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 03:59:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 04:11:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 04:23:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 04:35:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 04:47:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 04:59:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 05:11:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 05:23:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 05:35:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 05:47:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 05:59:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 06:11:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 06:24:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 06:36:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 06:48:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 07:00:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 07:12:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 07:22:29] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 07:22:29] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 07:22:29] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 07:22:29] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 07:22:29] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 07:22:29] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 07:24:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 07:36:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 07:48:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 08:00:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 08:47:56] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 08:47:56] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 08:47:56] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 08:47:56] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 08:47:56] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 08:47:56] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 13:54:17] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 13:54:17] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 13:54:17] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 13:54:17] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 13:54:17] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 13:54:17] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 13:54:35] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 13:54:35] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 13:54:35] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 13:54:35] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 13:54:35] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 13:54:35] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 13:54:38] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 13:54:38] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 13:54:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 13:55:12] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 13:55:15] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 13:55:15] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 13:55:15] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 13:55:15] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 13:55:15] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 13:55:15] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 13:55:18] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 13:55:18] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 13:55:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:07:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:19:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:26:31] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 14:26:36] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:26:36] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:26:36] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:26:36] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:26:36] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:26:36] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:26:39] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:26:39] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:26:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:29:03] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:29:03] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:29:03] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:29:03] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:29:03] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:29:03] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:29:07] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:29:07] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:29:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:30:16] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:30:16] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:30:16] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:30:16] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:30:16] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:30:16] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:30:19] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:30:19] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:30:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:32:22] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 14:32:25] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:32:25] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:32:25] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:32:25] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:32:25] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:32:25] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:32:29] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:32:29] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:32:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:33:30] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 14:33:33] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:33:33] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:33:33] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:33:33] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:33:33] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:33:33] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:33:36] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:33:36] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:33:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:35:05] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 14:35:08] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:35:08] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:35:08] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:35:08] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:35:08] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:35:08] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:35:11] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:35:11] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:35:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:35:37] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 14:35:45] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:35:45] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:35:45] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:35:45] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:35:45] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:35:45] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:35:48] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:35:48] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:35:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:36:10] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 14:36:13] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:36:13] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:36:13] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:36:13] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:36:13] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:36:13] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:36:16] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:36:16] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:36:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:38:52] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 14:39:07] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 14:39:07] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 14:39:07] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 14:39:07] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 14:39:07] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 14:39:07] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 14:39:09] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 14:39:09] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 14:39:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 14:51:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:03:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:15:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:27:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:36:39] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 15:36:46] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 15:36:46] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 15:36:46] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 15:36:46] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 15:36:46] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 15:36:46] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 15:36:48] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 15:36:48] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 15:36:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:36:51] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 15:38:14] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 15:38:14] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 15:38:14] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 15:38:14] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 15:38:14] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 15:38:14] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 15:38:16] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 15:38:16] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 15:38:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:39:11] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 15:39:11] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 15:39:11] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 15:39:11] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 15:39:11] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 15:39:11] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 15:39:14] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 15:39:14] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 15:39:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:40:18] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 15:40:21] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 15:40:21] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 15:40:21] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 15:40:21] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 15:40:21] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 15:40:21] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 15:40:24] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 15:40:24] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 15:40:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 15:52:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:02:45] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:08:30] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:08:30] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:08:30] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:08:30] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:08:30] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:08:30] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:08:32] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:08:32] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:08:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:09:15] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:09:51] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:09:51] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:09:51] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:09:51] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:09:51] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:09:51] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:09:54] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:09:54] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:09:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:10:33] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:10:33] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:10:33] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:10:33] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:10:33] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:10:33] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:10:46] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:10:46] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:10:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:15:49] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:15:49] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:15:49] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:15:49] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:15:49] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:15:49] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:15:52] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:15:52] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:15:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:16:45] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:16:45] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:16:45] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:16:45] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:16:45] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:16:45] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] {'yhkl_1': '', 'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:16:48] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:16:48] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:16:48] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:16:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:16:51] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:16:51] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:16:52] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:16:52] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:16:54] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB], [TJ_TJJLMXB] 
+WHERE [TJ_TJJLMXB].tjbh = %(tjbh_1)s
+[2018-08-08 16:16:54] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '153352090'}
+[2018-08-08 16:17:21] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:17:21] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:17:21] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:17:21] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:17:21] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:17:21] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'xtsb_1': '101'}
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] {'yhkl_1': '', 'yhdm_1': '160405020', 'xtsb_1': '101'}
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:17:23] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:17:23] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:17:23] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:17:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:17:25] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:17:25] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:17:26] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:17:26] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:17:29] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:17:29] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172080107'}
+[2018-08-08 16:17:38] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '166260029' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:17:38] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:17:59] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '133100411' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:17:59] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:18:06] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:18:06] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:18:10] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:18:10] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166773096'}
+[2018-08-08 16:18:14] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:18:14] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166773099'}
+[2018-08-08 16:19:06] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '166772367' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:19:06] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:10] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:19:10] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166772367'}
+[2018-08-08 16:19:35] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:19:35] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:19:35] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:19:35] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:19:35] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:19:35] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020', 'yhkl_1': ''}
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:19:38] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:19:38] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:19:38] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:19:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:19:40] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:19:40] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:41] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:19:41] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:44] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:19:44] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '148740244'}
+[2018-08-08 16:19:51] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '166772367' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:19:51] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:19:54] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:19:54] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166772367'}
+[2018-08-08 16:21:43] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:21:46] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:21:46] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:21:46] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:21:46] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:21:46] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:21:46] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] {'yhkl_1': '', 'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:21:49] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:21:49] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:21:49] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:21:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:21:50] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:21:50] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:21:52] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:21:52] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:22:05] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '166772367' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:22:05] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:22:11] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:22:11] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166772367'}
+[2018-08-08 16:28:13] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:28:18] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:28:18] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:28:18] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:28:18] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:28:18] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:28:18] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'xtsb_1': '101'}
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'xtsb_1': '101', 'yhkl_1': ''}
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:28:21] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:28:21] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:28:21] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:28:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:28:22] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:28:22] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:28:24] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:28:24] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:28:26] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:28:26] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166820130'}
+[2018-08-08 16:28:34] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '166772367' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:28:34] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:28:36] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:28:36] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166772367'}
+[2018-08-08 16:30:01] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:30:01] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166772367'}
+[2018-08-08 16:30:16] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '172450011' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:30:16] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:30:19] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:30:19] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450011'}
+[2018-08-08 16:32:18] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:32:22] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:32:22] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:32:22] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:32:22] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:32:22] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:32:22] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:32:24] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:32:24] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:24] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:32:24] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:24] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:32:24] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'xtsb_1': '101'}
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'yhkl_1': '', 'xtsb_1': '101'}
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:32:25] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:32:25] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:32:25] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:32:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:32:26] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:32:26] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:28] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:32:28] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:31] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:32:31] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166773088'}
+[2018-08-08 16:32:34] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '166773088' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:32:34] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:42] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '123456789' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:32:42] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:32:50] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDAB.SJHM = '13857894897' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:32:50] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:33:08] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '172450010' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:33:08] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:33:18] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '172450025' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:33:18] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:33:22] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:33:22] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 16:34:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:34:21] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': ''}
+[2018-08-08 16:35:44] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:35:44] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 16:35:46] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:35:46] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': ''}
+[2018-08-08 16:36:30] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:36:30] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 16:37:00] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:37:03] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:37:03] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:37:03] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:37:03] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:37:03] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:37:03] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'xtsb_1': '101', 'yhkl_1': ''}
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:37:05] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:37:05] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:37:05] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:37:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:37:07] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:37:07] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:08] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:37:08] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:13] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '172450025' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:37:13] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:40] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:37:43] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:37:43] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:37:43] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:37:43] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:37:43] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:37:43] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] {'yhkl_1': '', 'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:37:46] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:37:46] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:37:46] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:37:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:37:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:37:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:49] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:37:49] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:37:57] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+                
+                AND  TJ_TJDJB.TJBH = '172450025' 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:37:57] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:38:00] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:38:00] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 16:39:17] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 16:39:20] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 16:39:20] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 16:39:20] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 16:39:20] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 16:39:20] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 16:39:20] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'yhkl_1': '', 'xtsb_1': '101'}
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 16:39:23] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 16:39:23] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 16:39:23] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 16:39:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 16:39:26] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 16:39:26] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:39:31] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 16:39:31] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 16:39:34] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 16:39:34] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '154273270'}
+[2018-08-08 16:51:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:03:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:14:45] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 17:14:45] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 17:14:45] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 17:14:45] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 17:14:45] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 17:14:45] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'xtsb_1': '101'}
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '160405020', 'yhkl_1': '', 'xtsb_1': '101'}
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 17:14:48] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 17:14:48] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 17:14:48] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 17:14:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:14:58] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT '2018-08-08 00:00:00' AS QSSJ,'2018-08-08 23:59:59' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
+    
+        FROM TJ_CZJLB 
+        
+        WHERE CZSJ BETWEEN '2018-08-08 00:00:00' AND '2018-08-08 23:59:59'
+        
+        AND JLLX IN ('0010','0011')  
+        
+        AND CZQY LIKE '明州%'
+        
+        GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+        
+        ORDER BY CZQY,count(*) DESC ;
+        
+    
+[2018-08-08 17:14:58] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:15:02] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:15:02] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州1楼采血台', 'param_1': '黄管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:15:05] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:15:05] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czsj_1': '2018-08-08 00:00:00', 'param_1': '紫红管', 'jllx_2': '0011', 'czqy_1': '明州1楼采血台', 'jllx_1': '0010'}
+[2018-08-08 17:15:06] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:15:06] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czsj_1': '2018-08-08 00:00:00', 'param_1': '绿管', 'jllx_2': '0011', 'czqy_1': '明州1楼采血台', 'jllx_1': '0010'}
+[2018-08-08 17:15:06] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:15:06] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czsj_1': '2018-08-08 00:00:00', 'param_1': '黄管', 'jllx_2': '0011', 'czqy_1': '明州2楼采血台', 'jllx_1': '0010'}
+[2018-08-08 17:15:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:19:21] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:21] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州3楼采血台', 'param_1': '黑管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:23] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:23] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czsj_1': '2018-08-08 00:00:00', 'param_1': '黄管', 'jllx_2': '0011', 'czqy_1': '明州1楼采血台', 'jllx_1': '0010'}
+[2018-08-08 17:19:24] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:24] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czsj_1': '2018-08-08 00:00:00', 'param_1': '绿管', 'jllx_2': '0011', 'czqy_1': '明州1楼采血台', 'jllx_1': '0010'}
+[2018-08-08 17:19:25] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:25] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州2楼采血台', 'param_1': '紫红管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:31] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:31] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州3楼采血台', 'param_1': '黑管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:32] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:32] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州3楼采血台', 'param_1': '绿管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:32] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:32] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州3楼采血台', 'param_1': '紫红管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:33] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:33] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州2楼留尿台', 'param_1': '特殊管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:33] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-08 17:19:33] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '明州2楼留尿台', 'param_1': '粪便管', 'jllx_2': '0011', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:53] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy LIKE %(czqy_1)s AND [TJ_CZJLB].czxm = %(czxm_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s
+[2018-08-08 17:19:53] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'czqy_1': '所有%', 'jllx_2': '0011', 'czxm_1': '彭蜜蜜', 'czsj_1': '2018-08-08 00:00:00', 'jllx_1': '0010'}
+[2018-08-08 17:19:56] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s
+[2018-08-08 17:19:56] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_2': '2018-08-08 23:59:59', 'jllx_1': '0010', 'czsj_1': '2018-08-08 00:00:00', 'jllx_2': '0011'}
+[2018-08-08 17:20:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.8.200.201
+[2018-08-08 17:26:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:27:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:30:16] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 17:30:18] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 17:33:15] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 17:33:15] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 17:33:15] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 17:33:15] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 17:33:15] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 17:33:15] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] {'yhkl_1': '', 'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 17:33:17] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 17:33:17] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 17:33:17] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 17:33:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:33:19] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 17:33:19] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:21] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 17:33:21] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:24] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:33:24] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166820131'}
+[2018-08-08 17:33:48] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 17:33:48] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 17:33:48] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 17:33:48] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 17:33:48] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 17:33:48] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhkl_1': '', 'yhdm_1': '160405020'}
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 17:33:51] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 17:33:51] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 17:33:51] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 17:33:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:33:53] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 17:33:53] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:54] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 17:33:54] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:33:57] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:33:57] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166820130'}
+[2018-08-08 17:33:59] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:33:59] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166820130'}
+[2018-08-08 17:34:06] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:34:06] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 17:34:06] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:34:06] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 17:34:07] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:34:07] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 17:34:16] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:34:16] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450010'}
+[2018-08-08 17:34:27] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:34:27] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '132810110'}
+[2018-08-08 17:34:47] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 17:34:47] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 17:34:50] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 17:34:50] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 17:34:50] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 17:34:50] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 17:34:50] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 17:34:50] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '160405020'}
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhkl_1': '', 'yhdm_1': '160405020'}
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-08 17:34:52] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '160405020'}
+[2018-08-08 17:34:52] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 17:34:52] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 17:34:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 17:34:54] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-08 17:34:54] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:34:55] INFO [sqlalchemy.engine.base.Engine:109] 
+    WITH T1 AS (
+                SELECT 
+                    (CASE TJZT
+                        WHEN '0' THEN '取消登记'
+                        WHEN '1' THEN '已登记'
+                        WHEN '2' THEN '已预约'
+                        WHEN '3' THEN '已签到'
+                        WHEN '4' THEN '已收单'
+                        WHEN '5' THEN '已追踪'
+                        WHEN '6' THEN '已总检'
+                        WHEN '7' THEN '已审核'
+                        WHEN '8' THEN '已审阅'
+                        ELSE '' END 
+                    ) AS TJZT,
+                    (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                    ) AS TJQY,
+                    TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
+                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
+
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
+
+                AND (TJ_TJDJB.QDRQ>='2018-08-05' and TJ_TJDJB.QDRQ<'2018-08-08')
+            )
+             ,T2 AS (
+                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                    )
+
+    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    (
+        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+    ) AS d
+
+    ON T1.TJBH=d.TJBH 
+
+    
+[2018-08-08 17:34:55] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-08 17:34:59] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:34:59] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166773087'}
+[2018-08-08 17:35:01] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:35:01] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '166773087'}
+[2018-08-08 17:35:11] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DHGTJLB].[ID] AS [TJ_DHGTJLB_ID], [TJ_DHGTJLB].tjbh AS [TJ_DHGTJLB_tjbh], [TJ_DHGTJLB].jllx AS [TJ_DHGTJLB_jllx], [TJ_DHGTJLB].jlnr AS [TJ_DHGTJLB_jlnr], [TJ_DHGTJLB].jlr AS [TJ_DHGTJLB_jlr], [TJ_DHGTJLB].jlsj AS [TJ_DHGTJLB_jlsj] 
+FROM [TJ_DHGTJLB] 
+WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
+[2018-08-08 17:35:11] INFO [sqlalchemy.engine.base.Engine:109] {'tjbh_1': '172450025'}
+[2018-08-08 17:35:30] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 21:46:02] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 21:46:02] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 21:46:02] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 21:46:02] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 21:46:02] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 21:46:02] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 21:46:07] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 21:46:07] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 21:46:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 21:58:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 22:08:15] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-08 22:10:38] INFO [utils.config_log:22] 程序启动......
+[2018-08-08 22:10:38] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-08 22:10:38] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-08 22:10:38] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-08 22:10:38] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-08 22:10:38] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-08 22:10:50] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-08 22:10:50] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-08 22:10:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 22:22:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 22:34:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 22:46:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 22:58:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 23:10:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 23:22:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 23:34:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 23:46:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-08 23:59:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 00:11:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 00:23:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 00:35:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 00:47:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 00:59:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 01:11:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 01:23:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 01:35:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 01:47:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 01:59:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 02:11:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 02:23:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 02:35:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 02:47:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 02:59:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 03:11:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 03:23:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 03:35:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 03:47:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 03:59:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 04:11:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 04:23:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 04:35:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 04:47:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 04:59:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 05:11:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 05:23:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 05:35:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 05:47:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 05:59:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 06:11:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 06:23:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 06:35:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 06:47:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 06:59:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 07:11:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 07:23:37] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 07:35:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 07:47:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 09:54:32] INFO [utils.config_log:22] 程序启动......
+[2018-08-09 09:54:32] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-09 09:54:32] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-09 09:54:32] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-09 09:54:32] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-09 09:54:32] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-09 09:54:34] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-09 09:54:34] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-09 09:54:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 09:55:56] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-09 09:55:59] INFO [utils.config_log:22] 程序启动......
+[2018-08-09 09:55:59] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-09 09:55:59] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-09 09:55:59] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-09 09:55:59] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-09 09:55:59] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-09 09:56:01] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-09 09:56:01] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-09 09:56:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 09:56:56] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-09 09:58:58] INFO [utils.config_log:22] 程序启动......
+[2018-08-09 09:58:58] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-09 09:58:58] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-09 09:58:58] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-09 09:58:58] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-09 09:58:58] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-09 09:59:01] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-09 09:59:01] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-09 09:59:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-09 10:11:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205

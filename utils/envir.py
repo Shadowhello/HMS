@@ -40,16 +40,33 @@ def set_env(termial=False):
 
 
     ####################体检数据链接#####################################
-    session = get_tjxt_session(
-        hostname=gol.get_value('tjxt_host','10.8.200.201'),
-        dbname=gol.get_value('tjxt_database','tjxt'),
-        user=gol.get_value('tjxt_user', 'bsuser'),
-        passwd=gol.get_value('tjxt_passwd', 'admin2389'),
-        port=gol.get_value2('tjxt_port', 1433)
-    )
-    pacs_session = get_pacs_session()
-    pis_session = get_pis_session()
-    lis_session = get_lis_session()
+    try:
+        session = get_tjxt_session(
+            hostname=gol.get_value('tjxt_host','10.8.200.201'),
+            dbname=gol.get_value('tjxt_database','tjxt'),
+            user=gol.get_value('tjxt_user', 'bsuser'),
+            passwd=gol.get_value('tjxt_passwd', 'admin2389'),
+            port=gol.get_value2('tjxt_port', 1433)
+        )
+    except Exception as e:
+        session = None
+        log.info('连接体检数据库失败！错误信息：%s' %e)
+    try:
+        pacs_session = get_pacs_session()
+    except Exception as e:
+        pacs_session = None
+        log.info('连接PACS检查数据库失败！错误信息：%s' %e)
+    try:
+        pis_session = get_pis_session()
+    except Exception as e:
+        pis_session = None
+        log.info('连接PIS病理数据库失败！错误信息：%s' % e)
+    try:
+        lis_session = get_lis_session()
+    except Exception as e:
+        lis_session = None
+        log.info('连接LIS检验数据库失败！错误信息：%s' % e)
+    # 设置数据库连接变量
     gol.set_value("tjxt_session_local", session)
     gol.set_value("tjxt_session_thread", session)
     gol.set_value("pacs_session", pacs_session)

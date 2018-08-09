@@ -34,7 +34,7 @@ class PesResultThread(QThread):
 # 获取PIS 结果
 class PisResultThread(QThread):
     # 定义信号,定义参数为str类型
-    signalConnFail = pyqtSignal(bool,str)   # 连接失败
+    signalConnFail = pyqtSignal(str)   # 连接失败
     signalPost = pyqtSignal(str,list)           # 更新界面
     signalExit = pyqtSignal()
     tjbh = None
@@ -54,8 +54,11 @@ class PisResultThread(QThread):
     def run(self):
         while self.running:
             if self.tjbh:
-                result = self.session.execute(get_pis_sql(self.tjbh)).fetchall()
-                self.signalPost.emit('PIS',result)
+                try:
+                    result = self.session.execute(get_pis_sql(self.tjbh)).fetchall()
+                    self.signalPost.emit('PIS',result)
+                except Exception as e:
+                    self.signalConnFail.emit('连接PIS数据库执行查询出错，错误信息：%s' %e)
             else:
                 pass
             self.running = False
@@ -64,7 +67,7 @@ class PisResultThread(QThread):
 class PacsResultThread(QThread):
 
     # 定义信号,定义参数为str类型
-    signalConnFail = pyqtSignal(bool,str)   # 连接失败
+    signalConnFail = pyqtSignal(str)   # 连接失败
     signalPost = pyqtSignal(str,list)           # 更新界面
     signalExit = pyqtSignal()
     tjbh = None
@@ -84,8 +87,11 @@ class PacsResultThread(QThread):
     def run(self):
         while self.running:
             if self.tjbh:
-                result = self.session.execute(get_pacs_sql(self.tjbh)).fetchall()
-                self.signalPost.emit('PACS',result)
+                try:
+                    result = self.session.execute(get_pacs_sql(self.tjbh)).fetchall()
+                    self.signalPost.emit('PACS',result)
+                except Exception as e:
+                    self.signalConnFail.emit('连接PACS数据库执行查询出错，错误信息：%s' %e)
             else:
                 pass
             self.running = False
@@ -94,7 +100,7 @@ class PacsResultThread(QThread):
 class LisResultThread(QThread):
 
     # 定义信号,定义参数为str类型
-    signalConnFail = pyqtSignal(bool,str)       # 连接失败
+    signalConnFail = pyqtSignal(str)       # 连接失败
     signalPost = pyqtSignal(str,dict)           # 更新界面
     signalExit = pyqtSignal()
     tjbh = None
@@ -115,12 +121,15 @@ class LisResultThread(QThread):
     def run(self):
         while self.running:
             if self.tjbh:
-                result = {}
-                result_pes = self.session_pes.execute(get_pes_sql(self.tjbh)).fetchall()
-                result_lis = self.session_lis.execute(get_lis_sql(self.tjbh)).fetchall()
-                result['lis'] = list2dict(result_lis)
-                result['pes'] = result_pes
-                self.signalPost.emit('LIS',result)
+                try:
+                    result = {}
+                    result_pes = self.session_pes.execute(get_pes_sql(self.tjbh)).fetchall()
+                    result_lis = self.session_lis.execute(get_lis_sql(self.tjbh)).fetchall()
+                    result['lis'] = list2dict(result_lis)
+                    result['pes'] = result_pes
+                    self.signalPost.emit('LIS',result)
+                except Exception as e:
+                    self.signalConnFail.emit('连接LIS数据库执行查询出错，错误信息：%s' %e)
             else:
                 pass
             self.running = False

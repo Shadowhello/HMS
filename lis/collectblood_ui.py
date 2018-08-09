@@ -168,8 +168,12 @@ class CollectBlood_UI(UI):
             show_y = gol.get_value('photo_capture_height')
             capture = gol.get_value('photo_capture')
             fps = gol.get_value('photo_fps')
-            self.camera = CameraUI(show_x,show_y,capture,fps)
-            right_up_lt.addWidget(self.camera)
+            try:
+                self.camera = CameraUI(show_x,show_y,capture,fps)
+                right_up_lt.addWidget(self.camera)
+            except Exception as e:
+                mes_about(self,'载入摄像头功能失败，错误信息：%s' %e)
+                self.camera = None
         else:
             self.camera = None
 

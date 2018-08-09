@@ -126,3 +126,25 @@ def get_handover_sql(t_start,t_end,area):
         ORDER BY CZQY,count(*) DESC ;
         
     ''' %(t_start,t_end,t_start,t_end,area)
+
+
+# 样本交接 条码数量汇总  明州的时候 汇总
+def get_handover2_sql(t_start, t_end, area):
+    return '''
+        SELECT '%s' AS QSSJ,'%s' AS JSSJ,LEFT(CZQY,2) as CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
+
+        FROM TJ_CZJLB 
+
+        WHERE CZSJ BETWEEN '%s' AND '%s'
+
+        AND JLLX IN ('0010','0011')  
+
+        AND CZQY LIKE '%s%%'
+
+        GROUP BY LEFT(CZQY,2),CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+
+        ORDER BY count(*) DESC ;
+
+    ''' % (t_start, t_end, t_start, t_end, area)
