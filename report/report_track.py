@@ -21,6 +21,7 @@ class ReportTrack(ReportTrackUI):
         self.table_track.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_track.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
         self.table_track.itemClicked.connect(self.on_table_set)
+        self.table_track.itemDoubleClicked.connect(self.on_btn_item_click)
         # 快速检索
         self.gp_quick_search.returnPressed.connect(self.on_quick_search)
         self.btn_export.clicked.connect(self.on_btn_export_click)       # 导出
@@ -130,7 +131,8 @@ class ReportTrack(ReportTrackUI):
             return
         else:
             if not self.item_ui:
-                self.item_ui = ItemsStateUI(self.cur_tjbh, self)
+                self.item_ui = ItemsStateUI(self)
+            self.item_ui.returnPressed.emit(self.cur_tjbh)
             self.item_ui.show()
 
     # 电话记录

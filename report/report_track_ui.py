@@ -45,9 +45,9 @@ class ReportTrackUI(Widget):
         lt_top.addWidget(gp_search)
         lt_top.addWidget(self.gp_quick_search)
         ##########################################
-        self.table_track_cols = OrderedDict([('tjzt','体检状态'),
-                                             ('tjlx','客户类型'),
-                                             ('tjqy','体检区域'),
+        self.table_track_cols = OrderedDict([('tjzt','状态'),
+                                             ('tjlx','类型'),
+                                             ('tjqy','区域'),
                                              ('tjbh','体检编号'),
                                              ('xm','姓名'),
                                              ('xb','性别'),
@@ -55,7 +55,6 @@ class ReportTrackUI(Widget):
                                              ('sfzh', '身份证号'),
                                              ('sjhm','手机号码'),
                                              ('dwmc', '单位名称'),
-                                             ('depart', '部门'),
                                              ('qdrq', '签到日期'),
                                              ('wjxm', '未结束项目')
                                             ])

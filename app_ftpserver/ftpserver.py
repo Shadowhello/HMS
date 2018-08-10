@@ -74,7 +74,7 @@ def run_ftp_server(para=None):
     # FTP日志
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    log_handler = TimedRotatingFileHandler(filename='ftpserver.log',
+    log_handler = TimedRotatingFileHandler(filename='app_ftpserver.log',
                                        when='d',
                                        interval=1,
                                        backupCount=7)

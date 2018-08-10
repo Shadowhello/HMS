@@ -4,14 +4,17 @@ from report.model import *
 
 class ItemsStateUI(Dialog):
 
-    def __init__(self,tjbh=None,parent=None):
+    # 自定义 信号，封装对外使用
+    returnPressed = pyqtSignal(str)
+
+    def __init__(self,parent=None):
         super(ItemsStateUI,self).__init__(parent)
         self.setWindowTitle('项目查看')
         self.setMinimumHeight(600)
         self.initUI()
-        if tjbh:
-            results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.sfzh=='1').all()
-            self.table_item.load([result.item_result for result in results])
+        # 绑定信号槽
+        self.returnPressed.connect(self.setDatas)
+        self.le_tjbh.returnPressed.connect(self.on_le_tjbh_press)
 
     def initUI(self):
         self.item_cols = OrderedDict(
@@ -37,10 +40,17 @@ class ItemsStateUI(Dialog):
         self.setLayout(lt_main)
 
     # 初始化数据
-    def initDatas(self):
-        pass
+    def setDatas(self,p_str):
+        self.le_tjbh.setText(p_str)
+        self.on_le_tjbh_press()
 
-
+    # 查询
+    def on_le_tjbh_press(self):
+        if not self.le_tjbh.text():
+            mes_about(self,'请输入体检编号！')
+            return
+        results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == self.le_tjbh.text(),MT_TJ_TJJLMXB.sfzh=='1').all()
+        self.table_item.load([result.item_result for result in results])
 
 if __name__ == '__main__':
     import sys

@@ -1,6 +1,6 @@
 from flask import Flask
 from utils import gol
-import logging
+import logging,os
 from logging.handlers import TimedRotatingFileHandler
 
 
@@ -30,5 +30,4 @@ def create_app():
     # app.logger.addHandler(handler)
 
     return app
-
 

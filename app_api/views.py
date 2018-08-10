@@ -1,9 +1,11 @@
 from multiprocessing import Queue
 from flask import send_file,make_response,request,jsonify,render_template,abort
-from api.exception import *
-from api.model import *
+from app_api.exception import *
+from app_api.model import *
 import os,ujson,time
 import mimetypes
+from utils import gol
+from app_api.dbconn import *
 
 # 任务队列
 task_queue = Queue()
@@ -53,11 +55,21 @@ def init_views(app,db):
             abort(404)
 
     # PDF 报告下载，用户发起
-    @app.route('/api/report/down/pdf/<int:tjbh>', methods=['POST'])
+    @app.route('/api/report/down/pdf/<int:tjbh>', methods=['GET'])
     def report_down(tjbh):
-        pass
+        session = gol.get_value('tj_cxk')
+        result = session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).order_by(MT_TJ_PDFRUL.CREATETIME.desc()).scalar()
+        if result:
+            print('客户端：%s 报告(%s)下载请求' %(request.remote_addr,tjbh))
+            filename = os.path.join('D:/pdf/',result.PDFURL)
+            response = make_response(send_file(filename, as_attachment=True))
+            response.headers['Content-Type'] = mimetypes.guess_type(os.path.basename(filename))[0]
+            response.headers['Content-Disposition'] = 'attachment; filename={}'.format(os.path.basename(filename))
+            return response
+        else:
+            abort(404)
 
-    # PDF 报告下载，用户发起
+    # PDF 报告打印，用户发起
     @app.route('/api/report/print/pdf/<int:tjbh>', methods=['GET'])
     def report_print(tjbh):
         pass
@@ -69,7 +81,6 @@ def init_views(app,db):
             tjbh = '%09d' % tjbh
         elif len(str(tjbh)) == 9:
             tjbh = str(tjbh)
-
         pass
 
     # 设备 报告下载
@@ -137,9 +148,7 @@ def init_views(app,db):
             response.headers['Content-Disposition'] = 'attachment; filename={}'.format(result.filename)
             return response
         else:
-            return make_response("Not Found File")
-
-            #return ujson.dumps({'code':1,'mes':'上传成功','data':None})
+            abort(404)
 
     # 程序更新
     @app.route('/api/version/<float:version>', methods=['GET'])

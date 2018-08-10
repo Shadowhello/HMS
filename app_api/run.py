@@ -1,11 +1,12 @@
 from gevent import monkey
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
-from api.config import create_app
-from api.views import init_views
-from api.model import db
+from app_api.config import create_app
+from app_api.views import init_views
+from app_api.model import db
 from utils.envir2 import Init_env_vars
 from utils import gol
+from app_api.dbconn import *
 
 def run_api_server(app,host,port):
     # 异步
@@ -13,10 +14,10 @@ def run_api_server(app,host,port):
     http_server.serve_forever()
 
 
-
 if __name__ == '__main__':
     # 初始化
-    Init_env_vars(['api.ini', 'ftp.ini'])
+    Init_env_vars(['api.ini'])
+    gol.set_value('tj_cxk',get_oracle_session(gol.get_value('SQLALCHEMY_DATABASE_URI2')))
     monkey.patch_all()
     app = create_app()
     db.init_app(app)

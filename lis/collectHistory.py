@@ -18,7 +18,7 @@ class CollectHistory(CollectHistory_UI):
         if self.get_gol_para('api_file_down'):
             self.show_url = self.get_gol_para('api_file_down')
         else:
-            self.show_url = 'http://10.8.200.201:4000/api/file/down/%s/%s'
+            self.show_url = 'http://10.8.200.201:4000/app_api/file/down/%s/%s'
 
 
             # 查询

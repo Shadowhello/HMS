@@ -94,8 +94,8 @@ def get_report_track_sql(tstart,tend):
                     ) AS TJQY,
                     TJ_TJDJB.TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
                     NL,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
-                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
-                    DEPART,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC
+                    ,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ
                 FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
 
                 AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 

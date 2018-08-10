@@ -1,5 +1,8 @@
 from widgets.cwidget import *
 from utils import gol
+from utils.api import request_get
+import win32api
+import win32print
 
 # 自助机
 class SelfHelpMachine(Widget):
@@ -19,6 +22,8 @@ class SelfHelpMachine(Widget):
         self.btn_keyboard.clicked.connect(self.on_btn_keyboard_click)
         # 特殊变量
         self.gp_keyboard = None       #键盘区域
+        self.print_thread = None
+        self.dg_p = None              #进度窗口，温馨提示
 
     def initUI(self):
         lt_main = QHBoxLayout(self)
@@ -29,9 +34,12 @@ class SelfHelpMachine(Widget):
         lt_middle = QHBoxLayout()
         lt_bottom = QHBoxLayout()
         self.le_tjbh = QTJBH()
+        self.le_tjbh.setFixedHeight(128)
+        self.le_tjbh.setStyleSheet('''font: 75 40pt \"微软雅黑\";''')
         self.btn_keyboard = QPushButton(Icon('键盘'),'')
-        self.btn_keyboard.setIconSize(QSize(32,32))
-        self.btn_sfz = QPushButton('读身份证')
+        self.btn_keyboard.setIconSize(QSize(128,128))
+        self.btn_sfz = QPushButton(Icon('身份证'),'读身份证')
+        self.btn_sfz.setIconSize(QSize(128, 128))
         lt_middle2.addWidget(self.le_tjbh)
         lt_middle2.addWidget(self.btn_keyboard)
         lt_middle2.addWidget(self.btn_sfz)
@@ -49,10 +57,43 @@ class SelfHelpMachine(Widget):
 
     # 扫描体检编号或者手工输入回车
     def on_le_tjbh_press(self):
-        pass
+        if len(self.le_tjbh.text())==9:
+            self.on_print_thread(self.le_tjbh.text())
+            self.dg_p = ProgressDialog(self)
+            self.dg_p.show()
+        elif len(self.le_tjbh.text())==18:
+            pass
+            # self.session.
+        else:
+            mes_about(self,'请输入正确的体检编号或者身份证号！')
+
+        self.le_tjbh.setText('')
+
+    def on_print_thread(self,p_str):
+        if self.print_thread:
+            self.print_thread.setData(p_str)
+            self.print_thread.signalPost.connect(self.on_mes_show, type=Qt.QueuedConnection)
+            self.print_thread.start()
+        else:
+            self.print_thread = PrintThread()
+            self.print_thread.setData(p_str)
+            self.print_thread.signalPost.connect(self.on_mes_show, type=Qt.QueuedConnection)
+            self.print_thread.start()
+
+    # 消息提示
+    def on_mes_show(self,p_bool:bool,mes:str):
+        if self.dg_p:
+            if not self.dg_p.isHidden():
+                self.dg_p.hide()
+        mes_about(self,mes)
+        self.le_tjbh.setText('')
 
     # 读身份证号
     def on_btn_sfz_read(self):
+        # 键盘区域存在则隐藏
+        if self.gp_keyboard:
+            if not self.gp_keyboard.isHidden():
+                self.gp_keyboard.hide()
         dialog = ReadChinaIdCard_UI(self)
         dialog.sendIdCard.connect(self.setData)
         dialog.exec_()
@@ -76,7 +117,7 @@ class SelfHelpMachine(Widget):
             btn_names = ['ESC','0','1','2','3','4','5','6','7','8','9','搜索']
             # 一行几个按钮
             size = 3
-            height = 300
+            height = 400
             self.gp_keyboard = QGroupBox(self)
             lt_keyboard = QGridLayout()
             for i,btn_name in enumerate(btn_names):
@@ -100,7 +141,14 @@ class SelfHelpMachine(Widget):
 
             self.gp_keyboard.setLayout(lt_keyboard)
             self.gp_keyboard.setGeometry(QRect(left,bottom,width,height))
-        self.gp_keyboard.show()
+            self.gp_keyboard.show()
+        else:
+            #已存在，是否已隐藏
+            if self.gp_keyboard.isHidden():
+                self.gp_keyboard.show()
+            else:
+                # 再次点击 则隐藏
+                self.gp_keyboard.hide()
 
     # 数字键盘信号槽
     def on_btn_obj_click(self,btn_name):
@@ -113,6 +161,77 @@ class SelfHelpMachine(Widget):
             self.on_le_tjbh_press()
         else:
             self.le_tjbh.setText(self.le_tjbh.text()+btn_name)
+
+# 打印线程
+class PrintThread(QThread):
+
+    # 定义信号,定义参数为str类型
+    signalMes = pyqtSignal(str)          # 消息反馈
+    signalPost = pyqtSignal(bool,str)        # 消息反馈
+    signalExit = pyqtSignal()
+
+    def __init__(self):
+        super(PrintThread,self).__init__()
+        self.runing = False
+        self.printer = win32print.GetDefaultPrinter()
+        self.tjbh = None
+
+    def stop(self):
+        self.runing = False
+
+    def setData(self,p_str):
+        self.tjbh =p_str
+        self.runing = True
+
+    def run(self):
+        while self.runing:
+            if self.tjbh:
+                url = gol.get_value('api_pdf_old_down',None) %self.tjbh
+                filename = os.path.join(gol.get_value('path_tmp'),'%s.pdf' %self.tjbh)
+                if os.path.exists(filename):
+                    os.remove(filename)
+                if url:
+                    if request_get(url,filename):
+                        try:
+                            win32api.ShellExecute(0, 'print', filename,self.printer , '.', 0)
+                            time.sleep(2)
+                            self.signalPost.emit(True,'打印成功！')
+                        except Exception as e:
+                            self.signalPost.emit(False,'打印失败！错粗信息：%s \n 处理方式：请安装PDF阅读器 AcroRd32.exe 并设置为默认打开方式。' %e)
+                    else:
+                        self.signalPost.emit(False,'未找到您的报告！')
+
+                else:
+                    self.signalPost.emit(False,'请联系管理员配置节点：api_pdf_old_down')
+
+            self.stop()
+
+
+# 进度动态图
+class ProgressDialog(Dialog):
+
+    def __init__(self,parent):
+        super(ProgressDialog,self).__init__(parent)
+        self.setWindowFlags(Qt.FramelessWindowHint)  # 窗口模式，去掉标题栏
+        self.setFixedSize(500,500)
+        lt_main = QVBoxLayout()
+        lb_p = QLabel()
+        lb_dec = QLabel('正在打印，请您稍等！')
+        lb_dec.setStyleSheet('''font: 75 40pt \"微软雅黑\";''')
+        movie = QMovie(file_ico('35.gif'))
+        lb_p.setMovie(movie)
+        movie.start()
+        # 用于控件移动居中 不考虑任务与考虑任务栏
+        # move((desktop->width() - this->width()) / 2, (desktop->height() - this->height()) / 2);
+        # self.move((qApp.desktop().availableGeometry().width() - self.width()) / 2 + qApp.desktop().availableGeometry().x(),
+        #           (qApp.desktop().availableGeometry().height() - self.height()) / 2 + qApp.desktop().availableGeometry().y()
+        #           )
+        lt_main.addWidget(lb_p)
+        lt_main.addWidget(lb_dec)
+        self.setLayout(lt_main)
+
+
+
 
 if __name__ == '__main__':
     import sys

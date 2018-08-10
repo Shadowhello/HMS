@@ -2,7 +2,7 @@ import os,time,sys
 from collections import OrderedDict
 from jinja2 import Template
 from mako.template import Template as  Template2
-from reportserver.report_html import *
+from app_reportserver.report_html import *
 from utils.base import RemoteFileHandler
 from utils.buildbarcode import BarCode
 
@@ -63,7 +63,7 @@ if __name__=="__main__":
     tjbh='153192497'
     # tjbh = '149520265'
 
-    from reportserver.model import *
+    from app_reportserver.model import *
     # 初始化
     ms_engine = create_engine('mssql+pymssql://bsuser:admin2389@10.8.200.201:1433/tjxt',encoding='utf8',echo=False)
     ms_session = sessionmaker(bind=ms_engine)()
@@ -114,7 +114,7 @@ if __name__=="__main__":
             count = 1
             tmp = result.zhbh
 
-        file_local = 'F:/HMS/reportserver/%s_%s_%s.jpg' % (result.tjbh, result.zhbh, count)
+        file_local = 'F:/HMS/app_reportserver/%s_%s_%s.jpg' % (result.tjbh, result.zhbh, count)
         # 病理
         if result.ksbm.strip()=='0026':
             file_remote = result.picpath.replace('\\','/').lstrip('//')
@@ -136,7 +136,7 @@ if __name__=="__main__":
             pass
 
     # 设备报告图片 心电图 0806、分体成分 5402、骨密度501576 从TJ_EQUIP 中获取
-    equip_pic = ['F:/HMS/reportserver/153192497_0806.png','F:/HMS/reportserver/153192497_501576.jpg','F:/HMS/reportserver/153192497_5402.png']
+    equip_pic = ['F:/HMS/app_reportserver/153192497_0806.png','F:/HMS/app_reportserver/153192497_501576.jpg','F:/HMS/app_reportserver/153192497_5402.png']
 
     # 医生排班
     #results2 = ora_session.query(M_TJ_YSPB).filter(M_TJ_YSPB.ZFBZ=='0').order_by(M_TJ_YSPB.PBXQ).all()
@@ -198,7 +198,7 @@ if __name__=="__main__":
     # 生成html
     file_html ="C:/Users/Administrator/Desktop/pdf测试/test.html"
     file_pdf = "C:/Users/Administrator/Desktop/pdf测试/test.pdf"
-    file_css = "F:/HMS/reportserver/report.css"
+    file_css = "F:/HMS/app_reportserver/report.css"
     html = ReportBuildHTML(file_html)
     html.write_home_page(user_i)
     html.write_second_page(summarys,suggestions,sign)
@@ -246,7 +246,7 @@ if __name__=="__main__":
     'enable-javascript':None
     #'user-style-sheet':file_css
     }
-    cover_file='F:/HMS/reportserver/head.html',
+    cover_file='F:/HMS/app_reportserver/head.html',
     pdfkit.from_file(file_html, file_pdf,options=options,configuration=config,cover=cover_file,css=file_css)
 
     time_end2 = time.time()

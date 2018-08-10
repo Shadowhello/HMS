@@ -9,7 +9,7 @@ html_head = '''<html>
 <meta http-equiv="pragma" CONTENT="no-cache"> 
 <meta http-equiv="Cache-Control" CONTENT="no-cache, must-revalidate"> 
 <meta http-equiv="expires" CONTENT="0">
-<link rel="stylesheet" type="text/css" href="file:///F:/HMS/reportserver/report.css" >
+<link rel="stylesheet" type="text/css" href="file:///F:/HMS/app_reportserver/report.css" >
 </head>
 <body>
 <div align="center">'''
@@ -24,7 +24,7 @@ html_home_page= '''
 <div class="line">
     <div class="user">
         <div>
-            <img src="file:///F:/HMS/reportserver/img0.jpg" class="image" />
+            <img src="file:///F:/HMS/app_reportserver/img0.jpg" class="image" />
         </div>
         <div class="user_tag">
             <div>
@@ -60,7 +60,7 @@ html_home_page2= '''
 <div>
     <div class="user">
         <div>
-            <img src="file:///F:/HMS/reportserver/img0.jpg" class="image" />
+            <img src="file:///F:/HMS/app_reportserver/img0.jpg" class="image" />
         </div>
         <div class="user_tag">
             <table class="user_table">

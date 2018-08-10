@@ -31,12 +31,12 @@ def set_equip_env(termial=False):
     gol.merge(config_parse('database.ini',True))      # 数据库配置
     log.info('读取配置(database.ini)文件成功')
 
-    # api = APIRquest(login_id=gol.get_value('login_user_id',''),
+    # app_api = APIRquest(login_id=gol.get_value('login_user_id',''),
     #                 host = gol.get_value('api_host',''),
     #                 port = gol.get_value('api_port',''),
     #                 log = gol.get_value('log','')
     #                 )
-    # gol.set_value('api', api)                                           # 添加API请求
+    # gol.set_value('app_api', app_api)                                           # 添加API请求
 
 
     ####################体检数据链接#####################################

@@ -647,7 +647,7 @@ class ReportTrackTable(TableWidget):
                         item = QTableWidgetItem(col_value)
                     else:
                         item = QTableWidgetItem(str2(col_value))
-                    if col_index not in [9,10,12]:
+                    if col_index not in [4,9,10,11]:
                         item.setTextAlignment(Qt.AlignCenter)
                     # self.resizeColumnToContents()
                 else:
@@ -660,11 +660,12 @@ class ReportTrackTable(TableWidget):
             # self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             # self.horizontalHeader().setMinimumSectionSize(60)
             # self.horizontalHeader().setMaximumSectionSize(300)
-            self.horizontalHeader().setStretchLastSection(True)
             self.setColumnWidth(0, 70)
             self.setColumnWidth(1, 60)
-            self.setColumnWidth(5, 30)
-            self.setColumnWidth(6, 30)
+            self.setColumnWidth(4, 70)
+            self.setColumnWidth(5, 40)
+            self.setColumnWidth(6, 40)
+            self.horizontalHeader().setStretchLastSection(True)
 
 
 # 慢病疑似筛选列表
