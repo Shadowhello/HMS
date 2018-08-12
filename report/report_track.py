@@ -1,5 +1,5 @@
 # 系统接口
-from app_interface.i_pacs_result_ui import PacsResultUI
+from app_interface.i_pacs_result import PacsResult
 from app_interface.i_pis_result_ui import PisResultUI
 from app_interface.i_sms_ui import SmsUI
 from app_interface.i_phone_ui import PhoneUI
@@ -22,10 +22,11 @@ class ReportTrack(ReportTrackUI):
         self.table_track.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
         self.table_track.itemClicked.connect(self.on_table_set)
         self.table_track.itemDoubleClicked.connect(self.on_btn_item_click)
-        # 快速检索
-        self.gp_quick_search.returnPressed.connect(self.on_quick_search)
-        self.btn_export.clicked.connect(self.on_btn_export_click)       # 导出
-        self.btn_query.clicked.connect(self.on_btn_query_click)          # 查询
+        # 按钮栏
+        self.gp_quick_search.returnPressed.connect(self.on_quick_search)    # 快速检索
+        self.btn_export.clicked.connect(self.on_btn_export_click)           # 导出
+        self.btn_query.clicked.connect(self.on_btn_query_click)             # 查询
+        self.btn_task.clicked.connect(self.on_btn_task_click)               # 任务领取
         # 功能栏
         self.btn_item.clicked.connect(self.on_btn_item_click)
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
@@ -56,6 +57,7 @@ class ReportTrack(ReportTrackUI):
 
         self.lt_where_search.s_dwbh.setValues(self.dwmc_bh,self.dwmc_py)
 
+    #快速检索
     def on_quick_search(self,p1_str,p2_str):
         if p1_str == 'tjbh':
             where_str = " TJ_TJDJB.TJBH = '%s' " %p2_str
@@ -65,7 +67,6 @@ class ReportTrack(ReportTrackUI):
             where_str = " TJ_TJDAB.SFZH = '%s' " % p2_str
         else:
             where_str = " TJ_TJDAB.XM ='%s' " % p2_str
-
         results = self.session.execute(get_quick_search_sql(where_str)).fetchall()
         self.table_track.load(results)
         mes_about(self,'共检索出 %s 条数据！' %self.table_track.rowCount())
@@ -79,15 +80,10 @@ class ReportTrack(ReportTrackUI):
                 row_num = i.row()
 
             menu = QMenu()
-            item1 = menu.addAction(Icon("短信"), "发送预约短信")
-            item2 = menu.addAction(Icon("短信"), "编辑预约短信")
-            item3 = menu.addAction(Icon("预约"), "设置预约客户")
-            item4 = menu.addAction(Icon("预约"), "电话记录")
-            item5 = menu.addAction(Icon("预约"), "本次体检结果")
-            item6 = menu.addAction(Icon("预约"), "历年体检结果")
-            item7 = menu.addAction(Icon("预约"), "浏览体检报告")
-            item8 = menu.addAction(Icon("预约"), "下载电子报告")
-
+            item1 = menu.addAction(Icon("短信"), "更换追踪人")
+            item2 = menu.addAction(Icon("短信"), "增加电话记录")
+            item3 = menu.addAction(Icon("预约"), "发送短信")
+            item4 = menu.addAction(Icon("预约"), "查看采血照片")
             action = menu.exec_(self.table_track.mapToGlobal(pos))
 
     # 导出功能
@@ -111,16 +107,18 @@ class ReportTrack(ReportTrackUI):
         if where_dwmc:
             sql = sql + where_dwmc
 
+        sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC '''
         results = self.session.execute(sql).fetchall()
         self.table_track.load(results)
+        mes_about(self,'共检索出 %s 条数据！' %self.table_track.rowCount())
 
     # 设置快速检索文本
     def on_table_set(self,tableWidgetItem):
         row = tableWidgetItem.row()
-        tjbh = self.table_track.item(row, 3).text()
-        xm = self.table_track.item(row, 4).text()
-        sfzh = self.table_track.item(row, 7).text()
-        sjhm = self.table_track.item(row, 8).text()
+        tjbh = self.table_track.item(row, 7).text()
+        xm = self.table_track.item(row, 8).text()
+        sfzh = self.table_track.item(row, 11).text()
+        sjhm = self.table_track.item(row, 12).text()
         self.gp_quick_search.setText(tjbh,xm,sjhm,sfzh)
         self.cur_tjbh = tjbh
 
@@ -242,11 +240,32 @@ class ReportTrack(ReportTrackUI):
             self.lis_ui.show()
         elif sys_name =='PACS':
             if not self.pacs_ui:
-                self.pacs_ui = PacsResultUI('检查系统',self)
+                self.pacs_ui = PacsResult(self)
             self.pacs_ui.setData(results)
             self.pacs_ui.show()
         else:
             pass
+
+    def on_btn_task_click(self):
+        tmp = []
+
+        rows = self.table_track.isSelectRows()
+        for row in rows:
+            data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': '', 'mxbh': '',
+                        'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': None,
+                        'bz': None}
+            data_obj['tjbh'] = self.table_track.item(row, 7).text()
+            data_obj['jlnr'] = self.table_track.item(row, 15).text()
+            tmp.append(data_obj)
+            self.table_track.item(row, 2).setText('追踪中')
+            self.table_track.item(row, 3).setText(self.login_name)
+        try:
+            self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
+            self.session.commit()
+            mes_about(self,'领取成功！')
+        except Exception as e:
+            self.session.rollback()
+            mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
 
     def closeEvent(self, *args, **kwargs):
         super(ReportTrack, self).closeEvent(*args, **kwargs)

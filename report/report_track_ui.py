@@ -1,7 +1,4 @@
 from widgets.cwidget import *
-from report.model import *
-
-
 
 # 报告追踪
 class ReportTrackUI(Widget):
@@ -22,19 +19,27 @@ class ReportTrackUI(Widget):
         self.btn_query = ToolButton(Icon('query'),'查询')
         self.btn_task = ToolButton(Icon('任务'), '领取')
         self.btn_export = ToolButton(Icon('导出'), '导出')
+        self.btn_receive = ToolButton(Icon('接收'),'结果接收')
         # 追踪类型
         self.cb_track_type = TrackTypeGroup()
         # 报告类型
         self.cb_report_type = ReportTypeGroup()
-
+        # 报告追踪人员
+        self.cb_report_track_person = ReportTrackPersonGroup()
+        # 报告追踪时效
+        self.cb_report_track_timerout = ReportTrackTimeroutGroup()
+        # 加入布局
         self.lt_where_search = WhereSearchGroup()
         self.lt_where_search.addWidget(QLabel(), 0, 4, 1, 1)
         self.lt_where_search.addItem(self.cb_track_type, 0, 5, 1, 2)
         self.lt_where_search.addItem(self.cb_report_type, 0, 7, 1, 2)
-        self.lt_where_search.addWidget(self.btn_query, 0, 9, 2, 2)
-        self.lt_where_search.addWidget(self.btn_task, 0, 11, 2, 2)
-        self.lt_where_search.addWidget(self.btn_export, 0, 13, 2, 2)
-
+        self.lt_where_search.addItem(self.cb_report_track_person, 0, 9, 1, 2)
+        self.lt_where_search.addItem(self.cb_report_track_timerout, 1, 9, 1, 2)
+        # 按钮
+        self.lt_where_search.addWidget(self.btn_query, 0, 11, 2, 2)
+        self.lt_where_search.addWidget(self.btn_task, 0, 13, 2, 2)
+        self.lt_where_search.addWidget(self.btn_export, 0, 15, 2, 2)
+        self.lt_where_search.addWidget(self.btn_receive, 0, 17, 2, 2)
         gp_search.setLayout(self.lt_where_search)
 
         # 快速检索
@@ -45,7 +50,11 @@ class ReportTrackUI(Widget):
         lt_top.addWidget(gp_search)
         lt_top.addWidget(self.gp_quick_search)
         ##########################################
-        self.table_track_cols = OrderedDict([('tjzt','状态'),
+        self.table_track_cols = OrderedDict([('XMZQ', '结果周期'),
+                                             ('zzjd', '追踪进度'),
+                                             ('zzzt', '追踪状态'),
+                                             ('lqry', '追踪人'),
+                                             ('tjzt','体检状态'),
                                              ('tjlx','类型'),
                                              ('tjqy','区域'),
                                              ('tjbh','体检编号'),
@@ -60,14 +69,15 @@ class ReportTrackUI(Widget):
                                             ])
 
         self.table_track = ReportTrackTable(self.table_track_cols)
+
         lt_middle.addWidget(self.table_track)
 
         # 按钮功能区
-        self.btn_item = QPushButton(Icon('项目'), '项目查看')  # 查看 LIS 结果
-        self.btn_lis = QPushButton(Icon('lis'),'检验系统')          # 查看 LIS 结果
-        self.btn_pacs = QPushButton(Icon('pacs'),'检查系统')        # 查看 PACS 结果
-        self.btn_pis = QPushButton(Icon('pis'),'病理系统')          # 查看 病理结果
-        self.btn_equip = QPushButton(Icon('pis'), '设备系统')  # 查看 病理结果
+        self.btn_item = QPushButton(Icon('项目'), '项目查看')         # 查看 LIS 结果
+        self.btn_lis = QPushButton(Icon('lis'),'检验系统')            # 查看 LIS 结果
+        self.btn_pacs = QPushButton(Icon('pacs'),'检查系统')          # 查看 PACS 结果
+        self.btn_pis = QPushButton(Icon('pis'),'病理系统')            # 查看 病理结果
+        self.btn_equip = QPushButton(Icon('pis'), '设备系统')         # 查看 病理结果
         self.btn_phone = QPushButton(Icon('电话'),'电话记录')       # 查看电话记录
         self.btn_sms = QPushButton(Icon('短信'),'短信记录')         # 查看短信记录
         self.btn_sd = QPushButton(Icon('体检收单'),'导检收单')      # 导检收单
@@ -88,6 +98,3 @@ class ReportTrackUI(Widget):
         lt_main.addWidget(gp_bottom)
 
         self.setLayout(lt_main)
-
-
-

@@ -5760,3 +5760,1208 @@ WHERE [TJ_DHGTJLB].tjbh = %(tjbh_1)s
 [2018-08-10 09:10:44] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
 [2018-08-10 09:10:44] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
 [2018-08-10 09:10:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:22:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:28:51] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 09:28:57] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 09:28:57] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 09:28:57] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 09:28:57] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 09:28:57] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 09:28:57] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 09:29:00] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 09:29:00] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 09:29:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:41:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:46:50] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 09:46:55] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 09:46:55] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 09:46:55] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 09:46:55] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 09:46:55] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 09:46:55] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 09:46:58] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 09:46:58] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 09:46:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:52:18] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 09:52:18] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 09:52:18] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 09:52:18] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 09:52:18] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 09:52:18] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 09:52:20] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 09:52:20] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 09:52:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:53:50] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 09:53:53] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 09:53:53] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 09:53:53] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 09:53:53] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 09:53:53] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 09:53:53] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 09:53:56] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 09:53:56] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 09:53:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:55:06] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 09:55:10] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 09:55:10] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 09:55:10] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 09:55:10] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 09:55:10] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 09:55:10] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 09:55:12] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 09:55:12] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 09:55:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 09:56:15] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 09:56:15] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 09:56:15] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 09:56:15] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 09:56:15] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 09:56:15] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 09:56:17] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 09:56:17] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 09:56:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:08:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:20:14] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:20:17] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:20:17] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:20:17] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:20:17] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:20:17] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:20:17] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:20:20] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:20:20] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:20:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:20:36] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:20:36] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:20:36] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:20:36] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:20:36] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:20:36] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:20:39] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:20:39] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:20:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:21:16] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:21:16] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:21:16] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:21:16] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:21:16] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:21:16] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:21:19] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:21:19] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:21:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:21:58] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:22:02] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:22:02] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:22:02] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:22:02] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:22:02] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:22:02] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:22:04] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:22:04] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:22:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:22:32] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:22:32] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:22:32] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:22:32] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:22:32] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:22:32] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:22:34] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:22:34] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:22:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:25:01] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:25:05] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:25:05] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:25:05] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:25:05] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:25:05] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:25:05] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:25:07] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:25:07] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:25:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:31:22] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:31:25] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:31:25] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:31:25] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:31:25] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:31:25] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:31:25] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:31:27] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:31:27] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:31:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:33:08] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:33:11] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:33:11] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:33:11] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:33:11] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:33:11] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:33:11] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:33:14] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:33:14] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:33:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:37:33] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:37:47] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:37:47] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:37:47] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:37:47] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:37:47] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:37:47] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:37:50] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:37:50] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:37:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:38:13] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:38:16] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:38:16] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:38:16] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:38:16] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:38:16] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:38:16] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:38:18] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:38:18] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:38:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:38:48] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:38:53] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:38:53] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:38:53] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:38:53] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:38:53] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:38:53] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:38:56] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:38:56] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:38:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:41:07] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:41:25] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:41:25] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:41:25] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:41:25] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:41:25] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:41:25] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:41:28] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:41:28] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:41:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:42:07] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:42:10] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:42:10] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:42:10] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:42:10] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:42:10] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:42:10] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:42:12] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:42:12] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:42:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:45:49] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:46:07] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:46:07] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:46:07] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:46:07] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:46:07] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:46:07] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:46:10] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:46:10] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:46:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 10:52:52] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 10:52:55] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 10:52:55] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 10:52:55] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 10:52:55] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 10:52:55] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 10:52:55] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 10:52:58] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 10:52:58] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 10:52:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 11:04:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 11:07:56] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 11:07:59] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 11:07:59] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 11:07:59] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 11:07:59] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 11:07:59] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 11:07:59] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 11:08:02] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 11:08:02] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 11:08:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 11:08:18] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 11:08:23] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 11:08:23] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 11:08:23] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 11:08:23] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 11:08:23] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 11:08:23] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 11:08:26] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 11:08:26] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 11:08:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 11:09:47] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 11:09:47] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 11:09:47] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 11:09:47] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 11:09:47] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 11:09:47] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 11:09:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 11:09:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 11:10:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 11:10:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 11:15:08] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 11:15:12] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 11:15:12] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 11:15:12] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 11:15:12] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 11:15:12] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 11:15:12] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 11:15:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 11:15:30] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 11:15:30] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 11:15:30] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 11:15:30] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 11:15:30] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 11:15:30] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 11:15:33] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 11:15:33] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 11:15:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 11:17:37] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 11:17:40] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 11:17:40] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 11:17:40] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 11:17:40] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 11:17:40] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 11:17:40] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 11:17:42] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-10 11:17:42] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-10 11:17:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 13:03:34] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:03:34] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:03:34] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:03:34] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:03:34] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:03:34] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:03:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:03:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:04:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:04:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:07:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:09:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:10:35] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:10:35] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:10:35] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:10:35] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:10:35] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:10:35] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:10:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:10:47] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:10:47] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:10:47] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:10:47] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:10:47] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:10:47] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:10:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:10:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:11:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:15:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:16:37] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:16:37] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:16:37] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:16:37] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:16:37] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:16:37] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:16:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:16:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:16:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:17:44] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:17:44] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:17:44] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:17:44] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:17:44] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:17:44] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:17:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:17:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:19:12] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:19:12] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:19:12] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:19:12] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:19:12] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:19:12] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:19:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:19:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:19:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:20:15] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:20:15] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:20:15] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:20:15] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:20:15] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:20:15] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:20:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:20:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:20:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:21:39] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:21:39] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:21:39] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:21:39] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:21:39] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:21:39] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:21:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:22:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:23:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.200.101
+[2018-08-10 13:30:53] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:30:53] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:30:53] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:30:53] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:30:53] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:30:53] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:30:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 13:34:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.8.200.201
+[2018-08-10 13:34:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.8.200.201
+[2018-08-10 13:34:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.8.200.201
+[2018-08-10 13:35:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.8.200.201
+[2018-08-10 13:42:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 13:47:00] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 13:49:52] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:49:52] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:49:52] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:49:52] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:49:52] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:49:52] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:49:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 13:50:48] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 13:50:51] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:50:51] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:50:51] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:50:51] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:50:51] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:50:51] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:50:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 13:57:50] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 13:57:55] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 13:57:55] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 13:57:55] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 13:57:55] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 13:57:55] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 13:57:55] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 13:57:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:01:12] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 14:01:15] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 14:01:15] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 14:01:15] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 14:01:15] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 14:01:15] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 14:01:15] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 14:01:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:05:33] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 14:05:33] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 14:05:33] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 14:05:33] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 14:05:33] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 14:05:33] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 14:05:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:06:27] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 14:06:27] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 14:06:27] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 14:06:27] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 14:06:27] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 14:06:27] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 14:06:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:07:55] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 14:07:55] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 14:07:55] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 14:07:55] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 14:07:55] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 14:07:55] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 14:07:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:16:06] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 14:16:12] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 14:16:12] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 14:16:12] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 14:16:12] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 14:16:12] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 14:16:12] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 14:16:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:28:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:40:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 14:52:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:04:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:16:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:25:06] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:25:09] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:25:09] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:25:09] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:25:09] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:25:09] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:25:09] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:25:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:25:31] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:25:34] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:25:34] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:25:34] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:25:34] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:25:34] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:25:34] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:25:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:28:58] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:29:01] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:29:01] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:29:01] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:29:01] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:29:01] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:29:01] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:29:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:29:07] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:29:13] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:29:13] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:29:13] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:29:13] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:29:13] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:29:13] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:29:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:29:44] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:29:55] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:29:55] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:29:55] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:29:55] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:29:55] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:29:55] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:29:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:40:16] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:40:21] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:40:21] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:40:21] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:40:21] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:40:21] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:40:21] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:40:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:41:01] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:41:04] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:41:04] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:41:04] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:41:04] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:41:04] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:41:04] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:41:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:41:40] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:41:53] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:41:53] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:41:53] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:41:53] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:41:53] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:41:53] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:41:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:53:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 15:56:19] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 15:56:24] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 15:56:24] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 15:56:24] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 15:56:24] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 15:56:24] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 15:56:24] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 15:56:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:08:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:12:34] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 16:12:37] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 16:12:37] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 16:12:37] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 16:12:37] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 16:12:37] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 16:12:37] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 16:12:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:14:46] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 16:14:48] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 16:14:48] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 16:14:48] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 16:14:48] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 16:14:48] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 16:14:48] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 16:14:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:15:38] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 16:15:38] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 16:15:38] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 16:15:38] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 16:15:38] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 16:15:38] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 16:15:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:27:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:39:32] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 16:39:40] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 16:39:40] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 16:39:40] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 16:39:40] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 16:39:40] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 16:39:40] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 16:39:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:41:43] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 16:41:43] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 16:41:43] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 16:41:43] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 16:41:43] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 16:41:43] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 16:41:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:44:38] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 16:44:41] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 16:44:41] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 16:44:41] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 16:44:41] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 16:44:41] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 16:44:41] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 16:44:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 16:56:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 17:01:41] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 17:01:47] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 17:01:47] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 17:01:47] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 17:01:47] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 17:01:47] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 17:01:47] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 17:01:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 17:06:02] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 17:06:05] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 17:06:05] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 17:06:05] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 17:06:05] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 17:06:05] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 17:06:05] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 17:06:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 17:18:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 17:30:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 17:42:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 17:54:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 18:06:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 18:18:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 18:30:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 18:42:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 18:54:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 19:06:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 19:18:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 19:30:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 19:42:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 19:54:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 20:06:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 20:18:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 20:30:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 20:42:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 20:54:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 21:06:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 21:18:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 21:30:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 21:42:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 21:54:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:06:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:18:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:30:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:37:27] INFO [utils.config_log:128] 关闭时发生错误：wrapped C/C++ object of type SampleManager has been deleted 
+[2018-08-10 22:37:27] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 22:37:35] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 22:37:35] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 22:37:35] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 22:37:35] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 22:37:35] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 22:37:35] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 22:37:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:38:42] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 22:38:47] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 22:38:47] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 22:38:47] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 22:38:47] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 22:38:47] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 22:38:47] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 22:38:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:40:53] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 22:40:56] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 22:40:56] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 22:40:56] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 22:40:56] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 22:40:56] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 22:40:56] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 22:40:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:42:34] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-10 22:42:39] INFO [utils.config_log:22] 程序启动......
+[2018-08-10 22:42:39] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-10 22:42:39] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-10 22:42:39] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-10 22:42:39] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-10 22:42:39] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-10 22:42:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 22:54:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 23:06:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 23:18:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 23:30:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 23:42:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-10 23:54:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 00:06:47] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 00:18:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 00:30:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 00:42:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 00:54:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 01:06:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 01:18:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 01:30:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 01:42:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 01:54:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 02:06:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 02:18:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 02:30:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 02:43:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 02:55:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 03:07:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 03:19:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 03:31:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 03:43:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 03:55:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 04:07:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 04:19:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 04:31:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 04:43:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 04:55:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 05:07:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 05:19:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 05:31:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 05:43:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 05:55:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 06:07:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 06:19:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 06:31:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 06:43:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 06:55:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 07:07:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 07:19:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 07:31:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 07:43:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 07:55:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 08:07:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 08:19:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 08:31:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 08:43:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 08:55:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 09:07:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 09:19:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 09:31:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 09:43:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 09:55:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 10:07:37] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 10:19:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 10:31:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 10:43:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 10:55:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 11:07:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 11:19:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 11:31:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 11:43:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 11:55:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 12:07:47] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 12:19:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 12:31:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 12:43:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 12:55:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 13:07:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 13:19:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 13:31:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 13:43:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 13:55:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 14:07:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 14:19:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 14:31:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 14:44:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 14:56:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:07:15] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:07:21] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:07:21] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:07:21] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:07:21] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:07:21] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:07:21] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:07:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:14:21] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:14:25] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:14:25] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:14:25] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:14:25] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:14:25] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:14:25] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:14:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:17:25] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:17:29] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:17:29] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:17:29] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:17:29] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:17:29] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:17:29] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:17:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:29:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:35:44] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:35:50] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:35:50] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:35:50] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:35:50] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:35:50] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:35:50] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:35:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:36:29] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:36:33] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:36:33] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:36:33] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:36:33] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:36:33] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:36:33] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:36:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:36:40] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:36:58] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:36:58] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:36:58] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:36:58] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:36:58] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:36:58] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:36:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:37:15] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:37:32] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:37:32] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:37:32] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:37:32] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:37:32] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:37:32] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:37:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:39:20] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:39:23] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:39:23] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:39:23] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:39:23] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:39:23] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:39:23] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:39:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:42:57] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-11 15:43:00] INFO [utils.config_log:22] 程序启动......
+[2018-08-11 15:43:00] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-11 15:43:00] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-11 15:43:00] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-11 15:43:00] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-11 15:43:00] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-11 15:43:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 15:55:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 16:07:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 16:19:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 16:31:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 16:43:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 16:55:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 17:07:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 17:19:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 17:31:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 17:43:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 17:55:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 18:07:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 18:19:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 18:31:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 18:43:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 18:55:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 19:07:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 19:19:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 19:31:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 19:43:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 19:55:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 20:07:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 20:19:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 20:31:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 20:43:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 20:55:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 21:07:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 21:19:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 21:31:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 21:43:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 21:55:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 22:07:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 22:19:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 22:31:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 22:43:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 22:55:37] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 23:07:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 23:19:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 23:31:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 23:43:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-11 23:55:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 00:07:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 00:19:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 00:31:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 00:43:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 00:55:47] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 01:07:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 01:19:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 01:31:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 01:43:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 01:55:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 02:07:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 02:19:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 02:31:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 02:43:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 02:55:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 03:07:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 03:19:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 03:32:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 03:44:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 03:56:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 04:08:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 04:20:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 04:32:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 04:44:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 04:56:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 05:08:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 05:20:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 05:32:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 05:44:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 05:56:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 06:08:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 06:20:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 06:32:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 06:44:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 06:56:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 07:08:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 07:20:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 07:32:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 07:44:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 07:56:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:08:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:20:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:27:22] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 08:27:25] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 08:27:25] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 08:27:25] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 08:27:25] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 08:27:25] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 08:27:25] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 08:27:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:28:15] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 08:28:19] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 08:28:19] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 08:28:19] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 08:28:19] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 08:28:19] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 08:28:19] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 08:28:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:28:24] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 08:32:23] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 08:32:23] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 08:32:23] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 08:32:23] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 08:32:23] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 08:32:23] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 08:32:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:34:26] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 08:34:30] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 08:34:30] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 08:34:30] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 08:34:30] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 08:34:30] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 08:34:30] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 08:34:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:46:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 08:58:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 09:10:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 09:22:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 09:34:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 09:46:37] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 09:50:25] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 09:50:30] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 09:50:30] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 09:50:30] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 09:50:30] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 09:50:30] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 09:50:30] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 09:50:51] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 09:50:51] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 09:50:51] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 09:50:51] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 09:50:51] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 09:50:51] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 09:50:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 09:51:33] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 09:51:41] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 09:51:41] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 09:51:41] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 09:51:41] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 09:51:41] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 09:51:41] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 09:51:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 09:52:13] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:16:51] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 10:16:51] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:16:51] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 10:16:51] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 10:16:51] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 10:16:51] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 10:17:01] INFO [utils.config_log:22] 程序启动......
+[2018-08-12 10:17:01] INFO [utils.config_log:24] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:17:01] INFO [utils.config_log:26] 读取配置(parse.ini)文件成功
+[2018-08-12 10:17:01] INFO [utils.config_log:28] 读取配置(custom.ini)文件成功
+[2018-08-12 10:17:01] INFO [utils.config_log:30] 读取配置(version.ini)文件成功
+[2018-08-12 10:17:01] INFO [utils.config_log:32] 读取配置(database.ini)文件成功
+[2018-08-12 10:17:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:17:52] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:18:44] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 10:18:44] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:18:44] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 10:18:44] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 10:18:44] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 10:18:44] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 10:18:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:19:06] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:19:40] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 10:19:40] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:19:40] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 10:19:40] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 10:19:40] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 10:19:40] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 10:19:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:20:44] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:20:47] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 10:20:47] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:20:47] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 10:20:47] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 10:20:47] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 10:20:47] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 10:20:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:23:08] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:23:11] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 10:23:11] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:23:11] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 10:23:11] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 10:23:11] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 10:23:11] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 10:23:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:25:52] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:25:55] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 10:25:55] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:25:55] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 10:25:55] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 10:25:55] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 10:25:55] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 10:25:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:26:57] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:27:01] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 10:27:01] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:27:01] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 10:27:01] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 10:27:01] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 10:27:01] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 10:27:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:36:57] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 10:37:00] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 10:37:00] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 10:37:00] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 10:37:00] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 10:37:00] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 10:37:00] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 10:37:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 10:49:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 11:01:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 11:13:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 11:25:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 11:37:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 11:49:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 12:01:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 12:13:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 12:25:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 12:37:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 12:49:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:01:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:13:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:14:28] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 13:14:31] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 13:14:31] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 13:14:31] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 13:14:31] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 13:14:31] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 13:14:31] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 13:14:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:17:45] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 13:17:50] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 13:17:50] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 13:17:50] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 13:17:50] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 13:17:50] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 13:17:50] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 13:18:02] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 13:18:02] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 13:18:02] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 13:18:02] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 13:18:02] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 13:18:02] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 13:18:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:21:34] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 13:21:37] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 13:21:37] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 13:21:37] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 13:21:37] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 13:21:37] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 13:21:37] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 13:21:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:22:02] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 13:22:07] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 13:22:07] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 13:22:07] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 13:22:07] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 13:22:07] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 13:22:07] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 13:22:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:22:51] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 13:22:58] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 13:22:58] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 13:22:58] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 13:22:58] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 13:22:58] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 13:22:58] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 13:22:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:35:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:47:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 13:59:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 14:11:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 14:23:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 14:35:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 14:47:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 14:59:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:11:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:13:41] INFO [utils.config_log:128] 关闭时发生错误：wrapped C/C++ object of type SampleManager has been deleted 
+[2018-08-12 15:13:41] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:13:44] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:13:44] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:13:44] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:13:44] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:13:44] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:13:44] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:13:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:20:45] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:20:51] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:20:51] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:20:51] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:20:51] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:20:51] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:20:51] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:20:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:22:36] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:22:39] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:22:39] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:22:39] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:22:39] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:22:39] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:22:39] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:22:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:22:56] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:22:59] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:22:59] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:22:59] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:22:59] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:22:59] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:22:59] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:23:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:23:49] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:23:51] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:23:51] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:23:51] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:23:51] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:23:51] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:23:51] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:23:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:24:13] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:25:09] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:25:09] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:25:09] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:25:09] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:25:09] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:25:09] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:25:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:27:01] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:27:04] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:27:04] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:27:04] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:27:04] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:27:04] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:27:04] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:27:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:27:38] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:27:40] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:27:40] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:27:40] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:27:40] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:27:40] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:27:40] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:27:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:27:43] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:27:52] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:27:52] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:27:52] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:27:52] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:27:52] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:27:52] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:28:49] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:28:49] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:28:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:29:53] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:29:55] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:29:55] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:29:55] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:29:55] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:29:55] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:29:55] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:29:58] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:29:58] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:29:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:30:36] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:30:38] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:30:38] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:30:38] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:30:38] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:30:38] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:30:38] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:30:41] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:30:41] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:30:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:30:51] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:33:03] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:33:03] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:33:03] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:33:03] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:33:03] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:33:03] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:33:06] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:33:06] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:33:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:34:32] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:34:35] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:34:35] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:34:35] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:34:35] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:34:35] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:34:35] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:34:38] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:34:38] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:34:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:34:53] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:35:07] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:35:07] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:35:07] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:35:07] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:35:07] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:35:07] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:35:09] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:35:09] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:35:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:36:21] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:36:23] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:36:23] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:36:23] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:36:23] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:36:23] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:36:23] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:36:25] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:36:25] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:36:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:36:41] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:36:48] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:36:48] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:36:48] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:36:48] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:36:48] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:36:48] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:36:51] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:36:51] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:36:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-12 15:40:51] INFO [utils.config_log:131] 用户：彭蜜蜜(160405020) 退出成功！
+[2018-08-12 15:40:53] INFO [utils.config_log:23] 程序启动......
+[2018-08-12 15:40:53] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-12 15:40:53] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-12 15:40:53] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-12 15:40:53] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-12 15:40:53] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-12 15:40:57] INFO [utils.config_log:175] 写入配置(custom.ini)文件成功
+[2018-08-12 15:40:57] INFO [utils.config_log:176] 用户：彭蜜蜜(160405020) 登陆成功！
+[2018-08-12 15:40:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205

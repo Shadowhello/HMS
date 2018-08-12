@@ -61,6 +61,7 @@ class ToolButton(QToolButton):
 
     def __init__(self,icon,name):
         super(ToolButton,self).__init__()
+        # self.setObjectName('toolB')
         self.setIcon(icon)
         self.setText(name)
         self.setIconSize(QSize(32,32))
@@ -117,6 +118,14 @@ class TableWidget(QTableWidget):
     def load_set(self,datas,head):
         pass
 
+    # 已经选择的行
+    def isSelectRows(self):
+        rows = []
+        for item in self.selectedItems():
+           if item.row() not in rows:
+               rows.append(item.row())
+        return rows
+
     # 插入一行 实现
     def insert(self,data):
         self.insertRow(self.rowCount())  # 特别含义
@@ -131,6 +140,14 @@ class TableWidget(QTableWidget):
         else:
             mes_about(self,'数据格式要求：dict或者list！')
         self.resizeColumnsToContents()  # 设置列适应大小
+
+    # 获取某行最后一列值
+    def getLastItemValue(self,row:int):
+        return self.item(row,self.columnCount()-1).text()
+
+    #获取某行某列值
+    def getItemValue(self,row:int,col:int):
+        return self.item(row,col).text()
 
     # 导出数据，对表格数据聚合
     def export(self):

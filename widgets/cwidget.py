@@ -53,6 +53,12 @@ class PacsWidget(GolParasMixin2, QWidget):
         super(PacsWidget, self).__init__(parent)
         self.init()
 
+# 窗口带日志、登录信息、数据库链接功能
+class PacsDialog(GolParasMixin2, QDialog):
+    def __init__(self, parent=None):
+        super(PacsDialog, self).__init__(parent)
+        self.init()
+
 # 体检编号
 class QTJBH(QLineEdit):
 
@@ -642,29 +648,47 @@ class ReportTrackTable(TableWidget):
             # 插入一行
             self.insertRow(row_index)
             for col_index, col_value in enumerate(row_data):
-                if col_value:
-                    if  col_index in [3,7,8,11,12]:
-                        item = QTableWidgetItem(col_value)
-                    else:
-                        item = QTableWidgetItem(str2(col_value))
-                    if col_index not in [4,9,10,11]:
-                        item.setTextAlignment(Qt.AlignCenter)
-                    # self.resizeColumnToContents()
+                if col_index==1:
+                    item = QTableWidgetItem(str(col_value))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    if col_value < 0:
+                        item.setBackground(QColor("#FF0000"))
+                    elif col_value == 0:
+                        item.setBackground(QColor('#FFB90F'))
                 else:
-                    item = QTableWidgetItem('')
+                    if col_value:
+                        if  col_index in [11,12,14,15]:
+                            item = QTableWidgetItem(col_value)
+                        else:
+                            item = QTableWidgetItem(str2(col_value))
+                        if col_index not in [13,15]:
+                             item.setTextAlignment(Qt.AlignCenter)
+                        # self.resizeColumnToContents()
+                    else:
+                        item = QTableWidgetItem('')
                 self.setItem(row_index, col_index, item)
 
         # 特殊设置
         if datas:
-            self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)         #所有列
+            # self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)         #所有列
             # self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             # self.horizontalHeader().setMinimumSectionSize(60)
             # self.horizontalHeader().setMaximumSectionSize(300)
-            self.setColumnWidth(0, 70)
-            self.setColumnWidth(1, 60)
-            self.setColumnWidth(4, 70)
-            self.setColumnWidth(5, 40)
-            self.setColumnWidth(6, 40)
+            self.setColumnWidth(0, 60)      # 结果周期
+            self.setColumnWidth(1, 60)      # 追踪进度
+            self.setColumnWidth(2, 60)      # 追踪状态
+            self.setColumnWidth(3, 50)      # 追踪人
+            self.setColumnWidth(4, 60)      # 体检状态
+            self.setColumnWidth(5, 50)      # 类型
+            self.setColumnWidth(6, 60)      # 区域
+            self.setColumnWidth(7, 70)      # 体检编号
+            self.setColumnWidth(8, 60)      # 姓名
+            self.setColumnWidth(9, 30)      # 性别
+            self.setColumnWidth(10, 30)     # 年龄
+            self.setColumnWidth(11, 120)    # 身份证号
+            self.setColumnWidth(12, 80)     # 手机号码
+            self.setColumnWidth(13, 180)    # 单位编号
+            self.setColumnWidth(14, 70)     # 签到日期
             self.horizontalHeader().setStretchLastSection(True)
 
 
@@ -950,7 +974,7 @@ class ReportTypeGroup(QHBoxLayout):
         self.is_check.stateChanged.connect(self.on_cb_check)
 
     def initUI(self):
-        self.is_check = QCheckBox('报告类型：')
+        self.is_check = QCheckBox('客户类型：')
         self.cb_report_type = QComboBox()
         # self.report_type = OrderedDict([('所有',0),('普通',1),('贵宾',1),('招工',2),('职业病',3),('外出',4),('加急',5)])
         self.cb_report_type.addItems(['所有','普通','招工','贵宾','职业病','从业','重点','投诉'])
@@ -975,6 +999,86 @@ class ReportTypeGroup(QHBoxLayout):
                 return False
             else:
                 return ''' AND TJLX = '%s' ''' %self.cb_report_type.currentText()
+        return False
+
+# 报告类型
+class ReportTrackPersonGroup(QHBoxLayout):
+
+    def __init__(self):
+        super(ReportTrackPersonGroup, self).__init__()
+        # 界面
+        self.initUI()
+        # 布局
+        self.addWidget(self.is_check)
+        self.addWidget(self.cb_report_track)
+        # 信号槽
+        self.is_check.stateChanged.connect(self.on_cb_check)
+
+    def initUI(self):
+        self.is_check = QCheckBox('追踪人员：')
+        self.cb_report_track = QComboBox()
+        self.cb_report_track.addItems(['所有', '本人', '未领取'])
+        self.cb_report_track.setCurrentText('所有')
+        self.cb_report_track.setDisabled(True)
+        self.cb_report_track.setMinimumWidth(80)
+
+    def on_cb_check(self, p_int):
+        if p_int:
+            self.cb_report_track.setDisabled(False)
+        else:
+            self.cb_report_track.setDisabled(True)
+
+    @property
+    def get_tjlx(self):
+        return self.cb_report_track.currentText()
+
+    @property
+    def where_tjlx(self):
+        if self.is_check.isChecked():
+            if self.cb_report_track.currentText() == '所有':
+                return False
+            else:
+                return ''' AND TJLX = '%s' ''' % self.cb_report_track.currentText()
+        return False
+
+# 追踪进度
+class ReportTrackTimeroutGroup(QHBoxLayout):
+
+    def __init__(self):
+        super(ReportTrackTimeroutGroup, self).__init__()
+        # 界面
+        self.initUI()
+        # 布局
+        self.addWidget(self.is_check)
+        self.addWidget(self.cb_report_timerout)
+        # 信号槽
+        self.is_check.stateChanged.connect(self.on_cb_check)
+
+    def initUI(self):
+        self.is_check = QCheckBox('追踪时效：')
+        self.cb_report_timerout = QComboBox()
+        self.cb_report_timerout.addItems(['所有', '超时', '预警', '未到期'])
+        self.cb_report_timerout.setCurrentText('所有')
+        self.cb_report_timerout.setDisabled(True)
+        self.cb_report_timerout.setMinimumWidth(80)
+
+    def on_cb_check(self, p_int):
+        if p_int:
+            self.cb_report_timerout.setDisabled(False)
+        else:
+            self.cb_report_timerout.setDisabled(True)
+
+    @property
+    def get_tjlx(self):
+        return self.cb_report_timerout.currentText()
+
+    @property
+    def where_tjlx(self):
+        if self.is_check.isChecked():
+            if self.cb_report_timerout.currentText() == '所有':
+                return False
+            else:
+                return ''' AND TJLX = '%s' ''' % self.cb_report_timerout.currentText()
         return False
 
 # 采血区域
@@ -1381,8 +1485,7 @@ class QuickSearchGroup(QGroupBox):
         self.s_xm = QXM()
         self.s_sjhm = QSJHM()
         self.s_sfzh = QSFZH()
-        self.s_sfzh_read = QToolButton()
-        self.s_sfzh_read.setText('...')
+        self.s_sfzh_read = QPushButton(Icon('身份证号'),'读卡')
 
         ###################基本信息  第一行##################################
         lt_main.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)

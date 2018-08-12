@@ -13,6 +13,7 @@ def set_env(termial=False):
     gol.set_value('log',log)                                            # 添加日志
     gol.set_value("host_name",hostname())                               # 添加主机名
     gol.set_value("host_ip", hostip())                                  # 添加主机IP
+    gol.set_value("login_time",cur_datetime())
     gol.set_value("app_path", app_path)                                 # 添加程序根目录
     gol.set_value("path_tmp","%s/tmp/" %app_path)                       # 添加临时文件目录
     gol.set_value("path_ico", "%s/resource/image/" %app_path)           # 添加资源文件目录

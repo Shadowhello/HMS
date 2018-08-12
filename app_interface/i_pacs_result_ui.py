@@ -1,13 +1,11 @@
 from widgets.cwidget import *
 
-class PacsResultUI(QDialog):
+class PacsResultUI(PacsDialog):
 
     def __init__(self,title,parent=None):
         super(PacsResultUI,self).__init__(parent)
         self.setWindowTitle(title)
         self.initUI()
-        self.table_inspect.itemClicked.connect(self.on_table_refresh)
-        self.painter = None
 
     def initUI(self):
         # self.setWindowFlags(Qt.WindowCloseButtonHint)
@@ -77,6 +75,7 @@ class PacsResultUI(QDialog):
         self.bgys = Lable()
         self.bgsj = Lable()
         self.shys = Lable()
+        self.shgh = Lable()         #隐藏
         self.shsj = Lable()
         lt_bottom_3.addWidget(QLabel('报告医生：'))
         lt_bottom_3.addWidget(self.bgys)
@@ -101,38 +100,6 @@ class PacsResultUI(QDialog):
         # self.lb_bz.setAttribute(Qt.WA_TranslucentBackground)
         self.lb_bz.show()
         self.setLayout(lt_main)
-
-    def on_table_refresh(self,tableWidgetItem):
-        row = tableWidgetItem.row()
-        bgzt = self.table_inspect.item(row, 0).text()
-        bgys = self.table_inspect.item(row, 7).text()
-        bgrq = self.table_inspect.item(row, 8).text()
-        shys = self.table_inspect.item(row, 9).text()
-        shrq = self.table_inspect.item(row, 10).text()
-        xmjg = self.table_inspect.item(row, 11).text()
-        xmzd = self.table_inspect.item(row, 12).text()
-        self.bgys.setText(bgys)
-        self.bgsj.setText(bgrq)
-        self.shys.setText(shys)
-        self.shsj.setText(shrq)
-        self.pacs_jg.setText(xmjg)
-        self.pacs_zd.setText(xmzd)
-        if bgzt=='已审核':
-            self.lb_bz.show2()
-        else:
-            self.lb_bz.show2(False)
-
-    def setData(self,datas):
-        # 清空数据
-        self.bgys.setText('')
-        self.bgsj.setText('')
-        self.shys.setText('')
-        self.shsj.setText('')
-        self.pacs_jg.setText('')
-        self.pacs_zd.setText('')
-        self.lb_bz.show2(False)
-        self.table_inspect.load(datas)
-
 
 class StateLable(QLabel):
 

@@ -1,5 +1,5 @@
 from utils.bmodel import *
-
+from string import Template
 # 主表 信息只记录最后一次，过程记录是 TJ_CZJLB
 # 流程
 # 正流程：体检登记 -> 体检预约 -> 体检签到(检查) -> 体检收单 -> (体检追踪) -> 总检 -> 审核 -> 审阅 -> 打印 -> 整理 -> 领取(下载)  取消登记(体检)0
@@ -56,7 +56,7 @@ class MT_TJ_BGGL(BaseModel):
     bgym = Column(Integer, nullable=True, default=0) # 报告页码，默认0页
 
 def get_report_track_sql(tstart,tend):
-    return '''
+    sql= '''
     WITH T1 AS (
                 SELECT 
                     (CASE TJZT
@@ -102,20 +102,26 @@ def get_report_track_sql(tstart,tend):
 
                 AND TJ_TJDJB.QD='1' AND SUMOVER = '0'
 
-                AND (TJ_TJDJB.QDRQ>='%s' and TJ_TJDJB.QDRQ<'%s')
+                AND (TJ_TJDJB.QDRQ>= '$tstart' and TJ_TJDJB.QDRQ< '$tend')
             )
              ,T2 AS (
-                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                        SELECT T1.TJBH,XMMC,(SELECT BGCJZQ FROM TJ_XMDM WHERE XMBH = TJ_TJJLMXB.XMBH) AS XMZQ 
+                        FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
                     )
 
-    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    SELECT d.XMZQ,(d.XMZQ-DATEDIFF(DAY, T1.QDRQ, GETDATE())) AS zzjd,(CASE WHEN TJ_CZJLB.CZXM IS NOT NULL THEN '追踪中' ELSE '' END) AS zzzt,TJ_CZJLB.CZXM AS lqry,T1.*,d.wjxm FROM T1 
+
+	LEFT  JOIN TJ_CZJLB ON T1.TJBH = TJ_CZJLB.TJBH AND TJ_CZJLB.JLLX='0030' AND CZSJ>= '$tstart'
+    INNER JOIN 
     (
-        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+        SELECT T2.TJBH,MAX(T2.XMZQ) AS XMZQ,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
     ) AS d
 
     ON T1.TJBH=d.TJBH 
+    
+    '''
 
-    ''' %(tstart,tend)
+    return Template(sql).safe_substitute({'tstart':tstart,'tend':tend})
 
 def get_quick_search_sql(where_str):
     return '''
@@ -165,12 +171,16 @@ def get_quick_search_sql(where_str):
                 AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
             )
              ,T2 AS (
-                        SELECT T1.TJBH,XMMC FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
+                        SELECT T1.TJBH,XMMC,(SELECT BGCJZQ FROM TJ_XMDM WHERE XMBH = TJ_TJJLMXB.XMBH) AS XMZQ  
+                        FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1' AND jsbz<>'1'
                     )
 
-    SELECT T1.*,d.wjxm FROM T1 INNER JOIN 
+    SELECT d.XMZQ,(d.XMZQ-DATEDIFF(DAY, T1.QDRQ, GETDATE())) AS zzjd, (CASE WHEN TJ_CZJLB.CZXM IS NOT NULL THEN '追踪中' ELSE '' END) AS zzzt,TJ_CZJLB.CZXM AS lqry,T1.*,d.wjxm FROM T1 
+
+	LEFT  JOIN TJ_CZJLB ON T1.TJBH = TJ_CZJLB.TJBH AND TJ_CZJLB.JLLX='0030'
+    INNER JOIN 
     (
-        SELECT T2.TJBH,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+        SELECT T2.TJBH,MAX(T2.XMZQ) AS XMZQ,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
     ) AS d
 
     ON T1.TJBH=d.TJBH 

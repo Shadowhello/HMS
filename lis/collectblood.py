@@ -309,6 +309,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
             self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == self.user_id.text(),MT_TJ_TJJLMXB.tmbh1 == btn_no).update({MT_TJ_TJJLMXB.zxpb:'4'})
             self.session.commit()
         except Exception as e:
+            self.session.rollback()
             mes_about(self,'插入 TJ_CZJLB 记录失败！错误代码：%s' %e)
 
     def onSerialNoBtnMenu(self,button,pos):

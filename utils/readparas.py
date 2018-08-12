@@ -33,7 +33,8 @@ class GolParasMixin2(object):
         try:
             self.tmp_file = gol.get_value('path_tmp')
             self.log = gol.get_value('log','')
-            self.session = gol.get_value('pacs_session_local','')
+            self.session = gol.get_value('tjxt_session_local', '')
+            self.session_pacs = gol.get_value('pacs_session_local','')
             self.login_id = gol.get_value('login_user_id','')
             self.login_name = gol.get_value('login_user_name','')
             self.login_time = gol.get_value('login_time','')

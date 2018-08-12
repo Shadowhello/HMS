@@ -5,6 +5,12 @@ from utils import gol
 from functools import partial
 import time
 
+class StatusLabel(QLabel):
+
+    def __init__(self,p_str=None,parent=None):
+        super(StatusLabel,self).__init__(p_str,parent)
+        self.setStyleSheet('''font: 75 12pt \"微软雅黑\";color: rgb(255, 255, 255);''')
+
 #状态栏
 class StatusBar(QStatusBar):
 
@@ -18,26 +24,25 @@ class StatusBar(QStatusBar):
 
     # 初始化界面
     def initUI(self):
-        self.version = QLabel(' 当前版本：V%s' %gol.get_value('system_version',''))
-        self.login = QLabel(' 当前用户：%s '%gol.get_value('login_user_name',''))
-        self.hostname = QLabel(' 当前主机：%s ' % gol.get_value('host_name','未获取到'))
-        self.hostip = QLabel(' 当前IP：%s ' % gol.get_value('host_ip','未获取到'))
-        self.handle_mes = QLabel()
-        self.handle_mes.setStyleSheet('''75 11pt "04b_21";color: rgb(255, 0, 0);''')
-        self.login_time = QLabel(' 登录时间：%s ' % gol.get_value('login_time',''))
-        self.cur_time = QLabel()
-        self.cur_time.setText(" 当前时间：%s " %time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
-        self.addWidget(self.version)
-        self.addWidget(self.login)
-        self.addWidget(self.hostname)
-        self.addWidget(self.hostip)
-        self.addWidget(self.handle_mes)
-        self.addPermanentWidget(self.login_time)
-        self.addPermanentWidget(self.cur_time)
+        self.lb_version = StatusLabel(' 当前版本：V%s' %gol.get_value('system_version',''))
+        self.lb_login = StatusLabel(' 当前用户：%s '%gol.get_value('login_user_name',''))
+        self.lb_hostname = StatusLabel(' 当前主机：%s ' % gol.get_value('host_name','未获取到'))
+        self.lb_hostip = StatusLabel(' 当前IP：%s ' % gol.get_value('host_ip','未获取到'))
+        self.lb_handle_mes = StatusLabel()
+        self.lb_login_time = StatusLabel(' 登录时间：%s ' % gol.get_value('login_time',''))
+        self.lb_cur_time = StatusLabel()
+        self.lb_cur_time.setText(" 当前时间：%s " %time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+        self.addWidget(self.lb_version)
+        self.addWidget(self.lb_login)
+        self.addWidget(self.lb_hostname)
+        self.addWidget(self.lb_hostip)
+        self.addWidget(self.lb_handle_mes)
+        self.addPermanentWidget(self.lb_login_time)
+        self.addPermanentWidget(self.lb_cur_time)
 
     def on_time_show(self):
         now=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
-        self.cur_time.setText("当前时间：%s" %now)
+        self.lb_cur_time.setText("当前时间：%s" %now)
 
     def on_change_mes(self,p_str):
         self.handle_mes.setText(p_str)

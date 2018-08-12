@@ -15,3 +15,5 @@ Color_dj = QColor("#b0c4de")
 Color_hx = QColor("#1e90ff")
 # 已拒检
 Color_jj = QColor("#008000")
+# 警告
+Color_jg = QColor('#FFB90F')
