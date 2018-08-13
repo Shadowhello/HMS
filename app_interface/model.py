@@ -80,3 +80,49 @@ def get_inspect_result_sql():
         RIS_BG_CBGYS,RIS_BG_CSHYS,HISORDER_IID,CBRLX,CROOM
      FROM V_RIS2HIS_ALL WHERE CBLKH = '%s'
     '''
+
+# VI_TJ_RESULT 检验结果表
+class MV_VI_TJ_RESULT(BaseModel):
+
+    __tablename__ = 'VI_TJ_RESULT'
+
+    tjbh = Column(String(16), primary_key=True)         # 体检编号
+    tmh = Column(String(20), primary_key=True)          # 条码号
+    xmxh = Column(String(10), primary_key=True)           # 项目编号
+    xmmc = Column(String(50), nullable=False)           # 项目名称
+    xmjg = Column(String(250), nullable=False)          # 项目结果
+    gdbj = Column(String(10), nullable=False)           # 项目标识
+    ckfw = Column(String(50), nullable=False)           # 项目参考范围
+    xmdw = Column(String(50), nullable=False)           # 项目单位
+    jyys = Column(String(16), nullable=False)           # 检验医生
+    jyrq = Column(DateTime, nullable=False)             # 检验日期
+    shys = Column(String(16), nullable=False)           # 审核医生
+    bgrq = Column(DateTime, nullable=False)             # 审核日期
+
+    @property
+    def to_dict(self):
+        return {
+            'tjbh': getattr(self, "tjbh", ''),
+            'xmbh': getattr(self, "xmxh", ''),
+            'xmjg': str2(getattr(self, "xmjg", '')),
+            'ycts': str2(getattr(self, "gdbj", '')),
+            'ckfw': str2(getattr(self, "ckfw", '')),
+            'xmdw': str2(getattr(self, "xmdw", '')),
+            'jcys': getattr(self, "jyys", ''),
+            'jcrq': getattr(self, "jyrq", ''),
+            'shys': getattr(self, "shys", ''),
+            'shrq': getattr(self, "bgrq", '')
+        }
+
+# LIS项目对照表
+def get_lis_match_pes_sql():
+    return '''
+      SELECT 
+		TJ_XMDM.NEWLISBH, 
+		TJ_XMDM.XMBH   
+       FROM TJ_XMDM,   
+             TJ_XMLB  
+       WHERE ( TJ_XMDM.LBBM = TJ_XMLB.LBBM ) AND  
+                NEWLISBH IS NOT NULL AND
+             ( ( TJ_XMLB.XMLX = '2' ) and (flag =0 ) ) 
+    '''

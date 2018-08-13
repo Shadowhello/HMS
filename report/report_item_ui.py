@@ -34,6 +34,7 @@ class ItemsStateUI(Dialog):
         self.gp_user = UserBaseGroup()
         self.table_item = ItemsStateTable(self.item_cols)
         self.table_item.setAlternatingRowColors(False)                       # 使用行交替颜色
+        self.table_item.verticalHeader().setVisible(False)
         lt_main.addWidget(self.le_tjbh)
         lt_main.addWidget(self.gp_user)
         lt_main.addWidget(self.table_item)

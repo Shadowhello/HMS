@@ -69,7 +69,7 @@ class ReportTrackUI(Widget):
                                             ])
 
         self.table_track = ReportTrackTable(self.table_track_cols)
-
+        self.table_track.verticalHeader().setVisible(False)  # 列表头
         lt_middle.addWidget(self.table_track)
 
         # 按钮功能区

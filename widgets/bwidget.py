@@ -85,7 +85,7 @@ class TableWidget(QTableWidget):
         self.setShowGrid(True)
         self.setSortingEnabled(True)            # 字符串排序功能
         self.setFrameShape(QFrame.NoFrame)      # 设置无边框
-        self.verticalHeader().setVisible(True)  # 列表头
+        self.verticalHeader().setVisible(False)  # 列表头
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)   # 表格内容不能编辑
         self.setSelectionBehavior(QAbstractItemView.SelectRows)  # 选中一行
         self.setAlternatingRowColors(True)                       # 使用行交替颜色
@@ -139,7 +139,7 @@ class TableWidget(QTableWidget):
                 self.setItem(self.rowCount()-1, col_index, item)
         else:
             mes_about(self,'数据格式要求：dict或者list！')
-        self.resizeColumnsToContents()  # 设置列适应大小
+        # self.resizeColumnsToContents()  # 设置列适应大小
 
     # 获取某行最后一列值
     def getLastItemValue(self,row:int):
@@ -148,6 +148,16 @@ class TableWidget(QTableWidget):
     #获取某行某列值
     def getItemValue(self,row:int,col:int):
         return self.item(row,col).text()
+
+    # 根据key 获取某行列的值
+    def getItemValueOfKey(self,row:int,key:str):
+        col = list(self.heads.keys()).index(key)
+        return self.getItemValue(row,col)
+
+    # 根据key 获取当前行列的值
+    def getCurItemValueOfKey(self,key:str):
+        col = list(self.heads.keys()).index(key)
+        return self.getItemValue(self.currentRow(),col)
 
     # 导出数据，对表格数据聚合
     def export(self):

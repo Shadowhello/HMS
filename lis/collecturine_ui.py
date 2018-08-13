@@ -3,6 +3,13 @@ from lis.model import *
 from utils.buildbarcode import BarCodeBuild
 # 留样
 
+def unire_font():
+    font = QFont()
+    font.setBold(True)
+    font.setWeight(75)
+    font.setPixelSize(24)
+    return font
+
 class CollectUrine_UI(Widget):
 
     def __init__(self):
@@ -26,16 +33,25 @@ class CollectUrine_UI(Widget):
         self.tmbh.setFont(QFont("微软雅黑" , 50,  QFont.Bold))
         label.setFont(QFont("微软雅黑" , 50,  QFont.Bold))
         self.urine_cols = OrderedDict([
-                                ("cjzt", ""),
+                                ("cjzt", "状态"),
+                                ("xm", "姓名"),
+                                ("xb", "性别"),
+                                ("nl", "年龄"),
                                 ("tmbh", "条码号"),
                                 ("tjbh","体检编号"),
                                 ("xmhz", "条码项目")
                             ])
-        self.table_urine = TableWidget(self.urine_cols)
-        self.table_urine.verticalHeader().setVisible(False)  # 去掉行头
-
-
-        lt_left_top.addWidget(label)
+        self.table_urine = CollectUnireTable(self.urine_cols)
+        # self.table_urine.verticalHeader().setVisible(False)  # 去掉行头
+        self.table_urine.horizontalHeader().setStretchLastSection(True)
+        self.table_urine.setColumnWidth(2, 70)
+        self.table_urine.setColumnWidth(3, 70)
+        self.table_urine.setColumnWidth(4, 180)
+        self.table_urine.setColumnWidth(5, 180)
+        self.table_urine.setStyleSheet('''
+        QHeaderView{font-size:24px;}QTableView::item {font-size:18px;}
+        ''')
+        # lt_left_top.addWidget(label)
         lt_left_top.addWidget(self.tmbh)
 
         lt_left.addLayout(lt_left_top)
@@ -47,7 +63,30 @@ class CollectUrine_UI(Widget):
         lt_right = QVBoxLayout()
         lt_right.addWidget(self.table_urine)
         self.gp_right.setLayout(lt_right)
-        main_layout.addWidget(gp_left)
-        main_layout.addWidget(self.gp_right)
+        main_layout.addWidget(gp_left,1)
+        main_layout.addWidget(self.gp_right,2)
 
         self.setLayout(main_layout)
+
+class CollectUnireTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(CollectUnireTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                item = QTableWidgetItem(str2(col_value))
+                item.setTextAlignment(Qt.AlignCenter)
+                item.setFont(unire_font())
+                self.setItem(row_index, col_index, item)
+
+        # self.setColumnWidth(0, 70)
+        # self.setColumnWidth(1, 60)
+        # self.setColumnWidth(2, 30)
+        # self.setColumnWidth(3, 30)
+        self.horizontalHeader().setStretchLastSection(True)

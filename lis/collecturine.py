@@ -8,6 +8,16 @@ class CollectUrine(CollectUrine_UI):
         self.initParas()
         self.tmbh.returnPressed.connect(self.serialno_validate)
         # self.tmbh.returnPressed.connect(self.on_table_urine_insert)
+        # 用户对象
+        self.user_obj = None
+        # 当前条码容器
+        self.seri_objs = []
+        # 当天样本初始化显示
+        results = self.session.execute(get_urine_init_sql(gol.get_value('login_area'))).fetchall()
+        self.table_urine.load(results)
+        self.gp_right.setTitle('留样列表（%s）' % str(self.table_urine.rowCount()))
+        self.seri_objs.extend(result[4] for result in results)
+
 
     # 初始化参数
     def initParas(self):
@@ -24,9 +34,11 @@ class CollectUrine(CollectUrine_UI):
         self.data_obj = {'jllx':'0011','jlmc':'留样','tjbh':'','mxbh':'',
                          'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'jlnr':None,'bz':None}
 
+    # 刷新数据
+    def refresh_ryxx(self,tjbh):
+        return self.session.query(MV_RYXX).filter(MV_RYXX.tjbh == tjbh).scalar()
 
-
-    # 留样台  属于无人管理区，顾无对话框
+    # 留样台  属于无人管理区，无需对话框
     def serialno_validate(self):
         hm = self.tmbh.text()
         # 判断当前界面是否是同一人，根据体检编号判断或者当前条码记录
@@ -34,8 +46,14 @@ class CollectUrine(CollectUrine_UI):
             if hm in list(self.all_serialno.keys()):
                 # 是同一人
                 button = self.all_serialno[hm]
-                self.refreshSerial(button)
-                self.on_table_urine_insert(button)
+                if self.tmbh.text() not in self.seri_objs:
+                    # 不存在，则添加
+                    self.refreshSerial(button)
+                    self.on_table_urine_insert(button)
+                    self.seri_objs.append(self.tmbh.text())
+
+                # 并显示在这一行
+                self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
                 self.tmbh.setText('')
                 return
         # self.all_serialno 为空 说明 还未刷单，刚打开
@@ -43,10 +61,18 @@ class CollectUrine(CollectUrine_UI):
         # 与当前界面不是同一人，刷新整个过程
         tjbh = self.session.execute(get_tjbh_sql(hm)).scalar()
         if tjbh:
+            # 获取用户信息
+            self.user_obj = self.refresh_ryxx(tjbh)
             self.refreshAllSerialNo(tjbh)
             button = self.all_serialno[hm]
-            self.refreshSerial(button)
-            self.on_table_urine_insert(button)
+            if self.tmbh.text() not in self.seri_objs:
+                # 不存在，则添加
+                self.refreshSerial(button)
+                self.on_table_urine_insert(button)
+                self.seri_objs.append(self.tmbh.text())
+
+            # 显示 选中
+            self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
 
         self.tmbh.setText('')
 
@@ -77,12 +103,12 @@ class CollectUrine(CollectUrine_UI):
         ly_num = 0  # 留样数量
 
         # 获取条码信息
-        results = self.session.execute(get_tmxx_sql(tjbh)).fetchall()
+        results = self.session.execute(get_tmxx2_sql(tjbh)).fetchall()
         for i, result in enumerate(results):
             # 获取条码属性
             btn_no = result[1]
             btn_name = result[2]
-            btn_state = result[-1]
+            btn_state = result[3]
             # 生成按钮
             if not btn_state:
                 filename = self.barCodeBuild.create(btn_no)
@@ -175,6 +201,6 @@ class CollectUrine(CollectUrine_UI):
 
     # 刷新采血列表
     def on_table_urine_insert(self,button:SerialNoButton):
-        data=['已留样',button.collectNo,button.collectTJBH,button.collectTxt]
+        data=['已留样',str2(self.user_obj.xm),str2(self.user_obj.xb),str2(self.user_obj.nl),button.collectNo,button.collectTJBH,button.collectTxt]
         self.table_urine.insert(data)
         self.gp_right.setTitle('留样列表（%s）' % str(self.table_urine.rowCount()))

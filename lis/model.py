@@ -45,6 +45,7 @@ def get_tjbh_sql(tmbh):
     ''' %tmbh
     return sql
 
+# 获取采血+采样
 def get_tmxx_sql(tjbh):
     sql='''
     WITH 
@@ -61,7 +62,34 @@ def get_tmxx_sql(tjbh):
             GROUP BY T1.TJBH,T1.TMBH
         ),
         T3 AS (
-                SELECT TJBH,MXBH AS TMBH FROM TJ_CZJLB WHERE JLLX='0010' GROUP BY TJBH,MXBH
+                SELECT TJBH,MXBH AS TMBH FROM TJ_CZJLB WHERE JLLX IN ('0010','0011') GROUP BY TJBH,MXBH
+        )
+
+    SELECT T2.TJBH,T2.TMBH,T2.XMHZ,(SELECT 1 FROM T3 WHERE T3.TJBH = T2.TJBH AND T3.TMBH=T2.TMBH ) AS ISCX,
+     (SELECT qzjs FROM TJ_TJJLMXB WHERE TJ_TJJLMXB.TJBH = T2.TJBH AND TJ_TJJLMXB.XMMC=T2.XMHZ AND TJ_TJJLMXB.SFZH = '1') AS SFJJ
+     FROM T2 WHERE TJBH='%s';
+    ''' %(tjbh,tjbh)
+
+    return sql
+
+# 获取采样的
+def get_tmxx2_sql(tjbh):
+    sql='''
+    WITH 
+        T1 AS (
+            SELECT TJBH,XMMC,(CASE WHEN XMBH IN ('1931','5010','1926') THEN TJBH+XMBH ELSE TMBH1 END) AS TMBH 
+            FROM TJ_TJJLMXB WHERE TJBH='%s' AND SFZH='1' 
+            AND (
+                       (XMBH IN (SELECT XMBH FROM TJ_XMDM WHERE LBBM IN (SELECT LBBM FROM TJ_XMLB WHERE XMLX='2' )) AND TMBH1 IS NOT NULL) 
+                    OR (XMBH IN ('1931','5010','1926'))
+                 )
+        ),
+        T2 AS (
+            SELECT T1.TJBH,T1.TMBH,(SELECT XMMC+'  ' FROM T1 AS C WHERE C.TJBH = T1.TJBH AND C.TMBH = T1.TMBH  FOR XML PATH('')  ) AS XMHZ from T1 
+            GROUP BY T1.TJBH,T1.TMBH
+        ),
+        T3 AS (
+                SELECT TJBH,MXBH AS TMBH FROM TJ_CZJLB WHERE JLLX='0011' GROUP BY TJBH,MXBH
         )
 
     SELECT T2.TJBH,T2.TMBH,T2.XMHZ,(SELECT 1 FROM T3 WHERE T3.TJBH = T2.TJBH AND T3.TMBH=T2.TMBH ) AS ISCX,
@@ -148,3 +176,22 @@ def get_handover2_sql(t_start, t_end, area):
         ORDER BY count(*) DESC ;
 
     ''' % (t_start, t_end, t_start, t_end, area)
+
+
+# 获取当前留样信息，初始化用
+def get_urine_init_sql(area):
+    return '''
+    SELECT 
+        '已留样' AS state,
+        TJ_TJDAB.XM,
+        (CASE TJ_TJDAB.XB WHEN '1' THEN '男' WHEN '2' THEN '女' ELSE '' END) AS XB,
+        TJ_TJDJB.NL,
+        C.MXBH,
+        TJ_TJDJB.TJBH,
+        C.JLNR 
+    FROM TJ_TJDJB 
+        INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH=TJ_TJDAB.DABH AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) and TJ_TJDJB.QD='1'
+        INNER JOIN (SELECT TJBH,MXBH,JLNR FROM TJ_CZJLB  WHERE CZSJ>=substring(convert(char,GETDATE(),120),1,10) AND JLLX='0011' AND CZQY='%s') C
+        
+        ON TJ_TJDJB.TJBH=C.TJBH 
+    ''' %area

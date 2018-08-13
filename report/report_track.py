@@ -1,9 +1,7 @@
 # 系统接口
-from app_interface.i_pacs_result import PacsResult
-from app_interface.i_pis_result_ui import PisResultUI
-from app_interface.i_sms_ui import SmsUI
+from app_interface import PacsResult, PisResult,LisResult
 from app_interface.i_phone_ui import PhoneUI
-from lis.lis_result_ui import LisResultUI
+from app_interface.i_sms_ui import SmsUI
 from report.report_item_ui import ItemsStateUI
 from report.report_track_thread import *
 from widgets.cwidget import *
@@ -27,6 +25,7 @@ class ReportTrack(ReportTrackUI):
         self.btn_export.clicked.connect(self.on_btn_export_click)           # 导出
         self.btn_query.clicked.connect(self.on_btn_query_click)             # 查询
         self.btn_task.clicked.connect(self.on_btn_task_click)               # 任务领取
+        self.btn_receive.clicked.connect(self.on_btn_receive_click)         # 结果接收
         # 功能栏
         self.btn_item.clicked.connect(self.on_btn_item_click)
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
@@ -139,7 +138,7 @@ class ReportTrack(ReportTrackUI):
             mes_about(self, '请先选择一个人！')
             return
         else:
-            if not self.item_ui:
+            if not self.phone_ui:
                 self.phone_ui = PhoneUI(self)
             self.phone_ui.returnPressed.emit(self.cur_tjbh)
             self.phone_ui.show()
@@ -230,12 +229,12 @@ class ReportTrack(ReportTrackUI):
         '''
         if sys_name =='PIS':
             if not self.pis_ui:
-                self.pis_ui = PisResultUI('病理系统',self)
+                self.pis_ui = PisResult(self)
             self.pis_ui.setData(results)
             self.pis_ui.show()
         elif sys_name =='LIS':
             if not self.lis_ui:
-                self.lis_ui = LisResultUI('检验系统',self)
+                self.lis_ui = LisResult(self)
             self.lis_ui.setData(results)
             self.lis_ui.show()
         elif sys_name =='PACS':
@@ -267,6 +266,12 @@ class ReportTrack(ReportTrackUI):
             self.session.rollback()
             mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
 
+    def on_btn_receive_click(self):
+        rows =self.table_track.isSelectRows()
+        for row in rows:
+            pass
+
+
     def closeEvent(self, *args, **kwargs):
         super(ReportTrack, self).closeEvent(*args, **kwargs)
         try:
@@ -291,6 +296,3 @@ class ReportTrack(ReportTrackUI):
                 self.sms_ui.close()
         except Exception as e:
             self.log.info("ReportTrack 子UI关闭时发生错误：%s " %e)
-
-
-

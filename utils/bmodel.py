@@ -81,6 +81,20 @@ class MT_TJ_TJJLMXB(BaseModel):
     # def ksbm(self):
     #     return getattr(self, "ksbm", ''),
 
+class MT_TJ_PACS_PIC(BaseModel):
+
+    __tablename__ = 'TJ_PACS_PIC'
+
+    ID = Column(Integer, primary_key=True, autoincrement=True)
+    tjbh = Column(String(16),nullable=True)
+    ksbm = Column(CHAR(6),nullable=True)
+    picpath = Column(String(200),nullable=False)
+    picname = Column(String(100),nullable=False)
+    zhbh = Column(String(16), nullable=False)
+    flag = Column(CHAR(1), nullable=False)
+    path = Column(String(100), nullable=False)
+    pk = Column(String(30), nullable=False)
+    ftp_bz = Column(CHAR(1), nullable=False)
 
 class MT_TJ_DW(BaseModel):
 

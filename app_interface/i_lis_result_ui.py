@@ -1,14 +1,12 @@
 from widgets.cwidget import *
 
-class LisResultUI(QDialog):
+class LisResultUI(LisDialog):
 
     def __init__(self,title,parent=None):
         super(LisResultUI,self).__init__(parent)
         self.setWindowTitle(title)
         self.initUI()
-        self.table_inspect_master.itemClicked.connect(self.on_table_show_detail)
-        # 右侧详细结果 字典
-        self.detail_datas = None
+
 
     def initUI(self):
         #self.setWindowFlags(Qt.WindowCloseButtonHint)
@@ -26,7 +24,7 @@ class LisResultUI(QDialog):
         lt_top.addWidget(self.btn_receive)
 
         lt_middle = QHBoxLayout()
-        gp_middle = QGroupBox('检查列表')
+        gp_middle = QGroupBox('检验列表')
         self.inspect_master_cols = OrderedDict([
                         ('bgzt', '状态'),
                         ('tmbh', '条码编号'),
@@ -78,34 +76,6 @@ class LisResultUI(QDialog):
         lt_main.addWidget(gp_middle)
         lt_main.addWidget(gp_bottom)
         self.setLayout(lt_main)
-
-    def setData(self,datas):
-        # 清空数据
-        self.bgys.setText('')
-        self.bgsj.setText('')
-        self.shys.setText('')
-        self.shsj.setText('')
-        #self.pacs_jg.setText('')
-        #self.pacs_zd.setText('')
-        self.table_inspect_master.load(datas['pes'])
-        self.detail_datas = datas['lis']
-
-    #单击主的 出来子的
-    def on_table_show_detail(self,tableWidgetItem):
-        row = tableWidgetItem.row()
-        tjtm = self.table_inspect_master.item(row,7).text()+self.table_inspect_master.item(row,1).text()
-        self.table_inspect_detail.load(self.detail_datas.get(tjtm,[]))
-        bgys = self.table_inspect_master.item(row, 3).text()
-        bgrq = self.table_inspect_master.item(row, 4).text()
-        shys = self.table_inspect_master.item(row, 5).text()
-        shrq = self.table_inspect_master.item(row, 6).text()
-        self.bgys.setText(bgys)
-        self.bgsj.setText(bgrq)
-        self.shys.setText(shys)
-        self.shsj.setText(shrq)
-
-
-
 
 if __name__=="__main__":
     from PyQt5.QtWidgets import QApplication

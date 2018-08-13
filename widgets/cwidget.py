@@ -1,5 +1,5 @@
 from widgets.bwidget import *
-from utils.readparas import GolParasMixin,GolParasMixin2
+from utils.readparas import *
 from utils.base import str2
 from functools import partial
 from utils.readcard import IdCard
@@ -48,15 +48,27 @@ class Dialog(GolParasMixin, QDialog):
         self.init()
 
 # 窗口带日志、登录信息、数据库链接功能
-class PacsWidget(GolParasMixin2, QWidget):
+class PacsWidget(PacsGolParasMixin, QWidget):
     def __init__(self, parent=None):
         super(PacsWidget, self).__init__(parent)
         self.init()
 
-# 窗口带日志、登录信息、数据库链接功能
-class PacsDialog(GolParasMixin2, QDialog):
+# 检查窗口带日志、登录信息、数据库链接功能
+class PacsDialog(PacsGolParasMixin, QDialog):
     def __init__(self, parent=None):
         super(PacsDialog, self).__init__(parent)
+        self.init()
+
+# 病理窗口带日志、登录信息、数据库链接功能
+class PisDialog(PisGolParasMixin, QDialog):
+    def __init__(self, parent=None):
+        super(PisDialog, self).__init__(parent)
+        self.init()
+
+# 检验窗口带日志、登录信息、数据库链接功能
+class LisDialog(LisGolParasMixin, QDialog):
+    def __init__(self, parent=None):
+        super(LisDialog, self).__init__(parent)
         self.init()
 
 # 体检编号
@@ -1420,6 +1432,36 @@ class TUint(QLineEdit):
 
         super(TUint,self).keyPressEvent(QKeyEvent)
 
+
+# 基础条件检索
+class BaseCondiSearchGroup(QGroupBox):
+
+    def __init__(self):
+        super(BaseCondiSearchGroup, self).__init__()
+        self.setTitle('条件检索')
+        lt_main = QGridLayout()
+        self.s_date = DateGroup(-3)
+        self.s_dwbh = TUintGroup({}, {})
+
+        ###################基本信息  第一行##################################
+        lt_main.addItem(self.s_date, 0, 0, 1, 3)
+
+        ###################基本信息  第二行##################################
+        lt_main.addItem(self.s_dwbh, 1, 0, 1, 5)
+
+        lt_main.setHorizontalSpacing(10)  # 设置水平间距
+        lt_main.setVerticalSpacing(10)  # 设置垂直间距
+        lt_main.setContentsMargins(10, 10, 10, 10)  # 设置外间距
+        lt_main.setColumnStretch(14, 1)  # 设置列宽，添加空白项的
+        self.setLayout(lt_main)
+
+    @property
+    def date_range(self):
+        return self.s_date.get_date_range
+
+    @property
+    def where_dwmc(self):
+        return self.s_dwbh.where_dwmc
 
 # 公共条件搜索
 # 日期：签到、收单、总检、审核、审阅

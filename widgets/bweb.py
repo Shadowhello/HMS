@@ -1,7 +1,7 @@
 from PyQt5.QtWebEngineWidgets import *
 from widgets.bwidget import *
 
-class WebEngine(QWebEngineView):
+class WebView(QWebEngineView):
 
     def load(self,url:str):
         self.setUrl(QUrl(url))
