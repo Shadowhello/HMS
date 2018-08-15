@@ -270,6 +270,11 @@ def get_lis_sql2(tjbh):
     SELECT TJBH,tmh AS TMBH,BGRQ,SHYS,JYYS,JYRQ FROM VI_TJ_RESULT WHERE TJBH='%s' GROUP BY TJBH,tmh,BGRQ,SHYS,JYYS,JYRQ;
     ''' %tjbh
 
+def get_equip_sql():
+    return '''
+    
+    '''
+
 
 # CREATE TABLE TJ_BGGL(
 #     [TJBH] varchar(16) COLLATE Chinese_PRC_CI_AS NOT NULL ,

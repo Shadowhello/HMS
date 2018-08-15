@@ -75,12 +75,8 @@ def init_views(app,db):
         pass
 
     # 设备 预览
-    @app.route('/api/equip/preview/<int:equip_file>/<int:tjbh>', methods=['POST'])
+    @app.route('/api/equip/preview/<string:equip_file>/<string:tjbh>', methods=['POST'])
     def equip_preview(equip_file,tjbh):
-        if len(str(tjbh)) == 8:
-            tjbh = '%09d' % tjbh
-        elif len(str(tjbh)) == 9:
-            tjbh = str(tjbh)
         pass
 
     # 设备 报告下载

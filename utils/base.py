@@ -146,12 +146,18 @@ class RemoteFileHandler(object):
         except Exception as e:
             return False,e
 
+def get_key(p_dict, p_value):
+
+    tmp = [k for k, v in p_dict.items() if v == p_value]
+    if tmp:
+        return tmp[0]
+    else:
+        return False
 
 def version_sort(versions):
     # versions = ['v2.0.1', 'v1.0.2', 'v1.0.21', 'v2.2.9', 'v1.2.11']
     # ['v1.0.2', 'v1.0.21', 'v1.2.11', 'v2.0.1', 'v2.2.9']
     return sorted(versions, key=lambda x: tuple(int(v) for v in x.replace('v', '').split(".")))
-
 
 # 模板替换变量采用的是$符号，而不是%，它的使用要遵循以下规则：
 # 1、$$ 是需要规避，已经采用一个单独的 $代替（$$相当于输出$,而不是变量）

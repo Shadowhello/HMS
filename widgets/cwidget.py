@@ -1,6 +1,6 @@
 from widgets.bwidget import *
 from utils.readparas import *
-from utils.base import str2
+from utils.base import str2,get_key
 from functools import partial
 from utils.readcard import IdCard
 
@@ -369,12 +369,36 @@ class EquipInspectTable(TableWidget):
         self.insertRow(self.rowCount())  # 特别含义
         for col_index, col_name in enumerate(self.heads.keys()):
             item = QTableWidgetItem(data[col_name])
+            item.setTextAlignment(Qt.AlignCenter)
             if col_index ==0 and data[col_name]=='检查中':
                 item.setBackground(QColor("#ff8c00"))               # 橘黄色
 
             self.setItem(self.rowCount() - 1, col_index, item)
 
-        self.resizeColumnsToContents()  # 设置列适应大小
+        self.setColumnWidth(0, 50)
+        self.setColumnWidth(2, 70)
+        self.setColumnWidth(3, 50)
+        self.setColumnWidth(4, 40)
+        self.setColumnWidth(5, 40)
+        # self.horizontalHeader().setStretchLastSection(True)
+
+    # 消息返回 回插
+    def insert3(self,data:dict):
+        self.insertRow(self.rowCount())  # 特别含义
+        for col_index, col_name in enumerate(self.heads.keys()):
+            item = QTableWidgetItem(data[col_name])
+            item.setTextAlignment(Qt.AlignCenter)
+            if col_index ==0 and data[col_name]=='已上传':
+                item.setBackground(QColor("#f0e68c"))
+
+            self.setItem(self.rowCount() - 1, col_index, item)
+
+        self.setColumnWidth(0, 50)
+        self.setColumnWidth(2, 70)
+        self.setColumnWidth(3, 50)
+        self.setColumnWidth(4, 40)
+        self.setColumnWidth(5, 40)
+        # self.horizontalHeader().setStretchLastSection(True)
 
 # 设备结果列表，追踪处用
 class EquipResultTable(TableWidget):
@@ -1326,6 +1350,13 @@ class TUintGroup(QHBoxLayout):
         else:
             return False
 
+    @property
+    def where_dwbh(self):
+        if self.cb_check.isChecked():
+            return self.unit.where_dwbh
+        else:
+            return False
+
 # 体检单位
 class TUint(QLineEdit):
 
@@ -1351,6 +1382,14 @@ class TUint(QLineEdit):
     def where_dwmc(self):
         if self.text():
             return ''' AND DWMC = '%s' ''' %self.text()
+        else:
+            return False
+
+    # 获取单位编号
+    @property
+    def where_dwbh(self):
+        if self.text():
+            return get_key(self.dwmc_bh,self.text())
         else:
             return False
 
@@ -1436,32 +1475,46 @@ class TUint(QLineEdit):
 # 基础条件检索
 class BaseCondiSearchGroup(QGroupBox):
 
-    def __init__(self):
+    def __init__(self,datadiff=-3):
         super(BaseCondiSearchGroup, self).__init__()
         self.setTitle('条件检索')
-        lt_main = QGridLayout()
-        self.s_date = DateGroup(-3)
+        self.lt_main = QGridLayout()
+        self.s_date = DateGroup(datadiff)
         self.s_dwbh = TUintGroup({}, {})
+        self.btn_query = ToolButton(Icon('query'), '查询')
 
         ###################基本信息  第一行##################################
-        lt_main.addItem(self.s_date, 0, 0, 1, 3)
-
+        self.lt_main.addItem(self.s_date, 0, 0, 1, 3)
         ###################基本信息  第二行##################################
-        lt_main.addItem(self.s_dwbh, 1, 0, 1, 5)
+        self.lt_main.addItem(self.s_dwbh, 1, 0, 1, 5)
 
-        lt_main.setHorizontalSpacing(10)  # 设置水平间距
-        lt_main.setVerticalSpacing(10)  # 设置垂直间距
-        lt_main.setContentsMargins(10, 10, 10, 10)  # 设置外间距
-        lt_main.setColumnStretch(14, 1)  # 设置列宽，添加空白项的
-        self.setLayout(lt_main)
+        self.lt_main.setHorizontalSpacing(10)  # 设置水平间距
+        self.lt_main.setVerticalSpacing(10)  # 设置垂直间距
+        self.lt_main.setContentsMargins(10, 10, 10, 10)  # 设置外间距
+        self.lt_main.setColumnStretch(14, 1)  # 设置列宽，添加空白项的
+        self.setLayout(self.lt_main)
 
     @property
     def date_range(self):
         return self.s_date.get_date_range
 
+    def setNoChoice(self):
+        self.s_date.setNoChoice(True)
+
     @property
     def where_dwmc(self):
         return self.s_dwbh.where_dwmc
+
+    @property
+    def where_dwbh(self):
+        return self.s_dwbh.where_dwbh
+
+    def addWidget(self,widget,int_x,int_y,int_w,int_h):
+        self.lt_main.addWidget(widget,int_x,int_y,int_w,int_h)
+
+    def addItem(self,widget,int_x,int_y,int_w,int_h):
+        self.lt_main.addLayout(widget,int_x,int_y,int_w,int_h)
+
 
 # 公共条件搜索
 # 日期：签到、收单、总检、审核、审阅
@@ -1566,6 +1619,18 @@ class QuickSearchGroup(QGroupBox):
         else:
             p_text = ''
         self.returnPressed.emit(p_key,p_text)
+
+    def setLabelDisable(self,p_str):
+        if p_str == 'tjbh':
+            self.s_tjbh.setDisabled(True)
+        elif p_str == 'xm':
+            self.s_xm.setDisabled(True)
+        elif p_str == 'sjhm':
+            self.s_sjhm.setDisabled(True)
+        elif p_str == 'sfzh':
+            self.s_sfzh.setDisabled(True)
+        else:
+            pass
 
 # 左右，左边是为目录，右边为TAB界面
 class DirTabWidget(QSplitter):
@@ -1689,6 +1754,33 @@ class UserBaseGroup(QGroupBox):
         self.lb_user_age.setText('')
         self.lb_sjhm.setText('')
         self.lb_sfzh.setText('')
+
+class EquipTypeLayout(QHBoxLayout):
+
+    def __init__(self):
+        super(EquipTypeLayout,self).__init__()
+
+        self.cb_equip_type = QComboBox()
+        self.cb_equip_type.addItems(['所有','心电图','骨密度','电测听','人体成分'])
+        self.cb_equip_type.setCurrentText('心电图')
+
+        self.addWidget(QLabel('设备类型：'))
+        self.addWidget(self.cb_equip_type)
+
+    def get_equip_type(self):
+        if self.cb_equip_type.currentText()=='所有':
+            return False
+        else:
+            if self.cb_equip_type.currentText()=='心电图':
+                return '08'
+            elif self.cb_equip_type.currentText()=='电测听':
+                return '01'
+            elif self.cb_equip_type.currentText()=='骨密度':
+                return '04'
+            elif self.cb_equip_type.currentText()=='人体成分':
+                return '03'
+            else:
+                return '00'
 
 # 用户详细信息
 class UserDetailGroup(QGroupBox):

@@ -1,4 +1,5 @@
 from .bmodel import *
+import _mssql,pymssql
 
 
 def get_tjxt_session(hostname,dbname,user,passwd,port=1433,encoding='utf-8',echo=False):

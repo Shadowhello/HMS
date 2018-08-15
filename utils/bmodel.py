@@ -224,6 +224,18 @@ class MT_TJ_EQUIP(BaseModel):
     operator2 = Column(String(20), nullable=False)
     operate_area = Column(String(50), nullable=False)
 
+    @property
+    def to_dict(self):
+        return {
+            'tjbh': getattr(self, "tjbh"),
+            'patient': str2(getattr(self, "patient")),
+            'ename': str2(getattr(self, "equip_name")),
+            'jcrq': str(getattr(self, "operate_time"))[0:19],
+            'jcys': str2(getattr(self, "operator2")),
+            'jcqy': str2(getattr(self, "operate_area")),
+            'fpath': getattr(self, "file_path").replace(r'D:/activefile','')
+        }
+
 # 心电图
 class MT_DCP_files(BaseModel):
 

@@ -185,14 +185,14 @@ SYS_MENU_MODULE_CLASS = {
     4001: {'module': None, 'class': None, 'enabled': False},
     4002: {'module': None, 'class': None, 'enabled': False},
     4003: {'module': None, 'class': None, 'enabled': False},
-    4004: {'module': 'result.resultManager', 'class': 'ResultManager', 'enabled': True},
+    4004: {'module': 'result', 'class': 'ResultManager', 'enabled': True},
     4005: {'module': None, 'class': None, 'enabled': False},
     4006: {'module': None, 'class': None, 'enabled': False},
     4007: {'module': None, 'class': None, 'enabled': False},
-    4008: {'module': 'lis.sample', 'class': 'SampleManager', 'enabled': True},       # 采血台
-    4009: {'module': 'C13.breathmanger', 'class': 'BreathManager', 'enabled': True},    # 呼气室
-    5001: {'module': 'report.report', 'class': 'ReportCenter', 'enabled': True},    # 报告中心
-    5002: {'module': 'mbgl.ncd', 'class': 'NCD', 'enabled': True},                  # 慢病管理
+    4008: {'module': 'lis', 'class': 'SampleManager', 'enabled': True},       # 采血台
+    4009: {'module': 'C13', 'class': 'BreathManager', 'enabled': True},    # 呼气室
+    5001: {'module': 'report', 'class': 'ReportManager', 'enabled': True},    # 报告中心
+    5002: {'module': 'mbgl', 'class': 'NCDManager', 'enabled': True},                  # 慢病管理
     5003: {'module': None, 'class': None, 'enabled': False},
     5004: {'module': None, 'class': None, 'enabled': False},
     5005: {'module': None, 'class': None, 'enabled': False},

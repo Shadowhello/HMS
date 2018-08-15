@@ -90,3 +90,9 @@ class CollectUnireTable(TableWidget):
         # self.setColumnWidth(2, 30)
         # self.setColumnWidth(3, 30)
         self.horizontalHeader().setStretchLastSection(True)
+
+    def insert(self,data):
+        for col_index, col_value in enumerate(data):
+            item = QTableWidgetItem(col_value)
+            item.setFont(unire_font())
+            self.setItem(self.rowCount() - 1, col_index, item)

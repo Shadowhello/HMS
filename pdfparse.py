@@ -9,7 +9,10 @@ from utils.bmodel import *
 # 说明：
 # 2017-09-01 0.1 版  新增设备接口，增加设备：骨密度、心电图、电测听、大便仪、超声骨密度、C13/14
 # 2018-05-01 0.2 版  重构设备接口，增加外出联网，增加设备：DR放射、肺功能（COM）
-# 2018-07-26 0.3 版  重构设备接口，增加 PDF转Pic功能，增加绩效、日志补充、HTTP上传替换SMB上传方式
+# 2018-07-26 0.3 版  重构设备接口
+# 1、增加 PDF转Pic功能；
+# 2、增加绩效、归档、日志补充 TJ_CZJLB,TJ_FILE_ACTIVE；
+# 3、HTTP上传取代SMB上传方式；
 
 # 监听文件生成，解析，上传
 class MonitorHandler(FileSystemEventHandler):
@@ -187,6 +190,7 @@ class MonitorHandler(FileSystemEventHandler):
                                                                  }
                                                                 )
             else:
+                equip_info['create_time'] = cur_datetime()
                 self.session.bulk_insert_mappings(MT_TJ_EQUIP, [equip_info])
             self.session.commit()
         except Exception as e:
@@ -216,7 +220,7 @@ class MonitorHandler(FileSystemEventHandler):
 # 运行监控服务
 def run(queue=None):
     set_equip_env(False)
-    log = gol.get_value('log')
+    log = gol.get_value('parse_log')
     monitor_file_paths = gol.get_value('monitor_file_paths', 'C:/')
     monitor_polling_timer = gol.get_value('monitor_polling_timer', 2)
     observer = Observer()

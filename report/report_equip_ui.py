@@ -1,50 +1,59 @@
 from widgets.cwidget import *
 from widgets.bweb import *
 
-class ReportReviewUI(Widget):
+class ReportEquipUI(Widget):
 
     def __init__(self,parent=None):
-        super(ReportReviewUI,self).__init__(parent)
+        super(ReportEquipUI,self).__init__(parent)
         self.initUI()
 
     def initUI(self):
         lt_main = QHBoxLayout()
         lt_left = QVBoxLayout()
         self.btn_query = ToolButton(Icon('query'), '查询')
-        self.gp_where_search = BaseCondiSearchGroup()
+        self.gp_where_search = BaseCondiSearchGroup(1)
+        self.gp_where_search.setNoChoice()
+        self.cb_equip_type = EquipTypeLayout()
+        self.cb_user = UserCombox()
+        self.cb_user.addItems(['所有',self.login_name])
+        # 区域
+        self.cb_area = AreaGroup()
+        self.gp_where_search.addItem(self.cb_area, 0, 3, 1, 2)
+        self.gp_where_search.addWidget(QLabel('检查医生：'), 0, 5, 1, 1)
+        self.gp_where_search.addWidget(self.cb_user, 0, 6, 1, 1)
+        self.gp_where_search.addItem(self.cb_equip_type, 1, 5, 1, 2)
         # 按钮
         self.gp_where_search.addWidget(self.btn_query, 0, 7, 2, 2)
         self.gp_quick_search = QuickSearchGroup()
-        self.table_report_review_cols = OrderedDict([
-             ('tjzt', '体检状态'),
-             ('bgzt', '报告状态'),
-             ('tjlx','类型'),
-             ('tjqy','区域'),
-             ('tjbh','体检编号'),
-             ('xm','姓名'),
-             ('xb','性别'),
-             ('nl','年龄'),
-             ('sjhm','手机号码'),
-             ('sfzh', '身份证号')
+        self.gp_quick_search.setLabelDisable('sfzh')
+        self.gp_quick_search.setLabelDisable('sjhm')
+        self.table_report_equip_cols = OrderedDict([
+            ('ename', '设备名称'),
+            ('tjbh', '体检编号'),
+            ('patient', '姓名'),
+            ('jcrq','检查日期'),
+            ('jcys','检查医生'),
+            ('jcqy', '检查区域'),
+            ('fpath', '文件路径')
         ])
         # 待审阅列表
-        self.table_report_review = ReportReviewTable(self.table_report_review_cols)
-        gp_table = QGroupBox('待审阅列表（0）')
+        self.table_report_equip = ReportEquipTable(self.table_report_equip_cols)
+        self.gp_table = QGroupBox('检查完成列表（0）')
         lt_table = QHBoxLayout()
-        lt_table.addWidget(self.table_report_review)
-        gp_table.setLayout(lt_table)
+        lt_table.addWidget(self.table_report_equip)
+        self.gp_table.setLayout(lt_table)
         # 审阅信息
-        self.gp_review_user = ReportReviewUser()
+        self.gp_review_user = ReportEquipUser()
         # 添加布局
         lt_left.addWidget(self.gp_where_search,1)
         lt_left.addWidget(self.gp_quick_search,1)
-        lt_left.addWidget(gp_table,7)
+        lt_left.addWidget(self.gp_table,7)
         lt_left.addWidget(self.gp_review_user,1)
 
         ####################右侧布局#####################
-        self.report_web = WebView()
+        self.wv_report_equip = WebView()
         lt_right = QHBoxLayout()
-        lt_right.addWidget(self.report_web)
+        lt_right.addWidget(self.wv_report_equip)
         gp_right = QGroupBox('报告预览')
         gp_right.setLayout(lt_right)
         lt_main.addLayout(lt_left,1)
@@ -53,72 +62,56 @@ class ReportReviewUI(Widget):
         self.setLayout(lt_main)
 
 # 报告审阅列表
-class ReportReviewTable(TableWidget):
+class ReportEquipTable(TableWidget):
 
     tjqy = None  # 体检区域
     tjlx = None  # 体检类型
 
     def __init__(self, heads, parent=None):
-        super(ReportReviewTable, self).__init__(heads, parent)
+        super(ReportEquipTable, self).__init__(heads, parent)
 
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
-        # list 实现
+        # 字典载入
         for row_index, row_data in enumerate(datas):
-            # 插入一行
-            self.insertRow(row_index)
-            for col_index, col_value in enumerate(row_data):
-                item = QTableWidgetItem(col_value)
-
+            self.insertRow(row_index)                # 插入一行
+            for col_index, col_name in enumerate(heads.keys()):
+                item = QTableWidgetItem(row_data[col_name])
+                item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
+        # 布局
+        self.setColumnWidth(0, 70)  # 设备名称
+        self.setColumnWidth(1, 70)  # 体检编号
+        self.setColumnWidth(2, 50)  # 姓名
+        self.setColumnWidth(3, 80)  # 检查日期
+        self.setColumnWidth(4, 70)  # 检查姓名
+        self.setColumnWidth(5, 100) # 检查区域
+        self.horizontalHeader().setStretchLastSection(True)
 
-        # 特殊设置
-        if datas:
-            # self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)         #所有列
-            # self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            # self.horizontalHeader().setMinimumSectionSize(60)
-            # self.horizontalHeader().setMaximumSectionSize(300)
-            self.setColumnWidth(0, 60)  # 结果周期
-            self.setColumnWidth(1, 60)  # 追踪进度
-            self.setColumnWidth(2, 60)  # 追踪状态
-            self.setColumnWidth(3, 50)  # 追踪人
-            self.setColumnWidth(4, 60)  # 体检状态
-            self.setColumnWidth(5, 50)  # 类型
-            self.setColumnWidth(6, 60)  # 区域
-            self.setColumnWidth(7, 70)  # 体检编号
-            self.setColumnWidth(8, 60)  # 姓名
-            self.setColumnWidth(9, 30)  # 性别
-            self.setColumnWidth(10, 30)  # 年龄
-            self.setColumnWidth(11, 120)  # 身份证号
-            self.setColumnWidth(12, 80)  # 手机号码
-            self.setColumnWidth(13, 180)  # 单位编号
-            self.setColumnWidth(14, 70)  # 签到日期
-            self.horizontalHeader().setStretchLastSection(True)
-
-class ReportReviewUser(QGroupBox):
+class ReportEquipUser(QGroupBox):
 
     def __init__(self):
-        super(ReportReviewUser,self).__init__()
-        self.setTitle('审阅信息')
+        super(ReportEquipUser,self).__init__()
+        self.setTitle('审核信息')
         lt_main = QGridLayout()
         self.review_user = ReviewLabel()
         self.review_time = ReviewLabel()
         self.review_comment = QPlainTextEdit()
         # self.review_comment.setFixedHeight(80)
         self.review_comment.setStyleSheet('''border: 1px solid;font: 75 12pt \"微软雅黑\";height:20px;''')
-        self.btn_review_sure = QPushButton('完成审阅')
-        self.btn_review_cancle = QPushButton('取消审阅')
+        self.btn_review_sure = QPushButton('完成审核')
+        self.btn_review_cancle = QPushButton('取消审核')
 
         ###################基本信息  第一行##################################
-        lt_main.addWidget(QLabel('审阅者：'), 0, 0, 1, 1)
+        lt_main.addWidget(QLabel('审核者：'), 0, 0, 1, 1)
         lt_main.addWidget(self.review_user, 0, 1, 1, 1)
-        lt_main.addWidget(QLabel('审阅时间：'), 0, 2, 1, 1)
+        lt_main.addWidget(QLabel('审核时间：'), 0, 2, 1, 1)
         lt_main.addWidget(self.review_time, 0, 3, 1, 1)
         # 按钮
         lt_main.addWidget(self.btn_review_sure, 0, 4, 1, 1)
         lt_main.addWidget(self.btn_review_cancle, 0, 6, 1, 1)
         ###################基本信息  第二行##################################
-        lt_main.addWidget(QLabel('审阅备注：'), 1, 0, 2, 2)
+        lt_main.addWidget(QLabel('审核结果：'), 1, 0, 2, 2)
         lt_main.addWidget(self.review_comment, 1, 1, 2, 7)
 
 
@@ -156,6 +149,6 @@ class ReviewLabel(QLabel):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    ui = ReportReviewUI()
+    ui = ReportEquipUI()
     ui.show()
     app.exec_()

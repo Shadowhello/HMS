@@ -1,7 +1,7 @@
 import logging.config
 import logging
 
-def get_log_class():
+def get_log_class(log_name='hms.log'):
 
     logging.config.dictConfig({
         "version": 1,
@@ -35,7 +35,7 @@ def get_log_class():
                 # If delay is true,
                 # then file opening is deferred until the first call to emit().
                 "delay": True,
-                "filename": "hms.log",
+                "filename": log_name,
                 "formatter": "verbose"
             }
         },

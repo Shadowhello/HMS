@@ -1,6 +1,15 @@
-from utils.envir import *
-from multiprocessing import Process, Queue
+from PyQt5.QtCore import PYQT_VERSION_STR
+# 判断版本号
+if int(PYQT_VERSION_STR.replace('.',''))>=560:
+    from PyQt5.QtWebEngineWidgets import *
+else:
+    from PyQt5.QtWebKit import *
+    from PyQt5.QtWebKitWidgets import *
+
 import multiprocessing
+from multiprocessing import Process, Queue
+from utils.envir import *
+
 
 # 主界面
 def main_ui(ui,app):
@@ -18,23 +27,26 @@ def equip_ui(ui,app):
     app.exec_()
 
 def start_run():
-    from login.login_ui import Login_UI
+    from main import Login_UI
     from PyQt5.QtWidgets import QApplication
     import sys
     ##########################################
     app = QApplication(sys.argv)
+    # 是否通过用户密码验证登陆
     if gol.get_value('system_is_login',1) == 1:
         login_ui = Login_UI()
         if login_ui.exec_():
+            # 是否进入设备接口
             if gol.get_value('system_is_equip', 0) == 0:
-                from main.tj_main_ui import TJ_Main_UI
+                from main import TJ_Main_UI
                 main_ui(TJ_Main_UI(), app)
+            # 进入设备接口
             else:
                 if gol.get_value('equip_type', 0) == 12:
                     pass
                     #ui = Equip2()
                 else:
-                    from equip.equipmanger import EquipManger
+                    from app_equip import EquipManager
                     from pdfparse import run
                     #################无论是否，均启动后台进程#################### 为临时解决子进程启动被UI化的问题
                     # 全局进程队列
@@ -42,7 +54,7 @@ def start_run():
                     multiprocessing.freeze_support()
                     monitor_process = Process(target=run, args=(gol_process_queue,))
                     monitor_process.start()
-                    ui = EquipManger(gol_process_queue)
+                    ui = EquipManager(gol_process_queue)
                     ui.show()
                     app.exec_()
                     # 退出后台子进程
@@ -51,11 +63,14 @@ def start_run():
                         monitor_process.terminate()
                         # 随主进程退出
                         monitor_process.join()
+
+    # 不需要通过用户密码验证，直接进入主界面
     elif gol.get_value('system_is_login',1) == 0:
-        from main.tj_main_ui import TJ_Main_UI
+        from main import TJ_Main_UI
         main_ui(TJ_Main_UI(), app)
+    # 进入自助机模式
     else:
-        from app_selfhelp.selfHelpMachine import SelfHelpMachine
+        from app_selfhelp import SelfHelpMachine
         ui = SelfHelpMachine()
         ui.showMaximized()
         app.exec_()

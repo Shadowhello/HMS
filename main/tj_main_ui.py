@@ -2,20 +2,20 @@ from main.main_ui import *
 from utils import gol
 from utils.api import request_get
 from utils.base import cur_date
-# 动态模块 需加入，否则以源码形式跑
-from report.report import ReportCenter
-from lis.sample import SampleManager
-from mbgl.ncd import NCD
-from C13.breathmanger import BreathManager
+# 动态模块需加入，否则需以源码形式跑
+# 采血留样 管理
+from lis import SampleManager
+# C13/14 管理
+from C13 import BreathManager
+# 报告管理
+from report import ReportManager
+# 慢病管理
+from mbgl import NCDManager
+# 结果录入管理
+from result import ResultManager
 
-TreeItemStyle="font: 75 12pt \"微软雅黑\";"
-MainUIStyle=""
 WindowsTitle="明州体检"
 WindowsIcon="mztj"
-ToolButton1="体检登记"
-ToolButton2="结果录入"
-ToolButton3="报告中心"
-ToolButton4="切换接口"
 
 class TJ_Main_UI(QMainWindow):
 
@@ -60,7 +60,7 @@ class TJ_Main_UI(QMainWindow):
         self.log = gol.get_value('log')
         self.stylesheet = file_style(gol.get_value('file_qss','mztj.qss'))
         self.update_auto = gol.get_value('update_auto',True)
-        self.update_timer = gol.get_value('update_timer',60)
+        self.update_timer = gol.get_value('update_timer',360)
         self.user_menu_sid = gol.get_value('menu_sid',5001)
 
     def initStatusBar(self):
@@ -96,7 +96,7 @@ class TJ_Main_UI(QMainWindow):
     # 注销
     def login_out(self):
         self.close()
-        from login.login_ui import Login_UI
+        from main.login_ui import Login_UI
         login_ui = Login_UI()
         if login_ui.exec_():
                 pass

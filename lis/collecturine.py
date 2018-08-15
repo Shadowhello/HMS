@@ -199,7 +199,7 @@ class CollectUrine(CollectUrine_UI):
         except Exception as e:
             mes_about(self,'插入 TJ_CZJLB 记录失败！错误代码：%s' %e)
 
-    # 刷新采血列表
+    # 刷新采样列表
     def on_table_urine_insert(self,button:SerialNoButton):
         data=['已留样',str2(self.user_obj.xm),str2(self.user_obj.xb),str2(self.user_obj.nl),button.collectNo,button.collectTJBH,button.collectTxt]
         self.table_urine.insert(data)

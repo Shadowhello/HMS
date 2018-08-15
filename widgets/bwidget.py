@@ -3,7 +3,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtPrintSupport import *
 import os,sys,time
-import cv2
+try:
+    import cv2
+except Exception as e:
+    print(e)
+    cv2 = None
 from collections import OrderedDict
 import pandas as pd
 from utils.base import desktop

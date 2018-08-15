@@ -1,9 +1,8 @@
+from main.model import *
 from widgets.LineEdit import *
 from widgets.bwidget import *
-from login.model import *
 from utils import gol
-from utils.base import *
-from utils.config_parse import *
+from utils import *
 
 
 class Login_UI(QDialog):
