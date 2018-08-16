@@ -668,7 +668,7 @@ class ItemsStateTable(TableWidget):
         self.setColumnWidth(2, 60)
 
 
-# 报告追踪列表
+# 报告打印列表
 class ReportTrackTable(TableWidget):
 
     tjqy = None      # 体检区域
@@ -988,13 +988,89 @@ class TrackTypeGroup(QHBoxLayout):
         self.track_type = OrderedDict([('所有',0),('未收单',1),('未结束',2),('有错误',3),('审核退回',4),('审阅退回',5)])
         self.cb_track_type.addItems(list(self.track_type.keys()))
         self.cb_track_type.setDisabled(True)
-        self.cb_track_type.setMinimumWidth(100)
+        self.cb_track_type.setMinimumWidth(80)
 
     def on_cb_check(self,p_int):
         if p_int:
             self.cb_track_type.setDisabled(False)
         else:
             self.cb_track_type.setDisabled(True)
+
+# 用户
+class UserGroup(QHBoxLayout):
+
+    def __init__(self,title):
+        super(UserGroup, self).__init__()
+        # 界面
+        self.initUI(title)
+        # 布局
+        self.addWidget(self.is_check)
+        self.addWidget(self.cb_user)
+        # 信号槽
+        self.is_check.stateChanged.connect(self.on_cb_check)
+
+    def initUI(self,title):
+        self.is_check = QCheckBox(title)
+        self.cb_user = QComboBox()
+
+    def on_cb_check(self, p_int):
+        if p_int:
+            self.cb_user.setDisabled(False)
+        else:
+            self.cb_user.setDisabled(True)
+
+    def addUsers(self,users:list):
+        self.cb_user.addItems(users)
+        self.cb_user.setCurrentText('所有')
+        self.cb_user.setDisabled(True)
+        self.cb_user.setMinimumWidth(80)
+
+    def currentText(self):
+        return self.cb_user.currentText()
+
+# 报告状态
+class ReportStateGroup(QHBoxLayout):
+
+    def __init__(self):
+        super(ReportStateGroup, self).__init__()
+        # 界面
+        self.initUI()
+        # 布局
+        self.addWidget(self.is_check)
+        self.addWidget(self.cb_report_state)
+        # 信号槽
+        self.is_check.stateChanged.connect(self.on_cb_check)
+
+    def initUI(self):
+        self.is_check = QCheckBox('报告状态：')
+        self.cb_report_state = QComboBox()
+
+    def on_cb_check(self, p_int):
+        if p_int:
+            self.cb_report_state.setDisabled(False)
+        else:
+            self.cb_report_state.setDisabled(True)
+
+    @property
+    def get_tjlx(self):
+        return self.cb_report_state.currentText()
+
+    @property
+    def where_tjlx(self):
+        if self.is_check.isChecked():
+            if self.cb_report_state.currentText() == '所有':
+                return False
+            else:
+                return ''' AND TJLX = '%s' ''' % self.cb_report_state.currentText()
+        return False
+
+    # 添加状态
+    def addStates(self,states:list):
+        # self.cb_report_state.addItems(['待追踪','追踪中','追踪完成','所有'])
+        self.cb_report_state.addItems(states)
+        self.cb_report_state.setCurrentText('所有')
+        self.cb_report_state.setDisabled(True)
+        self.cb_report_state.setMinimumWidth(80)
 
 # 报告类型
 class ReportTypeGroup(QHBoxLayout):
@@ -1230,7 +1306,7 @@ class DateGroup(QHBoxLayout):
         super(DateGroup,self).__init__(parent)
 
         self.jsrq=QComboBox()
-        self.jsrq.addItems(['登记日期','签到日期','收单日期','总检日期','审核日期'])
+        self.jsrq.addItems(['登记日期','签到日期','收单日期','总检日期','审核日期','审阅日期'])
         self.jsrq.setCurrentText('签到日期')
         if diff>=0:
             self.start=QDateEdit(QDate.currentDate())
@@ -1256,6 +1332,9 @@ class DateGroup(QHBoxLayout):
             self.jsrq.setDisabled(True)
         else:
             self.jsrq.setDisabled(False)
+
+    def setCurrentText(self,p_str):
+        self.jsrq.setCurrentText(p_str)
 
 
     @property
@@ -1325,7 +1404,7 @@ class TUintGroup(QHBoxLayout):
     def __init__(self,dwbhs:dict,dwmcs:dict):
         super(TUintGroup, self).__init__()
 
-        self.cb_check = QCheckBox('单位名称')
+        self.cb_check = QCheckBox('单位名称 ')
         self.cb_check.stateChanged.connect(self.on_cb_check)
         self.unit = TUint(dwbhs,dwmcs)
         self.unit.setDisabled(True)
@@ -1486,7 +1565,7 @@ class BaseCondiSearchGroup(QGroupBox):
         ###################基本信息  第一行##################################
         self.lt_main.addItem(self.s_date, 0, 0, 1, 3)
         ###################基本信息  第二行##################################
-        self.lt_main.addItem(self.s_dwbh, 1, 0, 1, 5)
+        self.lt_main.addItem(self.s_dwbh, 1, 0, 1, 3)
 
         self.lt_main.setHorizontalSpacing(10)  # 设置水平间距
         self.lt_main.setVerticalSpacing(10)  # 设置垂直间距
@@ -1515,6 +1594,9 @@ class BaseCondiSearchGroup(QGroupBox):
     def addItem(self,widget,int_x,int_y,int_w,int_h):
         self.lt_main.addLayout(widget,int_x,int_y,int_w,int_h)
 
+    def setText(self,p_str):
+        self.s_date.jsrq.setCurrentText(p_str)
+
 
 # 公共条件搜索
 # 日期：签到、收单、总检、审核、审阅
@@ -1528,7 +1610,7 @@ class WhereSearchGroup(QGridLayout):
 
         self.s_date = DateGroup(-3)
         self.s_dwbh = TUintGroup({},{})
-        self.s_depart = DepartGroup()
+        self.s_report_state = ReportStateGroup()
         self.s_area = AreaGroup()
 
         ###################基本信息  第一行##################################
@@ -1536,13 +1618,13 @@ class WhereSearchGroup(QGridLayout):
 
         ###################基本信息  第二行##################################
         self.addItem(self.s_dwbh, 1, 0, 1, 5)
-        self.addItem(self.s_depart, 1, 5, 1, 2)
+        self.addItem(self.s_report_state, 1, 5, 1, 2)
         self.addItem(self.s_area, 1,7, 1, 2)
 
         self.setHorizontalSpacing(10)  # 设置水平间距
         self.setVerticalSpacing(10)  # 设置垂直间距
         self.setContentsMargins(10, 10, 10, 10)  # 设置外间距
-        self.setColumnStretch(14, 1)  # 设置列宽，添加空白项的
+        self.setColumnStretch(17, 1)  # 设置列宽，添加空白项的
 
     @property
     def date_range(self):
@@ -1555,6 +1637,9 @@ class WhereSearchGroup(QGridLayout):
     @property
     def where_dwmc(self):
         return self.s_dwbh.where_dwmc
+
+    def addStates(self,states):
+        self.s_report_state.addStates(states)
 
 
 
@@ -1573,6 +1658,17 @@ class QuickSearchGroup(QGroupBox):
         self.s_xm.returnPressed.connect(partial(self.getText, 'xm'))
         self.s_sjhm.returnPressed.connect(partial(self.getText,'sjhm'))
         self.s_sfzh.returnPressed.connect(partial(self.getText, 'sfzh'))
+        self.s_sfzh_read.clicked.connect(self.on_btn_sfzh_read)
+
+    def on_btn_sfzh_read(self):
+        dialog = ReadChinaIdCard_UI(self)
+        dialog.sendIdCard.connect(self.setData)
+        dialog.exec_()
+
+    #赋值
+    def setData(self,sfzh,xm):
+        self.s_sfzh.setText(sfzh)
+        self.s_xm.setText(xm)
 
     def initUI(self):
         lt_main = QGridLayout()
@@ -1580,7 +1676,7 @@ class QuickSearchGroup(QGroupBox):
         self.s_xm = QXM()
         self.s_sjhm = QSJHM()
         self.s_sfzh = QSFZH()
-        self.s_sfzh_read = QPushButton(Icon('身份证号'),'读卡')
+        self.s_sfzh_read = QPushButton(Icon('身份证'),'读卡')
 
         ###################基本信息  第一行##################################
         lt_main.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)
@@ -1759,13 +1855,16 @@ class EquipTypeLayout(QHBoxLayout):
 
     def __init__(self):
         super(EquipTypeLayout,self).__init__()
-
+        self.is_check = QCheckBox('设备类型：')
         self.cb_equip_type = QComboBox()
         self.cb_equip_type.addItems(['所有','心电图','骨密度','电测听','人体成分'])
-        self.cb_equip_type.setCurrentText('心电图')
-
-        self.addWidget(QLabel('设备类型：'))
+        self.cb_equip_type.setCurrentText('所有')
+        self.cb_equip_type.setDisabled(True)
+        # 添加布局
+        self.addWidget(self.is_check)
         self.addWidget(self.cb_equip_type)
+        # 信号槽
+        self.is_check.stateChanged.connect(self.on_cb_check)
 
     def get_equip_type(self):
         if self.cb_equip_type.currentText()=='所有':
@@ -1781,6 +1880,12 @@ class EquipTypeLayout(QHBoxLayout):
                 return '03'
             else:
                 return '00'
+
+    def on_cb_check(self, p_int):
+        if p_int:
+            self.cb_equip_type.setDisabled(False)
+        else:
+            self.cb_equip_type.setDisabled(True)
 
 # 用户详细信息
 class UserDetailGroup(QGroupBox):
@@ -1839,8 +1944,8 @@ class UserDetailGroup(QGroupBox):
 # 读取身份证显示界面
 class ReadChinaIdCard_UI(QDialog):
 
-    # 自定义 信号，封装对外使用
-    sendIdCard = pyqtSignal(str)
+    # 自定义 信号，封装对外使用  身份证号、姓名
+    sendIdCard = pyqtSignal(str,str)
 
     widget_style = '''
         font: 75 14pt \"微软雅黑\";
@@ -1907,7 +2012,7 @@ class ReadChinaIdCard_UI(QDialog):
 
     # 确定
     def on_sure(self):
-        self.sendIdCard.emit(self.lb_user_card.text())
+        self.sendIdCard.emit(self.lb_user_card.text(),self.lb_user_name.text())
         self.accept()
         self.close()
 

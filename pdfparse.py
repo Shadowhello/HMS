@@ -39,7 +39,7 @@ class MonitorHandler(FileSystemEventHandler):
         # 上传文件请求地址
         self.url = gol.get_value('api_equip_upload','')
         # 日志
-        self.log = gol.get_value('log')
+        self.log = gol.get_value('parse_log')
         # 设备记录表
         self.equip_info={
                     'equip_type':self.equip_type,

@@ -25,11 +25,13 @@ class ReportTrackUI(Widget):
         # 报告类型
         self.cb_report_type = ReportTypeGroup()
         # 报告追踪人员
-        self.cb_report_track_person = ReportTrackPersonGroup()
+        self.cb_report_track_person = UserGroup('追踪人员：')
+        self.cb_report_track_person.addUsers(['所有',self.login_name])
         # 报告追踪时效
         self.cb_report_track_timerout = ReportTrackTimeroutGroup()
         # 加入布局
         self.lt_where_search = WhereSearchGroup()
+        self.lt_where_search.addStates(['所有','待追踪','追踪中','追踪完成'])
         self.lt_where_search.addWidget(QLabel(), 0, 4, 1, 1)
         self.lt_where_search.addItem(self.cb_track_type, 0, 5, 1, 2)
         self.lt_where_search.addItem(self.cb_report_type, 0, 7, 1, 2)
@@ -98,3 +100,4 @@ class ReportTrackUI(Widget):
         lt_main.addWidget(gp_bottom)
 
         self.setLayout(lt_main)
+

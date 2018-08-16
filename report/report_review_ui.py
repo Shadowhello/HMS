@@ -1,50 +1,77 @@
 from widgets.cwidget import *
 from widgets.bweb import *
+from .model import *
 
 class ReportReviewUI(Widget):
 
     def __init__(self,parent=None):
         super(ReportReviewUI,self).__init__(parent)
         self.initUI()
+        self.initParas()
+
+    def initParas(self):
+        self.dwmc_bh = OrderedDict()
+        self.dwmc_py = OrderedDict()
+        results = self.session.query(MT_TJ_DW).all()
+        for result in results:
+            self.dwmc_bh[result.dwbh] = str2(result.mc)
+            self.dwmc_py[result.pyjm.lower()] = str2(result.mc)
+
+        self.gp_where_search.s_dwbh.setValues(self.dwmc_bh,self.dwmc_py)
 
     def initUI(self):
         lt_main = QHBoxLayout()
         lt_left = QVBoxLayout()
         self.btn_query = ToolButton(Icon('query'), '查询')
-        self.gp_where_search = BaseCondiSearchGroup()
+        self.gp_where_search = BaseCondiSearchGroup(1)
+        self.gp_where_search.setText('审核日期')
+        self.gp_where_search.setNoChoice()
+        # 报告状态
+        self.cb_report_state = ReportStateGroup()
+        self.cb_report_state.addStates(['所有','未审阅','已审阅'])
+        self.cb_report_type = ReportTypeGroup()
+        self.cb_user = UserCombox()
+        self.cb_user.addItems(['所有',self.login_name])
+        # 区域
+        self.cb_area = AreaGroup()
+        self.cb_user = UserGroup('审阅护士')
+        self.cb_user.addUsers(['所有',self.login_name])
+        self.gp_where_search.addItem(self.cb_area, 0, 3, 1, 2)
+        self.gp_where_search.addItem(self.cb_report_state, 1, 3, 1, 2)
+        self.gp_where_search.addItem(self.cb_user, 0, 5, 1, 2)
+        self.gp_where_search.addItem(self.cb_report_type, 1, 5, 1, 2)
         # 按钮
         self.gp_where_search.addWidget(self.btn_query, 0, 7, 2, 2)
         self.gp_quick_search = QuickSearchGroup()
         self.table_report_review_cols = OrderedDict([
-             ('tjzt', '体检状态'),
-             ('bgzt', '报告状态'),
-             ('tjlx','类型'),
-             ('tjqy','区域'),
-             ('tjbh','体检编号'),
-             ('xm','姓名'),
-             ('xb','性别'),
-             ('nl','年龄'),
-             ('sjhm','手机号码'),
-             ('sfzh', '身份证号')
+            ('bgzt', '报告状态'),
+            ('tjbh', '体检编号'),
+            ('xm', '姓名'),
+            ('xb', '性别'),
+            ('nl', '年龄'),
+            ('qdrq','签到日期'),
+            ('jcys','检查医生'),
+            ('jcqy', '检查区域'),
+            ('fpath', '文件路径')
         ])
         # 待审阅列表
-        self.table_report_review = ReportReviewTable(self.table_report_review_cols)
-        gp_table = QGroupBox('待审阅列表（0）')
+        self.table_report_equip = ReportReviewTable(self.table_report_review_cols)
+        self.gp_table = QGroupBox('审阅完成列表（0）')
         lt_table = QHBoxLayout()
-        lt_table.addWidget(self.table_report_review)
-        gp_table.setLayout(lt_table)
+        lt_table.addWidget(self.table_report_equip)
+        self.gp_table.setLayout(lt_table)
         # 审阅信息
         self.gp_review_user = ReportReviewUser()
         # 添加布局
         lt_left.addWidget(self.gp_where_search,1)
         lt_left.addWidget(self.gp_quick_search,1)
-        lt_left.addWidget(gp_table,7)
+        lt_left.addWidget(self.gp_table,7)
         lt_left.addWidget(self.gp_review_user,1)
 
         ####################右侧布局#####################
-        self.report_web = WebView()
+        self.wv_report_equip = WebView()
         lt_right = QHBoxLayout()
-        lt_right.addWidget(self.report_web)
+        lt_right.addWidget(self.wv_report_equip)
         gp_right = QGroupBox('报告预览')
         gp_right.setLayout(lt_right)
         lt_main.addLayout(lt_left,1)
@@ -63,37 +90,21 @@ class ReportReviewTable(TableWidget):
 
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
-        # list 实现
+        # 字典载入
         for row_index, row_data in enumerate(datas):
-            # 插入一行
-            self.insertRow(row_index)
-            for col_index, col_value in enumerate(row_data):
-                item = QTableWidgetItem(col_value)
-
+            self.insertRow(row_index)                # 插入一行
+            for col_index, col_name in enumerate(heads.keys()):
+                item = QTableWidgetItem(row_data[col_name])
+                item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
-
-        # 特殊设置
-        if datas:
-            # self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)         #所有列
-            # self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            # self.horizontalHeader().setMinimumSectionSize(60)
-            # self.horizontalHeader().setMaximumSectionSize(300)
-            self.setColumnWidth(0, 60)  # 结果周期
-            self.setColumnWidth(1, 60)  # 追踪进度
-            self.setColumnWidth(2, 60)  # 追踪状态
-            self.setColumnWidth(3, 50)  # 追踪人
-            self.setColumnWidth(4, 60)  # 体检状态
-            self.setColumnWidth(5, 50)  # 类型
-            self.setColumnWidth(6, 60)  # 区域
-            self.setColumnWidth(7, 70)  # 体检编号
-            self.setColumnWidth(8, 60)  # 姓名
-            self.setColumnWidth(9, 30)  # 性别
-            self.setColumnWidth(10, 30)  # 年龄
-            self.setColumnWidth(11, 120)  # 身份证号
-            self.setColumnWidth(12, 80)  # 手机号码
-            self.setColumnWidth(13, 180)  # 单位编号
-            self.setColumnWidth(14, 70)  # 签到日期
-            self.horizontalHeader().setStretchLastSection(True)
+        # 布局
+        self.setColumnWidth(0, 70)  # 设备名称
+        self.setColumnWidth(1, 70)  # 体检编号
+        self.setColumnWidth(2, 50)  # 姓名
+        self.setColumnWidth(3, 80)  # 检查日期
+        self.setColumnWidth(4, 70)  # 检查姓名
+        self.setColumnWidth(5, 100) # 检查区域
+        self.horizontalHeader().setStretchLastSection(True)
 
 class ReportReviewUser(QGroupBox):
 

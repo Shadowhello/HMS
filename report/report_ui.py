@@ -17,6 +17,10 @@ class Report_UI(DirTabWidget):
             from .report_review import ReportReview
             widget=ReportReview()
             self.rwidget.addPage(widget,Icon(title),title)
+        elif title=='报告打印':
+            from .report_print import ReportPrint
+            widget=ReportPrint()
+            self.rwidget.addPage(widget,Icon(title),title)
         elif title=='设备报告':
             from .report_equip import ReportEquip
             widget=ReportEquip()

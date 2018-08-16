@@ -95,4 +95,5 @@ class CollectUnireTable(TableWidget):
         for col_index, col_value in enumerate(data):
             item = QTableWidgetItem(col_value)
             item.setFont(unire_font())
+            item.setTextAlignment(Qt.AlignCenter)
             self.setItem(self.rowCount() - 1, col_index, item)

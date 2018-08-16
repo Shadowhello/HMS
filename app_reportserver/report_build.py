@@ -4,7 +4,7 @@ from jinja2 import Template
 from mako.template import Template as  Template2
 from app_reportserver.report_html import *
 from utils.base import RemoteFileHandler
-from utils.buildbarcode import BarCode
+from utils.buildbarcode import BarCodeBuild
 
 def str2(para:str):
     try:
@@ -86,7 +86,7 @@ if __name__=="__main__":
     sign = {}
     health = {}
 
-    bc= BarCode()
+    bc= BarCodeBuild()
     bc.create2(tjbh)
 
     # 文件传输服务

@@ -2,7 +2,7 @@ from multiprocessing import Queue
 from flask import send_file,make_response,request,jsonify,render_template,abort
 from app_api.exception import *
 from app_api.model import *
-import os,ujson,time
+import os,ujson,time,urllib.parse,requests
 import mimetypes
 from utils import gol
 from app_api.dbconn import *
@@ -17,6 +17,32 @@ def init_views(app,db):
     :return:
     '''
 
+    #二维码生成
+    @app.route('/api/qrcode/<string:xm>/<string:sfzh>/<string:sjhm>', methods=['POST'])
+    def qrcode_create(xm,sfzh,sjhm):
+        if all([xm,sfzh,sjhm]):
+            url = 'http://10.7.200.27:8080/tjadmin/pInfoSubmit'
+            head = {}
+            head['realName'] = urllib.parse.quote(xm)
+            head['idCardNum'] = sfzh
+            head['phoneNumber'] = sjhm
+            head['email'] = ''
+            head['address'] = ''
+            head['Content-Type'] = 'application/json'
+
+            response = requests.post(url, headers=head)
+            if response.status_code == 200:
+                return response.content
+                # f = open('1.png', "wb")
+                # for chunk in response.iter_content(chunk_size=512):
+                #     if chunk:
+                #         f.write(chunk)
+                # f.close()
+            else:
+                abort(404)
+        else:
+            abort(404)
+
     # HTML 报告生成 医生总检审核完成
     # PDF 报告生成，护理审阅完成
     @app.route('/api/report/create/<string:filetype>/<int:tjbh>', methods=['POST'])
@@ -25,13 +51,36 @@ def init_views(app,db):
             tjbh = '%09d' % tjbh
         elif len(str(tjbh)) == 9:
             tjbh = tjbh
-        pass
+        else:
+            abort(404)
+        if filetype=='html':
+            # 审核完成
+            return ujson.dumps({'code': 1, 'mes': 'HTML报告生成', 'data': ''})
+        elif filetype=='pdf':
+            # 审阅完成
+            return ujson.dumps({'code': 1, 'mes': 'PDF报告生成', 'data': ''})
+        else:
+            abort(404)
 
     # HTML 报告删除 医生取消审核
     # PDF 报告删除，护理取消审阅
     @app.route('/api/report/delete/<string:filetype>/<int:tjbh>', methods=['POST'])
     def report_delete(filetype,tjbh):
-        pass
+        print(' request.remote_addr %s API(取消审核) 请求参数 filetype：%s tjbh：%s' %(cur_datetime(),filetype,tjbh))
+        if len(str(tjbh)) == 8:
+            tjbh = '%09d' % tjbh
+        elif len(str(tjbh)) == 9:
+            tjbh = tjbh
+        else:
+            abort(404)
+        if filetype=='html':
+            # 审核完成
+            return ujson.dumps({'code': 1, 'mes': '取消审核，HTML报告删除', 'data': ''})
+        elif filetype=='pdf':
+            # 审阅完成
+            return ujson.dumps({'code': 1, 'mes': '取消审阅，PDF报告删除', 'data': ''})
+        else:
+            abort(404)
 
     # HTML 报告预览 用户发起
     # PDF 报告预览，用户发起

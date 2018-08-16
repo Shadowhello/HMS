@@ -13,14 +13,17 @@ class ReportEquipUI(Widget):
         self.btn_query = ToolButton(Icon('query'), '查询')
         self.gp_where_search = BaseCondiSearchGroup(1)
         self.gp_where_search.setNoChoice()
+        # 报告状态
+        self.cb_report_state = ReportStateGroup()
+        self.cb_report_state.addStates(['所有','未审核','已审核'])
         self.cb_equip_type = EquipTypeLayout()
-        self.cb_user = UserCombox()
-        self.cb_user.addItems(['所有',self.login_name])
+        self.cb_user = UserGroup('检查医生：')
+        self.cb_user.addUsers(['所有',self.login_name])
         # 区域
         self.cb_area = AreaGroup()
         self.gp_where_search.addItem(self.cb_area, 0, 3, 1, 2)
-        self.gp_where_search.addWidget(QLabel('检查医生：'), 0, 5, 1, 1)
-        self.gp_where_search.addWidget(self.cb_user, 0, 6, 1, 1)
+        self.gp_where_search.addItem(self.cb_report_state, 1, 3, 1, 2)
+        self.gp_where_search.addItem(self.cb_user, 0, 5, 1, 2)
         self.gp_where_search.addItem(self.cb_equip_type, 1, 5, 1, 2)
         # 按钮
         self.gp_where_search.addWidget(self.btn_query, 0, 7, 2, 2)

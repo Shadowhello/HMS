@@ -99,7 +99,7 @@ class SelfHelpMachine(Widget):
         dialog.exec_()
 
     # 读取后设置身份证号
-    def setData(self,idCard:str):
+    def setData(self,idCard:str,xm:str):
         # 设置身份证号
         self.le_tjbh.setText(idCard)
         # 检索
