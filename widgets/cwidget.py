@@ -1641,7 +1641,8 @@ class WhereSearchGroup(QGridLayout):
     def addStates(self,states):
         self.s_report_state.addStates(states)
 
-
+    def get_date_text(self):
+        return self.s_date.jsrq.currentText()
 
 # 快速检索组 体检编号、姓名、手机号码、身份证号
 class QuickSearchGroup(QGroupBox):

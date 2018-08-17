@@ -58,6 +58,11 @@ def set_env(termial=False):
         pacs_session = None
         log.info('连接PACS检查数据库失败！错误信息：%s' %e)
     try:
+        cxk_session = get_cxk_session()
+    except Exception as e:
+        cxk_session = None
+        log.info('连接外网查询库数据库失败！错误信息：%s' %e)
+    try:
         pis_session = get_pis_session()
     except Exception as e:
         pis_session = None
@@ -73,5 +78,6 @@ def set_env(termial=False):
     gol.set_value("pacs_session", pacs_session)
     gol.set_value("pis_session", pis_session)
     gol.set_value("lis_session", lis_session)
+    gol.set_value("cxk_session", cxk_session)
     if termial:
         gol.print_paras()

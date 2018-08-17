@@ -34,7 +34,7 @@ class ReportReviewUI(Widget):
         self.cb_user.addItems(['所有',self.login_name])
         # 区域
         self.cb_area = AreaGroup()
-        self.cb_user = UserGroup('审阅护士')
+        self.cb_user = UserGroup('审阅护士：')
         self.cb_user.addUsers(['所有',self.login_name])
         self.gp_where_search.addItem(self.cb_area, 0, 3, 1, 2)
         self.gp_where_search.addItem(self.cb_report_state, 1, 3, 1, 2)

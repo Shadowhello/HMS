@@ -274,7 +274,126 @@ def get_equip_sql():
     return '''
     
     '''
+# 根据签到日期检索 历史的
+def get_report_print_sql(t_start,t_end):
+    return '''
+                SELECT
+                    (CASE TJZT
+                            WHEN '0' THEN '取消登记'
+                            WHEN '1' THEN '已登记'
+                            WHEN '2' THEN '已预约'
+                            WHEN '3' THEN '已签到'
+                            WHEN '4' THEN '已收单'
+                            WHEN '5' THEN '已追踪'
+                            WHEN '6' THEN '已总检'
+                            WHEN '7' THEN '已审核'
+                            WHEN '8' THEN '已审阅'
+                            ELSE '' END 
+                    ) AS TJZT,
+                    c.BGZT,
+                    (CASE WHEN c.DYRQ IS NOT NULL THEN 1 WHEN c.DYRQ IS NULL AND a.dybj='1' THEN 1 ELSE 0 END) AS dyzt,
+                    (CASE 
+                            WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                            WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                            WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                            WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                            WHEN zhaogong='2' THEN '贵宾'
+                            WHEN zhaogong='3' THEN '重点'
+                            WHEN zhaogong='4' THEN '投诉'
+                            ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                            WHEN '1' THEN '明州1楼'
+                            WHEN '2' THEN '明州2楼'
+                            WHEN '3' THEN '明州3楼'
+                            WHEN '4' THEN '江东'
+                            WHEN '5' THEN '车管所'
+                            WHEN '6' THEN '外出'
+                            WHEN '7' THEN '其他'
+                            WHEN '8' THEN '明州'
+                            ELSE '' END
+                    ) AS TJQY, 
+                    A.TJBH,
+                    B.XM,
+                    (CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    A.NL,
+                    B.SFZH,
+                    B.SJHM,
+                    substring(convert(char,a.QDRQ,120),1,10) as QDRQ,
+                    substring(convert(char,(CASE WHEN c.DYRQ IS NULL THEN a.BGRQ ELSE c.DYRQ END ),120),1,10) AS DYRQ,
+                    (CASE WHEN c.DYXM IS NULL THEN (select ygxm from tj_ygdm where yggh=a.CPAINTER ) ELSE c.DYXM END) AS DYXM,
+                    (CASE WHEN c.DYCS IS NULL AND dybj='1' THEN 1 WHEN c.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN 0 ELSE c.DYCS END) AS DYCS,
+                    (CASE WHEN c.DYFS IS NULL AND dybj='1' THEN '报告室' WHEN c.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' ELSE c.DYFS END) AS DYFS,
+                    (select MC from TJ_DWDMB where DWBH=a.DWBH) AS DWMC
+                FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND (a.del <> '1' or a.del is null) and a.QD='1' AND SUMOVER='1' and (a.QDRQ>='%s' and a.QDRQ<'%s')
+                LEFT JOIN TJ_BGGL c ON a.TJBH=c.TJBH 
+            ''' %(t_start,t_end)
 
+# 根据审阅日期检索
+def get_report_print2_sql(t_start,t_end):
+    return '''
+                SELECT
+                    (CASE TJZT
+                            WHEN '0' THEN '取消登记'
+                            WHEN '1' THEN '已登记'
+                            WHEN '2' THEN '已预约'
+                            WHEN '3' THEN '已签到'
+                            WHEN '4' THEN '已收单'
+                            WHEN '5' THEN '已追踪'
+                            WHEN '6' THEN '已总检'
+                            WHEN '7' THEN '已审核'
+                            WHEN '8' THEN '已审阅'
+                            ELSE '' END 
+                    ) AS TJZT,
+                    c.BGZT,
+                    (CASE WHEN c.DYRQ IS NOT NULL THEN 1 WHEN c.DYRQ IS NULL AND a.dybj='1' THEN 1 ELSE 0 END) AS dyzt,
+                    (CASE 
+                            WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                            WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                            WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                            WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                            WHEN zhaogong='2' THEN '贵宾'
+                            WHEN zhaogong='3' THEN '重点'
+                            WHEN zhaogong='4' THEN '投诉'
+                            ELSE '' END
+                    ) AS TJLX,
+                    (CASE tjqy
+                            WHEN '1' THEN '明州1楼'
+                            WHEN '2' THEN '明州2楼'
+                            WHEN '3' THEN '明州3楼'
+                            WHEN '4' THEN '江东'
+                            WHEN '5' THEN '车管所'
+                            WHEN '6' THEN '外出'
+                            WHEN '7' THEN '其他'
+                            WHEN '8' THEN '明州'
+                            ELSE '' END
+                    ) AS TJQY, 
+                    A.TJBH,
+                    B.XM,
+                    (CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                    A.NL,
+                    B.SFZH,
+                    B.SJHM,
+                    substring(convert(char,a.QDRQ,120),1,10) as QDRQ,
+                    substring(convert(char,(CASE WHEN c.DYRQ IS NULL THEN a.BGRQ ELSE c.DYRQ END ),120),1,10) AS DYRQ,
+                    (CASE WHEN c.DYXM IS NULL THEN (select ygxm from tj_ygdm where yggh=a.CPAINTER ) ELSE c.DYXM END) AS DYXM,
+                    (CASE WHEN c.DYCS IS NULL AND dybj='1' THEN 1 WHEN c.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN 0 ELSE c.DYCS END) AS DYCS,
+                    (CASE WHEN c.DYFS IS NULL AND dybj='1' THEN '报告室' WHEN c.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' ELSE c.DYFS END) AS DYFS,
+                    (select MC from TJ_DWDMB where DWBH=a.DWBH) AS DWMC
+                FROM 
+                TJ_BGGL c INNER JOIN TJ_TJDJB a ON a.TJBH=c.TJBH  AND (a.del <> '1' or a.del is null) and a.QD='1' AND SUMOVER='1' AND (c.SYRQ>='%s' AND c.SYRQ<'%s')
+                INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH
+        '''%(t_start,t_end)
+
+# ORACLE PDF 路径 属于历史的
+class MT_TJ_PDFRUL(BaseModel):
+
+    __tablename__ = 'TJ_PDFRUL'
+
+    ID = Column(VARCHAR(36), primary_key=True)
+    TJBH = Column(VARCHAR(100), nullable=False)
+    PDFURL = Column(VARCHAR(200),nullable=False)
+    CREATETIME =Column(TIMESTAMP,nullable=False)
 
 # CREATE TABLE TJ_BGGL(
 #     [TJBH] varchar(16) COLLATE Chinese_PRC_CI_AS NOT NULL ,

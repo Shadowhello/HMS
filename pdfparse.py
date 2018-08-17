@@ -158,17 +158,20 @@ class MonitorHandler(FileSystemEventHandler):
 
         # 更新记录：TJ_TJJLMXB
         # 判断项目是否已小结
-        result = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.xmbh == EquipNo[self.equip_type]).scalar()
-        if result:
-            if result.jsbz !='1':
-                try:
-                    self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == EquipNo[self.equip_type]).update({MT_TJ_TJJLMXB.zxpb: '3'})
-                    self.session.commit()
-                except Exception as e:
-                    self.session.rollback()
-                    self.log.info("体检顾客：%s，更新表TJ_TJJLMXB失败！错误信息：%s" % (tjbh, e))
-        else:
-            self.log.info("体检顾客：%s，无项目：%s" %(tjbh,EquipName[self.equip_type]))
+        try:
+            result = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.xmbh == EquipNo[self.equip_type]).scalar()
+            if result:
+                if result.jsbz !='1':
+                    try:
+                        self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == EquipNo[self.equip_type]).update({MT_TJ_TJJLMXB.zxpb: '3'})
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        self.log.info("体检顾客：%s，更新表TJ_TJJLMXB失败！错误信息：%s" % (tjbh, e))
+            else:
+                self.log.info("体检顾客：%s，无项目：%s" %(tjbh,EquipName[self.equip_type]))
+        except Exception as e:
+            self.log.info("体检顾客：%s，查询表TJ_TJJLMXB失败！错误信息：%s" % (tjbh, e))
 
         # 更新记录：TJ_EQUIP
         try:
@@ -209,8 +212,8 @@ class MonitorHandler(FileSystemEventHandler):
                 dcp_info['filecontent'] = open(filename, 'rb').read()
                 dcp_info['uploadtime'] = cur_datetime()
                 dcp_info['flag'] = '0'
-                self.session.query(MT_DCP_files).filter(MT_DCP_files.cusn == tjbh).delete()
                 try:
+                    self.session.query(MT_DCP_files).filter(MT_DCP_files.cusn == tjbh).delete()
                     self.session.bulk_insert_mappings(MT_DCP_files, [dcp_info])
                     self.session.commit()
                 except Exception as e:
