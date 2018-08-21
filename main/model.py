@@ -1,7 +1,7 @@
 from utils.bmodel import *
 
-#用户表
-class M_TJ_USER(BaseModel):
+#用户登录表
+class MT_TJ_USER(BaseModel):
 
     __tablename__ = 'SS_OPERATE_USER'
 
@@ -12,12 +12,5 @@ class M_TJ_USER(BaseModel):
     yhkl = Column(VARCHAR(50), nullable=False)
     yhzt = Column(Integer, nullable=False)
 
-#用户表
-class M_TJ_YGQSKS(BaseModel):
 
-    __tablename__ = 'TJ_YGQSKS'
 
-    xh = Column(Integer, primary_key=True)
-    yggh = Column(VARCHAR(10),primary_key=True)
-    ksbm = Column(VARCHAR(10), primary_key=True)
-    xssx = Column(Integer, nullable=False)

@@ -1,44 +1,5 @@
 from utils.bmodel import *
 
-# 人员信息
-class MV_RYXX(BaseModel):
-
-    __tablename__ = 'V_RYXX'
-
-    tjbh = Column(String(16),primary_key=True)
-    xm = Column(String(20),nullable=False)
-    xb = Column(String(10),nullable=False)
-    nl = Column(Integer, nullable=False)
-    sfzh = Column(String(20),nullable=False)
-    sjhm = Column(String(20),nullable=False)
-    depart = Column(String(20), nullable=False)
-    dwmc = Column(String(20), nullable=False)
-    djrq = Column(String(20), nullable=False)
-    qdrq = Column(String(20), nullable=False)
-    zjys = Column(String(20), nullable=False)
-    shys = Column(String(20), nullable=False)
-    io_jkcf = Column(CHAR(1), nullable=False)
-    bz = Column(Text, nullable=False)
-
-    def dict(self):
-        sjhm = getattr(self, "sjhm", '')
-        if not sjhm:
-            sjhm='&nbsp;'
-        return {
-                "tjbh": getattr(self, "tjbh", ''),
-                "xm": str2(getattr(self, "xm", '')),
-                "xb": str2(getattr(self, "xb", '')),
-                "nl": '%s 岁' %str(getattr(self, "nl", '')),
-                "xmdw": str2(getattr(self, "xmdw", '')),
-                "sfzh": getattr(self, "sfzh", ''),
-                "sjhm": sjhm,
-                "depart": str2(getattr(self, "depart", '')),
-                "dwmc": str2(getattr(self, "dwmc", '')),
-                "qdrq": getattr(self, "qdrq", '')[0:10],
-                "djrq": getattr(self, "djrq", '')
-                }
-
-
 #医生排班
 class MT_TJ_YSPB(BaseModel):
 
@@ -111,8 +72,6 @@ class MV_TJJLMXB(BaseModel):
             zd = str2(getattr(self, "zd", ''))
             jg = str2(getattr(self, "jg", ''))
 
-
-
         return {
                 "xmbh": getattr(self, "xmbh", ''),
                 "xmmc": str2(getattr(self, "xmmc", '')),
@@ -126,37 +85,9 @@ class MV_TJJLMXB(BaseModel):
                 "zd": zd
                 }
 
-# 用户信息
-class MT_TJ_YGDM(BaseModel):
-
-    __tablename__ = 'TJ_YGDM'
-
-    yggh = Column(String(20), primary_key=True)
-    ygxm = Column(String(40), nullable=True)
-
-# 图片记录
-class MT_TJ_PACS_PIC(BaseModel):
-
-    __tablename__ = 'TJ_PACS_PIC'
-
-    ID = Column(Integer, primary_key=True)
-    tjbh = Column(String(12), primary_key=True)
-    ksbm = Column(String(6), primary_key=True)
-    picpath = Column(String(200), nullable=True)
-    picname = Column(String(100), nullable=True)
-    zhbh = Column(String(6), nullable=True)
-    flag = Column(CHAR(1), nullable=True)
-    path = Column(String(100), nullable=True)
-    pk = Column(String(30), nullable=True)
-    ftp_bz = Column(CHAR(1), nullable=True)
-
-# # 设备报告图片记录
-# class MT_TJ_EQUIP(BaseModel):
-#
-#     __tablename__ = 'TJ_EQUIP'
 
 
-# 图片记录
+# 保健处方标题
 class MT_TJ_BJCF_TITLE(BaseModel):
 
     __tablename__ = 'tj_bjcf_title'

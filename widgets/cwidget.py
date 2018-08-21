@@ -904,7 +904,7 @@ class TimerLabel(QLabel):
 
     timer_out = pyqtSignal()
 
-    def __init__(self, num=10, icon=None, parent=None):
+    def __init__(self, num=960, icon=None, parent=None):
         '''
         :param num: 倒计时时间
         :param icon: 按钮图标
@@ -912,6 +912,7 @@ class TimerLabel(QLabel):
         '''
         super(TimerLabel, self).__init__(parent)
         self.num = num
+        self.setStyleSheet('''font: 75 18pt \"微软雅黑\";color: rgb(255, 0, 0);''')
         self.setText(time.strftime('%M:%S', time.gmtime(self.num)))
         self.timer = QTimer(self)
         self.timer.start(1000)
@@ -2070,8 +2071,59 @@ class ReadThread(QThread):
 
             time.sleep(0.3)
 
+# 通用查询条件 用于：结果录入、体检收单等界面
+class SearchGroup(QGroupBox):
 
+    clicked = pyqtSignal()              # 按钮查询功能
+    returnPressed = pyqtSignal(str)     # 体检编号回车
 
+    def __init__(self,diff=0,parent=None):
+        super(SearchGroup,self).__init__(parent)
+        self.setWindowTitle('筛选条件')
+        # 载入界面
+        self.initUI(diff)
+        # 信号槽
+        self.le_tjbh.returnPressed.connect(self.on_le_tjbh_press)
+        self.btn_query.clicked.connect(self.on_btn_query_click)
+
+    def initUI(self,diff):
+        ################## 控件 ###############################
+        self.le_tjbh = QTJBH()
+        if diff>=0:
+            self.de_start=QDateEdit(QDate.currentDate())
+            self.de_end=QDateEdit(QDate.currentDate().addDays(diff))
+        else:
+            self.de_start=QDateEdit(QDate.currentDate().addDays(diff))
+            self.de_end=QDateEdit(QDate.currentDate())
+
+        self.de_start.setCalendarPopup(True)
+        self.de_start.setDisplayFormat("yyyy-MM-dd")
+        self.de_end.setCalendarPopup(True)
+        self.de_end.setDisplayFormat("yyyy-MM-dd")
+        self.btn_query = QPushButton(Icon('query'),'查询')
+        ################## 插入布局 ###############################
+        lt_main = QGridLayout()
+        lt_main.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)
+        lt_main.addWidget(self.le_tjbh, 0, 1, 1, 3)
+        lt_main.addWidget(QLabel('签到日期：'), 1, 0, 1, 1)
+        lt_main.addWidget(self.de_start, 1, 1, 1, 1)
+        lt_main.addWidget(QLabel('-'), 1, 2, 1, 1)
+        lt_main.addWidget(self.de_end, 1, 3, 1, 1)
+        lt_main.addWidget(self.btn_query, 2, 3, 1, 1)
+
+        self.setLayout(lt_main)
+
+    def on_le_tjbh_press(self):
+        self.returnPressed.emit(self.le_tjbh.text())
+
+    def on_btn_query_click(self):
+        self.clicked.emit()
+
+    def text(self):
+        return self.le_tjbh.text()
+
+    def setText(self,p_str):
+        self.le_tjbh.setText(p_str)
 
 
 if __name__ == '__main__':

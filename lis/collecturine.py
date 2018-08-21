@@ -50,10 +50,11 @@ class CollectUrine(CollectUrine_UI):
                     # 不存在，则添加
                     self.refreshSerial(button)
                     self.on_table_urine_insert(button)
-                    self.seri_objs.append(self.tmbh.text())
-
-                # 并显示在这一行
-                self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
+                    self.seri_objs.insert(0,self.tmbh.text())
+                    self.table_urine.selectRow(0)
+                else:
+                    # 并显示在这一行
+                    self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
                 self.tmbh.setText('')
                 return
         # self.all_serialno 为空 说明 还未刷单，刚打开
@@ -69,10 +70,11 @@ class CollectUrine(CollectUrine_UI):
                 # 不存在，则添加
                 self.refreshSerial(button)
                 self.on_table_urine_insert(button)
-                self.seri_objs.append(self.tmbh.text())
-
-            # 显示 选中
-            self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
+                self.seri_objs.insert(0,self.tmbh.text())
+                self.table_urine.selectRow(0)
+            else:
+                # 显示 选中
+                self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
 
         self.tmbh.setText('')
 

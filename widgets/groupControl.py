@@ -7,6 +7,13 @@ class UserInfoLable(QLabel):
         #self.setMinimumWidth(75)
         self.setStyleSheet('''font: 75 %spt "微软雅黑";color: rgb(50, 150, 0);''' %font_size)
 
+class StateLable(QLabel):
+
+    def __init__(self, font_size=18):
+        super(StateLable, self).__init__()
+        # self.setMinimumWidth(75)
+        self.setStyleSheet('''font: 75 %spt "微软雅黑";color: rgb(255,0,0);''' % font_size)
+
 # 业务组件 用户详细信息
 class UserDetailGroup(QGroupBox):
 
@@ -78,7 +85,7 @@ class UserDetailGroup(QGroupBox):
 # 科室项目信息
 class DepartItemsGroup(QGroupBox):
 
-    # 自定义 信号，封装对外使用
+    # 自定义 信号，封装对外使用  # 科室编号、组合编号
     currentTextChanged = pyqtSignal(str,str)
 
     def __init__(self):
@@ -94,14 +101,19 @@ class DepartItemsGroup(QGroupBox):
         self.cb_item = QComboBox()
         self.lb_jcys = UserInfoLable()
         self.lb_jcrq = UserInfoLable()
+        self.lb_state = StateLable()
         lt_main.addWidget(QLabel('当前科室：'))
         lt_main.addWidget(self.cb_depart)
+        lt_main.addSpacing(10)
         lt_main.addWidget(QLabel('组合项目：'))
         lt_main.addWidget(self.cb_item)
+        lt_main.addSpacing(10)
         lt_main.addWidget(QLabel('检查医生：'))
         lt_main.addWidget(self.lb_jcys)
+        lt_main.addSpacing(10)
         lt_main.addWidget(QLabel('检查时间：'))
         lt_main.addWidget(self.lb_jcrq)
+        lt_main.addStretch()
         self.setLayout(lt_main)
 
     def setData(self,data):
@@ -122,19 +134,23 @@ class DepartItemsGroup(QGroupBox):
 # 项目默认结果列
 class ItemDefaultwidget(QListWidget):
 
+    # 判断是左键双击  还是右键双击
     is_left=True
 
     def __init__(self,parent=None):
         super(ItemDefaultwidget,self).__init__(parent)
 
     def mouseDoubleClickEvent(self, event):
-        super(ItemDefaultwidget, self).mouseDoubleClickEvent(event)
         if event.button() == Qt.LeftButton:
             self.is_left=True
         elif event.button() == Qt.RightButton:
             self.is_left=False
         else:
             pass
+        super(ItemDefaultwidget, self).mouseDoubleClickEvent(event)
+
+    def currentText(self):
+        return self.currentItem().text()
 
 
 # 条件搜索组

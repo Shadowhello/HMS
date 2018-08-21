@@ -1,7 +1,7 @@
 import os,time,sys
 from collections import OrderedDict
 from jinja2 import Template
-from mako.template import Template as  Template2
+from mako.template import Template as Template2
 from app_reportserver.report_html import *
 from utils.base import RemoteFileHandler
 from utils.buildbarcode import BarCodeBuild

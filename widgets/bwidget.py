@@ -81,6 +81,8 @@ class ToolButton(QToolButton):
     #     m_pModel->setItem(i, 0, item);
     # }
 
+# 基础方法：
+# self.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch) #第二列扩展
 class TableWidget(QTableWidget):
 
     def __init__(self,heads:dict,parent=None):

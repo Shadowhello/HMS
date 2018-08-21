@@ -127,7 +127,7 @@ class Login_UI(QDialog):
     def user_get(self):
         userid = self.userid.text()
         if userid:
-            result=self.session.query(M_TJ_USER).filter(M_TJ_USER.xtsb=='101',M_TJ_USER.yhdm==userid).scalar()
+            result=self.session.query(MT_TJ_USER).filter(MT_TJ_USER.xtsb=='101',MT_TJ_USER.yhdm==userid).scalar()
             if result:
                 self.user.setText(str2(result.yhmc))
                 self.buttonBox.buttons()[0].setEnabled(True)
@@ -143,10 +143,10 @@ class Login_UI(QDialog):
         _user_name = self.user.text()
         _user_pwd=self.passwd.text()
         if _user_id:
-            result = self.session.query(M_TJ_USER).filter(M_TJ_USER.xtsb == '101', M_TJ_USER.yhdm == _user_id).filter(or_(M_TJ_USER.yhkl==_user_pwd,M_TJ_USER.yhkl==None)).scalar()
+            result = self.session.query(MT_TJ_USER).filter(MT_TJ_USER.xtsb == '101', MT_TJ_USER.yhdm == _user_id).filter(or_(MT_TJ_USER.yhkl==_user_pwd,MT_TJ_USER.yhkl==None)).scalar()
             if result:
-                results = self.session.query(M_TJ_YGQSKS).filter(M_TJ_YGQSKS.yggh == _user_id).all()
-                ksbms = [result.ksbm for result in results]
+                results = self.session.query(MT_TJ_YGQSKS).filter(MT_TJ_YGQSKS.yggh == _user_id).all()
+                ksbms = [result.ksbm.rstrip() for result in results]
                 gol.set_value('login_user_ksbms', ksbms)
                 gol.set_value('login_user_id',_user_id)
                 gol.set_value('login_user_name', _user_name)

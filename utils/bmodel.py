@@ -13,6 +13,29 @@ BaseModel = declarative_base()
 2）MV_ 表示视图   其中 M表示model  V表示view
 '''
 
+#用户代码表
+class MT_TJ_YGDM(BaseModel):
+
+    __tablename__ = 'TJ_YGDM'
+
+    yggh = Column(VARCHAR(20),primary_key=True)
+    ygxm = Column(VARCHAR(40),nullable=False)
+
+
+#用户科室表
+class MT_TJ_YGQSKS(BaseModel):
+
+    __tablename__ = 'TJ_YGQSKS'
+
+    # __table_args__ = {"useexisting": True}  表示已建立，可追加
+
+    xh = Column(Integer, primary_key=True)
+    yggh = Column(VARCHAR(10),primary_key=True)
+    ksbm = Column(VARCHAR(10), primary_key=True)
+    xssx = Column(Integer, nullable=False)
+
+
+
 # 公共模型
 class MT_TJ_TJJLMXB(BaseModel):
 
@@ -77,9 +100,38 @@ class MT_TJ_TJJLMXB(BaseModel):
             'btn_hs':''                                     # 核实
         }
 
-    # @property
-    # def ksbm(self):
-    #     return getattr(self, "ksbm", ''),
+    @property
+    def get_shys(self):
+        if getattr(self, "shys", ''):
+            return getattr(self, "shys", '')
+        else:
+            if  getattr(self, "jcys", ''):
+                return getattr(self, "jcys", '')
+            else:
+                return ''
+
+    @property
+    def get_shrq(self):
+        if getattr(self, "shrq", ''):
+            return str(getattr(self, "shrq", ''))[0:19]
+        else:
+            if getattr(self, "jcrq", ''):
+                return str(getattr(self, "jcrq", ''))[0:19]
+            else:
+                return ''
+
+    @property
+    def get_edit_items(self):
+        return {
+            'xmbh': getattr(self, "xmbh", ''),
+            'xmmc': str2(getattr(self, "xmmc", '')),
+            'xmjg': str2(getattr(self, "jg", '')),
+            'ycbz': str2(getattr(self, "ycbz", '')),
+            'ycts': str2(getattr(self, "ycts", '')),
+            'ckfw': str2(getattr(self, "ckfw", '')),
+            'xmdw': str2(getattr(self, "xmdw", ''))
+        }
+
 
 class MT_TJ_PACS_PIC(BaseModel):
 
@@ -115,7 +167,6 @@ class MT_TJ_DW(BaseModel):
         return {
             getattr(self, "pyjm", ''):str2(getattr(self, "mc", ''))
         }
-
 
 # 公共模型
 class MT_TJ_FILE_ACTIVE(BaseModel):
@@ -236,6 +287,8 @@ class MT_TJ_EQUIP(BaseModel):
             'fpath': getattr(self, "file_path").replace(r'D:/activefile','')
         }
 
+
+
 # 心电图
 class MT_DCP_files(BaseModel):
 
@@ -263,6 +316,10 @@ class MV_RYXX(BaseModel):
     dwmc = Column(VARCHAR(100), nullable=False)
     djrq = Column(VARCHAR(20), nullable=False)
     qdrq = Column(VARCHAR(20), nullable=False)
+    zjys = Column(String(20), nullable=False)
+    shys = Column(String(20), nullable=False)
+    io_jkcf = Column(CHAR(1), nullable=False)
+    bz = Column(Text, nullable=False)
 
     @property
     def to_dict(self):
@@ -278,6 +335,24 @@ class MV_RYXX(BaseModel):
             'djrq': getattr(self, "djrq"),
             'qdrq': getattr(self, "qdrq")
         }
+
+    def dict(self):
+        sjhm = getattr(self, "sjhm", '')
+        if not sjhm:
+            sjhm='&nbsp;'
+        return {
+                "tjbh": getattr(self, "tjbh", ''),
+                "xm": str2(getattr(self, "xm", '')),
+                "xb": str2(getattr(self, "xb", '')),
+                "nl": '%s 岁' %str(getattr(self, "nl", '')),
+                "xmdw": str2(getattr(self, "xmdw", '')),
+                "sfzh": getattr(self, "sfzh", ''),
+                "sjhm": sjhm,
+                "depart": str2(getattr(self, "depart", '')),
+                "dwmc": str2(getattr(self, "dwmc", '')),
+                "qdrq": getattr(self, "qdrq", '')[0:10],
+                "djrq": getattr(self, "djrq", '')
+                }
 
 class MT_TJ_PHOTO(BaseModel):
 
