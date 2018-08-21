@@ -3,7 +3,7 @@ from collections import OrderedDict
 from jinja2 import Template
 from mako.template import Template as Template2
 from app_reportserver.report_html import *
-from utils.base import RemoteFileHandler
+from utils.base import RemoteFileHandler,cur_datetime
 from utils.buildbarcode import BarCodeBuild
 
 def str2(para:str):
@@ -20,6 +20,7 @@ def str2(para:str):
 class ReportBuildHTML(object):
 
     def __init__(self,outfile:str):
+        # 如果已存在，则删除
         if os.path.exists(outfile):
             os.remove(outfile)
         self.html_obj=open(outfile, 'a', encoding="utf8")
@@ -54,13 +55,15 @@ class ReportBuildHTML(object):
         self.html_obj.write(html_tail)
         self.html_obj.close()
 
+
 if __name__=="__main__":
+    # 测试case
     app_path = os.path.split(os.path.abspath(sys.argv[0]))[0]
     # 提取数据
     #env = Environment()
     # gols=env.make_globals({'g_element_top':0})
 
-    tjbh='153192497'
+    tjbh='166820124'
     # tjbh = '149520265'
 
     from app_reportserver.model import *

@@ -35,33 +35,74 @@ class BreathCheck(BreathCheckUI):
 
     # 刷新 获取待测数据
     def initDatas(self,up_time=None):
-        # 初始化
+        # 初始化 所有组件
         if not up_time:
-            # 显示吃药丸列表
-            results = self.session.execute(get_checking1_sql()).fetchall()
-            self.table_c13_checking_1.insertMany(results)
-            self.gp_right_up.setTitle('2、吃药丸 计时中：总人数 %s' %self.table_c13_checking_1.rowCount())
-            # 显示待吹气列表
-            results = self.session.execute(get_checking2_sql()).fetchall()
-            self.table_c13_checking_2.insertMany(results)
-            self.gp_right_down_1.setTitle('3、计时完成待吹气：总人数 %s' % self.table_c13_checking_2.rowCount())
-            # 显示完成列表
+            ###################### 1、 显示完成列表 ######################
             results = self.session.execute(get_checked_sql()).fetchall()
-            self.table_c13_checked.insertMany(results)
+            # 放入 对象容器
+            tmp = []
+            for result in results:
+                # 已存在容器
+                if result[0] not in list(self.c13_items.keys()):
+                    self.c13_items[result[0]] = C13Item(result[0],data=list(result),state=4)
+                    tmp.append(result)
+            self.table_c13_checked.insertMany(tmp)
             self.gp_right_down_2.setTitle('4、完成吹气：总人数 %s' % self.table_c13_checked.rowCount())
-            # 显示待测列表
+
+            ###################### 2、 显示待吹气列表 ######################
+            results = self.session.execute(get_checking2_sql()).fetchall()
+            # 放入 对象容器
+            tmp = []
+            for result in results:
+                # 已存在容器
+                if result[0] not in list(self.c13_items.keys()):
+                    self.c13_items[result[0]] = C13Item(result[0],data=list(result),state=3)
+                    tmp.append(result)
+            self.table_c13_checking_2.insertMany(tmp)
+            self.gp_right_down_1.setTitle('3、计时完成待吹气：总人数 %s' % self.table_c13_checking_2.rowCount())
+
+            ###################### 3、显示吃药丸列表 ######################
+            results = self.session.execute(get_checking1_sql()).fetchall()
+            for result in results:
+                # 已存在容器
+                if result[0] not in list(self.c13_items.keys()):
+                    self.c13_items[result[0]] = C13Item(result[0],data=list(result),state=2)
+                    # 重启计时
+                    tmp = []
+                    tmp.extend(result)
+                    tmp.append(0)
+                    tmp.append(cur_time())
+                    tmp.append(cur_time_15())
+                    self.table_c13_checking_1.insert2([result[0],str2(result[1]),str2(result[2]),str(result[3]),str2(result[4]),str2(result[5]),0,cur_time(),cur_time_15()])
+            # self.table_c13_checking_1.insertMany(results)
+            self.gp_right_up.setTitle('2、吃药丸 计时中：总人数 %s' %self.table_c13_checking_1.rowCount())
+
+            ###################### 4、 显示待测列表 ######################
             results = self.session.execute(get_nocheck_sql()).fetchall()
+            # 放入 对象容器
+            for result in results:
+                self.c13_items[result[0]] = C13Item(result[0],data=list(result),state=1)
             self.table_c13_nocheck.load(results)
-        # 增量刷新
+            self.gp_left.setTitle('1、待测：总人数 %s 人' % str(self.table_c13_nocheck.rowCount()))
+
+        # 增量刷新 待测 组件
         else:
             results = self.session.execute(get_nocheck2_sql(up_time)).fetchall()
-            self.table_c13_nocheck.insertMany(results)
-
-        # 放入 对象容器
-        for result in results:
-            self.c13_items[result[0]] = C13Item(result[0])
-        self.gp_left.setTitle('1、待测：总人数 %s 人' % str(self.table_c13_nocheck.rowCount()))
-        self.lb_update.setText(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))))
+            if results:
+                # 放入 对象容器
+                tmp = []
+                for result in results:
+                    # 已存在容器
+                    if result[0] not in list(self.c13_items.keys()):
+                        self.c13_items[result[0]] = C13Item(result[0],data=list(result),state=1)
+                        tmp.append(result)
+                self.table_c13_nocheck.insertMany(tmp)
+                self.gp_left.setTitle('1、待测：总人数 %s 人' % str(self.table_c13_nocheck.rowCount()))
+                mes_about(self, '刷新 %s 条数据！' % str(len(tmp)))
+            else:
+                mes_about(self,'刷新 0 条数据！')
+        # self.lb_update.setText('2018-08-21 09:00:00')
+        self.lb_update.setText(cur_datetime())
 
     # 刷新待测列表
     def on_btn_update_click(self,up_time):
@@ -80,6 +121,7 @@ class BreathCheck(BreathCheckUI):
             # 说明 在容器中 ，根据状态判断处于哪个table 中
             c13_item_obj = self.c13_items[tjbh]
             state = c13_item_obj.getState()
+            print(tjbh,state)
             self.data_obj['tjbh'] = tjbh
             if state == 1:
                 # 在待测列表中
@@ -127,15 +169,20 @@ class BreathCheck(BreathCheckUI):
                 items = self.table_c13_checking_2.findItems(tjbh, Qt.MatchContains)
                 if items:
                     item = items[0]
-                    p_tjqy = self.table_c13_checking_2.item(item.row(), 5).text()
+                    p_tjbh = self.table_c13_checking_2.item(item.row(), 0).text()
+                    p_sno = self.table_c13_checking_2.item(item.row(), 1).text()
+                    p_xm = self.table_c13_checking_2.item(item.row(), 2).text()
+                    p_xb = self.table_c13_checking_2.item(item.row(), 3).text()
+                    p_nl = self.table_c13_checking_2.item(item.row(), 4).text()
+                    p_xmmc = self.table_c13_checking_2.item(item.row(), 5).text()
+                    p_tjqy = self.table_c13_checking_2.item(item.row(), 6).text()
                     # 删除原表中 行数据
                     self.table_c13_checking_2.removeRow(item.row())
                     # 更新项目状态
                     c13_item_obj.setState(4)
-                    data = c13_item_obj.getData()
-                    data.insert(1, str(c13_item_obj.getSimpleNo()))
+                    c13_item_obj.setData([p_tjbh,p_sno,p_xm,p_xb,p_nl,p_xmmc,p_tjqy])
                     # 新表增加
-                    self.table_c13_checked.insert3(data)
+                    self.table_c13_checked.insert3([p_tjbh,p_sno,p_xm,p_xb,p_nl,p_xmmc,p_tjqy])
                     # 标题变更
                     self.gp_right_down_1.setTitle('3、计时完成待吹气：总人数 %s' % self.table_c13_checking_2.rowCount())
                     self.gp_right_down_2.setTitle('4、完成吹气：总人数 %s' %self.table_c13_checked.rowCount())

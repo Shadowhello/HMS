@@ -253,11 +253,11 @@ class SerialNoButton(QToolButton):
 # C13/14 项目对象(同一类对象同时存在且需要不同状态)
 class C13Item(object):
 
-    def __init__(self,tjbh,data=None):
+    def __init__(self,tjbh,data=None,state=1,sno=None):
         self.tjbh = tjbh            # 体检编号
-        self.data = None            # 数据                # 解决乱码问题
-        self.state = 1              # 状态：1,2,3,4
-        self.simpleNo = None        # 样本号：对应吹气试纸
+        self.data = data            # 数据                # 解决乱码问题
+        self.state = state              # 状态：1,2,3,4
+        self.simpleNo = sno        # 样本号：对应吹气试纸
 
     def setData(self,data:dict):
         self.data = data
@@ -298,10 +298,15 @@ class C13InspectTable(TableWidget):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
 
-        self.setColumnWidth(0, 70)
-        self.setColumnWidth(1, 60)
-        self.setColumnWidth(2, 30)
-        self.setColumnWidth(3, 30)
+        # self.setColumnWidth(0, 70)
+        # self.setColumnWidth(1, 60)
+        # self.setColumnWidth(2, 30)
+        # self.setColumnWidth(3, 30)
+        self.setColWidth('tjbh', 70)
+        self.setColWidth('xm', 60)
+        self.setColWidth('xb', 30)
+        self.setColWidth('nl', 30)
+        self.setColWidth('xmmc', 90)
         self.horizontalHeader().setStretchLastSection(True)
 
     # 插入到 吹气列表
@@ -341,11 +346,11 @@ class C13InspectTable(TableWidget):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(self.rowCount() - 1, col_index, item)
 
-        self.setColumnWidth(0, 70)
-        self.setColumnWidth(1, 60)
-        self.setColumnWidth(2, 60)
-        self.setColumnWidth(3, 30)
-        self.setColumnWidth(4, 30)
+        self.setColWidth('tjbh', 70)
+        self.setColWidth('xm', 60)
+        self.setColWidth('xb', 30)
+        self.setColWidth('nl', 30)
+        self.setColWidth('xmmc', 90)
         self.horizontalHeader().setStretchLastSection(True)
 
     # 删除行

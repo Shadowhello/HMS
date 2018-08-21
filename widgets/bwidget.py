@@ -165,6 +165,11 @@ class TableWidget(QTableWidget):
         col = list(self.heads.keys()).index(key)
         return self.getItemValue(self.currentRow(),col)
 
+    def setColWidth(self, key, p_int):
+        if key in list(self.heads.keys()):
+            col = list(self.heads.keys()).index(key)
+            self.setColumnWidth(col,p_int)
+
     # 导出数据，对表格数据聚合
     def export(self):
         if self.rowCount():

@@ -68,7 +68,7 @@ def get_checking1_sql():
 def get_checking2_sql():
 
     return '''
-            SELECT  
+            SELECT  DISTINCT
             a.TJBH,
 			d.JJXM,
             b.XM,
@@ -83,14 +83,14 @@ def get_checking2_sql():
             ) AS TJQY
             FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
             INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
-			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3';
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3' ORDER BY a.tjqy,JJXM;
     '''
 
 # 完成
 def get_checked_sql():
 
-    return '''
-            SELECT  
+    return ''' 
+            SELECT  DISTINCT
             a.TJBH,
 			d.JJXM,
             b.XM,
@@ -105,5 +105,5 @@ def get_checked_sql():
             ) AS TJQY
             FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
             INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
-			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4';
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4' ORDER BY a.tjqy,JJXM;
     '''

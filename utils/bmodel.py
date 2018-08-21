@@ -336,7 +336,8 @@ class MV_RYXX(BaseModel):
             'qdrq': getattr(self, "qdrq")
         }
 
-    def dict(self):
+    @property
+    def pdf_dict(self):
         sjhm = getattr(self, "sjhm", '')
         if not sjhm:
             sjhm='&nbsp;'

@@ -50,6 +50,7 @@ class BarCodeBuild(object):
 
     def create2(self,serialno):
         ean = Code39(serialno, writer=self.tmp, add_checksum=False)
+        print(os.path.join(self.path,serialno))
         return ean.save(os.path.join(self.path,serialno), options=self.option3)
 
     def alter(self,serialno):
