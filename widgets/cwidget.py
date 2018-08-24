@@ -1204,7 +1204,7 @@ class CollectAreaGroup(QHBoxLayout):
 
     def __init__(self,areas=None):
         super(CollectAreaGroup, self).__init__()
-        lb_1 = QLabel('采血区域：')
+        lb_1 = QLabel('采集区域：')
         self.cb_area = QComboBox()
         if areas:
             self.cb_area.addItems(areas)
@@ -1741,13 +1741,15 @@ class DirTabWidget(QSplitter):
     status = False
     left_flag = False  # 左边按钮，默认朝向左
 
-    def __init__(self,title,nodes):
+    def __init__(self,title,nodes,lb_is_close=True):
         '''
         :param title: 窗口标题
         :param nodes: 目录名称列表
+        :param lb_is_close: 关闭标签
         '''
         super(DirTabWidget,self).__init__()
         self.nodes = nodes
+        self.lb_is_close = lb_is_close
         self.setOrientation(Qt.Horizontal)
         self.setChildrenCollapsible(True)
         self.setHandleWidth(0)
@@ -1767,7 +1769,7 @@ class DirTabWidget(QSplitter):
         self.lwidget=TreeWidget(self,self.nodes)
         self.lwidget.setMaximumWidth(150)
         self.button = ArrowButton("left")
-        self.rwidget=TabWidget(self)
+        self.rwidget=TabWidget(self,self.lb_is_close)
 
         ########################添加控件##################################
         self.addWidget(self.lwidget)

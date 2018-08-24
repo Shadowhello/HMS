@@ -21,6 +21,8 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
 
     # 初始化 页面参数
     def initParas(self):
+        # 条码横向排列个数 默认5
+        self.collect_count = gol.get_value('collect_count',5)
         self.api = APIRquest(self.login_id,self.api_host,self.api_port,self.log)
         self.api_file_upload_url = gol.get_value('api_file_upload')
         results = self.session.execute(get_yblx_sql()).fetchall()
@@ -146,7 +148,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
             widget = item.widget()
             widget.deleteLater()
         #############初始化#####################
-        size=5
+        size=self.collect_count
         tm_num = 0          # 总数量
         cx_num = 0          # 抽血数量
         cx_done_num =0      # 抽血/留样完成的数量
@@ -224,17 +226,17 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
         self.layout3.setHorizontalSpacing(10)               # 设置水平间距
         self.layout3.setVerticalSpacing(10)                 # 设置垂直间距
         self.layout3.setContentsMargins(10, 10, 10, 10)     # 设置外间距
-        self.layout3.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
+        self.layout3.setColumnStretch(size, 1)                 # 设置列宽，添加空白项的
 
         self.layout4.setHorizontalSpacing(10)               # 设置水平间距
         self.layout4.setVerticalSpacing(10)                 # 设置垂直间距
         self.layout4.setContentsMargins(10, 10, 10, 10)     # 设置外间距
-        self.layout4.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
+        self.layout4.setColumnStretch(size, 1)                 # 设置列宽，添加空白项的
 
         self.layout5.setHorizontalSpacing(10)               # 设置水平间距
         self.layout5.setVerticalSpacing(10)                 # 设置垂直间距
         self.layout5.setContentsMargins(10, 10, 10, 10)     # 设置外间距
-        self.layout5.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
+        self.layout5.setColumnStretch(size, 1)                 # 设置列宽，添加空白项的
 
         self.ser_all.setText("%s" % str(tm_num))
         self.ser_cx.setText("%s" % str(cx_num))
@@ -285,12 +287,18 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
         self.all_serialno[btn_no] = button2
         # 从UI布局中 删除旧的 添加 新的
         if not btn_type:
-            self.layout3.removeWidget(button)
-            button.hide()                      # 对象隐藏，如何销毁呢？？？
+            try:
+                self.layout3.removeWidget(button)
+                button.hide()                      # 对象隐藏，如何销毁呢？？？
+            except Exception as e:
+                print(e)
             self.layout3.addWidget(button2, btn_pos_x, btn_pos_y, 1, 1)
         else:
-            self.layout4.removeWidget(button)
-            button.hide()
+            try:
+                self.layout4.removeWidget(button)
+                button.hide()
+            except Exception as e:
+                print(e)
             self.layout4.addWidget(button2, btn_pos_x, btn_pos_y, 1, 1)
         # 更新界面UI
         self.ser_done.setText("%s" % str(int(self.ser_done.text())+1))

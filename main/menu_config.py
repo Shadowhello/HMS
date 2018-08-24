@@ -95,6 +95,7 @@ SYS_MENU_TREE = {   # 系统
              # ('医生总检',{'pid': 300, 'sid': 3005, 'title': '医生总检', 'tip': None, 'state': True, 'icon':'预约','is_tool':True,'shortcut':None}),
              # ('智能导检',{'pid': 300, 'sid': 3006, 'title': '智能导检', 'tip': None, 'state': False, 'icon':'导检','is_tool':True,'shortcut':None}),
              # ('短信平台',{'pid': 300, 'sid': 3007, 'title': '短信平台', 'tip': None, 'state': False, 'icon':'短信','is_tool':True,'shortcut':None})
+                ('贵宾管理',{'pid': 400, 'sid': 4007, 'title': '贵宾管理', 'tip': None, 'state': True, 'icon':'贵宾管理','is_tool':True,'shortcut':None}),
                 ('采血留样',{'pid': 400, 'sid': 4008, 'title': '采血台', 'tip': None, 'state': True, 'icon':'采血台','is_tool':True,'shortcut':None}),
                 ('呼气试验',{'pid': 400, 'sid': 4009, 'title': '呼气室', 'tip': None, 'state': True, 'icon':'呼气室','is_tool':True,'shortcut':None}),
             ])}),
@@ -188,7 +189,7 @@ SYS_MENU_MODULE_CLASS = {
     4004: {'module': 'result', 'class': 'ResultManager', 'enabled': True},
     4005: {'module': None, 'class': None, 'enabled': False},
     4006: {'module': None, 'class': None, 'enabled': False},
-    4007: {'module': None, 'class': None, 'enabled': False},
+    4007: {'module': 'vip', 'class': 'VipManager', 'enabled': True},
     4008: {'module': 'lis', 'class': 'SampleManager', 'enabled': True},       # 采血台
     4009: {'module': 'C13', 'class': 'BreathManager', 'enabled': True},    # 呼气室
     5001: {'module': 'report', 'class': 'ReportManager', 'enabled': True},    # 报告中心

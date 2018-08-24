@@ -96,11 +96,15 @@ class CollectHandover(CollectHandover_UI):
     # 条件查询
     def on_btn_query_click(self):
         collect_time = self.collect_time.get_where_text()
+        if self.collect_user2.currentText() =='所有':
+            where_collect_user2 = ' AND 1 = 1 '
+        else:
+            where_collect_user2 = "AND CZXM = '%s' " %self.collect_user2.currentText()
         # 检索条件
         if self.collect_area.get_area == '明州':
-            results = self.session.execute(get_handover2_sql(collect_time[0], collect_time[1], self.collect_area.get_area)).fetchall()
+            results = self.session.execute(get_handover2_sql(collect_time[0], collect_time[1], self.collect_area.get_area,where_collect_user2)).fetchall()
         else:
-            results = self.session.execute(get_handover_sql(collect_time[0],collect_time[1],self.collect_area.get_area)).fetchall()
+            results = self.session.execute(get_handover_sql(collect_time[0],collect_time[1],self.collect_area.get_area,where_collect_user2)).fetchall()
         self.table_handover_master.load(results)
         rowcount = self.table_handover_master.rowCount()
         self.gp_bottom_left.setTitle('样本交接汇总 (%s)' %rowcount)

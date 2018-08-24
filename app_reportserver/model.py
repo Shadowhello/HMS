@@ -110,3 +110,26 @@ class MT_TJ_BJCF_TITLE(BaseModel):
                 "ltitle2": str2(getattr(self, "ltitle2", '')),
                 "body2": str2(getattr(self, "body2", ''))
         }
+
+def get_bjcf_detail(tjbh):
+    return '''
+            SELECT
+                a.title AS bjcf_title,
+                a.body AS bjcf_body
+            FROM
+                tj_bjcf_body a
+            WHERE
+                a.id IN (
+                    SELECT DISTINCT (b.bodyid) FROM tj_bjcf_rel b
+                    WHERE
+                        b.illid IN (
+                            SELECT DISTINCT (c.bh) FROM
+                                tj_suggestion c,
+                                tj_jbqk d
+                            WHERE
+                                c.jbbh = d.jbbm
+                            AND d.tjbh = '%s'
+                        )
+                )
+            ORDER BY a.id
+    ''' %tjbh

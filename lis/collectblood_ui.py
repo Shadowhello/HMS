@@ -159,6 +159,9 @@ class CollectBlood_UI(UI):
         self.middle_layout.addStretch()
 
         ####################右边布局#####################################
+        self.cb_is_photo = QCheckBox('扫单自动拍照')
+        self.cb_is_photo.setChecked(True)
+        self.btn_take_photo = QPushButton(Icon('体检拍照'),'手动拍照')
         right_up_gp = QGroupBox('摄像头')
         right_up_gp.setAlignment(Qt.AlignHCenter)
         right_up_lt = QVBoxLayout()
@@ -176,15 +179,17 @@ class CollectBlood_UI(UI):
                 self.camera = None
         else:
             self.camera = None
+            # 不载入摄像头 则关闭右侧栏
+            self.on_right_clicked()
+            # 关闭 自动拍照
+            self.cb_is_photo.setChecked(False)
 
         right_up_lt.addStretch()
         right_up_gp.setLayout(right_up_lt)
         # 按钮区
         right_middle_gp = QGroupBox()
         right_middle_lt = QHBoxLayout()
-        self.cb_is_photo = QCheckBox('扫单自动拍照')
-        self.cb_is_photo.setChecked(True)
-        self.btn_take_photo = QPushButton(Icon('体检拍照'),'手动拍照')
+
         right_middle_lt.addWidget(self.cb_is_photo)
         right_middle_lt.addWidget(self.btn_take_photo)
         right_middle_gp.setLayout(right_middle_lt)

@@ -306,9 +306,9 @@ class TabWidget(QTabWidget):
 
     widget_queue = {}         # 控件队列 打开过的不允许新增
 
-    def __init__(self,parent=None):
+    def __init__(self,parent=None,lb_is_close = True):
         super(TabWidget, self).__init__(parent)
-        self.setTabsClosable(True)  # 关闭标签
+        self.setTabsClosable(lb_is_close)  # 关闭标签
         self.setMovable(True)       #tab可移动
         self.setMouseTracking(True)
         self.tabCloseRequested.connect(self.dropTab)

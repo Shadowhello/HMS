@@ -316,6 +316,8 @@ class MV_RYXX(BaseModel):
     dwmc = Column(VARCHAR(100), nullable=False)
     djrq = Column(VARCHAR(20), nullable=False)
     qdrq = Column(VARCHAR(20), nullable=False)
+    zjxm = Column(String(20), nullable=False)
+    shxm = Column(String(20), nullable=False)
     zjys = Column(String(20), nullable=False)
     shys = Column(String(20), nullable=False)
     io_jkcf = Column(CHAR(1), nullable=False)
@@ -333,7 +335,7 @@ class MV_RYXX(BaseModel):
             'depart': str2(getattr(self, "depart")),
             'dwmc': str2(getattr(self, "dwmc")),
             'djrq': getattr(self, "djrq"),
-            'qdrq': getattr(self, "qdrq")
+            'qdrq': getattr(self, "qdrq"),
         }
 
     @property
@@ -352,7 +354,9 @@ class MV_RYXX(BaseModel):
                 "depart": str2(getattr(self, "depart", '')),
                 "dwmc": str2(getattr(self, "dwmc", '')),
                 "qdrq": getattr(self, "qdrq", '')[0:10],
-                "djrq": getattr(self, "djrq", '')
+                "djrq": getattr(self, "djrq", ''),
+                'zjys': str2(getattr(self, "zjys")),
+                'shys': str2(getattr(self, "shys"))
                 }
 
 class MT_TJ_PHOTO(BaseModel):

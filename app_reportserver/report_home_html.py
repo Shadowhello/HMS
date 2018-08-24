@@ -9,7 +9,7 @@ pdf_html_home_page= '''
     <link rel="stylesheet" type="text/css" href=${user['css']} >
 </head>
 <body>
-<div align="center">
+<div class="sum">
     <div>
         <div class="user">
             <div>

@@ -203,5 +203,11 @@ class TJResult(GolParasMixin,TJResultUI):
             self.lb_state_pic.show2(True)
             mes_about(self,'保存成功！')
 
+    # 保存结果
+    def saveResult(self):
+        for row in range(self.table_result_item.rowCount()):
+            xmbh = self.table_result_item.getItemValueOfKey(row,'xmbh')
+            xmjg = self.table_result_item.getItemValueOfKey(row,'xmjg')
+
 def cur_datetime():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())))

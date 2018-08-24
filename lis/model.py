@@ -135,7 +135,7 @@ def get_xmjj_sql(tjbh,tmbh,login_id,login_name,login_area):
     return sql
 
 # 样本交接 条码数量汇总
-def get_handover_sql(t_start,t_end,area):
+def get_handover_sql(t_start,t_end,area,some_where):
     return '''
         SELECT '%s' AS QSSJ,'%s' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
 
@@ -149,15 +149,17 @@ def get_handover_sql(t_start,t_end,area):
         
         AND CZQY LIKE '%s%%'
         
+        %s
+        
         GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
         
         ORDER BY CZQY,count(*) DESC ;
         
-    ''' %(t_start,t_end,t_start,t_end,area)
+    ''' %(t_start,t_end,t_start,t_end,area,some_where)
 
 
 # 样本交接 条码数量汇总  明州的时候 汇总
-def get_handover2_sql(t_start, t_end, area):
+def get_handover2_sql(t_start, t_end, area, some_where):
     return '''
         SELECT '%s' AS QSSJ,'%s' AS JSSJ,LEFT(CZQY,2) as CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
 
@@ -170,12 +172,14 @@ def get_handover2_sql(t_start, t_end, area):
         AND JLLX IN ('0010','0011')  
 
         AND CZQY LIKE '%s%%'
+        
+        %s
 
         GROUP BY LEFT(CZQY,2),CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
 
         ORDER BY count(*) DESC ;
 
-    ''' % (t_start, t_end, t_start, t_end, area)
+    ''' % (t_start, t_end, t_start, t_end, area,some_where)
 
 
 # 获取当前留样信息，初始化用

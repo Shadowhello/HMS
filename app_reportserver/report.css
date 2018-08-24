@@ -32,6 +32,12 @@ select,input,img,select{
     top:-10px;
     border:0px solid #000;
 }
+
+.sum{
+    align=center;
+    border:5px solid #000;
+}
+
 .page {
     width:1240px;
     height:1754px;
@@ -44,7 +50,7 @@ select,input,img,select{
     top:-50px;
     width:1240px;
     height:1754px;
-    border: green solid 0px;
+    border: green solid 5px;
 }
 
 /*背景图*/
@@ -55,7 +61,7 @@ select,input,img,select{
     top:0px;
     width:1240px;
     height:1800;
-    border:0px solid #000;
+    border: red solid 5px;
 }
 /* 人员信息标签 */
 .user_tag{
@@ -66,7 +72,7 @@ select,input,img,select{
     top:-700px;
     height:auto;
     width:700px;
-    border:0px solid #000;
+    border:5px solid #000;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
     font-family:微软雅黑;    /*文本的字体*/
@@ -131,6 +137,14 @@ select,input,img,select{
 .page_2{
     position:relative;
     top:100px;
+    text-align:left;
+    left:0px;
+    width:1240px;
+    height:auto;
+}
+
+.page_1{
+    top:30px;
     text-align:left;
     left:0px;
     width:1240px;
@@ -261,10 +275,34 @@ td{
     border-bottom:5px solid #000;
 }
 
-.sign{
-    background-image:url('F:/HMS/reportserver/sign.png');
+.cachet{
+    background-image:url('F:/HMS/app_reportserver/cachet.png');
     background-repeat:no-repeat;
     background-position:right;
-    background-size:400px 300px;
+    background-size:240px 180px;
     border-top:0px solid #000;
+}
+
+.no_cachet{
+    border-top:0px solid #000;
+}
+
+.sign{
+    background-image:url('F:/HMS/app_reportserver/cachet.png');
+    background-repeat:no-repeat;
+    background-position:right;
+    border-top:0px solid #000;
+}
+
+p{
+    text-indent:2em;
+}
+
+.bkcf_stitle {
+    text-align:center;
+}
+
+.bkcf_sstitle {
+    color:red;
+    text-align:right;
 }

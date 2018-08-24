@@ -19,8 +19,10 @@ class CollectHandover_UI(Widget):
 
         self.collect_time = DateTimeGroup()
         self.collect_user = UserCombox()
-        self.collect_user.addItems(['配送大叔','%s'%self.login_name,'顾客'])
-        self.collect_area = CollectAreaGroup(['明州','明州1楼','明州2楼','明州3楼','江东'])
+        self.collect_user.addItems(['配送大叔','%s'%self.login_name])
+        self.collect_user2 = UserCombox()
+        self.collect_user2.addItems(['%s'%self.login_name,'所有'])
+        self.collect_area = CollectAreaGroup(['明州','明州1楼','明州2楼','明州3楼','明州贵宾','江东'])
         self.collect_area.set_area(self.login_area)
 
         self.btn_query = ToolButton(Icon('query'),'查询')
@@ -29,19 +31,20 @@ class CollectHandover_UI(Widget):
         self.btn_receive = ToolButton(Icon('样本签收'), '样本签收')
         #self.btn_export.clicked.connect(self.on_btn_export)
         # 子布局 左
-        lt_where_search.addItem(self.collect_time, 0, 0, 1, 5)
+        lt_where_search.addItem(self.collect_time, 0, 0, 1, 6)
         lt_where_search.addWidget(QLabel('送检人员：'), 1, 0, 1, 1)
         lt_where_search.addWidget(self.collect_user, 1, 1, 1, 1)
-        # lt_where_search.addWidget(QLabel('操作区域：'), 1, 2, 1, 1)
         lt_where_search.addItem(self.collect_area, 1, 2, 1, 2)
-        lt_where_search.addWidget(self.btn_query, 0, 5, 2, 2)
-        lt_where_search.addWidget(self.btn_export, 0, 7, 2, 2)
-        lt_where_search.addWidget(self.btn_handover, 0, 9, 2, 2)
-        lt_where_search.addWidget(self.btn_receive, 0, 11, 2, 2)
+        lt_where_search.addWidget(QLabel('采集护士：'), 1, 4, 1, 1)
+        lt_where_search.addWidget(self.collect_user2, 1, 5, 1, 1)
+        lt_where_search.addWidget(self.btn_query, 0, 6, 2, 2)
+        lt_where_search.addWidget(self.btn_export, 0, 8, 2, 2)
+        lt_where_search.addWidget(self.btn_handover, 0,10, 2, 2)
+        lt_where_search.addWidget(self.btn_receive, 0, 12, 2, 2)
         lt_where_search.setHorizontalSpacing(10)            #设置水平间距
         lt_where_search.setVerticalSpacing(10)              #设置垂直间距
         lt_where_search.setContentsMargins(10, 10, 10, 10)  #设置外间距
-        lt_where_search.setColumnStretch(11, 1)             #设置列宽，添加空白项的
+        lt_where_search.setColumnStretch(12, 1)             #设置列宽，添加空白项的
 
         gp_where_search.setLayout(lt_where_search)
         # 子布局 右
@@ -68,7 +71,7 @@ class CollectHandover_UI(Widget):
                                 ("mxbh", "条码号"),
                                 ("czsj", "采集时间"),
                                 ("czqy", "采集区域"),
-                                ("czxm", "采集区域"),
+                                ("czxm", "采集护士"),
                                 ("jlnr", "样本项目")
                             ])
         # 汇总
