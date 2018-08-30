@@ -8,10 +8,10 @@ pdf_html_summary_page = '''
     <div class="tj_xj_content">
         <ul>
             {% for summary in summarys %}
-             <li>{{loop.index|string+"、"+summary}}</li>
-             <br>
+             <li class="tj_xj_li">{{loop.index|string+"、"+summary}}</li>
         {% endfor %}
         </ul>
+        <br />
     </div>
 </div>
 '''
@@ -24,13 +24,13 @@ pdf_html_suggest_page = '''
         <h1>体检建议(Suggestions)</h1>
         <hr />
     </div>
-    <div class="tj_xj_content">
+    <div class="tj_jy_content">
         <ul>
             {% for suggestion in suggestions %}
-             <li>{{loop.index|string+"、"+suggestion}}</li>
-             <br>
+             <li class="tj_xj_li">{{loop.index|string+"、"+suggestion}}</li>
         {% endfor %}
         </ul>
+        <br />
     </div>
 </div>
 '''
@@ -45,6 +45,9 @@ pdf_html_cachet_page ='''
     %>
     <br>
     <table class="cachet">
+        <tr>
+            <td></td>
+        </tr>
         <tr align="right">
             <td>总检医生：<img src=${zjys}></td>
         </tr>
@@ -54,8 +57,6 @@ pdf_html_cachet_page ='''
         <tr align="right">
             <td>审核医生：<img src=${shys}></td>
         </tr>
-    </table>
-    <table class="no_cachet">
         <tr align="left">
             <td>${warn}</td>
         </tr>

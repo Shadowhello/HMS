@@ -1,6 +1,6 @@
 from widgets.bwidget import *
 from importlib import import_module
-from main.menu_config import *
+from .menu_config import *
 from utils import gol
 from functools import partial
 import time
@@ -9,7 +9,7 @@ class StatusLabel(QLabel):
 
     def __init__(self,p_str=None,parent=None):
         super(StatusLabel,self).__init__(p_str,parent)
-        self.setStyleSheet('''font: 75 12pt \"微软雅黑\";color: rgb(255, 255, 255);''')
+        self.setStyleSheet('''font: 75 11pt \"微软雅黑\";color: rgb(255, 255, 255);''')
 
 #状态栏
 class StatusBar(QStatusBar):
@@ -24,10 +24,11 @@ class StatusBar(QStatusBar):
 
     # 初始化界面
     def initUI(self):
-        self.lb_version = StatusLabel(' 当前版本：V%s' %gol.get_value('system_version',''))
-        self.lb_login = StatusLabel(' 当前用户：%s '%gol.get_value('login_user_name',''))
-        self.lb_hostname = StatusLabel(' 当前主机：%s ' % gol.get_value('host_name','未获取到'))
-        self.lb_hostip = StatusLabel(' 当前IP：%s ' % gol.get_value('host_ip','未获取到'))
+        self.lb_version = StatusLabel('版本：V%s' %gol.get_value('system_version',''))
+        self.lb_login = StatusLabel('用户：%s '%gol.get_value('login_user_name',''))
+        self.lb_hostname = StatusLabel('主机：%s ' % gol.get_value('host_name','未获取到'))
+        self.lb_hostip = StatusLabel('IP：%s ' % gol.get_value('host_ip','未获取到'))
+        self.lb_room = StatusLabel('房间：%s ' % gol.get_value('login_area', '未获取到'))
         self.lb_handle_mes = StatusLabel()
         self.lb_login_time = StatusLabel(' 登录时间：%s ' % gol.get_value('login_time',''))
         self.lb_cur_time = StatusLabel()
@@ -36,6 +37,7 @@ class StatusBar(QStatusBar):
         self.addWidget(self.lb_login)
         self.addWidget(self.lb_hostname)
         self.addWidget(self.lb_hostip)
+        self.addWidget(self.lb_room)
         self.addWidget(self.lb_handle_mes)
         self.addPermanentWidget(self.lb_login_time)
         self.addPermanentWidget(self.lb_cur_time)

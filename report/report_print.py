@@ -10,7 +10,8 @@ class ReportPrint(ReportPrintUI):
         super(ReportPrint, self).__init__()
         self.initParas()
         # 绑定信号槽
-        self.btn_query.clicked.connect(self.ob_btn_query_click)
+        self.btn_query.clicked.connect(self.on_btn_query_click)
+        self.btn_down.clicked.connect(self.on_btn_down_click)
         # 右键、双击、单击
         self.table_print.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_print.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
@@ -30,7 +31,7 @@ class ReportPrint(ReportPrintUI):
 
         self.lt_where_search.s_dwbh.setValues(self.dwmc_bh,self.dwmc_py)
 
-    def ob_btn_query_click(self):
+    def on_btn_query_click(self):
         if self.lt_where_search.get_date_text()=='签到日期':
             t_start,t_end = self.lt_where_search.date_range
             results = self.session.execute(get_report_print_sql(t_start,t_end)).fetchall()
@@ -41,6 +42,17 @@ class ReportPrint(ReportPrintUI):
             results = self.session.execute(get_report_print2_sql(t_start,t_end)).fetchall()
             self.table_print.load(results)
             mes_about(self,'检索出数据%s条' %self.table_print.rowCount())
+
+    def on_btn_down_click(self):
+        rows = self.table_print.isSelectRows()
+        if rows:
+            filename=self.setSaveFileName()
+            if not filename:
+                return
+            for row in rows:
+                print(self.table_print.getItemValueOfKey(row,'tjbh'))
+        else:
+            mes_about(self,'请选择行')
 
     # 右键功能
     def onTableMenu(self,pos):
@@ -98,6 +110,12 @@ class ReportPrint(ReportPrintUI):
                 self.web_pdf_ui = PdfDialog(self)
             self.web_pdf_ui.urlChange.emit(url)
             self.web_pdf_ui.show()
+
+    def setSaveFileName(self):
+        filepath = QFileDialog.getExistingDirectory(self, "保存路径",
+                                                  desktop(),
+                                                   QFileDialog.ShowDirsOnly|QFileDialog.DontResolveSymlinks)
+        return filepath
 
 class PdfDialog(QDialog):
 

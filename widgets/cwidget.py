@@ -311,6 +311,26 @@ class C13InspectTable(TableWidget):
 
     # 插入到 吹气列表
     def insert2(self,data):
+        '''
+        :param data:
+        :return:
+        '''
+        # 插入首行
+        self.insertRow(self.rowCount())
+        for col_index, col_value in enumerate(data):
+            if col_index== 6 :
+                lb_timer = TimerLabel()
+                lb_timer.timer_out.connect(partial(self.dropRow,data))     # 必须传递唯一的值
+                self.setCellWidget(self.rowCount()-1,col_index,lb_timer)
+            else:
+                item = QTableWidgetItem(col_value)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(self.rowCount() - 1, col_index, item)
+
+        self.horizontalHeader().setStretchLastSection(True)
+
+    # 有处理 要合并，时间太赶
+    def insert22(self,data):
         self.insertRow(self.rowCount())
         for col_index, col_value in enumerate(data):
             if col_index== 6 :

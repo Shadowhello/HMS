@@ -315,7 +315,11 @@ class MV_RYXX(BaseModel):
     depart = Column(VARCHAR(50), nullable=False)
     dwmc = Column(VARCHAR(100), nullable=False)
     djrq = Column(VARCHAR(20), nullable=False)
+    djgh = Column(VARCHAR(20), nullable=False)
+    djxm = Column(VARCHAR(20), nullable=False)
     qdrq = Column(VARCHAR(20), nullable=False)
+    zjrq = Column(String(20), nullable=False)
+    shrq = Column(String(20), nullable=False)
     zjxm = Column(String(20), nullable=False)
     shxm = Column(String(20), nullable=False)
     zjys = Column(String(20), nullable=False)
@@ -353,8 +357,8 @@ class MV_RYXX(BaseModel):
                 "sjhm": sjhm,
                 "depart": str2(getattr(self, "depart", '')),
                 "dwmc": str2(getattr(self, "dwmc", '')),
-                "qdrq": getattr(self, "qdrq", '')[0:10],
-                "djrq": getattr(self, "djrq", ''),
+                "qdrq": str(getattr(self, "qdrq", ''))[0:10],
+                "djrq": str(getattr(self, "djrq", '')),
                 'zjys': str2(getattr(self, "zjys")),
                 'shys': str2(getattr(self, "shys"))
                 }

@@ -21,7 +21,7 @@ def set_report_env(termial=False):
     report_log.info('程序启动......')
     parse, no_parse = config_report_parse('report.ini')
     gol.merge(parse)                         # 服务配置
-    report_log.info('读取配置(mztj.ini)文件成功')
+    report_log.info('读取配置(report.ini)文件成功')
     # 连接数据库，设置session
     ####################体检数据链接#####################################
     try:

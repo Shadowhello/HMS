@@ -14710,3 +14710,1594 @@ WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy LIKE %(czq
     
 [2018-08-24 09:12:53] INFO [sqlalchemy.engine.base.Engine:109] {}
 [2018-08-24 09:12:56] INFO [utils.config_log:131] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-24 10:05:41] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 10:05:41] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 10:05:41] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 10:05:41] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 10:05:41] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 10:05:41] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-24 10:05:44] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '18SX12'}
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhkl_1': 'admin2016', 'yhdm_1': '18SX12'}
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '18SX12'}
+[2018-08-24 10:05:47] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-24 10:05:47] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109]  
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND SJFS='2' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+            AND 
+    
+[2018-08-24 10:05:47] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:10] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 10:06:10] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 10:06:10] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 10:06:10] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 10:06:10] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 10:06:10] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-24 10:06:12] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '18SX12'}
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '18SX12', 'xtsb_1': '101', 'yhkl_1': 'admin2016'}
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '18SX12'}
+[2018-08-24 10:06:15] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-24 10:06:15] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109]  
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND SJFS='2' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE a.tjqy 
+                WHEN '1'  THEN '明州1楼' 
+                WHEN '2'  THEN '明州2楼' 
+                WHEN '3'  THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH NOT IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT (SELECT XMMC FROM TJ_XMDM WHERE XMBH = aa.XMBH) as XMMC,rtrim(bb.YBLX) as YBLX FROM TJ_SFTJB AS aa
+    
+        INNER JOIN 
+        
+        (SELECT SFBH,SFMC,YBLX,(SELECT DMMC FROM GY_DMZD WHERE DMLB='1196' AND DMSB>0 AND DMSB=TJ_SFXMB.YBLX) AS YBMC FROM TJ_SFXMB WHERE YBLX IS NOT NULL) AS bb
+        
+        ON aa.SFBH=bb.SFBH
+        
+    
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] 
+    SELECT 
+        XMBH,
+        (SELECT XMMC FROM TJ_XMDM WHERE XMBH=TJ_SFTJB.XMBH) AS XMMC, 
+        (SELECT SFMC FROM TJ_SFXMB WHERE SFBH = TJ_SFTJB.SFBH) AS SGMC  
+    FROM TJ_SFTJB
+    
+[2018-08-24 10:06:15] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 10:06:20] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_DWDMB].dwbh AS [TJ_DWDMB_dwbh], [TJ_DWDMB].mc AS [TJ_DWDMB_mc], [TJ_DWDMB].pyjm AS [TJ_DWDMB_pyjm] 
+FROM [TJ_DWDMB]
+[2018-08-24 10:06:20] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:22] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_EQUIP].tjbh AS [TJ_EQUIP_tjbh], [TJ_EQUIP].equip_type AS [TJ_EQUIP_equip_type], [TJ_EQUIP].equip_name AS [TJ_EQUIP_equip_name], [TJ_EQUIP].create_time AS [TJ_EQUIP_create_time], [TJ_EQUIP].modify_time AS [TJ_EQUIP_modify_time], [TJ_EQUIP].patient AS [TJ_EQUIP_patient], [TJ_EQUIP].file_path AS [TJ_EQUIP_file_path], [TJ_EQUIP].operator AS [TJ_EQUIP_operator], [TJ_EQUIP].operate_time AS [TJ_EQUIP_operate_time], [TJ_EQUIP].equip_jg1 AS [TJ_EQUIP_equip_jg1], [TJ_EQUIP].equip_jg2 AS [TJ_EQUIP_equip_jg2], [TJ_EQUIP].xmbh AS [TJ_EQUIP_xmbh], [TJ_EQUIP].hostname AS [TJ_EQUIP_hostname], [TJ_EQUIP].hostip AS [TJ_EQUIP_hostip], [TJ_EQUIP].operator2 AS [TJ_EQUIP_operator2], [TJ_EQUIP].operate_area AS [TJ_EQUIP_operate_area] 
+FROM [TJ_EQUIP] 
+WHERE [TJ_EQUIP].operate_time BETWEEN %(operate_time_1)s AND %(operate_time_2)s
+[2018-08-24 10:06:22] INFO [sqlalchemy.engine.base.Engine:109] {'operate_time_1': '2018-08-24', 'operate_time_2': '2018-08-25'}
+[2018-08-24 10:06:31] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT (SELECT XMMC FROM TJ_XMDM WHERE XMBH = aa.XMBH) as XMMC,rtrim(bb.YBLX) as YBLX FROM TJ_SFTJB AS aa
+    
+        INNER JOIN 
+        
+        (SELECT SFBH,SFMC,YBLX,(SELECT DMMC FROM GY_DMZD WHERE DMLB='1196' AND DMSB>0 AND DMSB=TJ_SFXMB.YBLX) AS YBMC FROM TJ_SFXMB WHERE YBLX IS NOT NULL) AS bb
+        
+        ON aa.SFBH=bb.SFBH
+        
+    
+[2018-08-24 10:06:31] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:31] INFO [sqlalchemy.engine.base.Engine:109] 
+    SELECT 
+        XMBH,
+        (SELECT XMMC FROM TJ_XMDM WHERE XMBH=TJ_SFTJB.XMBH) AS XMMC, 
+        (SELECT SFMC FROM TJ_SFXMB WHERE SFBH = TJ_SFTJB.SFBH) AS SGMC  
+    FROM TJ_SFTJB
+    
+[2018-08-24 10:06:31] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:31] INFO [sqlalchemy.engine.base.Engine:109] 
+    SELECT 
+        '已留样' AS state,
+        TJ_TJDAB.XM,
+        (CASE TJ_TJDAB.XB WHEN '1' THEN '男' WHEN '2' THEN '女' ELSE '' END) AS XB,
+        TJ_TJDJB.NL,
+        C.MXBH,
+        TJ_TJDJB.TJBH,
+        C.JLNR 
+    FROM TJ_TJDJB 
+        INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH=TJ_TJDAB.DABH AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) and TJ_TJDJB.QD='1'
+        INNER JOIN (SELECT TJBH,MXBH,JLNR FROM TJ_CZJLB  WHERE CZSJ>=substring(convert(char,GETDATE(),120),1,10) AND JLLX='0011' AND CZQY='测试台') C
+        
+        ON TJ_TJDJB.TJBH=C.TJBH 
+    
+[2018-08-24 10:06:31] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109]  
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND SJFS='2' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE a.tjqy 
+                WHEN '1'  THEN '明州1楼' 
+                WHEN '2'  THEN '明州2楼' 
+                WHEN '3'  THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH NOT IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:06:33] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:42] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT (SELECT XMMC FROM TJ_XMDM WHERE XMBH = aa.XMBH) as XMMC,rtrim(bb.YBLX) as YBLX FROM TJ_SFTJB AS aa
+    
+        INNER JOIN 
+        
+        (SELECT SFBH,SFMC,YBLX,(SELECT DMMC FROM GY_DMZD WHERE DMLB='1196' AND DMSB>0 AND DMSB=TJ_SFXMB.YBLX) AS YBMC FROM TJ_SFXMB WHERE YBLX IS NOT NULL) AS bb
+        
+        ON aa.SFBH=bb.SFBH
+        
+    
+[2018-08-24 10:06:42] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:42] INFO [sqlalchemy.engine.base.Engine:109] 
+    SELECT 
+        XMBH,
+        (SELECT XMMC FROM TJ_XMDM WHERE XMBH=TJ_SFTJB.XMBH) AS XMMC, 
+        (SELECT SFMC FROM TJ_SFXMB WHERE SFBH = TJ_SFTJB.SFBH) AS SGMC  
+    FROM TJ_SFTJB
+    
+[2018-08-24 10:06:42] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:48] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT '2018-08-24 00:00:00' AS QSSJ,'2018-08-24 23:59:59' AS JSSJ,LEFT(CZQY,2) as CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
+
+        FROM TJ_CZJLB 
+
+        WHERE CZSJ BETWEEN '2018-08-24 00:00:00' AND '2018-08-24 23:59:59'
+
+        AND JLLX IN ('0010','0011')  
+
+        AND CZQY LIKE '明州%'
+        
+        AND CZXM = '麻淑剑' 
+
+        GROUP BY LEFT(CZQY,2),CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+
+        ORDER BY count(*) DESC ;
+
+    
+[2018-08-24 10:06:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:06:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy LIKE %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:06:52] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_1': '2018-08-24 00:00:00', 'jllx_2': '0011', 'param_1': '紫红管', 'czsj_2': '2018-08-24 23:59:59', 'jllx_1': '0010', 'czqy_1': '明州%'}
+[2018-08-24 10:06:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy LIKE %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:06:52] INFO [sqlalchemy.engine.base.Engine:109] {'czsj_1': '2018-08-24 00:00:00', 'jllx_2': '0011', 'param_1': '黄管', 'czsj_2': '2018-08-24 23:59:59', 'jllx_1': '0010', 'czqy_1': '明州%'}
+[2018-08-24 10:06:53] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy LIKE %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:06:53] INFO [sqlalchemy.engine.base.Engine:109] {'jllx_2': '0011', 'jllx_1': '0010', 'param_1': '紫红管', 'czsj_2': '2018-08-24 23:59:59', 'czsj_1': '2018-08-24 00:00:00', 'czqy_1': '明州%'}
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109]  
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND SJFS='2' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE a.tjqy 
+                WHEN '1'  THEN '明州1楼' 
+                WHEN '2'  THEN '明州2楼' 
+                WHEN '3'  THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH NOT IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:07:28] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:07:34] INFO [utils.config_log:131] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-24 10:13:26] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 10:13:26] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 10:13:26] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 10:13:26] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 10:13:26] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 10:13:26] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-24 10:13:29] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhdm_1': '18SX12'}
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] {'xtsb_1': '101', 'yhkl_1': 'admin2016', 'yhdm_1': '18SX12'}
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '18SX12'}
+[2018-08-24 10:13:31] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-24 10:13:31] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109]  
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND SJFS='2' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:13:31] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:32] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE a.tjqy 
+                WHEN '1'  THEN '明州1楼' 
+                WHEN '2'  THEN '明州2楼' 
+                WHEN '3'  THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH NOT IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:13:32] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:32] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT (SELECT XMMC FROM TJ_XMDM WHERE XMBH = aa.XMBH) as XMMC,rtrim(bb.YBLX) as YBLX FROM TJ_SFTJB AS aa
+    
+        INNER JOIN 
+        
+        (SELECT SFBH,SFMC,YBLX,(SELECT DMMC FROM GY_DMZD WHERE DMLB='1196' AND DMSB>0 AND DMSB=TJ_SFXMB.YBLX) AS YBMC FROM TJ_SFXMB WHERE YBLX IS NOT NULL) AS bb
+        
+        ON aa.SFBH=bb.SFBH
+        
+    
+[2018-08-24 10:13:32] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:32] INFO [sqlalchemy.engine.base.Engine:109] 
+    SELECT 
+        XMBH,
+        (SELECT XMMC FROM TJ_XMDM WHERE XMBH=TJ_SFTJB.XMBH) AS XMMC, 
+        (SELECT SFMC FROM TJ_SFXMB WHERE SFBH = TJ_SFTJB.SFBH) AS SGMC  
+    FROM TJ_SFTJB
+    
+[2018-08-24 10:13:32] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:13:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 10:14:08] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a 
+				INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH 
+					AND  (a.del <> '1' or a.del is null) and a.QD='1' 
+					AND a.QDRQ>='2018-08-24 10:13:32'  AND  a.QDRQ<substring(convert(char,dateadd(day,1,getdate()),120),1,10)
+				INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+    
+[2018-08-24 10:14:08] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:14:16] INFO [utils.config_log:131] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-24 10:16:13] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 10:16:13] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 10:16:13] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 10:16:13] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 10:16:13] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 10:16:13] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] select @@version
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] SELECT schema_name()
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] SELECT CAST('test unicode returns' AS NVARCHAR(60)) AS anon_1
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] BEGIN (implicit)
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s
+[2018-08-24 10:16:16] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '18SX12', 'xtsb_1': '101'}
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] SELECT [SS_OPERATE_USER].xtsb AS [SS_OPERATE_USER_xtsb], [SS_OPERATE_USER].yhdm AS [SS_OPERATE_USER_yhdm], [SS_OPERATE_USER].yhzm AS [SS_OPERATE_USER_yhzm], [SS_OPERATE_USER].yhmc AS [SS_OPERATE_USER_yhmc], [SS_OPERATE_USER].yhkl AS [SS_OPERATE_USER_yhkl], [SS_OPERATE_USER].yhzt AS [SS_OPERATE_USER_yhzt] 
+FROM [SS_OPERATE_USER] 
+WHERE [SS_OPERATE_USER].xtsb = %(xtsb_1)s AND [SS_OPERATE_USER].yhdm = %(yhdm_1)s AND ([SS_OPERATE_USER].yhkl = %(yhkl_1)s OR [SS_OPERATE_USER].yhkl IS NULL)
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {'yhdm_1': '18SX12', 'xtsb_1': '101', 'yhkl_1': 'admin2016'}
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_YGQSKS].xh AS [TJ_YGQSKS_xh], [TJ_YGQSKS].yggh AS [TJ_YGQSKS_yggh], [TJ_YGQSKS].ksbm AS [TJ_YGQSKS_ksbm], [TJ_YGQSKS].xssx AS [TJ_YGQSKS_xssx] 
+FROM [TJ_YGQSKS] 
+WHERE [TJ_YGQSKS].yggh = %(yggh_1)s
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {'yggh_1': '18SX12'}
+[2018-08-24 10:16:19] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-24 10:16:19] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109]  
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='4' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  DISTINCT
+            a.TJBH,
+			d.JJXM,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+			INNER JOIN TJ_CZJLB d ON a.TJBH=d.TJBH AND d.SJFS='3' ORDER BY a.tjqy,JJXM;
+    
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND SJFS='2' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] 
+            SELECT  
+            a.TJBH,
+            b.XM,
+            (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
+            a.NL,
+            c.XMMC,
+            (CASE a.tjqy 
+                WHEN '1'  THEN '明州1楼' 
+                WHEN '2'  THEN '明州2楼' 
+                WHEN '3'  THEN '明州3楼' 
+                ELSE '江东' END 
+            ) AS TJQY
+            FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
+            INNER JOIN TJ_TJJLMXB c ON a.TJBH = c.TJBH AND c.XMBH='5001'
+            AND a.TJBH NOT IN (SELECT TJBH FROM TJ_CZJLB WHERE MXBH='5001' AND CZSJ>=substring(convert(char,getdate(),120),1,10) )
+    
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT (SELECT XMMC FROM TJ_XMDM WHERE XMBH = aa.XMBH) as XMMC,rtrim(bb.YBLX) as YBLX FROM TJ_SFTJB AS aa
+    
+        INNER JOIN 
+        
+        (SELECT SFBH,SFMC,YBLX,(SELECT DMMC FROM GY_DMZD WHERE DMLB='1196' AND DMSB>0 AND DMSB=TJ_SFXMB.YBLX) AS YBMC FROM TJ_SFXMB WHERE YBLX IS NOT NULL) AS bb
+        
+        ON aa.SFBH=bb.SFBH
+        
+    
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] 
+    SELECT 
+        XMBH,
+        (SELECT XMMC FROM TJ_XMDM WHERE XMBH=TJ_SFTJB.XMBH) AS XMMC, 
+        (SELECT SFMC FROM TJ_SFXMB WHERE SFBH = TJ_SFTJB.SFBH) AS SGMC  
+    FROM TJ_SFTJB
+    
+[2018-08-24 10:16:19] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 10:16:32] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT '2018-08-24 00:00:00' AS QSSJ,'2018-08-24 23:59:59' AS JSSJ,LEFT(CZQY,2) as CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
+
+        FROM TJ_CZJLB 
+
+        WHERE CZSJ BETWEEN '2018-08-24 00:00:00' AND '2018-08-24 23:59:59'
+
+        AND JLLX IN ('0010','0011')  
+
+        AND CZQY LIKE '明州%'
+        
+        AND CZXM = '麻淑剑' 
+
+        GROUP BY LEFT(CZQY,2),CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+
+        ORDER BY count(*) DESC ;
+
+    
+[2018-08-24 10:16:32] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:40] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT '2018-08-24 00:00:00' AS QSSJ,'2018-08-24 23:59:59' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
+    
+        FROM TJ_CZJLB 
+        
+        WHERE CZSJ BETWEEN '2018-08-24 00:00:00' AND '2018-08-24 23:59:59'
+        
+        AND JLLX IN ('0010','0011')  
+        
+        AND CZQY LIKE '明州贵宾%'
+        
+        AND CZXM = '麻淑剑' 
+        
+        GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+        
+        ORDER BY CZQY,count(*) DESC ;
+        
+    
+[2018-08-24 10:16:40] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:43] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT '2018-08-24 00:00:00' AS QSSJ,'2018-08-24 23:59:59' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
+    
+        FROM TJ_CZJLB 
+        
+        WHERE CZSJ BETWEEN '2018-08-24 00:00:00' AND '2018-08-24 23:59:59'
+        
+        AND JLLX IN ('0010','0011')  
+        
+        AND CZQY LIKE '明州1楼%'
+        
+        AND CZXM = '麻淑剑' 
+        
+        GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+        
+        ORDER BY CZQY,count(*) DESC ;
+        
+    
+[2018-08-24 10:16:43] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:48] INFO [sqlalchemy.engine.base.Engine:109] 
+        SELECT '2018-08-24 00:00:00' AS QSSJ,'2018-08-24 23:59:59' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
+
+        JJXM,JJSJ,SJFS,JSXM,JSSJ
+    
+        FROM TJ_CZJLB 
+        
+        WHERE CZSJ BETWEEN '2018-08-24 00:00:00' AND '2018-08-24 23:59:59'
+        
+        AND JLLX IN ('0010','0011')  
+        
+        AND CZQY LIKE '明州贵宾%'
+        
+        AND CZXM = '麻淑剑' 
+        
+        GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+        
+        ORDER BY CZQY,count(*) DESC ;
+        
+    
+[2018-08-24 10:16:48] INFO [sqlalchemy.engine.base.Engine:109] {}
+[2018-08-24 10:16:49] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:16:49] INFO [sqlalchemy.engine.base.Engine:109] {'jllx_1': '0010', 'czqy_1': '明州贵宾', 'czsj_1': '2018-08-24 00:00:00', 'czsj_2': '2018-08-24 23:59:59', 'param_1': '紫红管', 'jllx_2': '0011'}
+[2018-08-24 10:16:50] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:16:50] INFO [sqlalchemy.engine.base.Engine:109] {'jllx_1': '0010', 'param_1': '黄管', 'czqy_1': '明州贵宾', 'czsj_1': '2018-08-24 00:00:00', 'czsj_2': '2018-08-24 23:59:59', 'jllx_2': '0011'}
+[2018-08-24 10:16:50] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:16:50] INFO [sqlalchemy.engine.base.Engine:109] {'jllx_1': '0010', 'czqy_1': '明州贵宾', 'czsj_2': '2018-08-24 23:59:59', 'czsj_1': '2018-08-24 00:00:00', 'param_1': '绿管', 'jllx_2': '0011'}
+[2018-08-24 10:16:52] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:16:52] INFO [sqlalchemy.engine.base.Engine:109] {'jllx_1': '0010', 'czqy_1': '明州贵宾', 'czsj_2': '2018-08-24 23:59:59', 'czsj_1': '2018-08-24 00:00:00', 'param_1': '黄管', 'jllx_2': '0011'}
+[2018-08-24 10:16:53] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:16:53] INFO [sqlalchemy.engine.base.Engine:109] {'jllx_1': '0010', 'param_1': '紫红管', 'czqy_1': '明州贵宾', 'czsj_1': '2018-08-24 00:00:00', 'czsj_2': '2018-08-24 23:59:59', 'jllx_2': '0011'}
+[2018-08-24 10:16:53] INFO [sqlalchemy.engine.base.Engine:109] SELECT [TJ_CZJLB].[ID] AS [TJ_CZJLB_ID], [TJ_CZJLB].jllx AS [TJ_CZJLB_jllx], [TJ_CZJLB].jlmc AS [TJ_CZJLB_jlmc], [TJ_CZJLB].tjbh AS [TJ_CZJLB_tjbh], [TJ_CZJLB].mxbh AS [TJ_CZJLB_mxbh], [TJ_CZJLB].czgh AS [TJ_CZJLB_czgh], [TJ_CZJLB].czxm AS [TJ_CZJLB_czxm], [TJ_CZJLB].czsj AS [TJ_CZJLB_czsj], [TJ_CZJLB].czqy AS [TJ_CZJLB_czqy], [TJ_CZJLB].jlnr AS [TJ_CZJLB_jlnr], [TJ_CZJLB].bz AS [TJ_CZJLB_bz], [TJ_CZJLB].jjxm AS [TJ_CZJLB_jjxm], [TJ_CZJLB].jjsj AS [TJ_CZJLB_jjsj], [TJ_CZJLB].jsxm AS [TJ_CZJLB_jsxm], [TJ_CZJLB].jssj AS [TJ_CZJLB_jssj], [TJ_CZJLB].sjfs AS [TJ_CZJLB_sjfs] 
+FROM [TJ_CZJLB] 
+WHERE [TJ_CZJLB].jllx IN (%(jllx_1)s, %(jllx_2)s) AND [TJ_CZJLB].czqy = %(czqy_1)s AND [TJ_CZJLB].czsj BETWEEN %(czsj_1)s AND %(czsj_2)s AND CAST([TJ_CZJLB].bz AS VARCHAR(max)) = %(param_1)s
+[2018-08-24 10:16:53] INFO [sqlalchemy.engine.base.Engine:109] {'jllx_1': '0010', 'param_1': '绿管', 'czqy_1': '明州贵宾', 'czsj_1': '2018-08-24 00:00:00', 'czsj_2': '2018-08-24 23:59:59', 'jllx_2': '0011'}
+[2018-08-24 10:17:01] INFO [utils.config_log:131] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-24 11:16:33] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 11:16:33] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 11:16:33] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 11:16:33] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 11:16:33] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 11:16:33] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 11:16:38] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-24 11:16:38] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-24 11:16:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 11:28:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 11:40:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 11:52:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 12:04:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 12:09:44] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-24 12:09:47] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 12:09:47] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 12:09:47] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 12:09:47] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 12:09:47] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 12:09:47] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 12:09:58] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-24 12:09:58] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-24 12:09:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 12:21:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 12:33:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 12:45:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 12:57:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 13:09:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 13:21:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 13:29:35] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 13:29:35] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 13:29:35] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 13:29:35] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 13:29:35] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 13:29:35] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 13:33:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 13:46:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 13:55:03] INFO [utils.config_log:23] 程序启动......
+[2018-08-24 13:55:03] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-24 13:55:03] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-24 13:55:03] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-24 13:55:03] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-24 13:55:03] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-24 13:58:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 14:10:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 14:22:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 14:34:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 14:46:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 14:58:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 15:10:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 15:22:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 15:34:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 15:46:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 15:58:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 16:10:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 16:22:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 16:34:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 16:46:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-24 16:52:25] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 08:04:15] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 08:04:15] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 08:04:15] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 08:04:15] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 08:04:15] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 08:04:15] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 08:04:19] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 08:04:19] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 08:04:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 08:04:32] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 08:08:08] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 08:08:08] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 08:08:08] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 08:08:08] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 08:08:08] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 08:08:08] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 08:08:11] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 08:08:11] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 08:08:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 08:10:01] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 08:10:01] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 08:10:01] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 08:10:01] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 08:10:01] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 08:10:01] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 08:10:04] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 08:10:04] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 08:10:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 08:10:12] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 08:10:13] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 08:10:23] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 08:10:23] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 08:10:23] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 08:10:23] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 08:10:23] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 08:10:23] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 08:10:26] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 08:10:26] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 08:10:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 08:10:45] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 08:10:48] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 08:10:48] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 08:10:48] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 08:10:48] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 08:10:48] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 08:10:48] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 08:10:51] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 08:10:51] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 08:10:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 08:11:32] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 08:13:02] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 08:13:02] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 08:13:02] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 08:13:02] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 08:13:02] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 08:13:02] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 08:13:05] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 08:13:05] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 08:13:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 08:13:34] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 08:38:17] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 08:38:17] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 08:38:17] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 08:38:17] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 08:38:17] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 08:38:17] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 08:38:24] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 08:38:24] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 08:38:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 08:39:00] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 09:37:11] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 09:37:11] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 09:37:11] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 09:37:11] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 09:37:11] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 09:37:11] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 09:37:14] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 09:37:14] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 09:37:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 09:42:40] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 09:42:51] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 09:42:51] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 09:42:51] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 09:42:51] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 09:42:51] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 09:42:51] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 09:43:01] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 09:43:01] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 09:43:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 09:54:59] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 09:55:05] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 09:55:05] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 09:55:05] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 09:55:05] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 09:55:05] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 09:55:05] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 09:55:07] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 09:55:07] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 09:55:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 09:58:44] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 09:58:48] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 09:58:48] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 09:58:48] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 09:58:48] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 09:58:48] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 09:58:48] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 09:58:51] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 09:58:51] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 09:58:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:08:17] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:08:17] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:08:17] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:08:17] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:08:17] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:08:17] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:08:20] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:08:20] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:08:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:08:24] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:08:54] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:08:54] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:08:54] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:08:54] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:08:54] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:08:54] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:08:57] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:08:57] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:08:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:09:04] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:09:37] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:09:37] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:09:37] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:09:37] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:09:37] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:09:37] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:09:39] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:09:39] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:09:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:09:51] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:10:01] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:10:01] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:10:01] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:10:01] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:10:01] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:10:01] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:10:03] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:10:03] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:10:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:16:19] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:16:24] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:16:24] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:16:24] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:16:24] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:16:24] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:16:24] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:16:26] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:16:26] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:16:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:16:43] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:19:41] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:19:41] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:19:41] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:19:41] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:19:41] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:19:41] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:19:44] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:19:44] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:19:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:25:44] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:25:47] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:25:47] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:25:47] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:25:47] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:25:47] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:25:47] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:25:50] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:25:50] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:25:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:26:08] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:28:07] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:28:07] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:28:07] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:28:07] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:28:07] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:28:07] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:28:09] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:28:09] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:28:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:28:17] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:28:56] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:28:56] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:28:56] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:28:56] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:28:56] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:28:56] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:28:59] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:28:59] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:28:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:29:17] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:30:45] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:30:45] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:30:45] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:30:45] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:30:45] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:30:45] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:30:48] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:30:48] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:30:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:42:14] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:42:19] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:42:19] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:42:19] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:42:19] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:42:19] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:42:19] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:42:22] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:42:22] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:42:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 10:49:41] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 10:49:46] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 10:49:46] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 10:49:46] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 10:49:46] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 10:49:46] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 10:49:46] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 10:49:49] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 10:49:49] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 10:49:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 11:01:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 11:13:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 11:25:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 11:37:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 11:49:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 12:01:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 12:13:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 12:25:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 12:37:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 12:49:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 13:02:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 13:14:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 13:26:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 13:38:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 13:50:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 14:02:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 14:14:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 14:26:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 14:38:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 14:43:25] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-25 15:11:38] INFO [utils.config_log:23] 程序启动......
+[2018-08-25 15:11:38] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-25 15:11:38] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-25 15:11:38] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-25 15:11:38] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-25 15:11:38] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-25 15:12:02] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-25 15:12:02] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-25 15:12:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-25 15:12:47] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-26 16:11:36] INFO [utils.config_log:23] 程序启动......
+[2018-08-26 16:11:36] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-26 16:11:36] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-26 16:11:36] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-26 16:11:36] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-26 16:11:36] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-26 16:11:40] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-26 16:11:40] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-26 16:11:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-26 16:13:24] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-26 16:14:11] INFO [utils.config_log:23] 程序启动......
+[2018-08-26 16:14:11] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-26 16:14:12] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-26 16:14:12] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-26 16:14:12] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-26 16:14:12] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 07:33:56] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 07:33:56] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 07:33:56] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 07:33:56] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 07:33:56] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 07:33:56] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 07:33:59] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 07:33:59] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 07:34:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 07:46:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 07:50:51] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 07:55:40] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 07:55:40] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 07:55:40] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 07:55:40] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 07:55:40] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 07:55:40] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 07:55:43] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 07:55:43] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 07:55:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 07:56:00] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 07:56:19] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 07:56:19] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 07:56:19] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 07:56:19] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 07:56:19] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 07:56:19] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 07:56:21] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 07:56:21] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 07:56:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:06:21] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 08:07:03] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:07:03] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:07:03] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:07:03] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:07:03] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:07:03] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:07:06] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:07:06] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:07:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:14:31] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:14:31] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:14:31] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:14:31] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:14:31] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:14:31] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:14:42] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:14:42] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:14:42] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:14:42] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:14:42] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:14:42] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:14:45] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:14:45] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:14:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:17:29] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 08:17:48] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:17:48] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:17:48] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:17:48] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:17:48] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:17:48] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:17:51] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:17:51] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:17:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:18:24] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 08:18:28] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:18:28] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:18:28] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:18:28] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:18:28] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:18:28] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:18:30] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:18:30] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:18:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:30:20] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 08:30:44] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:30:44] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:30:44] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:30:44] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:30:44] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:30:44] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:30:46] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:30:46] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:30:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:30:51] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 08:37:40] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:37:40] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:37:40] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:37:40] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:37:40] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:37:40] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:37:43] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:37:43] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:37:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:39:14] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 08:39:19] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:39:19] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:39:19] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:39:19] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:39:19] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:39:19] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:39:23] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:39:23] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:39:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:40:12] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 08:40:16] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 08:40:16] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 08:40:16] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 08:40:16] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 08:40:16] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 08:40:16] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 08:40:19] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 08:40:19] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 08:40:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:52:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 08:55:53] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 09:01:14] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 09:01:14] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 09:01:14] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 09:01:14] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 09:01:14] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 09:01:14] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 09:01:17] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 09:01:17] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 09:01:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 09:03:07] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-27 09:45:56] INFO [utils.config_log:23] 程序启动......
+[2018-08-27 09:45:56] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-27 09:45:56] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-27 09:45:56] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-27 09:45:56] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-27 09:45:56] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-27 09:45:58] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-27 09:45:58] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-27 09:46:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-27 09:46:12] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-28 10:27:47] INFO [utils.config_log:23] 程序启动......
+[2018-08-28 10:27:47] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-28 10:27:47] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-28 10:27:47] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-28 10:27:47] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-28 10:27:47] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-28 10:27:50] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-28 10:27:50] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-28 10:27:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 10:39:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 10:51:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 11:03:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 11:15:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 11:27:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 11:39:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 11:51:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 12:03:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 12:16:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 12:28:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 12:40:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 12:52:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 13:04:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 13:16:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 13:28:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 13:40:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 13:52:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 14:04:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 14:16:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 14:28:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 14:40:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 14:52:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 15:04:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 15:16:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 15:28:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 15:40:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 15:52:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 16:04:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 17:21:37] INFO [utils.config_log:23] 程序启动......
+[2018-08-28 17:21:37] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-28 17:21:37] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-28 17:21:37] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-28 17:21:37] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-28 17:21:37] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-28 17:21:41] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-28 17:21:41] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-28 17:21:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 19:28:52] INFO [utils.config_log:23] 程序启动......
+[2018-08-28 19:28:52] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-28 19:28:52] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-28 19:28:52] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-28 19:28:52] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-28 19:28:52] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-28 19:28:55] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-28 19:28:55] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-28 19:28:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-28 19:34:26] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-29 07:45:06] INFO [utils.config_log:23] 程序启动......
+[2018-08-29 07:45:06] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-29 07:45:06] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-29 07:45:06] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-29 07:45:06] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-29 07:45:06] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-29 07:45:09] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-29 07:45:09] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-29 07:45:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 07:57:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 08:09:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 16:30:26] INFO [utils.config_log:23] 程序启动......
+[2018-08-29 16:30:26] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-29 16:30:26] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-29 16:30:26] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-29 16:30:26] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-29 16:30:26] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-29 16:30:30] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-29 16:30:30] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-29 16:30:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 16:31:56] INFO [utils.config_log:23] 程序启动......
+[2018-08-29 16:31:56] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-29 16:31:56] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-29 16:31:56] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-29 16:31:56] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-29 16:31:56] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-29 16:31:59] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-29 16:31:59] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-29 16:32:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 16:34:27] INFO [utils.config_log:23] 程序启动......
+[2018-08-29 16:34:27] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-29 16:34:27] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-29 16:34:27] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-29 16:34:27] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-29 16:34:27] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-29 16:34:30] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-29 16:34:30] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-29 16:34:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 16:34:58] INFO [utils.config_log:23] 程序启动......
+[2018-08-29 16:34:58] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-29 16:34:58] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-29 16:34:58] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-29 16:34:58] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-29 16:34:59] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-29 16:35:03] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-29 16:35:03] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-29 16:35:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 16:50:46] INFO [utils.config_log:23] 程序启动......
+[2018-08-29 16:50:46] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-29 16:50:46] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-29 16:50:46] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-29 16:50:46] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-29 16:50:46] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-29 16:50:50] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-29 16:50:50] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-29 16:50:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 17:02:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 17:14:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 17:26:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 17:38:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 17:50:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 18:02:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 18:14:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 18:26:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 18:39:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 18:51:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 19:03:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 19:15:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 19:27:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 19:39:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 19:51:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 20:03:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 20:15:08] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 20:27:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 20:39:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 20:51:11] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 21:03:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 21:15:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 21:27:14] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 21:39:15] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 21:51:16] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 22:03:17] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 22:15:18] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 22:27:19] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 22:39:20] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 22:51:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 23:03:22] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 23:15:23] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 23:27:24] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 23:39:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-29 23:51:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 00:03:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 00:15:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 00:27:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 00:39:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 00:51:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 01:03:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 01:15:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 01:27:34] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 01:39:35] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 01:51:36] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 02:03:37] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 02:15:38] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 02:27:39] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 02:39:40] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 02:51:41] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 03:03:42] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 03:15:43] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 03:27:44] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 03:39:45] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 03:51:46] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 04:03:47] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 04:15:48] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 04:27:49] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 04:39:50] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 04:51:51] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 05:03:52] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 05:15:53] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 05:27:54] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 05:39:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 05:51:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 06:03:57] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 06:15:58] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 06:27:59] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 06:40:00] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 06:52:01] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 07:04:02] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 07:16:03] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 07:28:04] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 07:40:05] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 07:52:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 08:04:06] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 08:16:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 08:28:07] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 08:40:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 08:52:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 09:04:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 09:16:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 09:28:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 09:40:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 09:52:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 10:04:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 10:16:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 10:28:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 10:40:09] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 10:52:10] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 10:59:45] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-30 10:59:51] INFO [utils.config_log:23] 程序启动......
+[2018-08-30 10:59:51] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-30 10:59:51] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-30 10:59:51] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-30 10:59:51] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-30 10:59:51] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-30 10:59:54] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-30 10:59:54] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-30 10:59:55] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 11:11:56] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 11:17:14] INFO [utils.config_log:133] 用户：麻淑剑(18SX12) 退出成功！
+[2018-08-30 11:17:18] INFO [utils.config_log:23] 程序启动......
+[2018-08-30 11:17:18] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-30 11:17:18] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-30 11:17:18] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-30 11:17:18] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-30 11:17:18] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-30 11:17:20] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-30 11:17:20] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-30 11:17:21] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 12:20:27] INFO [utils.config_log:23] 程序启动......
+[2018-08-30 12:20:27] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-30 12:20:27] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-30 12:20:27] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-30 12:20:27] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-30 12:20:27] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-30 12:20:29] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-30 12:20:29] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-30 12:20:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 12:21:10] INFO [utils.config_log:23] 程序启动......
+[2018-08-30 12:21:10] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-30 12:21:10] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-30 12:21:10] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-30 12:21:10] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-30 12:21:10] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-30 12:21:13] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-30 12:21:13] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-30 12:21:13] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 12:22:09] INFO [utils.config_log:23] 程序启动......
+[2018-08-30 12:22:09] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-30 12:22:09] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-30 12:22:09] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-30 12:22:09] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-30 12:22:09] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-30 12:22:12] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-30 12:22:12] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-30 12:22:12] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 12:23:22] INFO [utils.config_log:23] 程序启动......
+[2018-08-30 12:23:22] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-08-30 12:23:22] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-08-30 12:23:22] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-08-30 12:23:22] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-08-30 12:23:22] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-08-30 12:23:24] INFO [utils.config_log:174] 写入配置(custom.ini)文件成功
+[2018-08-30 12:23:24] INFO [utils.config_log:175] 用户：麻淑剑(18SX12) 登陆成功！
+[2018-08-30 12:23:25] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 12:35:26] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 12:47:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 12:59:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 13:11:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 13:23:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 13:35:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 13:47:27] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 13:59:28] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 14:11:29] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 14:23:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 14:35:30] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 14:47:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 14:59:31] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 15:11:32] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205
+[2018-08-30 15:23:33] INFO [requests.packages.urllib3.connectionpool:203] Starting new HTTP connection (1): 10.7.103.205

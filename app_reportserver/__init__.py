@@ -1,4 +1,5 @@
 from .report_home_html import pdf_html_home_page
+from .report_home2_html import pdf_html_home_page2
 from .report_yspb_html import pdf_html_yspb_page
 from .report_head_html import pdf_html_head,pdf_html_tail
 from .report_xjjy_html import *

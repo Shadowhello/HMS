@@ -91,7 +91,7 @@ SYS_MENU_TREE = {   # 系统
              # ('体检预约',{'pid': 300, 'sid': 3001, 'title': '体检预约', 'tip': None, 'state': True, 'icon':'预约','is_tool':True,'shortcut':None}),
              # ('体检登记',{'pid': 300, 'sid': 3002, 'title': '体检登记', 'tip': None, 'state': True, 'icon':'登记','is_tool':True,'shortcut':None}),
              # ('体检收费',{'pid': 300, 'sid': 3003, 'title': '体检收费', 'tip': None, 'state': True, 'icon':'收费','is_tool':True,'shortcut':None}),
-             ('结果录入',{'pid': 400, 'sid': 4004, 'title': '结果录入', 'tip': None, 'state': True, 'icon':'结果录入','is_tool':True,'shortcut':None}),
+                ('结果录入',{'pid': 400, 'sid': 4004, 'title': '结果录入', 'tip': None, 'state': True, 'icon':'结果录入','is_tool':True,'shortcut':None}),
              # ('医生总检',{'pid': 300, 'sid': 3005, 'title': '医生总检', 'tip': None, 'state': True, 'icon':'预约','is_tool':True,'shortcut':None}),
              # ('智能导检',{'pid': 300, 'sid': 3006, 'title': '智能导检', 'tip': None, 'state': False, 'icon':'导检','is_tool':True,'shortcut':None}),
              # ('短信平台',{'pid': 300, 'sid': 3007, 'title': '短信平台', 'tip': None, 'state': False, 'icon':'短信','is_tool':True,'shortcut':None})

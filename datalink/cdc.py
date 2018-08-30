@@ -48,7 +48,7 @@ if __name__ =="__main__":
     # 泌尿科
     engine = create_engine('mssql+pymssql://bsuser:admin2389@10.8.200.201:1433/tjxt', encoding='utf8', echo=False)
     session = sessionmaker(bind=engine)()
-    results = session.execute(SQL_CDC %('2018-08-14','2018-08-20')).fetchall()
+    results = session.execute(SQL_CDC %('2018-08-01','2018-08-26')).fetchall()
 
     datas = []
     cols = ['tjbh', 'xm', 'xb', 'nl', 'sjhm', 'sfzh', 'addr', 'dwmc', 'ysje', 'qdrq', 'xmmc', 'xmjg', 'xmzd', 'jy']

@@ -31,10 +31,11 @@ def get_nocheck2_sql(up_time):
             (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
             a.NL,
             c.XMMC,
-            (CASE a.tjqy 
-                WHEN '1'  THEN '明州1楼' 
-                WHEN '2'  THEN '明州2楼' 
-                WHEN '3'  THEN '明州3楼' 
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
                 ELSE '江东' END 
             ) AS TJQY
             FROM TJ_TJDJB a 
@@ -54,10 +55,11 @@ def get_checking1_sql():
             (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
             a.NL,
             c.XMMC,
-            (CASE a.tjqy 
-                WHEN '1'  THEN '明州1楼' 
-                WHEN '2'  THEN '明州2楼' 
-                WHEN '3'  THEN '明州3楼' 
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
                 ELSE '江东' END 
             ) AS TJQY
             FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
@@ -75,10 +77,11 @@ def get_checking2_sql():
             (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
             a.NL,
             c.XMMC,
-            (CASE a.tjqy 
-                WHEN '1'  THEN '明州1楼' 
-                WHEN '2'  THEN '明州2楼' 
-                WHEN '3'  THEN '明州3楼' 
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
                 ELSE '江东' END 
             ) AS TJQY
             FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 
@@ -97,10 +100,11 @@ def get_checked_sql():
             (CASE b.XB WHEN '1' THEN '男' WHEN '2'  THEN '女' ELSE '' END) AS XB,
             a.NL,
             c.XMMC,
-            (CASE a.tjqy 
-                WHEN '1'  THEN '明州1楼' 
-                WHEN '2'  THEN '明州2楼' 
-                WHEN '3'  THEN '明州3楼' 
+            (CASE 
+                WHEN a.zhaogong = '2' THEN '明州贵宾'
+                WHEN a.zhaogong <> '2' AND a.tjqy='1' THEN '明州1楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='2' THEN '明州2楼' 
+                WHEN a.zhaogong <> '2' AND a.tjqy='3' THEN '明州3楼' 
                 ELSE '江东' END 
             ) AS TJQY
             FROM TJ_TJDJB a INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH AND  (a.del <> '1' or a.del is null) and a.QD='1' AND a.QDRQ>=substring(convert(char,getdate(),120),1,10) 

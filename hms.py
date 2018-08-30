@@ -1,7 +1,10 @@
-from PyQt5.QtCore import PYQT_VERSION_STR
+from PyQt5.QtCore import PYQT_VERSION_STR,QCoreApplication,Qt
+
 # 判断版本号
 if int(PYQT_VERSION_STR.replace('.',''))>=560:
     from PyQt5.QtWebEngineWidgets import *
+    # 处理闪屏、黑屏问题 必须放在 Application 实例化前
+    QCoreApplication.setAttribute(Qt.AA_UseSoftwareOpenGL)
 else:
     from PyQt5.QtWebKit import *
     from PyQt5.QtWebKitWidgets import *

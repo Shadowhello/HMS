@@ -1,43 +1,45 @@
-from multiprocessing import Queue
 from flask import send_file,make_response,request,jsonify,render_template,abort
+from flask_restful import Resource, reqparse
 from app_api.exception import *
 from app_api.model import *
 import os,ujson,time,urllib.parse,requests
 import mimetypes
-from utils import gol
+from utils import gol,str2
 from app_api.dbconn import *
 
-# 任务队列
-task_queue = Queue()
 
 # 初始化视图
-def init_views(app,db):
+def init_views(app,db,queue=None):
     '''
     :param app:         应用程序本身
     :return:
     '''
 
     #二维码生成
-    @app.route('/api/qrcode/<string:xm>/<string:sfzh>/<string:sjhm>', methods=['POST'])
-    def qrcode_create(xm,sfzh,sjhm):
-        if all([xm,sfzh,sjhm]):
+    # @app.route('/api/qrcode/post?tjbh=<string:tjbh>&xm=<string:xm>&sfzh=<string:sfzh>&sjhm=<string:sjhm>&login_id=<string:login_id>', methods=['POST'])
+    @app.route('/api/qrcode/<string:tjbh>/<string:login_id>', methods=['GET'])
+    def qrcode_create(tjbh,login_id):
+        print(' request.remote_addr %s API(获取二维码) 请求参数 login_id：%s tjbh：%s' % (cur_datetime(), login_id, tjbh))
+        user = get_user_info(tjbh,db)
+        if user:
+            print(user)
             url = 'http://10.7.200.27:8080/tjadmin/pInfoSubmit'
             head = {}
-            head['realName'] = urllib.parse.quote(xm)
-            head['idCardNum'] = sfzh
-            head['phoneNumber'] = sjhm
+            head['realName'] = urllib.parse.quote(user['xm'])
+            head['idCardNum'] = user['sfzh']
+            head['phoneNumber'] = user['sjhm']
             head['email'] = ''
             head['address'] = ''
             head['Content-Type'] = 'application/json'
 
             response = requests.post(url, headers=head)
             if response.status_code == 200:
+                f = open(r'C:\Users\Administrator\Desktop\pdf测试\1.png', "wb")
+                for chunk in response.iter_content(chunk_size=512):
+                    if chunk:
+                        f.write(chunk)
+                f.close()
                 return response.content
-                # f = open('1.png', "wb")
-                # for chunk in response.iter_content(chunk_size=512):
-                #     if chunk:
-                #         f.write(chunk)
-                # f.close()
             else:
                 abort(404)
         else:
@@ -45,16 +47,20 @@ def init_views(app,db):
 
     # HTML 报告生成 医生总检审核完成
     # PDF 报告生成，护理审阅完成
-    @app.route('/api/report/create/<string:filetype>/<int:tjbh>', methods=['POST'])
-    def report_create(filetype,tjbh):
+    @app.route('/api/report/create/<string:filetype>/<int:tjbh>/<string:login_id>', methods=['GET','POST'])
+    def report_create(filetype,tjbh,login_id):
+
         if len(str(tjbh)) == 8:
             tjbh = '%09d' % tjbh
         elif len(str(tjbh)) == 9:
-            tjbh = tjbh
+            tjbh = str(tjbh)
         else:
             abort(404)
+        mes_obj = {'tjbh':tjbh,'action':filetype}
+        if queue:
+            print('%s 队列插入消息：%s' %(cur_datetime(),ujson.dumps(mes_obj)))
+            queue.put(mes_obj)
         if filetype=='html':
-            # 审核完成
             return ujson.dumps({'code': 1, 'mes': 'HTML报告生成', 'data': ''})
         elif filetype=='pdf':
             # 审阅完成
@@ -64,13 +70,13 @@ def init_views(app,db):
 
     # HTML 报告删除 医生取消审核
     # PDF 报告删除，护理取消审阅
-    @app.route('/api/report/delete/<string:filetype>/<int:tjbh>', methods=['POST'])
-    def report_delete(filetype,tjbh):
-        print(' request.remote_addr %s API(取消审核) 请求参数 filetype：%s tjbh：%s' %(cur_datetime(),filetype,tjbh))
+    @app.route('/api/report/delete/<string:filetype>/<int:tjbh>/<string:login_id>', methods=['GET','POST'])
+    def report_delete(filetype,tjbh,login_id):
+        print(' %s：客户端(%s) API(取消审核) 请求参数 filetype：%s tjbh：%s' %(cur_datetime(),request.remote_addr,filetype,tjbh))
         if len(str(tjbh)) == 8:
             tjbh = '%09d' % tjbh
         elif len(str(tjbh)) == 9:
-            tjbh = tjbh
+            tjbh = str(tjbh)
         else:
             abort(404)
         if filetype=='html':
@@ -106,10 +112,11 @@ def init_views(app,db):
     # PDF 报告下载，用户发起
     @app.route('/api/report/down/pdf/<int:tjbh>', methods=['GET'])
     def report_down(tjbh):
+        print('客户端：%s 报告(%s)下载请求' % (request.remote_addr, tjbh))
         session = gol.get_value('tj_cxk')
         result = session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).order_by(MT_TJ_PDFRUL.CREATETIME.desc()).scalar()
         if result:
-            print('客户端：%s 报告(%s)下载请求' %(request.remote_addr,tjbh))
+
             filename = os.path.join('D:/pdf/',result.PDFURL)
             response = make_response(send_file(filename, as_attachment=True))
             response.headers['Content-Type'] = mimetypes.guess_type(os.path.basename(filename))[0]
@@ -223,8 +230,6 @@ def init_views(app,db):
         response.status_code = e.status_code
         return response
 
-
-
 # 获得当日的保存目录
 def get_cur_path(dirname):
     dday = time.strftime("%Y-%m-%d", time.localtime(int(time.time())))
@@ -254,3 +259,17 @@ def get_file_upload_sql(filename):
 # 获取前缀、后缀名称
 def get_pre_suf(filename):
     return os.path.splitext(os.path.basename(filename))
+
+# 获得用户信息二维码
+def get_user_info(tjbh,db):
+    sql = "select XM,SFZH,SJHM FROM TJ_TJDAB WHERE DABH = (SELECT DABH FROM TJ_TJDJB where TJBH='%s') ;" %tjbh
+    print(sql)
+    results = db.session.execute(sql).fetchall()
+    if results:
+        result = results[0]
+        if all([result[1],result[2]]):
+            return {'xm':str2(result[0]),'sfzh':result[1],'sjhm':result[2]}
+        else:
+            return {}
+    else:
+        return {}

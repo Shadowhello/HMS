@@ -16,44 +16,48 @@ class MT_TJ_BGGL(BaseModel):
 
     __tablename__ = 'TJ_BGGL'
 
-    tjbh = Column(String(16), primary_key=True)     # 体检编号
-    bgzt = Column(CHAR(1), nullable=True)           # 报告状态 默认：待追踪(0) 追踪完成，待总检审核(1) 审核完成待审阅(2) 审阅完成待打印(3)
-    qdrq = Column(DateTime, nullable=True)          # 签到日期
-    qdgh = Column(String(16), nullable=False)       # 签到工号
-    qdxm = Column(String(16), nullable=False)       # 签到姓名
-    sdrq = Column(DateTime, nullable=False)         # 收单日期
-    sdgh = Column(String(16), nullable=False)       # 收单工号
-    sdxm = Column(String(16), nullable=False)       # 收单姓名
-    zzrq = Column(DateTime, nullable=False, default=datetime.now)         # 追踪日期
-    zzgh = Column(String(16), nullable=False)       # 追踪工号
-    zzxm = Column(String(16), nullable=False)       # 追踪姓名
-    zzbz = Column(Text, nullable=False)             # 追踪备注    记录电话等沟通信息，强制接收等信息
-    zjrq = Column(DateTime, nullable=False)         # 总检日期
-    zjgh = Column(String(16), nullable=False)       # 总检工号
-    zjxm = Column(String(16), nullable=False)       # 总检姓名
-    zjbz = Column(Text, nullable=False)             # 总检备注
-    shrq = Column(DateTime, nullable=False)         # 审核日期
-    shgh = Column(String(16), nullable=False)       # 审核工号
-    shxm = Column(String(16), nullable=False)       # 审核姓名
-    shbz = Column(Text, nullable=False)             # 审核备注    记录退回原因
-    syrq = Column(DateTime, nullable=False)         # 审阅日期
-    sygh = Column(String(16), nullable=False)       # 审阅工号
-    syxm = Column(String(16), nullable=False)       # 审阅姓名
-    sybz = Column(Text, nullable=False)             # 审阅备注    记录退回原因
-    dyrq = Column(DateTime, nullable=False)         # 打印日期
-    dygh = Column(String(16), nullable=False)       # 打印工号
-    dyxm = Column(String(16), nullable=False)       # 打印姓名
-    dyfs = Column(CHAR(1), nullable=True, default='0')          # 打印方式 默认 0  自助打印 1
-    dycs = Column(Integer, nullable=True, default=0)            # 打印次数 默认 0
-    zlrq = Column(DateTime, nullable=False)         # 整理日期
-    zlgh = Column(String(16), nullable=False)       # 整理工号
-    zlxm = Column(String(16), nullable=False)       # 整理姓名
-    zlhm = Column(String(16), nullable=False)       # 整理货号
-    lqrq = Column(DateTime, nullable=False)         # 领取日期
-    lqgh = Column(String(16), nullable=False)       # 领取工号
-    lqxm = Column(String(16), nullable=False)       # 领取姓名
-    lqbz = Column(Text, nullable=False)             # 领取备注    记录领取信息
-    bgym = Column(Integer, nullable=True, default=0) # 报告页码，默认0页
+    tjbh = Column(String(16), primary_key=True)                         # 体检编号
+    bgzt = Column(CHAR(1), nullable=True)                               # 报告状态 默认：待追踪(0) 追踪完成，待总检审核(1) 审核完成待审阅(2) 审阅完成待打印(3)
+    djrq = Column(DateTime, nullable=True)                              # 登记日期
+    djgh = Column(String(16), nullable=False)                           # 登记工号
+    djxm = Column(String(16), nullable=False)                           # 登记姓名
+    qdrq = Column(DateTime, nullable=True)                              # 签到日期
+    qdgh = Column(String(16), nullable=False)                           # 签到工号
+    qdxm = Column(String(16), nullable=False)                           # 签到姓名
+    sdrq = Column(DateTime, nullable=False)                             # 收单日期
+    sdgh = Column(String(16), nullable=False)                           # 收单工号
+    sdxm = Column(String(16), nullable=False)                           # 收单姓名
+    zzrq = Column(DateTime, nullable=False, default=datetime.now)       # 追踪日期
+    zzgh = Column(String(16), nullable=False)                           # 追踪工号
+    zzxm = Column(String(16), nullable=False)                           # 追踪姓名
+    zzbz = Column(Text, nullable=False)                                 # 追踪备注    记录电话等沟通信息，强制接收等信息
+    zjrq = Column(DateTime, nullable=False)                             # 总检日期
+    zjgh = Column(String(16), nullable=False)                           # 总检工号
+    zjxm = Column(String(16), nullable=False)                           # 总检姓名
+    zjbz = Column(Text, nullable=False)                                 # 总检备注
+    shrq = Column(DateTime, nullable=False)                             # 审核日期
+    shgh = Column(String(16), nullable=False)                           # 审核工号
+    shxm = Column(String(16), nullable=False)                           # 审核姓名
+    shbz = Column(Text, nullable=False)                                 # 审核备注    记录退回原因
+    syrq = Column(DateTime, nullable=False)                             # 审阅日期
+    sygh = Column(String(16), nullable=False)                           # 审阅工号
+    syxm = Column(String(16), nullable=False)                           # 审阅姓名
+    sybz = Column(Text, nullable=False)                                 # 审阅备注    记录退回原因
+    dyrq = Column(DateTime, nullable=False)                             # 打印日期
+    dygh = Column(String(16), nullable=False)                           # 打印工号
+    dyxm = Column(String(16), nullable=False)                           # 打印姓名
+    dyfs = Column(CHAR(1), nullable=True, default='0')                  # 打印方式 默认 0  自助打印 1
+    dycs = Column(Integer, nullable=True, default=0)                    # 打印次数 默认 0
+    zlrq = Column(DateTime, nullable=False)                             # 整理日期
+    zlgh = Column(String(16), nullable=False)                           # 整理工号
+    zlxm = Column(String(16), nullable=False)                           # 整理姓名
+    zlhm = Column(String(16), nullable=False)                           # 整理货号
+    lqrq = Column(DateTime, nullable=False)                             # 领取日期
+    lqgh = Column(String(16), nullable=False)                           # 领取工号
+    lqxm = Column(String(16), nullable=False)                           # 领取姓名
+    lqbz = Column(Text, nullable=False)                                 # 领取备注    记录领取信息
+    bgym = Column(Integer, nullable=True, default=0)                    # 报告页码，默认0页
+    bglj = Column(String(250), nullable=False)                          # 报告路径
 
 def get_report_track_sql(tstart,tend):
     sql= '''

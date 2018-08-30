@@ -3,6 +3,7 @@ from smb.SMBHandler import SMBHandler
 import urllib.request
 from utils import gol
 from string import Template
+from wand.image import Image
 
 # funcName = sys._getframe().f_back.f_code.co_name  #获取调用函数名
 # lineNumber = sys._getframe().f_back.f_lineno      #获取行号
@@ -185,3 +186,25 @@ def sql_init(sqlfile,paras:dict):
     except Exception as e:
         log.info('SQL文件：%s 读取失败，请检查文件编码！错误信息：%s' %(sqlfile,e))
         return ''
+
+def pdf2pic(pdf,new_file=None):
+    name = os.path.splitext(os.path.basename(pdf))[0] # 文件名称，不带路径
+    img_obj = Image(filename=pdf, resolution=300)
+    req_image = []
+    for img in img_obj.sequence:
+        img_page = Image(image=img)
+        if name[-3:] == '_08':
+            # 心电图 顺时针旋转 90度
+            img_page.rotate(90)
+        req_image.append(img_page.make_blob('png'))
+    # 遍历req_image,保存为图片文件
+    i = 0
+    if not new_file:
+        new_file = str(os.path.splitext(pdf)[0]) + '.png'
+    for img in req_image:
+        ff = open(new_file, 'wb')
+        ff.write(img)
+        ff.close()
+        i += 1
+
+    return new_file

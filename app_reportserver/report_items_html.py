@@ -60,11 +60,6 @@ pdf_html_item_page = '''
                             </tr>
                      %endif
                     % endfor
-                    <tr height=2px>
-                        <td colspan="4">
-                            <hr style="height:1px;border-top:2px solid #000;"/>
-                        </td>
-                    </tr>
                   </tbody>
                   <tfoot>
                     <tr valign="top" height=25px;>
@@ -128,11 +123,6 @@ pdf_html_item_page = '''
                         % endif
                         </tr>
                     % endfor
-                    <tr height=2px>
-                        <td colspan="4">
-                            <hr style="height:1px;border-top:2px solid #000;"/>
-                        </td>
-                    </tr>
                   </tbody>
                   <tfoot>
                     <tr>
@@ -167,21 +157,20 @@ pdf_html_item_page = '''
                             <td colspan="4">${mxxm['zd']}</td>
                         </tr>
                         % if ksbm == '0026':
-                            <tr>
-                                <td colspan="2" align="center"><img src=${pic[zhbh][0]} width="99%"></td>
-                                <td colspan="2" align="center"><img src=${pic[zhbh][0]} width="99%"></td>
-                            </tr>
+                            % if pic.get(zhbh,[]):
+                                <tr>
+                                    <td colspan="2" align="center"><img src=${pic[zhbh][0]} width="99%"></td>
+                                    <td colspan="2" align="center"><img src=${pic[zhbh][0]} width="99%"></td>
+                                </tr>
+                            % endif
                         % elif ksbm == '0020':
-                            <tr>
-                                <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
-                                <td colspan="2"><img src=${pic[zhbh][1]} width="99%"></td>
-                            </tr>
+                            % if pic.get(zhbh,[]):
+                                <tr>
+                                    <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
+                                    <td colspan="2"><img src=${pic[zhbh][1]} width="99%"></td>
+                                </tr>
+                            % endif
                         % endif
-                        <tr height=5px>
-                            <td colspan="4">
-                                <hr style="height:1px;border-top:2px solid #000;"/>
-                            </td>
-                        </tr>
                     %endfor
                     </tbody>
                       <tfoot>

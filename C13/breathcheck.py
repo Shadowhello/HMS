@@ -23,6 +23,7 @@ class BreathCheck(BreathCheckUI):
         self.simpleno_2 = 0     # 明州2楼
         self.simpleno_3 = 0     # 明州3楼
         self.simpleno_4 = 0     # 江东
+        self.simpleno_5 = 0     # 贵宾
         # 待插入的 数据对象
         self.data_obj = {'jllx':'0026','jlmc':'C13/14吹气','tjbh':'','mxbh':'5001','sjfs':'',
                          'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'jlnr':None,'bz':None}
@@ -65,16 +66,18 @@ class BreathCheck(BreathCheckUI):
             results = self.session.execute(get_checking1_sql()).fetchall()
             for result in results:
                 # 已存在容器
+                print(str2(result[5]),self.login_area,str2(result[5]) in  self.login_area)
                 if result[0] not in list(self.c13_items.keys()):
-                    self.c13_items[result[0]] = C13Item(result[0],data=list(result),state=2)
-                    # 重启计时
-                    tmp = []
-                    tmp.extend(result)
-                    tmp.append(0)
-                    tmp.append(cur_time())
-                    tmp.append(cur_time_15())
-                    self.table_c13_checking_1.insert2([result[0],str2(result[1]),str2(result[2]),str(result[3]),str2(result[4]),str2(result[5]),0,cur_time(),cur_time_15()])
-            # self.table_c13_checking_1.insertMany(results)
+                    # 初始化 时 只显示本区域内的 吃药丸进度，避免影响其他区域
+                    if str2(result[5]) in self.login_area:
+                        self.c13_items[result[0]] = C13Item(result[0],data=list(result),state=2)
+                        # 重启计时
+                        tmp = []
+                        tmp.extend(result)
+                        tmp.append(0)
+                        tmp.append(cur_time())
+                        tmp.append(cur_time_15())
+                        self.table_c13_checking_1.insert22([result[0],str2(result[1]),str2(result[2]),str(result[3]),str2(result[4]),str2(result[5]),0,cur_time(),cur_time_15()])
             self.gp_right_up.setTitle('2、吃药丸 计时中：总人数 %s' %self.table_c13_checking_1.rowCount())
 
             ###################### 4、 显示待测列表 ######################
@@ -101,7 +104,7 @@ class BreathCheck(BreathCheckUI):
                 mes_about(self, '刷新 %s 条数据！' % str(len(tmp)))
             else:
                 mes_about(self,'刷新 0 条数据！')
-        # self.lb_update.setText('2018-08-21 09:00:00')
+        # self.lb_update.setText('2018-08-21 09:00:00')   # 测试用
         self.lb_update.setText(cur_datetime())
 
     # 刷新待测列表
@@ -136,6 +139,8 @@ class BreathCheck(BreathCheckUI):
                     p_tjqy = self.table_c13_nocheck.item(item.row(), 5).text()
                     # 新表增加
                     self.table_c13_checking_1.insert2([p_tjbh,p_xm,p_xb,p_nl,p_xmmc,p_tjqy,0,cur_time(),cur_time_15()])
+                    # 更新容器对象
+
                     # 旧表删除
                     self.table_c13_nocheck.removeRow(item.row())
                     # 更新新表 标题
@@ -233,6 +238,9 @@ class BreathCheck(BreathCheckUI):
             elif tjqy == '江东':
                 self.simpleno_4 = self.simpleno_4 + 1
                 c13_item_obj.setSimpleNo(4000 + self.simpleno_4)
+            elif tjqy == '明州贵宾':
+                self.simpleno_5 = self.simpleno_5 + 1
+                c13_item_obj.setSimpleNo(5000 + self.simpleno_5)
             # 添加样本号
             data.insert(1,str(c13_item_obj.getSimpleNo()))
             # 新表增加
@@ -252,6 +260,8 @@ class BreathCheck(BreathCheckUI):
                 self.session.rollback()
                 mes_about(self, '插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
                 self.log.info('插入 TJ_CZJLB,TJ_TJJLMXB 记录失败！错误代码：%s' % e)
+
+
 
 
 if __name__ == '__main__':

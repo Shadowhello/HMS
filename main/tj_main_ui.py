@@ -2,7 +2,7 @@ from main.main_ui import *
 from utils import gol
 from utils.api import request_get
 from utils.base import cur_date
-# 动态模块需加入，否则需以源码形式跑
+# 动态模块需加入，打包工具无法检测自省模块，要不然需以源码形式跑
 # 采血留样 管理
 from lis import SampleManager
 # C13/14 管理
@@ -13,6 +13,8 @@ from report import ReportManager
 from mbgl import NCDManager
 # 结果录入管理
 from result import ResultManager
+# 加入VIP 管理
+from vip import VipManager
 
 WindowsTitle="明州体检"
 WindowsIcon="mztj"

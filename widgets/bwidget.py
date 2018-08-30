@@ -98,7 +98,7 @@ class TableWidget(QTableWidget):
         # 添加行头 必须先设置 setColumnCount
         self.setColumnCount(len(heads))
         self.setHorizontalHeaderLabels(heads.values())
-        self.horizontalHeader().setStyleSheet("QHeaderView::section{background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0.5 #054874 stop:1 #377277);}")  #设置表头背景色
+        # self.horizontalHeader().setStyleSheet("QHeaderView::section{background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0.5 #054874 stop:1 #377277);}")  #设置表头背景色
         self.heads = heads
 
     # 公共实现，载入数据
