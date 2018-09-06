@@ -17,7 +17,7 @@ class MT_TJ_BGGL(BaseModel):
     __tablename__ = 'TJ_BGGL'
 
     tjbh = Column(String(16), primary_key=True)                         # 体检编号
-    bgzt = Column(CHAR(1), nullable=True)                               # 报告状态 默认：待追踪(0) 追踪完成，待总检审核(1) 审核完成待审阅(2) 审阅完成待打印(3)
+    bgzt = Column(CHAR(1), nullable=True)                               # 报告状态 默认：追踪(0) 审核完成待审阅(1) 审阅完成待打印(2) 打印完成待整理(3) 4 整理  5 领取
     djrq = Column(DateTime, nullable=True)                              # 登记日期
     djgh = Column(String(16), nullable=False)                           # 登记工号
     djxm = Column(String(16), nullable=False)                           # 登记姓名
@@ -27,7 +27,7 @@ class MT_TJ_BGGL(BaseModel):
     sdrq = Column(DateTime, nullable=False)                             # 收单日期
     sdgh = Column(String(16), nullable=False)                           # 收单工号
     sdxm = Column(String(16), nullable=False)                           # 收单姓名
-    zzrq = Column(DateTime, nullable=False, default=datetime.now)       # 追踪日期
+    zzrq = Column(DateTime, nullable=False,)                            # 追踪日期
     zzgh = Column(String(16), nullable=False)                           # 追踪工号
     zzxm = Column(String(16), nullable=False)                           # 追踪姓名
     zzbz = Column(Text, nullable=False)                                 # 追踪备注    记录电话等沟通信息，强制接收等信息
@@ -43,10 +43,11 @@ class MT_TJ_BGGL(BaseModel):
     sygh = Column(String(16), nullable=False)                           # 审阅工号
     syxm = Column(String(16), nullable=False)                           # 审阅姓名
     sybz = Column(Text, nullable=False)                                 # 审阅备注    记录退回原因
+    sysc = Column(Integer, nullable=False, default=0)                   # 当次审阅时长 默认 0
     dyrq = Column(DateTime, nullable=False)                             # 打印日期
     dygh = Column(String(16), nullable=False)                           # 打印工号
     dyxm = Column(String(16), nullable=False)                           # 打印姓名
-    dyfs = Column(CHAR(1), nullable=True, default='0')                  # 打印方式 默认 0  自助打印 1
+    dyfs = Column(CHAR(1), nullable=False)                              # 打印方式 默认 0 报告室  自助打印 1
     dycs = Column(Integer, nullable=True, default=0)                    # 打印次数 默认 0
     zlrq = Column(DateTime, nullable=False)                             # 整理日期
     zlgh = Column(String(16), nullable=False)                           # 整理工号
@@ -55,9 +56,11 @@ class MT_TJ_BGGL(BaseModel):
     lqrq = Column(DateTime, nullable=False)                             # 领取日期
     lqgh = Column(String(16), nullable=False)                           # 领取工号
     lqxm = Column(String(16), nullable=False)                           # 领取姓名
+    lqfs = Column(String(16), nullable=False)                           # 领取方式
     lqbz = Column(Text, nullable=False)                                 # 领取备注    记录领取信息
     bgym = Column(Integer, nullable=True, default=0)                    # 报告页码，默认0页
-    bglj = Column(String(250), nullable=False)                          # 报告路径
+    bglj = Column(String(250), nullable=False)                          # 报告路径 只存储对应PDF、HTML根路径
+    bgms = Column(CHAR(1), nullable=False,default='0')                  # 报告模式 默认HTML 1 PDF
 
 def get_report_track_sql(tstart,tend):
     sql= '''
@@ -334,10 +337,10 @@ def get_report_print_sql(t_start,t_end):
             ''' %(t_start,t_end)
 
 # 根据审阅日期检索
-def get_report_print2_sql(t_start,t_end):
+def get_report_print2_sql():
     return '''
                 SELECT
-                    (CASE TJZT
+                    (CASE TJ_TJDJB.TJZT
                             WHEN '0' THEN '取消登记'
                             WHEN '1' THEN '已登记'
                             WHEN '2' THEN '已预约'
@@ -349,8 +352,16 @@ def get_report_print2_sql(t_start,t_end):
                             WHEN '8' THEN '已审阅'
                             ELSE '' END 
                     ) AS TJZT,
-                    c.BGZT,
-                    (CASE WHEN c.DYRQ IS NOT NULL THEN 1 WHEN c.DYRQ IS NULL AND a.dybj='1' THEN 1 ELSE 0 END) AS dyzt,
+                    (CASE TJ_BGGL.BGZT
+                            WHEN '0' THEN '追踪中'
+                            WHEN '1' THEN '已审核'
+                            WHEN '2' THEN '已审阅'
+                            WHEN '3' THEN '已打印'
+                            WHEN '4' THEN '已整理'
+                            WHEN '5' THEN '已领取'
+                            ELSE '' END 
+                    ) AS BGZT,
+                    (CASE WHEN TJ_BGGL.DYRQ IS NOT NULL THEN 1 WHEN TJ_BGGL.DYRQ IS NULL AND TJ_TJDJB.dybj='1' THEN 1 ELSE 0 END) AS dyzt,
                     (CASE 
                             WHEN zhaogong='0' AND TJLX='1' THEN '普通'
                             WHEN zhaogong='1' AND TJLX='1' THEN '招工'
@@ -372,22 +383,132 @@ def get_report_print2_sql(t_start,t_end):
                             WHEN '8' THEN '明州'
                             ELSE '' END
                     ) AS TJQY, 
-                    A.TJBH,
-                    B.XM,
+                    TJ_TJDJB.TJBH,
+                    TJ_TJDAB.XM,
                     (CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
-                    A.NL,
-                    B.SFZH,
-                    B.SJHM,
-                    substring(convert(char,a.QDRQ,120),1,10) as QDRQ,
-                    substring(convert(char,(CASE WHEN c.DYRQ IS NULL THEN a.BGRQ ELSE c.DYRQ END ),120),1,10) AS DYRQ,
-                    (CASE WHEN c.DYXM IS NULL THEN (select ygxm from tj_ygdm where yggh=a.CPAINTER ) ELSE c.DYXM END) AS DYXM,
-                    (CASE WHEN c.DYCS IS NULL AND dybj='1' THEN 1 WHEN c.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN 0 ELSE c.DYCS END) AS DYCS,
-                    (CASE WHEN c.DYFS IS NULL AND dybj='1' THEN '报告室' WHEN c.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' ELSE c.DYFS END) AS DYFS,
-                    (select MC from TJ_DWDMB where DWBH=a.DWBH) AS DWMC
+                    TJ_TJDJB.NL,
+                    TJ_TJDAB.SFZH,
+                    TJ_TJDAB.SJHM,
+                    substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) as QDRQ,
+                    substring(convert(char,(CASE WHEN TJ_BGGL.DYRQ IS NULL THEN TJ_TJDJB.BGRQ ELSE TJ_BGGL.DYRQ END ),120),1,10) AS DYRQ,
+                    (CASE 
+                        WHEN TJ_BGGL.DYXM IS NULL THEN (select ygxm from tj_ygdm where yggh=TJ_TJDJB.CPAINTER ) 
+                        ELSE TJ_BGGL.DYXM END
+                    ) AS DYXM,
+                    (CASE 
+                        WHEN TJ_BGGL.DYCS IS NULL AND dybj='1' THEN 1 
+                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN 0 
+                        ELSE TJ_BGGL.DYCS END
+                    ) AS DYCS,
+                    (CASE 
+                        WHEN TJ_BGGL.DYFS IS NULL AND dybj='1' THEN '报告室' 
+                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
+                        ELSE TJ_BGGL.DYFS END
+                    ) AS DYFS,
+                    TJ_BGGL.ZLXM,
+                    TJ_BGGL.ZLRQ,
+                    TJ_BGGL.ZLHM,
+                    TJ_BGGL.LQXM,
+                    TJ_BGGL.LQRQ,
+                    TJ_BGGL.LQFS,
+                    '' AS JPDY,
+                    TJ_TJDJB.DWBH,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC
                 FROM 
-                TJ_BGGL c INNER JOIN TJ_TJDJB a ON a.TJBH=c.TJBH  AND (a.del <> '1' or a.del is null) and a.QD='1' AND SUMOVER='1' AND (c.SYRQ>='%s' AND c.SYRQ<'%s')
-                INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH
+                TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_TJDJB.TJBH=TJ_BGGL.TJBH  
+                    AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+                    AND TJ_TJDJB.QD='1' 
+                    AND TJ_TJDJB.SUMOVER='1' 
+        '''
+
+# 根据审阅日期检索
+def get_report_review_sql(t_start,t_end):
+    return '''
+            SELECT
+                (CASE C.BGZT
+                        WHEN '0' THEN '待追踪'
+                        WHEN '1' THEN '已审核'
+                        WHEN '2' THEN '已审阅'
+                        WHEN '3' THEN '已打印'
+                        ELSE '' END 
+                ) AS BGZT,                  
+                (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                ) AS TJLX,
+                (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                ) AS TJQY, 
+                A.TJBH,
+                B.XM,
+                (CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                A.NL,
+                C.SYRQ,
+                C.SYXM,
+                (select MC from TJ_DWDMB where DWBH=a.DWBH) as DWMC,
+                C.SYBZ
+            FROM 
+            TJ_BGGL c INNER JOIN TJ_TJDJB a ON a.TJBH=c.TJBH  AND (a.del <> '1' or a.del is null) and a.QD='1' AND SUMOVER='1' AND (c.shrq>='%s' AND c.shrq<'%s')
         '''%(t_start,t_end)
+
+# 根据审阅日期检索
+def get_report_review_sql2(where_str):
+    return '''
+            SELECT
+                (CASE C.BGZT
+                        WHEN '0' THEN '待追踪'
+                        WHEN '1' THEN '已审核'
+                        WHEN '2' THEN '已审阅'
+                        WHEN '3' THEN '已打印'
+                        ELSE '' END 
+                ) AS BGZT,                  
+                (CASE 
+                        WHEN zhaogong='0' AND TJLX='1' THEN '普通'
+                        WHEN zhaogong='1' AND TJLX='1' THEN '招工'
+                        WHEN zhaogong='1' AND TJLX='2' THEN '从业'
+                        WHEN zhaogong='1' AND TJLX IN ('3','4','5','6') THEN '职业病'
+                        WHEN zhaogong='2' THEN '贵宾'
+                        WHEN zhaogong='3' THEN '重点'
+                        WHEN zhaogong='4' THEN '投诉'
+                        ELSE '' END
+                ) AS TJLX,
+                (CASE tjqy
+                        WHEN '1' THEN '明州1楼'
+                        WHEN '2' THEN '明州2楼'
+                        WHEN '3' THEN '明州3楼'
+                        WHEN '4' THEN '江东'
+                        WHEN '5' THEN '车管所'
+                        WHEN '6' THEN '外出'
+                        WHEN '7' THEN '其他'
+                        WHEN '8' THEN '明州'
+                        ELSE '' END
+                ) AS TJQY, 
+                A.TJBH,
+                B.XM,
+                (CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
+                A.NL,
+                C.SYRQ,
+                C.SYXM,
+                (select MC from TJ_DWDMB where DWBH=a.DWBH) as DWMC,
+                C.SYBZ
+            FROM 
+            TJ_BGGL c INNER JOIN TJ_TJDJB a ON a.TJBH=c.TJBH  AND (a.del <> '1' or a.del is null) and a.QD='1' AND SUMOVER='1' 
+            INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH  AND %s
+        '''%where_str
 
 # ORACLE PDF 路径 属于历史的
 class MT_TJ_PDFRUL(BaseModel):
@@ -399,45 +520,10 @@ class MT_TJ_PDFRUL(BaseModel):
     PDFURL = Column(VARCHAR(200),nullable=False)
     CREATETIME =Column(TIMESTAMP,nullable=False)
 
-# CREATE TABLE TJ_BGGL(
-#     [TJBH] varchar(16) COLLATE Chinese_PRC_CI_AS NOT NULL ,
-#     [BGZT] CHAR(1) COLLATE Chinese_PRC_CI_AS NOT NULL ,
-#     [QDRQ] datetime NULL ,
-#     [QDGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [QDXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SDRQ] datetime NULL ,
-#     [SDGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SDXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZZRQ] datetime NULL ,
-#     [ZZGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZZXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZZBZ] TEXT COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZJRQ] datetime NULL ,
-#     [ZJGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZJXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZJBZ] TEXT COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SHRQ] datetime  NULL ,
-#     [SHGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SHXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SHBZ] TEXT COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SYRQ] datetime NULL ,
-#     [SYGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SYXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [SYBZ] TEXT COLLATE Chinese_PRC_CI_AS NULL ,
-#     [DYRQ] datetime NULL ,
-#     [DYGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [DYXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [DYFS] CHAR(1) COLLATE Chinese_PRC_CI_AS NOT NULL ,
-#     [DYCS] INTEGER NOT NULL ,
-#     [ZLRQ] datetime NULL ,
-#     [ZLGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZLXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [ZLHM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [LQRQ] datetime NULL ,
-#     [LQGH] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [LQXM] varchar(16) COLLATE Chinese_PRC_CI_AS NULL ,
-#     [LQBZ] TEXT COLLATE Chinese_PRC_CI_AS NULL ,
-#     [BGYM] INTEGER NOT NULL ,
-#     PRIMARY KEY (TJBH)
-# );
+# ORACLE PDF 路径 属于历史的
+class MT_TJ_DWBH(BaseModel):
 
+    __tablename__ = 'TJ_DWBH'
+
+    dwbh = Column(VARCHAR(5), nullable=True,primary_key=True)
+    zlhm = Column(Integer, nullable=True,default=0)

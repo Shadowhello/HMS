@@ -165,10 +165,17 @@ pdf_html_item_page = '''
                             % endif
                         % elif ksbm == '0020':
                             % if pic.get(zhbh,[]):
-                                <tr>
-                                    <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
-                                    <td colspan="2"><img src=${pic[zhbh][1]} width="99%"></td>
-                                </tr>
+                                % if len(pic[zhbh])>=2:
+                                    <tr>
+                                        <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
+                                        <td colspan="2"><img src=${pic[zhbh][1]} width="99%"></td>
+                                    </tr>
+                                % else:
+                                    <tr>
+                                        <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
+                                        <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
+                                    </tr>   
+                                % endif                                 
                             % endif
                         % endif
                     %endfor

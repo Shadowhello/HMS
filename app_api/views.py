@@ -1,5 +1,4 @@
-from flask import send_file,make_response,request,jsonify,render_template,abort
-from flask_restful import Resource, reqparse
+from flask import send_file,make_response,request,jsonify,abort,url_for
 from app_api.exception import *
 from app_api.model import *
 import os,ujson,time,urllib.parse,requests
@@ -10,10 +9,15 @@ from app_api.dbconn import *
 
 # 初始化视图
 def init_views(app,db,queue=None):
+
     '''
     :param app:         应用程序本身
     :return:
     '''
+
+    @app.route("/")
+    def static_create():
+        return url_for('static', filename='/css/report.css')
 
     #二维码生成
     # @app.route('/api/qrcode/post?tjbh=<string:tjbh>&xm=<string:xm>&sfzh=<string:sfzh>&sjhm=<string:sjhm>&login_id=<string:login_id>', methods=['POST'])
@@ -22,7 +26,6 @@ def init_views(app,db,queue=None):
         print(' request.remote_addr %s API(获取二维码) 请求参数 login_id：%s tjbh：%s' % (cur_datetime(), login_id, tjbh))
         user = get_user_info(tjbh,db)
         if user:
-            print(user)
             url = 'http://10.7.200.27:8080/tjadmin/pInfoSubmit'
             head = {}
             head['realName'] = urllib.parse.quote(user['xm'])
@@ -34,11 +37,11 @@ def init_views(app,db,queue=None):
 
             response = requests.post(url, headers=head)
             if response.status_code == 200:
-                f = open(r'C:\Users\Administrator\Desktop\pdf测试\1.png', "wb")
-                for chunk in response.iter_content(chunk_size=512):
-                    if chunk:
-                        f.write(chunk)
-                f.close()
+                # f = open(r'C:\Users\Administrator\Desktop\pdf测试\1.png', "wb")
+                # for chunk in response.iter_content(chunk_size=512):
+                #     if chunk:
+                #         f.write(chunk)
+                # f.close()
                 return response.content
             else:
                 abort(404)
@@ -99,6 +102,14 @@ def init_views(app,db,queue=None):
         else:
             abort(404)
         if filetype =='html':      # request 请求
+            sql = "select bglj from tj_bggl where tjbh='%s';" %tjbh
+            result = db.session.execute(sql).scalar()
+            if result:
+                filename = os.path.join(result,'%s.html' %tjbh)
+                if os.path.exists(filename):
+                    #return app.send_static_file(filename)
+                    return send_file(filename)
+
             abort(404)
         elif filetype =='pdf':     # report 报告
             result = db.session.query(MT_TJ_FILE_ACTIVE.filename).filter(MT_TJ_FILE_ACTIVE.tjbh == tjbh,
@@ -113,17 +124,23 @@ def init_views(app,db,queue=None):
     @app.route('/api/report/down/pdf/<int:tjbh>', methods=['GET'])
     def report_down(tjbh):
         print('客户端：%s 报告(%s)下载请求' % (request.remote_addr, tjbh))
-        session = gol.get_value('tj_cxk')
-        result = session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).order_by(MT_TJ_PDFRUL.CREATETIME.desc()).scalar()
+        # 当前
+        result = db.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
         if result:
-
-            filename = os.path.join('D:/pdf/',result.PDFURL)
-            response = make_response(send_file(filename, as_attachment=True))
-            response.headers['Content-Type'] = mimetypes.guess_type(os.path.basename(filename))[0]
-            response.headers['Content-Disposition'] = 'attachment; filename={}'.format(os.path.basename(filename))
-            return response
+            filename = os.path.join(result.bglj,"%s.pdf" %tjbh)
         else:
-            abort(404)
+            # 历史
+            session = gol.get_value('tj_cxk')
+            result = session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).order_by(MT_TJ_PDFRUL.CREATETIME.desc()).scalar()
+            if result:
+                filename = os.path.join('D:/pdf/',result.PDFURL)
+            else:
+                abort(404)
+        response = make_response(send_file(filename, as_attachment=True))
+        response.headers['Content-Type'] = mimetypes.guess_type(os.path.basename(filename))[0]
+        response.headers['Content-Disposition'] = 'attachment; filename={}'.format(os.path.basename(filename))
+        return response
+
 
     # PDF 报告打印，用户发起
     @app.route('/api/report/print/pdf/<int:tjbh>', methods=['GET'])

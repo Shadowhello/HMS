@@ -72,6 +72,11 @@ def set_env(termial=False):
     except Exception as e:
         lis_session = None
         log.info('连接LIS检验数据库失败！错误信息：%s' % e)
+    try:
+        film_session = get_film_session()
+    except Exception as e:
+        film_session = None
+        log.info('连接胶片数据库失败！错误信息：%s' % e)
     # 设置数据库连接变量
     gol.set_value("tjxt_session_local", session)
     gol.set_value("tjxt_session_thread", session)
@@ -79,5 +84,6 @@ def set_env(termial=False):
     gol.set_value("pis_session", pis_session)
     gol.set_value("lis_session", lis_session)
     gol.set_value("cxk_session", cxk_session)
+    gol.set_value("film_session", film_session)
     if termial:
         gol.print_paras()

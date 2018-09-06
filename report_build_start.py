@@ -24,12 +24,14 @@ import time,os,ujson
 import shutil
 from collections import OrderedDict
 import pdfkit
-from utils import set_report_env,BarCodeBuild,cur_datetime,RemoteFileHandler,pdf2pic
+from utils import set_report_env,BarCodeBuild,cur_datetime,RemoteFileHandler,fileRename
 from utils import gol
 from app_reportserver import *
 from jinja2 import Template
 from mako.template import Template as Template2
 from pprint import pprint
+from report import MT_TJ_BGGL
+from wand.image import Image
 
 def report_run(queue):
     #######################初始化 全局参数######################################
@@ -43,10 +45,14 @@ def report_run(queue):
     pdf_cover_css = gol.get_value('report_cover_css')                           # 封面样式表
     pdf_bg_img = gol.get_value('report_head_pic')                               # 封面背景图
     pdf_sign_img = gol.get_value('report_sign')                                 # 签名图片位置
+    html_css = gol.get_value('report_html_css')                                 # 主文件样式表
+    html_bg_img = gol.get_value('report_html_head_pic')                         # 封面背景图
+    html_sign_img = gol.get_value('report_html_sign')                           # 签名图片位置
     session_tjxt = gol.get_value('session_tjxt')                                # 数据库链接
     session_cxk = gol.get_value('session_cxk')                                  # 数据库链接
-    cachet = {'zjys':None,'shys':None,'warn':None}                              # 公章、总检、审核医生签名
+    cachet = {'zjys':None,'shys':None,'warn':None,'syys':None}                  # 公章、总检、审核医生签名
     footer_user = pdf_options['footer-left']
+    html_path =gol.get_value('report_html_resource')
     ####################### 数据准备：图片、首页、html ###########################
     while True:
         if not queue.empty():                                                           # 循环
@@ -57,28 +63,38 @@ def report_run(queue):
             action = mes_obj['action']                                                  # 获取执行动作 ：生成HTML还是生成PDF
             time_start = time.time()
             # pdf 数据对象
-            pdf_data_obj = PdfData(session_tjxt,session_cxk,gol.get_value('report_path'),tjbh)
+            pdf_data_obj = PdfData(session_tjxt,session_cxk,gol.get_value('report_path'),tjbh,action)
             # 设置状态
             pdf_data_obj.set_bgzt(action)
+            # 设置html 路径
+            pdf_data_obj.set_html_path(html_path)
             # ######################## PDF 报告封面是否单独生成 #######################
             i_user = pdf_data_obj.get_user_data
             if not i_user:
                 log.info("未查询到顾客：%s 信息 " %tjbh)
                 return
-            i_user['css'] = pdf_css
-            i_user['cover_css'] = pdf_cover_css
-            i_user['head_pic'] = pdf_bg_img
-            # 传输 图片
-            pdf_data_obj.transfer_pic()
             if action=='pdf':
+                # 资源文件位置不一致
+                i_user['css'] = pdf_css
+                i_user['cover_css'] = pdf_cover_css
+                i_user['head_pic'] = pdf_bg_img
+                sign_img = pdf_sign_img
+                # 传输 图片
+                pdf_data_obj.transfer_pic()
                 # 单独生成封面
                 write_home_html(pdf_data_obj.get_head_html,i_user)
                 ######################## PDF 报告主体 从内容页开始写入 #######################
                 pdf_build_obj = buildBodyHtml(pdf_data_obj.get_body_html,pdf_css)
             else:
+                # 资源文件位置不一致
+                i_user['css'] = html_css
+                i_user['head_pic'] = html_bg_img
+                sign_img = html_sign_img
+                pdf_data_obj.transfer_pic(True)
                 # HTML 报告
                 ######################## PDF 报告主体 从首页开始写入 #######################
                 pdf_build_obj = buildBodyHtml(pdf_data_obj.get_html, pdf_css,False)
+                pdf_data_obj.set_bglj(pdf_data_obj.get_html)
                 pdf_build_obj.write_home(i_user)
             ######################## 写入排班信息 ########################
             pdf_build_obj.write_yspb(pdf_data_obj.get_yspb)
@@ -87,8 +103,12 @@ def report_run(queue):
             pdf_build_obj.write_xj(summarys)
             pdf_build_obj.write_jy(suggestions)
             ######################## 写入总检、审核医生签名及公章 ########################
-            cachet['zjys'] = os.path.join(pdf_sign_img,'%s.png' %i_user['zjys'])
-            cachet['shys'] = os.path.join(pdf_sign_img,'%s.png' %i_user['shys'])
+            cachet['zjys'] = os.path.join(sign_img,'%s.png' %i_user['zjys'])
+            cachet['shys'] = os.path.join(sign_img,'%s.png' %i_user['shys'])
+            if i_user['syys']:
+                cachet['syys'] = os.path.join(sign_img,'%s.png' %i_user['syys'])
+            else:
+                cachet['syys'] = None
             cachet['warn'] = warn
             pdf_build_obj.write_cachet(cachet)
             ######################## 写入项目结果 #######################
@@ -123,19 +143,12 @@ def report_run(queue):
                 time_end2 = time.time()
                 print("%s: %s PDF报告生成成功！耗时：%s " %(cur_datetime(),tjbh,time_end2 - time_start))
                 log.info("%s: %s PDF报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end2 - time_start))
-            ############################## 插入数据库 ########################################
+                pdf_data_obj.set_bglj(pdf_data_obj.get_pdf)
+            ############################## 更新数据库 ########################################
 
+            pdf_data_obj.update_user_report()
         else:
             time.sleep(1)
-
-
-# 生成PDF
-def build_pdf(tjbh):
-    pass
-
-# 生成HTML
-def build_html(tjbh):
-    pass
 
 def write_home_html(filename,user:dict):
     # 如果已存在，则删除
@@ -179,11 +192,15 @@ class buildBodyHtml(object):
 
     # 写入体检注意事项及公章
     def write_cachet(self,cachet):
-        self.html_obj.write(Template2(pdf_html_cachet_page).render(cachet=cachet))
+        if cachet['syys']:
+            self.html_obj.write(Template2(pdf_html_cachet_page2).render(cachet=cachet))
+        else:
+            self.html_obj.write(Template2(pdf_html_cachet_page).render(cachet=cachet))
 
     # 写入体检结果项目
     def write_items(self,items):
-        # pprint(items)
+        # from app_reportserver.report_items import write_item_test
+        # write_item_test(items)
         self.html_obj.write(Template2(pdf_html_item_page).render(items=items))
 
     # 写入设备项目报告
@@ -202,7 +219,7 @@ class buildBodyHtml(object):
 # PDF 数据对象：用于生成数据
 class PdfData(object):
 
-    def __init__(self,session_tjk,session_cxk,path,tjbh):
+    def __init__(self,session_tjk,session_cxk,path,tjbh,action):
         '''
         :param session_tjk: 体检库连接会话
         :param session_cxk: 查询库连接会话
@@ -214,6 +231,7 @@ class PdfData(object):
         self.session_cxk = session_cxk
         self.tjbh = tjbh
         self.path =path
+        self.action =action
         #
         self.citems = OrderedDict()    # 组合项目
         # key 用于标题，value 用于获取子项目明细
@@ -258,19 +276,34 @@ class PdfData(object):
         self.pic = {}          # B超、内镜图片信息
         self.equip_pic=[]      # 设备报告图片路径
         self.io_jkcf = False   # 是否有健康处方
+        self.out_file = None   # HTML 报告路径或者PDF报告路径
+        self.cur_dir = None    # 该体检编号
+        self.set_cur_dir()     # 设置当前目录
+        self.html_path = None  # 设置HTML 资源跟路径
 
         # 汇总数据 待插入TJ_BGGL 表格
         self.user_data = {
-            'TJBH':tjbh,
-            'SYBZ':[]
+            'tjbh':tjbh,
+            'sybz':[]
         }
 
     # 设置报告状态 这里只有 html 审核完成待审阅 pdf 审阅完成待打印
     def set_bgzt(self,filetype):
         if filetype =='html':
-            self.user_data['bgzt'] = '2'
+            self.user_data['bgzt'] = '1'
         else:
-            self.user_data['bgzt'] = '3'
+            self.user_data['bgzt'] = '2'
+
+    # 设置报告输出路径
+    def set_bglj(self,filename):
+        if filename.endswith('.pdf'):
+            self.user_data['bgms'] = '1'
+        else:
+            self.user_data['bgms'] = '0'
+        self.user_data['bglj'] = self.cur_dir
+
+    def set_html_path(self,path):
+        self.html_path = path
 
     # 获得用户数据
     @property
@@ -278,21 +311,24 @@ class PdfData(object):
         result = self.session_tjk.query(MV_RYXX).filter(MV_RYXX.tjbh == self.tjbh).scalar()
         if result:
             # 更新用户数据
-            self.user_data['DJRQ'] = str(result.djrq)
-            self.user_data['DJGH'] = result.djgh
-            self.user_data['DJXM'] = str2(result.djxm)
-            self.user_data['QDRQ'] = str(result.qdrq)
-            self.user_data['ZJGH'] = result.zjys
-            self.user_data['ZJXM'] = str2(result.zjxm)
-            self.user_data['ZJRQ'] = str(result.zjrq)
-            self.user_data['SHGH'] = result.shys
-            self.user_data['SHXM'] = str2(result.shxm)
-            self.user_data['SHRQ'] = str(result.shrq)
+            self.user_data['djrq'] = str(result.djrq)[0:19]
+            self.user_data['djgh'] = result.djgh
+            self.user_data['djxm'] = str2(result.djxm)
+            self.user_data['qdrq'] = str(result.qdrq)[0:19]
+            self.user_data['zjgh'] = result.zjys
+            self.user_data['zjxm'] = str2(result.zjxm)
+            self.user_data['zjrq'] = str(result.zjrq)[0:19]
+            self.user_data['shgh'] = result.shys
+            self.user_data['shxm'] = str2(result.shxm)
+            self.user_data['shrq'] = str(result.shrq)[0:19]
             #########################################
             if result.io_jkcf=='1':
                 self.io_jkcf = True
             i_user = result.pdf_dict
-            i_user['tm'] = os.path.join(self.get_img_dir, '%s.png' % self.tjbh)
+            if self.action=='pdf':
+                i_user['tm'] = os.path.join(self.get_img_dir, '%s.png' % self.tjbh)
+            else:
+                i_user['tm'] = os.path.join(self.get_html_img_dir, '%s.png' % self.tjbh).replace(self.html_path,'')
             return i_user
 
         return {}
@@ -308,36 +344,55 @@ class PdfData(object):
             os.makedirs(cur_path)
         return cur_path
 
-    # 获得当日的保存目录
+    # 获得该人保存的图片目录（HTML 用）
     @property
-    def get_cur_dir(self):
+    def get_html_img_dir(self):
+        dday = time.strftime("%Y-%m-%d", time.localtime(int(time.time())))
+        dyear = dday[0:4]
+        dmonth = dday[0:7]
+        cur_path = '%s/%s/%s/%s/%s/img/' % (self.html_path, dyear, dmonth, dday, self.tjbh)
+        if not os.path.exists(cur_path):
+            os.makedirs(cur_path)
+        return cur_path
+
+    # 设置保存目录
+    def set_cur_dir(self):
+        # 如果已经存在，则用原来的路径
+        result = self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh==self.tjbh).scalar()
+        if result:
+            if result.bglj:
+                report_file_rename(result.bglj,self.tjbh,self.action)
+                self.cur_dir = result.bglj
+                # return result.bglj
+                return
+        # 如果不存在，则生成当日路径
         dday = time.strftime("%Y-%m-%d", time.localtime(int(time.time())))
         dyear = dday[0:4]
         dmonth = dday[0:7]
         cur_path = '%s/%s/%s/%s/%s/' % (self.path, dyear, dmonth, dday, self.tjbh)
         if not os.path.exists(cur_path):
             os.makedirs(cur_path)
-        return cur_path
+        self.cur_dir = cur_path
 
     # 获得封面 名称
     @property
     def get_head_html(self):
-        return os.path.join(self.get_cur_dir, 'cover.html')
+        return os.path.join(self.cur_dir, 'cover.html')
 
     # 获得内容页面 名称
     @property
     def get_body_html(self):
-        return os.path.join(self.get_cur_dir, 'body.html')
+        return os.path.join(self.cur_dir, 'body.html')
 
     # 获得内容页面 名称
     @property
     def get_html(self):
-        return os.path.join(self.get_cur_dir, '%s.html' %self.tjbh)
+        return os.path.join(self.cur_dir, '%s.html' %self.tjbh)
 
     # 输出生成的pdf名称
     @property
     def get_pdf(self):
-        return os.path.join(self.get_cur_dir, '%s.pdf' %self.tjbh)
+        return os.path.join(self.cur_dir, '%s.pdf' %self.tjbh)
 
     # 获取小结、建议内容
     @property
@@ -389,9 +444,14 @@ class PdfData(object):
         return {'zhxm': self.citems, 'mxxm': self.ditems, 'jcjl': self.jcjl, 'pic': self.pic}
 
     # 迁移图像或者生成图片 到指定位置
-    def transfer_pic(self):
+    def transfer_pic(self,flag=False):
+        # 是否迁移HTML 图片
+        # 默认为PDF 图片
         # ################ 1、条码号图片  ##########################
-        bc = BarCodeBuild(path=self.get_img_dir)
+        if flag:
+            bc = BarCodeBuild(path=self.get_html_img_dir)
+        else:
+            bc = BarCodeBuild(path=self.get_img_dir)
         bc.create2(self.tjbh)
         # ################ 2、B超、内镜、病理图片 ########################
         # 文件传输服务
@@ -407,8 +467,10 @@ class PdfData(object):
             else:
                 count = 1
                 tmp = result.zhbh
-
-            file_local = os.path.join(self.get_img_dir, '%s_%s_%s.jpg' % (result.tjbh, result.zhbh, count))
+            if flag:
+                file_local = os.path.join(self.get_html_img_dir, '%s_%s_%s.jpg' % (result.tjbh, result.zhbh, count))
+            else:
+                file_local = os.path.join(self.get_img_dir, '%s_%s_%s.jpg' % (result.tjbh, result.zhbh, count))
             # 病理
             if result.ksbm.strip() == '0026':
                 if result.picpath:
@@ -417,11 +479,15 @@ class PdfData(object):
                     if is_done:
                         if not self.pic.get(result.zhbh, 0):
                             self.pic[result.zhbh] = []
-                        self.pic[result.zhbh].append(file_local)
+                        #
+                        if flag:
+                            self.pic[result.zhbh].append(file_local.replace(self.html_path,''))
+                        else:
+                            self.pic[result.zhbh].append(file_local)
                 else:
                     # 缺图
-                    print('病理科室：项目（%s）不存在图片！' %result.zhbh)
-                    self.user_data['SYBZ'].append('病理科室：项目（%s）不存在图片；' %result.zhbh)
+                    print('%s：(%s)病理科室：项目(%s)不存在图片！' %(cur_datetime(),self.tjbh,result.zhbh))
+                    self.user_data['sybz'].append('病理科室：项目（%s）不存在图片；' %result.zhbh)
 
             # PACS
             elif result.ksbm.strip() in ['0020', '0024']:
@@ -431,11 +497,17 @@ class PdfData(object):
                     if is_done:
                         if not self.pic.get(result.zhbh, 0):
                             self.pic[result.zhbh] = []
-                        self.pic[result.zhbh].append(file_local)
+                        if flag:
+                            print(file_local)
+                            print(file_local.replace(self.html_path, ''))
+                            self.pic[result.zhbh].append(file_local.replace(self.html_path, ''))
+                        else:
+                            self.pic[result.zhbh].append(file_local)
+                        #self.pic[result.zhbh].append(file_local)
                 else:
                     # 缺图
-                    print('彩超/内镜科室：项目（%s）不存在图片！' %result.zhbh)
-                    self.user_data['SYBZ'].append('彩超/内镜科室：项目（%s）不存在图片；' % result.zhbh)
+                    print('%s：(%s)彩超/内镜科室：项目（%s）不存在图片！' %(cur_datetime(),self.tjbh,result.zhbh))
+                    self.user_data['sybz'].append('彩超/内镜科室：项目（%s）不存在图片；' % result.zhbh)
             else:
                 pass
 
@@ -445,29 +517,51 @@ class PdfData(object):
             result = self.session_tjk.query(MT_TJ_EQUIP).filter(MT_TJ_EQUIP.tjbh == self.tjbh,MT_TJ_EQUIP.xmbh == zhbh).scalar()
             # 服务端
             if result:
-                file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+                if flag:
+                    file_local = os.path.join(self.get_html_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+                else:
+                    file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+                #file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
                 if result.file_path:
                     if os.path.exists(result.file_path.replace('.pdf', '.png')):
-                        shutil.copy2(file_local, result.file_path)
+                        try:
+                            shutil.copy2(result.file_path.replace('.pdf', '.png'),file_local)
+                            # shutil.copy2(file_local, result.file_path)
+                        except Exception as e:
+                            print("文件复制失败，错误信息：%s。源码错误：report_build_start/line 521" %(e))
                     else:
                         # 存在PDF，不存在png 图片,则后台转换，针对历史报告
-                        pdf2pic(result.file_path,file_local)
+                        if os.path.exists(result.file_path):
+                            pdf2pic(result.file_path,file_local)
+                        else:
+                            pass
                     # 添加
-                    self.pic[result.xmbh] = file_local
-
+                    if flag:
+                        self.pic[result.xmbh] = file_local.replace(self.html_path, '')
+                    else:
+                        self.pic[result.xmbh]= file_local
+                    # self.pic[result.xmbh] = file_local
             # 本地测试
             # if result:
-            #     file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
-            #     file_remote = '10.7.200.101/d$/%s' % result.file_path.replace('D:/', '').replace('.pdf', '.png')
-            #     is_done, error = hander_pacs.down(file_remote, file_local)
-            #     if is_done:
-            #         self.pic[result.xmbh] = file_local
+                # if flag:
+                #     file_local = os.path.join(self.get_html_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+                # else:
+                #     file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+                # # file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+                # file_remote = '10.7.200.101/d$/%s' % result.file_path.replace('D:/', '').replace('.pdf', '.png')
+                # is_done, error = hander_pacs.down(file_remote, file_local)
+                # if is_done:
+                    # 添加
+                    if flag:
+                        self.pic[result.xmbh] = file_local.replace(self.html_path, '')
+                    else:
+                        self.pic[result.xmbh] = file_local
+                    # self.pic[result.xmbh] = file_local
 
             else:
                 # 缺图
-                print('设备接口：项目（%s）不存在图片！' % result.zhbh)
-                self.user_data['SYBZ'].append('设备接口：项目（%s）不存在图片；' % result.zhbh)
-
+                print('%s (%s)设备接口：项目（%s）不存在图片！' %(cur_datetime(),self.tjbh,zhbh))
+                self.user_data['sybz'].append('设备接口：项目（%s）不存在图片；' % zhbh)
 
     # 获取医生排班信息
     @property
@@ -538,14 +632,63 @@ class PdfData(object):
 
         return health
 
-    # 获得用户体检数据
-    def get_user_info(self):
-        pass
+    # 更新用户数据
+    def update_user_report(self):
+
+        self.user_data['sybz'] = '；'.join(self.user_data['sybz'])
+        # pprint(self.user_data)
+        result = self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.tjbh).scalar()
+        if result:
+            if result.bgzt== '0':
+                # 待追踪
+                pass
+            elif result.bgzt== '1':
+                pass
+            else:
+                pass
+
+        else:
+            try:
+                self.session_tjk.bulk_insert_mappings(MT_TJ_BGGL, [self.user_data])
+                self.session_tjk.commit()
+            except Exception as e:
+                self.session_tjk.rollback()
+                print('插入 MT_TJ_BGGL 记录失败！错误代码：%s' %e)
+
+def pdf2pic(pdf,new_file=None):
+    name = os.path.splitext(os.path.basename(pdf))[0] # 文件名称，不带路径
+    img_obj = Image(filename=pdf, resolution=300)
+    req_image = []
+    for img in img_obj.sequence:
+        img_page = Image(image=img)
+        if name[-3:] == '_08':
+            # 心电图 顺时针旋转 90度
+            img_page.rotate(90)
+        req_image.append(img_page.make_blob('png'))
+    # 遍历req_image,保存为图片文件
+    i = 0
+    if not new_file:
+        new_file = str(os.path.splitext(pdf)[0]) + '.png'
+    for img in req_image:
+        ff = open(new_file, 'wb')
+        ff.write(img)
+        ff.close()
+        i += 1
+
+    return new_file
+
+
+# 指定文件存在，则重命名
+def report_file_rename(path,tjbh,action):
+    filename = os.path.join(path, '%s.%s' %(tjbh,action))
+    if os.path.exists(filename):
+        fileRename(filename)
+
 
 
 
 if __name__ =='__main__':
     from queue import Queue
     q = Queue()
-    q.put({'tjbh':'172960248','action':'pdf'})
+    q.put({'tjbh':'166772601','action':'pdf'})
     report_run(q)

@@ -30,3 +30,6 @@ class WebView(QWebView):
         self.settings.setAttribute(QWebSettings.LocalContentCanAccessFileUrls, True)
         self.settings.setAttribute(QWebSettings.LocalContentCanAccessRemoteUrls, True)
         self.settings.setAttribute(QWebSettings.DeveloperExtrasEnabled, True)
+
+    # def resizeEvent(self,event):
+    #     self.resize(500,1000)

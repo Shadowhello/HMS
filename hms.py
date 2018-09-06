@@ -1,5 +1,4 @@
 from PyQt5.QtCore import PYQT_VERSION_STR,QCoreApplication,Qt
-
 # 判断版本号
 if int(PYQT_VERSION_STR.replace('.',''))>=560:
     from PyQt5.QtWebEngineWidgets import *
@@ -12,6 +11,7 @@ else:
 import multiprocessing
 from multiprocessing import Process, Queue
 from utils.envir import *
+import ctypes
 
 
 # 主界面
@@ -82,4 +82,11 @@ if __name__=="__main__":
     multiprocessing.freeze_support()
     # 启动主进程
     set_env()
-    start_run()
+    # 增加全局异常处理
+    try:
+        start_run()
+    except Exception as e:
+        error = '%s' %e
+        ctypes.windll.user32.MessageBoxA(0,error.encode('gb2312'),'明州体检'.encode('gb2312'),0)
+
+

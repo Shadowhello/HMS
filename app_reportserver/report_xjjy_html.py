@@ -41,6 +41,7 @@ pdf_html_cachet_page ='''
     <%
         zjys = cachet['zjys'] 
         shys = cachet['shys'] 
+        syys = cachet['syys'] 
         warn = cachet['warn'] 
     %>
     <br>
@@ -49,13 +50,40 @@ pdf_html_cachet_page ='''
             <td></td>
         </tr>
         <tr align="right">
-            <td>总检医生：<img src=${zjys}></td>
+            <td>总检医生：<img src=${zjys} height="50" width="100" /></td>
         </tr>
+        <tr align="right">
+            <td>审核医生：<img src=${shys} height="50" width="100" /></td>
+        </tr>
+        <tr align="left">
+            <td>${warn}</td>
+        </tr>
+    </table>
+</div>
+'''
+
+# 总检审核签字、电子章
+pdf_html_cachet_page2 ='''
+<div class="page_2">
+    <%
+        zjys = cachet['zjys'] 
+        shys = cachet['shys'] 
+        syys = cachet['syys'] 
+        warn = cachet['warn'] 
+    %>
+    <br>
+    <table class="cachet">
         <tr>
             <td></td>
         </tr>
         <tr align="right">
-            <td>审核医生：<img src=${shys}></td>
+            <td>总检医生：<img src=${zjys} height="50" width="100" /></td>
+        </tr>
+        <tr align="right">
+            <td>审核医生：<img src=${shys} height="50" width="100" /></td>
+        </tr>
+        <tr align="right">
+            <td>三审护士：<img src=${syys} height="50" width="100" /></td>
         </tr>
         <tr align="left">
             <td>${warn}</td>

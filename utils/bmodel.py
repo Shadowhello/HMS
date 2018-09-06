@@ -132,6 +132,14 @@ class MT_TJ_TJJLMXB(BaseModel):
             'xmdw': str2(getattr(self, "xmdw", ''))
         }
 
+class MT_TJ_CZJLWHB(BaseModel):
+
+    __tablename__ = 'TJ_CZJLWHB'
+
+    czbh = Column(CHAR(4),nullable=True, primary_key=True)
+    czdzd = Column(VARCHAR(20),nullable=False)
+    jsgs = Column(Float,nullable=False)
+
 
 class MT_TJ_PACS_PIC(BaseModel):
 
@@ -284,8 +292,15 @@ class MT_TJ_EQUIP(BaseModel):
             'jcrq': str(getattr(self, "operate_time"))[0:19],
             'jcys': str2(getattr(self, "operator2")),
             'jcqy': str2(getattr(self, "operate_area")),
-            'fpath': getattr(self, "file_path").replace(r'D:/activefile','')
+            'fpath':self.fpath
         }
+
+    @property
+    def fpath(self):
+        if getattr(self, "file_path"):
+            return getattr(self, "file_path").replace(r'D:/activefile','')
+        else:
+            return ''
 
 
 
@@ -324,6 +339,7 @@ class MV_RYXX(BaseModel):
     shxm = Column(String(20), nullable=False)
     zjys = Column(String(20), nullable=False)
     shys = Column(String(20), nullable=False)
+    sygh = Column(String(20), nullable=False)
     io_jkcf = Column(CHAR(1), nullable=False)
     bz = Column(Text, nullable=False)
 
@@ -359,8 +375,9 @@ class MV_RYXX(BaseModel):
                 "dwmc": str2(getattr(self, "dwmc", '')),
                 "qdrq": str(getattr(self, "qdrq", ''))[0:10],
                 "djrq": str(getattr(self, "djrq", '')),
-                'zjys': str2(getattr(self, "zjys")),
-                'shys': str2(getattr(self, "shys"))
+                'zjys': getattr(self, "zjys"),
+                'shys': getattr(self, "shys"),
+                'syys': getattr(self, "sygh")
                 }
 
 class MT_TJ_PHOTO(BaseModel):

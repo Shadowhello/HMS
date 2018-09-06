@@ -342,6 +342,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
                                                            MT_TJ_CZJLB.mxbh == button.collectNo).update({MT_TJ_CZJLB.jllx: '0000',MT_TJ_CZJLB.bz: qxbz})
                     self.session.commit()
                 except Exception as e:
+                    self.session.rollback()
                     mes_about(self,'取消该条码出错！错误信息：%s' %e)
             else:
                 pass
@@ -351,6 +352,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
                 self.session.execute(get_xmjj_sql(button.collectTJBH,button.collectNo,self.login_id,self.login_name,self.login_area))
                 self.session.commit()
             except Exception as e:
+                self.session.rollback()
                 mes_about(self,'拒检失败！错误代码：%s' %e)
         if action == item3:
             pass

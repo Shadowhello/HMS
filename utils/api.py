@@ -122,7 +122,8 @@ class APIRquest(object):
 
 
 def request_create_report(tjbh,filetype='html'):
-    url = gol.get_value('api_report_create') %(filetype,tjbh)
+    url = gol.get_value('api_report_create') %(filetype,tjbh,'BSSA')
+    print(url)
     response = requests.post(url)
     if response.status_code == 200:
         print('API：%s 上传请求成功！' % url)
@@ -134,7 +135,13 @@ def request_create_report(tjbh,filetype='html'):
 
 if __name__=="__main__":
     from utils.envir import set_env
+    sql = "SELECT TJBH FROM TJ_TJDJB WHERE  (del <> '1' or del is null) and QD='1' and SHRQ>='2018-08-25' AND SHRQ<'2018-09-01' AND SUMOVER='1'; "
     set_env()
+    # session = gol.get_value('tjxt_session_local')
+    # results = session.execute(sql).fetchall()
+    # for result in results:
+    #     request_create_report(result[0], 'html')
+        # request_create_report(result[0], 'pdf')
     # print(get_barcode_wx('测试5','330227199902040663','13736093866'))
-    request_create_report('172960376','pdf')
+    request_create_report('111481599','html')
     # request_post_wx()

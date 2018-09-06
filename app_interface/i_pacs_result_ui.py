@@ -93,11 +93,6 @@ class PacsResultUI(PacsDialog):
         lt_main.addWidget(gp_bottom_3)
 
         self.lb_bz = StateLable(gp_bottom_2)
-        # self.lb_bz = QLabel(gp_bottom_2)
-        # self.lb_bz.setMinimumSize(200,200)
-        # self.lb_bz.setGeometry(400,-40,100,100)
-        # self.lb_bz.setStyleSheet('''font: 75 28pt "微软雅黑";color: rgb(255, 0, 0);''')
-        # self.lb_bz.setAttribute(Qt.WA_TranslucentBackground)
         self.lb_bz.show()
         self.setLayout(lt_main)
 

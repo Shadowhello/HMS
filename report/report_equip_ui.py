@@ -93,60 +93,109 @@ class ReportEquipTable(TableWidget):
 
 class ReportEquipUser(QGroupBox):
 
+    # 自定义 信号，封装对外使用
+    btnClick = pyqtSignal(bool,int)
+
     def __init__(self):
         super(ReportEquipUser,self).__init__()
+        self.initUI()
+        self.btn_audit.clicked.connect(self.on_btn_audit_click)
+
+    def initUI(self):
         self.setTitle('审核信息')
         lt_main = QGridLayout()
-        self.review_user = ReviewLabel()
-        self.review_time = ReviewLabel()
-        self.review_comment = QPlainTextEdit()
-        # self.review_comment.setFixedHeight(80)
-        self.review_comment.setStyleSheet('''border: 1px solid;font: 75 12pt \"微软雅黑\";height:20px;''')
-        self.btn_review_sure = QPushButton('完成审核')
-        self.btn_review_cancle = QPushButton('取消审核')
-
+        self.al_audit_user = AuditLabel()
+        self.al_audit_time = AuditLabel()
+        self.al_audit_content = QPlainTextEdit()
+        self.al_audit_content.setStyleSheet('''font: 75 12pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
+        self.btn_audit = ToolButton(Icon('样本签收'),'取消审核')
         ###################基本信息  第一行##################################
         lt_main.addWidget(QLabel('审核者：'), 0, 0, 1, 1)
-        lt_main.addWidget(self.review_user, 0, 1, 1, 1)
-        lt_main.addWidget(QLabel('审核时间：'), 0, 2, 1, 1)
-        lt_main.addWidget(self.review_time, 0, 3, 1, 1)
+        lt_main.addWidget(self.al_audit_user, 0, 1, 1, 1)
+        lt_main.addWidget(QLabel('审核时间：'), 1, 0, 1, 1)
+        lt_main.addWidget(self.al_audit_time, 1, 1, 1, 1)
         # 按钮
-        lt_main.addWidget(self.btn_review_sure, 0, 4, 1, 1)
-        lt_main.addWidget(self.btn_review_cancle, 0, 6, 1, 1)
+        lt_main.addWidget(self.btn_audit, 0, 9, 2, 2)
         ###################基本信息  第二行##################################
-        lt_main.addWidget(QLabel('审核结果：'), 1, 0, 2, 2)
-        lt_main.addWidget(self.review_comment, 1, 1, 2, 7)
-
+        # lt_main.addWidget(QLabel('审阅备注：'), 0, 2, 2, 2)
+        lt_main.addWidget(self.al_audit_content, 0, 2, 2, 7)
 
         lt_main.setHorizontalSpacing(10)            #设置水平间距
         lt_main.setVerticalSpacing(10)              #设置垂直间距
         lt_main.setContentsMargins(10, 10, 10, 10)  #设置外间距
         lt_main.setColumnStretch(6, 1)             #设置列宽，添加空白项的
         self.setLayout(lt_main)
+        # 状态标签
+        self.lb_audit_bz = StateLable(self)
+        self.lb_audit_bz.show()
+
 
     # 清空数据
     def clearData(self):
-        self.review_user.setText('')
-        self.review_time.setText('')
-        self.review_comment.setText('')
-        self.btn_review_sure.setEnabled(True)
-        self.btn_review_cancle.setEnabled(False)
+        self.al_audit_user.setText('')
+        self.al_audit_time.setText('')
+        self.al_audit_content.setPlainText('')
+        self.lb_audit_bz.show2(False)
 
     # 设置数据
     def setData(self,data:dict):
-        self.review_user.setText(data['user'])
-        self.review_time.setText(data['time'])
-        self.review_comment.setText(data['comment'])
-        self.review_comment.setEnabled(False)
-        self.btn_review_sure.setEnabled(False)
-        self.btn_review_cancle.setEnabled(True)
+        self.btn_review.stop()
+        if data['shzt']=='已审核':
+            self.lb_audit_bz.show2(False)
+            self.btn_audit.start()
+        else:
+            self.lb_audit_bz.show2()
+            self.btn_audit.setText('取消审阅')
+        self.al_audit_user.setText(data['shxm'])
+        self.al_audit_time.setText(data['shrq'])
+        self.al_audit_content.setPlainText(data['jg'])
 
-class ReviewLabel(QLabel):
+    # 状态变更
+    def statechange(self):
+        # 从完成审阅 -> 取消审阅
+        if '完成' in self.btn_review.text():
+            self.btn_audit.stop()
+            self.btn_audit.setText('取消审阅')
+        else:
+            pass
+
+    # 获取审阅备注信息
+    def get_sybz(self):
+        return self.al_audit_content.toPlainText()
+
+    # 按钮点击
+    def on_btn_audit_click(self):
+        if '完成审核' in self.btn_audit.text():
+            syzt = True
+        else:
+            syzt = False
+        self.btnClick.emit(syzt)
+
+
+class AuditLabel(QLabel):
 
     def __init__(self,p_str=None,parent=None):
-        super(ReviewLabel,self).__init__(p_str,parent)
+        super(AuditLabel,self).__init__(p_str,parent)
         self.setStyleSheet('''border: 1px solid;font: 75 12pt \"微软雅黑\";''')
         self.setMinimumWidth(80)
+
+class StateLable(QLabel):
+
+    def __init__(self,parent):
+        super(StateLable,self).__init__(parent)
+        self.setMinimumSize(200,200)
+        self.setGeometry(200,-60,100,100)
+        self.setStyleSheet('''font: 75 28pt "微软雅黑";color: rgb(255, 0, 0);''')
+        self.setAttribute(Qt.WA_TranslucentBackground)                               #背景透明
+        self.data = open(file_ico('已审核.png'),'rb').read()
+
+    def show2(self,flag = True):
+        if flag:
+            p = QPixmap()
+            p.loadFromData(self.data)
+            self.setPixmap(p)
+        else:
+            self.clear()
 
 
 if __name__ == '__main__':

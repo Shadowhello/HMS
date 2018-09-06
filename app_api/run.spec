@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['run.py'],
-             pathex=['F:\\HMS\\api'],
+             pathex=['F:\\HMS\\app_api'],
              binaries=[],
              datas=[],
              hiddenimports=[],

@@ -6,7 +6,7 @@ class SampleManager(DirTabWidget):
     def __init__(self):
         nodes= ['抽血采集','留样采集','样本交接','历史查询','工作量']
         super(SampleManager,self).__init__('采血台',nodes)
-        self.addTab('留样采集')
+        self.addTab('抽血采集')
 
     def addTab(self,title):
         super(SampleManager, self).addTab(title)

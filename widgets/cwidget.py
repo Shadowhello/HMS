@@ -924,6 +924,32 @@ class TimerButton(QPushButton):
             self.num=self.num-1
             self.setText('%s(%s)'%(self.btn_name,self.num))
 
+# 计时按钮
+class Timer2Button(ToolButton):
+
+    def __init__(self, *args):
+        super(Timer2Button, self).__init__(*args)
+        self.timer = QTimer(self)
+        self.old_text = self.text()
+
+    def start(self):
+        self.timer.start(1000)
+        self.num = 0
+        self.timer.timeout.connect(self.on_btn_timer)
+
+    def stop(self):
+        self.timer.stop()
+        self.num = 0
+
+    def on_btn_timer(self):
+        self.num = self.num + 1
+        self.setText('%s(%s)' %(self.old_text,self.num))
+
+
+
+
+
+
 # 倒计时标签 15分钟
 class TimerLabel(QLabel):
 
@@ -1022,6 +1048,150 @@ class TrackTypeGroup(QHBoxLayout):
         else:
             self.cb_track_type.setDisabled(True)
 
+class OrderSetupGroup(QGroupBox):
+
+    def __init__(self):
+        super(OrderSetupGroup, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setTitle('整理选项')
+        self.sb_size = QSpinBox()
+        self.sb_size.setMinimum(10)
+        self.sb_size.setMaximum(100)
+        lt_main = QHBoxLayout()
+        lt_main.addWidget(QLabel('份数：'))
+        lt_main.addWidget(self.sb_size)
+        lt_main.addStretch()
+        self.setLayout(lt_main)
+
+    def get_size(self):
+        return  self.sb_size.value()
+
+class ReciveSetupGroup(QGroupBox):
+
+    def __init__(self):
+        super(ReciveSetupGroup, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setTitle('领取选项')
+        lt_main = QHBoxLayout()
+        self.cb_is_check = QCheckBox('读身份证')
+        self.cb_is_check.setChecked(True)
+        self.cb_receive_mode = QComboBox()
+        self.cb_is_repeat = QCheckBox('可重复领取')
+        self.cb_receive_mode.addItems(['本人领取','单位领取','电子报告','网上查询'])
+        lt_main.addWidget(self.cb_is_check)
+        lt_main.addWidget(self.cb_is_repeat)
+        # lt_main.addWidget(QLabel('领取方式：'))
+        lt_main.addWidget(self.cb_receive_mode)
+        lt_main.addStretch()
+
+        self.setLayout(lt_main)
+
+    def get_receive_type(self):
+        if self.cb_is_check.isChecked():
+            return True
+        else:
+            return False
+
+    def get_receive_mode(self):
+        return self.cb_receive_mode.currentText()
+
+    def get_is_repeat(self):
+        if self.cb_is_repeat.isChecked():
+            return True
+        else:
+            return False
+
+class DownSetupGroup(QGroupBox):
+
+    def __init__(self):
+        super(DownSetupGroup, self).__init__()
+        self.initUI()
+        self.btn_dir.clicked.connect(self.on_btn_dir_click)
+
+    def initUI(self):
+        self.setTitle('下载选项')
+        lt_main = QHBoxLayout()
+        self.cb_name_setup = QComboBox()
+        self.cb_name_setup.addItems(['默认','体检编号+姓名'])
+        self.le_path = QLineEdit()
+        self.le_path.setText(desktop())
+        self.btn_dir = QPushButton('...')
+        lt_main.addWidget(QLabel('文件命名：'))
+        lt_main.addWidget(self.cb_name_setup)
+        lt_main.addWidget(QLabel('保存路径：'))
+        lt_main.addWidget(self.le_path)
+        lt_main.addWidget(self.btn_dir)
+        lt_main.addStretch()
+
+        self.setLayout(lt_main)
+
+    def on_btn_dir_click(self):
+        filepath = QFileDialog.getExistingDirectory(self, "保存路径",
+                                                  desktop(),
+                                                   QFileDialog.ShowDirsOnly|QFileDialog.DontResolveSymlinks)
+        if filepath:
+            self.le_path.setText(filepath)
+
+    def get_save_path(self):
+        return self.le_path.text()
+
+    def get_save_type(self):
+        if self.cb_name_setup.currentText()=='默认':
+            return 0
+        else:
+            return 1
+
+
+# 打印机组
+class PrintSetupGroup(QGroupBox):
+
+    def __init__(self):
+        super(PrintSetupGroup, self).__init__()
+        self.initUI()
+
+        self.rb_local_check.clicked.connect(partial(self.on_btn_state_change,False))
+        self.rb_remote_check.clicked.connect(partial(self.on_btn_state_change, True))
+
+    def initUI(self):
+        self.setTitle('打印选项')
+        lt_main = QHBoxLayout()
+        self.rb_remote_check = QRadioButton("报告室：")
+        self.rb_remote_check.setChecked(True)
+        self.cb_remote_printer = QComboBox()
+        self.cb_remote_printer.addItems(['77号打印机','78号打印机','79号打印机','江东打印机'])
+        self.rb_local_check = QRadioButton("本地：")
+        printerInfo = QPrinterInfo()
+        local_printers =[item.printerName() for item in printerInfo.availablePrinters()]
+        self.cb_local_printer = QComboBox()
+        self.cb_local_printer.addItems(local_printers)
+        self.cb_local_printer.setCurrentText(printerInfo.defaultPrinterName())
+        self.cb_local_printer.setDisabled(True)
+
+        lt_main.addWidget(self.rb_remote_check)
+        lt_main.addWidget(self.cb_remote_printer)
+        lt_main.addWidget(self.rb_local_check)
+        lt_main.addWidget(self.cb_local_printer)
+        lt_main.addStretch()
+        self.setLayout(lt_main)
+
+    def on_btn_state_change(self,btn_is_click:bool):
+        if btn_is_click:
+            self.cb_remote_printer.setDisabled(False)
+            self.cb_local_printer.setDisabled(True)
+        else:
+            self.cb_local_printer.setDisabled(False)
+            self.cb_remote_printer.setDisabled(True)
+
+
+
+
+
+
+
 # 用户
 class UserGroup(QHBoxLayout):
 
@@ -1054,6 +1224,16 @@ class UserGroup(QHBoxLayout):
     def currentText(self):
         return self.cb_user.currentText()
 
+    @property
+    def where_user(self):
+        if self.is_check.isChecked():
+            if self.cb_user.currentText()=='所有':
+                return False
+            else:
+                return self.cb_user.currentText()
+        else:
+            return False
+
 # 报告状态
 class ReportStateGroup(QHBoxLayout):
 
@@ -1066,6 +1246,15 @@ class ReportStateGroup(QHBoxLayout):
         self.addWidget(self.cb_report_state)
         # 信号槽
         self.is_check.stateChanged.connect(self.on_cb_check)
+        self.bgzt = {
+            '所有':False,
+            '追踪中': '0',
+            '已审核': '1',
+            '已审阅': '2',
+            '已打印': '3',
+            '已整理': '4',
+            '已领取': '5',
+        }
 
     def initUI(self):
         self.is_check = QCheckBox('报告状态：')
@@ -1078,16 +1267,23 @@ class ReportStateGroup(QHBoxLayout):
             self.cb_report_state.setDisabled(True)
 
     @property
-    def get_tjlx(self):
-        return self.cb_report_state.currentText()
+    def where_state(self):
+        if self.is_check.isChecked():
+            value = self.bgzt.get(self.cb_report_state.currentText(),False)
+            if value:
+                return ''' AND BGZT = %s ''' % value
+            else:
+                return False
+        return False
 
     @property
-    def where_tjlx(self):
+    def where_state2(self):
         if self.is_check.isChecked():
-            if self.cb_report_state.currentText() == '所有':
-                return False
+            value = self.bgzt.get(self.cb_report_state.currentText(),False)
+            if value:
+                return ''' AND TJ_BGGL.BGZT = %s ''' % value
             else:
-                return ''' AND TJLX = '%s' ''' % self.cb_report_state.currentText()
+                return False
         return False
 
     # 添加状态
@@ -1137,6 +1333,30 @@ class ReportTypeGroup(QHBoxLayout):
                 return False
             else:
                 return ''' AND TJLX = '%s' ''' %self.cb_report_type.currentText()
+        return False
+
+    @property
+    def where_tjlx2(self):
+        if self.is_check.isChecked():
+            if self.cb_report_type.currentText() == '所有':
+                return False
+            else:
+                if self.cb_report_type.currentText() == '普通':
+                    return ''' AND zhaogong='0' AND TJLX='1' '''
+                elif self.cb_report_type.currentText() == '招工':
+                    return ''' AND zhaogong='1' AND TJLX='1' '''
+                elif self.cb_report_type.currentText() == '从业':
+                    return ''' AND zhaogong='1' AND TJLX='2' '''
+                elif self.cb_report_type.currentText() == '职业病':
+                    return ''' AND zhaogong='1' AND TJLX IN ('3','4','5','6') '''
+                elif self.cb_report_type.currentText() == '贵宾':
+                    return ''' AND zhaogong='2' '''
+                elif self.cb_report_type.currentText() == '重点':
+                    return ''' AND zhaogong='3' '''
+                elif self.cb_report_type.currentText() == '投诉':
+                    return ''' AND zhaogong='4' '''
+                else:
+                    return False
         return False
 
 # 报告类型
@@ -1251,6 +1471,17 @@ class AreaGroup(QHBoxLayout):
         self.is_check.stateChanged.connect(self.on_cb_check)
         self.cb_area = QComboBox()
         self.cb_area.addItems(['所有','明州', '江东', '明州1楼', '明州2楼', '明州3楼', '车管所', '外出', '其他'])
+        self.qy = {
+            '所有':False,
+            '明州':['1','2','3'],
+            '江东':'4',
+            '明州1楼': '1',
+            '明州2楼': '2',
+            '明州3楼': '3',
+            '车管所': '5',
+            '外出': '6',
+            '其他': '7'
+        }
         self.cb_area.setCurrentText('所有')
         self.cb_area.setDisabled(True)
         self.cb_area.setMinimumWidth(80)
@@ -1272,10 +1503,24 @@ class AreaGroup(QHBoxLayout):
         if self.is_check.isChecked():
             if self.cb_area.currentText() == '所有':
                 return False
-            elif self.cb_area.currentText() == '明州':
+            elif self.cb_area.currentText():
                 return ''' AND TJQY IN ('明州1楼','明州1楼','明州3楼') '''
             else:
                 return ''' AND TJQY='%s' ''' % self.cb_area.currentText()
+        else:
+            return False
+
+    @property
+    def where_tjqy2(self):
+        if self.is_check.isChecked():
+            value = self.qy[self.cb_area.currentText()]
+            if value:
+                if isinstance(value,list):
+                    return ''' AND TJQY IN ('1','2','3') '''
+                else:
+                    return ''' AND TJQY='%s' ''' % value
+            else:
+                return False
         else:
             return False
 
@@ -1324,6 +1569,31 @@ class DateTimeGroup(QHBoxLayout):
     def get_where_text(self):
         return self.start.text(),self.end.text()
 
+# 查询功能：基础组件：日期组件、查询按钮、导出按钮、数据表格展示 上下布局
+class QueryLayout(QHBoxLayout):
+
+    def __init__(self, title, parent=None):
+        super(QueryLayout, self).__init__(parent)
+
+    def initUI(self):
+        # 时间
+        self.de_start = QDateEdit(QDate.currentDate())
+        self.de_end = QDateEdit(QDate.currentDate().addDays(1))
+        self.de_start.setCalendarPopup(True)
+        self.de_start.setDisplayFormat("yyyy-MM-dd")
+        self.de_end.setCalendarPopup(True)
+        self.de_end.setDisplayFormat("yyyy-MM-dd")
+        self.addWidget(QLabel("操作时间："))
+        self.addSpacing(10)
+        self.addWidget(self.de_start)
+        self.addSpacing(10)
+        self.addWidget(QLabel('-'))
+        self.addSpacing(10)
+        self.addWidget(self.de_end)
+
+    @property
+    def date_range(self):
+        return self.de_start.text(), self.de_end.text()
 
 # 复合控件，日期组 +
 class DateGroup(QHBoxLayout):
@@ -1661,8 +1931,20 @@ class WhereSearchGroup(QGridLayout):
         return self.s_area.where_tjqy
 
     @property
+    def where_tjqy2(self):
+        return self.s_area.where_tjqy2
+
+    @property
     def where_dwmc(self):
         return self.s_dwbh.where_dwmc
+
+    @property
+    def where_dwbh(self):
+        return self.s_dwbh.where_dwbh
+
+    @property
+    def where_bgzt(self):
+        return self.s_report_state.where_state2
 
     def addStates(self,states):
         self.s_report_state.addStates(states)
@@ -1676,8 +1958,9 @@ class QuickSearchGroup(QGroupBox):
     # 自定义 信号，封装对外使用
     returnPressed = pyqtSignal(str,str)
 
-    def __init__(self):
+    def __init__(self,state=0):
         super(QuickSearchGroup,self).__init__()
+        self.state = state
         self.setTitle('快速检索')
         self.initUI()
         # 绑定信号槽
@@ -1698,30 +1981,40 @@ class QuickSearchGroup(QGroupBox):
         self.s_xm.setText(xm)
 
     def initUI(self):
-        lt_main = QGridLayout()
         self.s_tjbh = QTJBH()
         self.s_xm = QXM()
         self.s_sjhm = QSJHM()
         self.s_sfzh = QSFZH()
         self.s_sfzh_read = QPushButton(Icon('身份证'),'读卡')
+        if self.state == 0:
+            lt_main = QGridLayout()
+            ###################基本信息  第一行##################################
+            lt_main.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)
+            lt_main.addWidget(self.s_tjbh, 0, 1, 1, 1)
+            lt_main.addWidget(QLabel('姓    名：'), 0, 2, 1, 1)
+            lt_main.addWidget(self.s_xm, 0, 3, 1, 1)
+            ###################基本信息  第二行##################################
+            lt_main.addWidget(QLabel('手机号码：'), 1, 0, 1, 1)
+            lt_main.addWidget(self.s_sjhm, 1, 1, 1, 1)
+            lt_main.addWidget(QLabel('身份证号：'), 1, 2, 1, 1)
+            lt_main.addWidget(self.s_sfzh, 1, 3, 1, 2)
+            lt_main.addWidget(self.s_sfzh_read, 1, 5, 1, 1)
+            lt_main.setHorizontalSpacing(10)  # 设置水平间距
+            lt_main.setVerticalSpacing(10)  # 设置垂直间距
+            lt_main.setContentsMargins(10, 10, 10, 10)  # 设置外间距
+            lt_main.setColumnStretch(6, 1)  # 设置列宽，添加空白项的
 
-        ###################基本信息  第一行##################################
-        lt_main.addWidget(QLabel('体检编号：'), 0, 0, 1, 1)
-        lt_main.addWidget(self.s_tjbh, 0, 1, 1, 1)
-        lt_main.addWidget(QLabel('姓    名：'), 0, 2, 1, 1)
-        lt_main.addWidget(self.s_xm, 0, 3, 1, 1)
+        elif self.state==1:
+            lt_main = QHBoxLayout()
+            lt_main.addWidget(QLabel('体检编号：'))
+            lt_main.addWidget(self.s_tjbh)
+            lt_main.addWidget(QLabel('姓    名：'))
+            lt_main.addWidget(self.s_xm)
+            lt_main.addStretch()
 
-        ###################基本信息  第二行##################################
-        lt_main.addWidget(QLabel('手机号码：'), 1, 0, 1, 1)
-        lt_main.addWidget(self.s_sjhm, 1, 1, 1, 1)
-        lt_main.addWidget(QLabel('身份证号：'), 1, 2, 1, 1)
-        lt_main.addWidget(self.s_sfzh, 1, 3, 1, 2)
-        lt_main.addWidget(self.s_sfzh_read, 1, 5, 1, 1)
+        else:
+            lt_main = QHBoxLayout()
 
-        lt_main.setHorizontalSpacing(10)            #设置水平间距
-        lt_main.setVerticalSpacing(10)              #设置垂直间距
-        lt_main.setContentsMargins(10, 10, 10, 10)  #设置外间距
-        lt_main.setColumnStretch(6, 1)             #设置列宽，添加空白项的
         self.setLayout(lt_main)
 
     def setText(self,p_tjbh=None,p_xm=None,p_sjhm=None,p_sfzh=None):
@@ -2157,7 +2450,7 @@ if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     # 倒计时按钮
-    # ui = TimerButton(30,'审阅')
+    ui = TimerButton(30,'审阅')
     # 一组日期
     #ui = StartEndDate()
     # data1=  {'10000': '社区', '10001': '社区2', '10501': '新社区'}

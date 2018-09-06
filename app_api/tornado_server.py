@@ -12,6 +12,7 @@
 # '''
 
 if __name__ == '__main__':
-    tornado_server_run()
+    pass
+    # tornado_server_run()
 
 

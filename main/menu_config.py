@@ -127,34 +127,34 @@ SYS_MENU_TREE = {   # 系统
              # ('预约明细',{'pid': 500, 'id': 5005, 'title': '预约明细', 'tip': None, 'state': True,'icon':'','is_tool':False,'shortcut':None})
             ])}),
         # 自带财务模块
-        ('财务管理',
-         {
-             'pid': 1,
-             'sid': 700,
-             'title': '经营',
-             'tip': None,
-             'state': True,
-             'childs': OrderedDict([
-             # ('用户管理',{'pid': 600, 'id': 6001, 'title': '用户管理', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
-             # ('权限管理',{'pid': 600, 'id': 6002, 'title': '权限管理', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
-             # ('密码修改',{'pid': 600, 'id': 6003, 'title': '密码修改', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
-             # ('系统参数',{'pid': 600, 'id': 6004, 'title': '系统参数', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
-             # ('系统字典',{'pid': 600, 'id': 6005, 'title': '系统字典', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
-             # ('系统版本',{'pid': 600, 'id': 6006, 'title': '系统版本', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
-             # ('注销',{'pid': 600, 'id': 6007, 'title': '注销', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
-             # ('退出',{'pid': 600, 'id': 6008, 'title': '退出', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None})
-            ])}),
+        # ('财务管理',
+        #  {
+        #      'pid': 1,
+        #      'sid': 700,
+        #      'title': '经营',
+        #      'tip': None,
+        #      'state': True,
+        #      'childs': OrderedDict([
+        #      # ('用户管理',{'pid': 600, 'id': 6001, 'title': '用户管理', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
+        #      # ('权限管理',{'pid': 600, 'id': 6002, 'title': '权限管理', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
+        #      # ('密码修改',{'pid': 600, 'id': 6003, 'title': '密码修改', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
+        #      # ('系统参数',{'pid': 600, 'id': 6004, 'title': '系统参数', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
+        #      # ('系统字典',{'pid': 600, 'id': 6005, 'title': '系统字典', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
+        #      # ('系统版本',{'pid': 600, 'id': 6006, 'title': '系统版本', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
+        #      # ('注销',{'pid': 600, 'id': 6007, 'title': '注销', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None}),
+        #      # ('退出',{'pid': 600, 'id': 6008, 'title': '退出', 'tip': None, 'state': True,'icon':'','is_tool':False,'class':None, 'childs': None})
+        #     ])}),
         # 数据统计 对所有人开放
-        ('查询统计',
-         {
-             'pid': 1,
-             'sid': 800,
-             'title': '查询统计',
-             'tip': None,
-             'state': True,
-             'childs': OrderedDict([
-                 ('检查结果',{'pid': 800, 'sid': 8001, 'title': '检查结果', 'tip': None, 'state': True, 'icon': '', 'is_tool': False,'shortcut':None})
-            ])})
+        # ('查询统计',
+        #  {
+        #      'pid': 1,
+        #      'sid': 800,
+        #      'title': '查询统计',
+        #      'tip': None,
+        #      'state': True,
+        #      'childs': OrderedDict([
+        #          ('检查结果',{'pid': 800, 'sid': 8001, 'title': '检查结果', 'tip': None, 'state': True, 'icon': '', 'is_tool': False,'shortcut':None})
+        #     ])})
     ])
 }
 # 系统菜单模块对象
@@ -200,7 +200,7 @@ SYS_MENU_MODULE_CLASS = {
     5006: {'module': None, 'class': None, 'enabled': False},
     5007: {'module': None, 'class': None, 'enabled': False},
     5008: {'module': None, 'class': None, 'enabled': False},
-    6001: {'module':'datastatistics.meritpay', 'class':'DN_MeritPay', 'enabled': True}, #医护绩效
+    6001: {'module':'statistics', 'class':'DN_MeritPay', 'enabled': True}, #医护绩效
     6002: {'module': None, 'class': None, 'enabled': False},
     6003: {'module': None, 'class': None, 'enabled': False},
     6004: {'module': None, 'class': None, 'enabled': False},

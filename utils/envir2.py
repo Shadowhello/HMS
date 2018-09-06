@@ -12,6 +12,6 @@ def Init_env_vars(config_inis:list):
     gol.set_value("host_ip", hostip())
 
     # 读取配置文件,加入全局参数
-    for config_ini in  config_inis:
+    for config_ini in config_inis:
         gol.merge(config_parse(config_ini))               # 主程序配置
-    gol.print_paras()
+    gol.print_paras('API服务')

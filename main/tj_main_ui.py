@@ -15,6 +15,8 @@ from mbgl import NCDManager
 from result import ResultManager
 # 加入VIP 管理
 from vip import VipManager
+# 加入绩效
+from statistics import DN_MeritPay
 
 WindowsTitle="明州体检"
 WindowsIcon="mztj"

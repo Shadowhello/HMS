@@ -47,8 +47,11 @@ def get_child_value(key_p,key_c,defValue=None):
     except KeyError:
         return defValue
 
-def print_paras():
-    print("############################ 初始化全局变量 ###############################")
+def print_paras(process_name=None):
+    if process_name:
+        print("############################ 初始化（%s）全局变量 ###############################" %process_name)
+    else:
+        print("############################ 初始化全局变量 ###############################")
     pprint(global_dict)
     print("############################               ###############################")
     return global_dict

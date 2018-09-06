@@ -160,11 +160,31 @@ class TableWidget(QTableWidget):
         col = list(self.heads.keys()).index(key)
         return self.getItemValue(row,col)
 
+    # 根据key 获取某行列的值
+    def setItemValueOfKey(self,row:int,key:str,value:str,color=None):
+        col = list(self.heads.keys()).index(key)
+        self.item(row, col).setText(value)
+        if color:
+            self.item(row, col).setBackground(color)
+
     # 根据key 获取当前行列的值
     def getCurItemValueOfKey(self,key:str):
         col = list(self.heads.keys()).index(key)
         return self.getItemValue(self.currentRow(),col)
 
+    # 根据key 获取当前行列的值
+    def setCurItemValueOfKey(self,key:str,value:str):
+        col = list(self.heads.keys()).index(key)
+        self.item(self.currentRow(),col).setText(value)
+
+    # 根据key 获取当前行列的值
+    def setCurItemOfKey(self,key:str,value:str,color=None):
+        col = list(self.heads.keys()).index(key)
+        self.item(self.currentRow(),col).setText(value)
+        if color:
+            self.item(self.currentRow(),col).setBackground(color)
+
+    # 设置列宽
     def setColWidth(self, key, p_int):
         if key in list(self.heads.keys()):
             col = list(self.heads.keys()).index(key)
