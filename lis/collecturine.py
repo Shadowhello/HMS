@@ -64,17 +64,19 @@ class CollectUrine(CollectUrine_UI):
         if tjbh:
             # 获取用户信息
             self.user_obj = self.refresh_ryxx(tjbh)
-            self.refreshAllSerialNo(tjbh)
-            button = self.all_serialno[hm]
-            if self.tmbh.text() not in self.seri_objs:
-                # 不存在，则添加
-                self.refreshSerial(button)
-                self.on_table_urine_insert(button)
-                self.seri_objs.insert(0,self.tmbh.text())
-                self.table_urine.selectRow(0)
-            else:
-                # 显示 选中
-                self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
+            if self.user_obj:
+                self.refreshAllSerialNo(tjbh)
+                button = self.all_serialno[hm]
+                if self.tmbh.text() not in self.seri_objs:
+                    # 不存在，则添加
+                    self.refreshSerial(button)
+                    self.on_table_urine_insert(button)
+                    self.seri_objs.insert(0,self.tmbh.text())
+                    self.table_urine.selectRow(0)
+                else:
+                    # 显示 选中
+                    self.table_urine.selectRow(self.seri_objs.index(self.tmbh.text()))
+            mes_about(self,'条码有误或顾客未签到！')
 
         self.tmbh.setText('')
 
@@ -203,6 +205,9 @@ class CollectUrine(CollectUrine_UI):
 
     # 刷新采样列表
     def on_table_urine_insert(self,button:SerialNoButton):
-        data=['已留样',str2(self.user_obj.xm),str2(self.user_obj.xb),str2(self.user_obj.nl),button.collectNo,button.collectTJBH,button.collectTxt]
-        self.table_urine.insert(data)
-        self.gp_right.setTitle('留样列表（%s）' % str(self.table_urine.rowCount()))
+        if self.user_obj:
+            data=['已留样',str2(self.user_obj.xm),str2(self.user_obj.xb),str2(self.user_obj.nl),button.collectNo,button.collectTJBH,button.collectTxt]
+            self.table_urine.insert(data)
+            self.gp_right.setTitle('留样列表（%s）' % str(self.table_urine.rowCount()))
+        else:
+            mes_about(self,'条码有误或该顾客未签到！')

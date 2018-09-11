@@ -4,7 +4,8 @@ from widgets.cwidget import *
 class ResultManager(DirTabWidget):
 
     def __init__(self):
-        nodes= ['临床检查','特殊检查','历史查询','工作量']
+        # ,'特殊检查','历史查询','工作量'
+        nodes= ['临床检查']
         super(ResultManager,self).__init__('结果录入',nodes)
         self.addTab('临床检查')
 

@@ -1,5 +1,4 @@
 from report.report_review_ui import *
-from utils import cur_datetime,request_create_report
 import webbrowser
 
 # 报告追踪
@@ -16,8 +15,18 @@ class ReportReview(ReportReviewUI):
         self.table_report_review.doubleClicked.connect(self.on_table_double_click)
         # 审阅
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
+        self.btn_review_mode.clicked.connect(self.on_btn_review_mode_click)
         # 设置快速获取的变量
         self.cur_tjbh = None
+        self.cur_row = None
+
+    def on_btn_review_mode_click(self):
+        if self.table_report_review.rowCount():
+            ui = ReportReviewFullScreen(self)
+            ui.opened.emit(self.table_report_review.cur_data_set)
+            ui.showFullScreen()
+        else:
+            mes_about(self,"请先筛选需要审阅的报告，再全屏操作！")
 
     def on_btn_query_click(self):
         # 日期范围 必选
@@ -62,6 +71,7 @@ class ReportReview(ReportReviewUI):
         sybz = self.table_report_review.getItemValueOfKey(QModelIndex.row(), 'sybz')
         #
         self.cur_tjbh = tjbh
+        self.cur_row = QModelIndex.row()
         # 更新title
         self.gp_right.setTitle('报告预览   体检编号：%s  姓名：%s 性别：%s  年龄：%s' %(tjbh,xm,xb,nl))
         self.gp_right.setStyleSheet('''font: 75 12pt '微软雅黑';color: rgb(0,128,0);''')
@@ -165,11 +175,12 @@ class ReportReview(ReportReviewUI):
                 mes_about(self,'更新数据库失败！错误信息：%s' %e)
                 return
             # 刷新控件 表格 和按钮
-            self.table_report_review.setCurItemOfKey('bgzt', '已审阅', QColor("#f0e68c"))           # 审阅状态
-            self.table_report_review.setCurItemValueOfKey('syxm', self.login_name)                  # 审阅者
-            self.table_report_review.setCurItemValueOfKey('syrq', cur_datetime())                   # 审阅日期
-            self.table_report_review.setCurItemValueOfKey('sybz', self.gp_review_user.get_sybz())   # 审阅备注
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'bgzt', '已审阅', QColor("#f0e68c"))           # 审阅状态
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'syxm', self.login_name)                  # 审阅者
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'syrq', cur_datetime())                   # 审阅日期
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'sybz', self.gp_review_user.get_sybz())   # 审阅备注
             self.gp_review_user.statechange()
+            self.gp_review_user.setData({'sybz':self.gp_review_user.get_sybz(),'syrq':cur_datetime(),'syxm':self.login_name,'syzt':2})
             # 向服务端 发送请求
             # HTML 报告需要重新生成
             request_create_report(self.cur_tjbh, 'html')
@@ -188,10 +199,10 @@ class ReportReview(ReportReviewUI):
                 self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
                 self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).update(
                     {
-                        MT_TJ_BGGL.syxm: '',
-                        MT_TJ_BGGL.sygh: '',
+                        MT_TJ_BGGL.syxm: None,
+                        MT_TJ_BGGL.sygh: None,
                         MT_TJ_BGGL.syrq: None,
-                        MT_TJ_BGGL.sybz: '',
+                        MT_TJ_BGGL.sybz: None,
                         MT_TJ_BGGL.sysc: 0,
                         MT_TJ_BGGL.bgzt: 1,
                     }
@@ -202,11 +213,11 @@ class ReportReview(ReportReviewUI):
                 mes_about(self,'更新数据库失败！错误信息：%s' %e)
                 return
             # 更新表
-            self.table_report_review.setCurItemOfKey('bgzt', '已审核',QColor("#FF0000"))        # 审阅状态
-            self.table_report_review.setCurItemValueOfKey('syxm', '')                           # 审阅者
-            self.table_report_review.setCurItemValueOfKey('syrq', '')                           # 审阅日期
-            self.table_report_review.setCurItemValueOfKey('sybz','')                            # 审阅备注
-            self.gp_review_user.clearData()                                                     # 清空数据
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'bgzt', '已审核',QColor("#FF0000"))    # 审阅状态
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'syxm', '')                           # 审阅者
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'syrq', '')                           # 审阅日期
+            self.table_report_review.setItemValueOfKey(self.cur_row, 'sybz','')                            # 审阅备注
+            self.gp_review_user.clearData()                                                                 # 清空数据
 
     # 自动缩放 无效
     # def resizeEvent(self, event):#由于没有使用布局，这里当父窗口大小改变时自动改变webview的大小

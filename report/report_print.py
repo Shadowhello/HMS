@@ -39,16 +39,84 @@ class ReportPrint(ReportPrintUI):
     # 打印
     def on_btn_print_click(self):
         rows = self.table_print.isSelectRows()
+        is_remote,printer = self.gp_print_setup.get_printer()
         if rows:
             for row in rows:
-                tjbh = self.table_print.getItemValueOfKey(row,'tjbh')
-                url = gol.get_value('api_report_down') %tjbh
-                filename = os.path.join(gol.get_value('path_tmp'),'%s.pdf' %tjbh)
-                if request_get(url,filename):
-                    # 下载成功
-                    print_pdf(filename)
+                tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
+                dyrq = self.table_print.getItemValueOfKey(row, 'dyrq')
+                dyr = self.table_print.getItemValueOfKey(row, 'dyr')
+                dycs = self.table_print.getItemValueOfKey(row, 'dycs')
+                bgzt = self.table_print.getItemValueOfKey(row, 'bgzt')
+                bgzt_name,bgzt_value = get_bgzt(bgzt,'已打印')
+                if is_remote:
+                    # 发送网络打印请求
+                    try:
+                        # 更新数据库 TJ_CZJLB TJ_BGGL
+                        data_obj = {'jllx': '0034', 'jlmc': '报告打印', 'tjbh': tjbh, 'mxbh': '',
+                                    'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                    'bz': '网络打印：%s' %printer}
+                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                        self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                            {
+                                MT_TJ_BGGL.dyrq: cur_datetime(),
+                                MT_TJ_BGGL.dyfs: '1',
+                                MT_TJ_BGGL.dygh: self.login_id,
+                                MT_TJ_BGGL.dyxm: self.login_name,
+                                MT_TJ_BGGL.dycs: MT_TJ_BGGL.dycs + 1,
+                                MT_TJ_BGGL.bgzt: bgzt_value
+                            }
+                        )
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self, '更新数据库失败！错误信息：%s' % e)
+                        return
+                    # 刷新界面
+                    self.table_print.setItemValueOfKey(row, 'dyrq', cur_datetime())
+                    self.table_print.setItemValueOfKey(row, 'dyr', self.login_name)
+                    self.table_print.setItemValueOfKey(row, 'dycs', '1')
+                    self.table_print.setItemValueOfKey(row, 'dyfs', '租赁打印')
+                    self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
+                    mes_about(self, "打印成功！")
                 else:
-                    mes_about(self,'未找到报告，无法打印！')
+                    # 本地打印 需要下载
+                    url = gol.get_value('api_report_down') %tjbh
+                    filename = os.path.join(gol.get_value('path_tmp'),'%s.pdf' %tjbh)
+                    if request_get(url,filename):
+                        # 下载成功
+                        if print_pdf(filename) == 42:
+                            try:
+                                # 更新数据库 TJ_CZJLB TJ_BGGL
+                                data_obj = {'jllx': '0034', 'jlmc': '报告打印', 'tjbh': tjbh, 'mxbh': '',
+                                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                            'bz': '本地打印：%s' %printer}
+                                self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                                    {
+                                        MT_TJ_BGGL.dyrq: cur_datetime(),
+                                        MT_TJ_BGGL.dyfs: '1',
+                                        MT_TJ_BGGL.dygh: self.login_id,
+                                        MT_TJ_BGGL.dyxm: self.login_name,
+                                        MT_TJ_BGGL.dycs: MT_TJ_BGGL.dycs + 1,
+                                        MT_TJ_BGGL.bgzt: bgzt_value
+                                    }
+                                )
+                                self.session.commit()
+                            except Exception as e:
+                                self.session.rollback()
+                                mes_about(self, '更新数据库失败！错误信息：%s' % e)
+                                return
+                            # 刷新界面
+                            self.table_print.setItemValueOfKey(row, 'dyrq',cur_datetime())
+                            self.table_print.setItemValueOfKey(row, 'dyr', self.login_name)
+                            self.table_print.setItemValueOfKey(row, 'dycs', '1')
+                            self.table_print.setItemValueOfKey(row, 'dyfs', '本地打印')
+                            self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
+                            mes_about(self, "打印成功！")
+                        else:
+                            mes_about(self, "打印失败！")
+                    else:
+                        mes_about(self,'未找到报告，无法打印！')
         else:
             mes_about(self,'请选择要打印的报告！')
 
@@ -83,7 +151,7 @@ class ReportPrint(ReportPrintUI):
             sql = sql + self.lt_where_search.where_tjqy2
 
         sql = sql + ''' INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH=TJ_TJDAB.DABH ;'''
-        print(sql)
+
         try:
             results = self.session.execute(sql).fetchall()
             self.table_print.load(results)
@@ -409,3 +477,18 @@ class PdfWebView(WebView):
     # URL 刷新
     def on_web_url_change(self,url:str):
         self.load(url)
+
+
+def get_bgzt(s_bgzt,t_bgzt):
+    bgzt = {
+        '已追踪': 0,
+        '已审核': 1,
+        '已审阅': 2,
+        '已打印': 3,
+        '已整理': 4,
+        '已领取': 5
+    }
+    if bgzt.get(s_bgzt,0)>=bgzt.get(t_bgzt,0):
+        return s_bgzt,str(bgzt.get(s_bgzt,0))
+    else:
+        return t_bgzt,str(bgzt.get(t_bgzt,0))

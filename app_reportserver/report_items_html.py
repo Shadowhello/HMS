@@ -158,10 +158,16 @@ pdf_html_item_page = '''
                         </tr>
                         % if ksbm == '0026':
                             % if pic.get(zhbh,[]):
-                                <tr>
-                                    <td colspan="2" align="center"><img src=${pic[zhbh][0]} width="99%"></td>
-                                    <td colspan="2" align="center"><img src=${pic[zhbh][0]} width="99%"></td>
-                                </tr>
+                                % if len(pic[zhbh])>=2:
+                                    <tr>
+                                        <td colspan="2" align="center"><img src=${pic[zhbh][0]} width="99%"></td>
+                                        <td colspan="2" align="center"><img src=${pic[zhbh][1]} width="99%"></td>
+                                    </tr>
+                                % else:
+                                    <tr>
+                                        <td colspan="4" align="left"><img src=${pic[zhbh][0]} width="49%"></td>
+                                    </tr>   
+                                % endif 
                             % endif
                         % elif ksbm == '0020':
                             % if pic.get(zhbh,[]):
@@ -172,10 +178,27 @@ pdf_html_item_page = '''
                                     </tr>
                                 % else:
                                     <tr>
-                                        <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
-                                        <td colspan="2"><img src=${pic[zhbh][0]} width="99%"></td>
+                                        <td colspan="4" align="left"><img src=${pic[zhbh][0]} width="49%"></td>
                                     </tr>   
                                 % endif                                 
+                            % endif
+                        % elif ksbm == '0024':
+                            % if pic.get(zhbh,[]):
+                                % if len(pic.get(zhbh,[])) % 2 ==0:
+                                    % for i in range(len(pic.get(zhbh,[])) // 2):
+                                        <tr>
+                                            <td colspan="2" align="center"><img src=${pic.get(zhbh,[])[i]} width="99%"></td>
+                                            <td colspan="2" align="center"><img src=${pic.get(zhbh,[])[i+1]} width="99%"></td>
+                                        </tr>
+                                    %endfor
+                                % else :
+                                    % for i in range(len(pic.get(zhbh,[]))-1 // 2):
+                                        <tr>
+                                            <td colspan="2" align="center"><img src=${pic.get(zhbh,[])[i]} width="99%"></td>
+                                            <td colspan="2" align="center"><img src=${pic.get(zhbh,[])[i+1]} width="99%"></td>
+                                        </tr>
+                                    %endfor
+                                % endif
                             % endif
                         % endif
                     %endfor

@@ -3,7 +3,8 @@ from widgets.cwidget import *
 class NCD_UI(DirTabWidget):
 
     def __init__(self,title):
-        nodes= ['疑似筛选','就诊预约']
+        # 就诊预约
+        nodes= ['疑似筛选']
         super(NCD_UI,self).__init__(title,nodes)
 
 

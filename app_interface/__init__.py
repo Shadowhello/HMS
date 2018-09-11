@@ -9,3 +9,4 @@
 from .i_pis_result import PisResult
 from .i_pacs_result import PacsResult
 from .i_lis_result import LisResult
+from .i_sms_ui import SmsPostUI

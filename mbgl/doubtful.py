@@ -10,7 +10,17 @@ class Doubtful(Widget):
         super(Doubtful,self).__init__()
         self.initParas()
         self.initUI()
-
+        # 绑定信号
+        self.cb_is_gxy.stateChanged.connect(partial(self.onCheckState, 'IS_GXY'))
+        self.cb_is_gxz.stateChanged.connect(partial(self.onCheckState, 'IS_GXZ'))
+        self.cb_is_gxt.stateChanged.connect(partial(self.onCheckState, 'IS_GXT'))
+        self.cb_is_gns.stateChanged.connect(partial(self.onCheckState, 'IS_GNS'))
+        self.cb_is_jzx.stateChanged.connect(partial(self.onCheckState, 'IS_JZX'))
+        #
+        self.gp_quick_search.returnPressed.connect(self.on_quick_search)  # 快速检索
+        self.table.itemClicked.connect(self.on_table_set)
+        self.btn_export.clicked.connect(self.on_btn_export_click)
+        self.btn_query.clicked.connect(self.on_btn_query)
 
     def initParas(self):
         self.dwmc_bh = OrderedDict()
@@ -21,14 +31,37 @@ class Doubtful(Widget):
             self.dwmc_bh[result.dwbh] = str2(result.mc)
             self.dwmc_py[result.pyjm.lower()] = str2(result.mc)
 
-        # results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.qdrq == '2018-06-30').all()
-        # tmp = [result.to_dict for result in results]
-        # self.table.load(tmp)
-
         ###################################################
-        self.where_jb = ''
+        self.where_jb = {}
         self.where_rq = ''
         self.where_je = ''
+
+    # 设置快速检索文本
+    def on_table_set(self, tableWidgetItem):
+        row = tableWidgetItem.row()
+        tjbh = self.table.item(row, 0).text()
+        xm = self.table.item(row, 1).text()
+        sfzh = self.table.item(row, 4).text()
+        sjhm = self.table.item(row, 4).text()
+        self.gp_quick_search.setText(tjbh, xm, sjhm, sfzh)
+
+    #快速检索
+    def on_quick_search(self,p1_str,p2_str):
+        if p1_str == 'tjbh':
+            results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.tjbh == p2_str).all()
+        elif p1_str == 'sjhm':
+            results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.sjhm == p2_str).all()
+        elif p1_str == 'sfzh':
+            results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.sfzh == p2_str).all()
+        else:
+            results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.xm == p2_str).all()
+        tmp = [result.to_dict for result in results]
+        self.table.load(tmp)
+        mes_about(self,'共检索出 %s 条数据！' %self.table.rowCount())
+
+    # 导出功能
+    def on_btn_export_click(self):
+        self.table.export()
 
     def initUI(self):
         main_layout = QVBoxLayout()
@@ -43,19 +76,16 @@ class Doubtful(Widget):
         self.cb_is_gns = QCheckBox('疑似高尿酸')
         self.cb_is_jzx = QCheckBox('疑似甲状腺')
 
-        self.cb_is_gxy.stateChanged.connect(partial(self.onCheckState, '高血压'))
-        self.cb_is_gxz.stateChanged.connect(partial(self.onCheckState, '高血脂'))
-        self.cb_is_gxt.stateChanged.connect(partial(self.onCheckState, '高血糖'))
-        self.cb_is_gns.stateChanged.connect(partial(self.onCheckState, '高尿酸'))
-        self.cb_is_jzx.stateChanged.connect(partial(self.onCheckState, '甲状腺'))
+
 
         self.dg_rq = DateGroup()       # 检索时间
+        self.dg_rq.jsrq.clear()
+        self.dg_rq.jsrq.addItems(['签到日期','总检日期','审核日期'])
         self.mg_je = MoneyGroup()      # 检索金额
         self.tj_dw = TUintGroup(self.dwmc_bh,self.dwmc_py)       # 体检单位
 
         self.btn_query = ToolButton(Icon('query'),'查询')
         self.btn_export = ToolButton(Icon('导出'), '导出')
-        self.btn_export.clicked.connect(self.on_btn_export)
 
         self.btn_query.setFixedWidth(64)
         self.btn_query.setFixedHeight(64)
@@ -128,6 +158,7 @@ class Doubtful(Widget):
 
         lt_top.addWidget(search_group)
         lt_top.addWidget(self.gp_quick_search)
+        # lt_top.addStretch()
 
         main_layout.addLayout(lt_top)
         #main_layout.addStretch()
@@ -135,12 +166,40 @@ class Doubtful(Widget):
         self.setLayout(main_layout)
 
     def onCheckState(self,p_str,is_check:int):
-
-        print(is_check,p_str)
+        if is_check == 2:
+            # 添加
+            self.where_jb[p_str] = '1'
+        elif is_check == 0:
+            if p_str in list(self.where_jb.keys()):
+                self.where_jb.pop(p_str)
 
     # 查询
     def on_btn_query(self):
-        pass
+        cols = ['tjbh','xm','xb','nl','sfzh','sjhm','dwmc','ysje','is_gxy','is_gxz','is_gxt','is_gns'
+            ,'is_jzx','glu','is_yc_glu','glu2','is_yc_glu2','hbalc','is_yc_hbalc','ua','is_yc_ua','tch'
+            ,'is_yc_tch','tg','is_yc_tg','hdl','is_yc_hdl','ldl','is_yc_ldl','hbp','is_yc_hbp','lbp','is_yc_lbp']
+        sql = get_mbgl_sql()
+        if self.dg_rq.where_date:
+            sql = sql + self.dg_rq.where_date
+        if self.mg_je.get_where_text():
+            sql = sql + self.mg_je.get_where_text()
+        if self.tj_dw.where_dwbh:
+            sql = sql + ''' AND DWBH = '%s' ''' %self.tj_dw.where_dwbh
+        if self.where_jb:
+            sql = sql + ''' AND %s ''' %' AND '.join(["%s = '%s' " %(key,value) for key,value in self.where_jb.items()])
+        # print(sql)
+        # return
+        results = self.session.execute(sql).fetchall()
+        if results:
+            new_results = [dict(zip(cols,result)) for result in results]
+            self.table.load(new_results)
+            mes_about(self, '检索出 %s 条数据！' %self.table.rowCount())
+        else:
+            mes_about(self,'检索出 0 条数据！')
+
+        # results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.qdrq == '2018-06-30').all()
+        # tmp = [result.to_dict for result in results]
+        # self.table.load(tmp)
 
     # 导出功能
     def on_btn_export(self):
@@ -155,13 +214,13 @@ class Doubtful(Widget):
                 row_num = i.row()
 
             menu = QMenu()
-            item1 = menu.addAction(Icon("短信"), "发送预约短信")
-            item2 = menu.addAction(Icon("短信"), "编辑预约短信")
-            item3 = menu.addAction(Icon("预约"), "设置预约客户")
-            item4 = menu.addAction(Icon("预约"), "电话记录")
-            item5 = menu.addAction(Icon("预约"), "本次体检结果")
-            item6 = menu.addAction(Icon("预约"), "历年体检结果")
-            item7 = menu.addAction(Icon("预约"), "浏览体检报告")
-            item8 = menu.addAction(Icon("预约"), "下载电子报告")
+            # item1 = menu.addAction(Icon("短信"), "发送预约短信")
+            # item2 = menu.addAction(Icon("短信"), "编辑预约短信")
+            # item3 = menu.addAction(Icon("预约"), "设置预约客户")
+            # item4 = menu.addAction(Icon("预约"), "电话记录")
+            # item5 = menu.addAction(Icon("预约"), "本次体检结果")
+            # item6 = menu.addAction(Icon("预约"), "历年体检结果")
+            # item7 = menu.addAction(Icon("预约"), "浏览体检报告")
+            # item8 = menu.addAction(Icon("预约"), "下载电子报告")
 
             action = menu.exec_(self.table.mapToGlobal(pos))

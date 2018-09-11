@@ -58,12 +58,12 @@ class MT_MB_YSKH(BaseModel):
     def to_dict(self):
         return {
             "tjbh": getattr(self, "tjbh", ''),
-            "xm": str2(getattr(self, "xm", '')),
-            "xb": str2(getattr(self, "xb", '')),
+            "xm": getattr(self, "xm", ''),
+            "xb": getattr(self, "xb", ''),
             "nl": '%s 岁' % str(getattr(self, "nl", '')),
             "sfzh": getattr(self, "sfzh", ''),
             "sjhm": getattr(self, "sjhm", ''),
-            "dwmc": str2(getattr(self, "dwmc", '')),
+            "dwmc": getattr(self, "dwmc", ''),
             "ysje": str(getattr(self, "ysje", '')),
             "is_gxy": getattr(self, "is_gxy", ''),
             "is_gxz": getattr(self, "is_gxz", ''),
@@ -91,3 +91,11 @@ class MT_MB_YSKH(BaseModel):
             "lbp": getattr(self, "lbp", ''),
             "is_yc_lbp": int(getattr(self, "is_yc_lbp", ''))
         }
+
+def get_mbgl_sql():
+    return '''
+    SELECT 
+    tjbh,xm,xb,CAST(nl AS VARCHAR) AS nl,sfzh,sjhm,dwmc,CAST(ysje AS VARCHAR) AS ysje,is_gxy,is_gxz,is_gxt,is_gns,is_jzx,glu,is_yc_glu,glu2,is_yc_glu2,hbalc,is_yc_hbalc,ua,
+    is_yc_ua,tch,is_yc_tch,tg,is_yc_tg,hdl,is_yc_hdl,ldl,is_yc_ldl,hbp,is_yc_hbp,lbp,is_yc_lbp
+    FROM MB_YSKH WHERE 
+    '''

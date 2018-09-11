@@ -21,6 +21,7 @@ class LisResult(LisResultUI):
             else:
                 self.item_match[result[0]] = result[1]
 
+
     def setData(self,datas):
         # 清空数据
         self.bgys.setText('')
@@ -52,7 +53,7 @@ class LisResult(LisResultUI):
         if self.table_inspect_master.currentRow()==-1:
             mes_about(self,'请选择行！')
         else:
-            if self.table_inspect_master.item(self.table_inspect_master.currentRow(),0)=='已审核':
+            if self.table_inspect_master.item(self.table_inspect_master.currentRow(),0).text()=='已审核':
                 mes_about(self,'结果已存在，不要重复接收！')
             else:
                 if not self.table_inspect_detail.rowCount():
@@ -64,7 +65,9 @@ class LisResult(LisResultUI):
                     results = self.session_lis.query(MV_VI_TJ_RESULT).filter(MV_VI_TJ_RESULT.tjbh == tjbh,MV_VI_TJ_RESULT.tmh == tmbh).all()
                     for result in results:
                         datas.append(lis2pes(result.to_dict,self.item_match))
-                        print(lis2pes(result.to_dict,self.item_match))
+                        # print(lis2pes(result.to_dict,self.item_match))
+
+                    mes_about(self,'接收成功！')
 
 
 

@@ -1,12 +1,12 @@
 # 系统接口
-from app_interface import PacsResult, PisResult,LisResult
+from app_interface import PacsResult, PisResult,LisResult,SmsPostUI
 from app_interface.i_phone_ui import PhoneUI
 from app_interface.i_sms_ui import SmsUI
 from report.report_item_ui import ItemsStateUI
 from report.report_track_thread import *
 from widgets.cwidget import *
 from .report_track_ui import ReportTrackUI
-
+from utils import api_file_down
 
 # 报告追踪
 class ReportTrack(ReportTrackUI):
@@ -26,6 +26,7 @@ class ReportTrack(ReportTrackUI):
         self.btn_query.clicked.connect(self.on_btn_query_click)             # 查询
         self.btn_task.clicked.connect(self.on_btn_task_click)               # 任务领取
         self.btn_receive.clicked.connect(self.on_btn_receive_click)         # 结果接收
+        self.btn_djd.clicked.connect(self.on_btn_djd_click)
         # 功能栏
         self.btn_item.clicked.connect(self.on_btn_item_click)
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
@@ -38,6 +39,7 @@ class ReportTrack(ReportTrackUI):
         self.pis_thread = None
         self.lis_thread = None
         self.pacs_thread = None
+        self.query_thread = None     # SQL 查询线程
         ############### 系统对话框 #######################################
         self.item_ui = None       # 项目查看
         self.pis_ui = None        # 病理对话框
@@ -45,6 +47,10 @@ class ReportTrack(ReportTrackUI):
         self.pacs_ui = None       # 检查对话框
         self.phone_ui = None      # 电话记录对话框
         self.sms_ui = None        # 短信记录对话框
+        self.pic_ui = None        # 采血照片对话框
+        self.pd_ui = None         # 进度条
+        self.pd_ui_num = 0        # 进度条计数，用于处理线程->UI静态变量 弹窗造成的BUG
+        self.zyd_ui = None        # 指引单对话框
 
     def initParas(self):
         self.dwmc_bh = OrderedDict()
@@ -79,22 +85,106 @@ class ReportTrack(ReportTrackUI):
                 row_num = i.row()
 
             menu = QMenu()
-            item1 = menu.addAction(Icon("短信"), "更换追踪人")
-            item2 = menu.addAction(Icon("短信"), "增加电话记录")
-            item3 = menu.addAction(Icon("预约"), "发送短信")
-            item4 = menu.addAction(Icon("预约"), "查看采血照片")
+            item1 = menu.addAction(Icon("切换"), "更换追踪人员")
+            item2 = menu.addAction(Icon("电话"), "增加电话记录")
+            item3 = menu.addAction(Icon("短信"), "发送短信")
+            item4 = menu.addAction(Icon("采血台"), "查看采血照片")
+            item5 = menu.addAction(Icon("体检收单"), "纸质导检单")
             action = menu.exec_(self.table_track.mapToGlobal(pos))
+            # 获取变量
+            tjbh = self.table_track.getCurItemValueOfKey('tjbh')
+            sjhm = self.table_track.getCurItemValueOfKey('sjhm')
+            if action == item1:
+                if self.table_track.getCurItemValueOfKey('lqry'):
+                    button = mes_warn(self,'您确认自己追踪本报告吗？')
+                    if button == QMessageBox.Yes:
+                        pass
+                        mes_about(self,'更新成功！')
+                else:
+                    mes_about(self,'该体检报告当前无追踪护士，无须更换！')
+            elif action == item2:
+                if not self.phone_ui:
+                    self.phone_ui = PhoneUI(self)
+                self.phone_ui.returnPressed.emit(tjbh, sjhm)
+                self.phone_ui.show()
+            elif action == item3:
+                if sjhm:
+                    ui = SmsPostUI(self)
+                    ui.initData.emit(tjbh,sjhm)
+                    ui.show()
+                else:
+                    mes_about(self,'该顾客不存在手机，请先补充完整！')
+
+            elif action == item4:
+                if self.get_gol_para('api_file_down'):
+                    self.show_url = self.get_gol_para('api_file_down')
+                else:
+                    self.show_url = 'http://10.8.200.201:4000/app_api/file/down/%s/%s'
+                url = self.show_url % (tjbh, '000001')
+                data = api_file_down(url)
+                if data:
+                    if not self.pic_ui:
+                        self.pic_ui = PicDialog()
+                    self.pic_ui.setData(data)
+                    self.pic_ui.show()
+                else:
+                    mes_about(self, '该人未拍照！')
+
+            elif action == item5:
+                result = self.session.query(MT_TJ_PHOTO_ZYD).filter(MT_TJ_PHOTO_ZYD.tjbh == tjbh).scalar()
+                if result:
+                    if result.picture_zyd:
+                        if not self.zyd_ui:
+                            self.zyd_ui = ZYDDialog()
+                        self.zyd_ui.setData(result.picture_zyd)
+                        self.zyd_ui.show()
+                else:
+                    mes_about(self, '该人导检单未拍照！')
+
+    def on_btn_djd_click(self):
+        result = self.session.query(MT_TJ_PHOTO_ZYD).filter(MT_TJ_PHOTO_ZYD.tjbh == self.cur_tjbh).scalar()
+        if result:
+            if result.picture_zyd:
+                if not self.zyd_ui:
+                    self.zyd_ui = ZYDDialog()
+                self.zyd_ui.setData(result.picture_zyd)
+                self.zyd_ui.show()
+        else:
+            mes_about(self, '该人导检单未拍照！')
 
     # 导出功能
     def on_btn_export_click(self):
         self.table_track.export()
+
+    # 启动线程 执行查询
+    def execQuery(self,sql):
+        if not self.query_thread:
+            self.query_thread = QueryThread(self.session)
+        self.query_thread.setTask(sql)
+        self.query_thread.signalMes.connect(self.on_mes_show, type=Qt.QueuedConnection)
+        self.query_thread.start()
+
+    def on_mes_show(self,mes:bool,result:list,num:int):
+        if self.pd_ui_num == num:
+            return
+        else:
+            self.pd_ui_num = num
+        if self.pd_ui:
+            if not self.pd_ui.isHidden():
+                self.pd_ui.hide()
+        if mes:
+            self.table_track.load(result)
+            self.gp_middle.setTitle('追踪列表（%s）' %self.table_track.rowCount())
+            mes_about(self,'共检索出 %s 条数据！' %self.table_track.rowCount())
+        else:
+            mes_about(self,"查询出错，错误信息：%s" %result[0])
 
     # 查询功能
     def on_btn_query_click(self):
         tstart,tend = self.lt_where_search.date_range             # 日期
         sql = get_report_track_sql(tstart, tend)
 
-        where_tjqy = self.lt_where_search.where_tjqy              #体检区域
+        where_tjqy = self.lt_where_search.where_tjqy             # 体检区域
         if where_tjqy:
             sql = sql + where_tjqy
 
@@ -106,10 +196,13 @@ class ReportTrack(ReportTrackUI):
         if where_dwmc:
             sql = sql + where_dwmc
 
-        sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC '''
-        results = self.session.execute(sql).fetchall()
-        self.table_track.load(results)
-        mes_about(self,'共检索出 %s 条数据！' %self.table_track.rowCount())
+        sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC ; '''
+        # print(sql)
+        # 执行查询
+        self.execQuery(sql)
+        # 进度条
+        self.pd_ui = ProgressDialog(self)
+        self.pd_ui.show()
 
     # 设置快速检索文本
     def on_table_set(self,tableWidgetItem):
@@ -134,13 +227,14 @@ class ReportTrack(ReportTrackUI):
 
     # 电话记录
     def on_btn_phone_click(self):
+        sjhm = self.table_track.getCurItemValueOfKey('sjhm')
         if not self.cur_tjbh:
             mes_about(self, '请先选择一个人！')
             return
         else:
             if not self.phone_ui:
                 self.phone_ui = PhoneUI(self)
-            self.phone_ui.returnPressed.emit(self.cur_tjbh)
+            self.phone_ui.returnPressed.emit(self.cur_tjbh,sjhm)
             self.phone_ui.show()
 
     # 短信记录
@@ -149,9 +243,10 @@ class ReportTrack(ReportTrackUI):
             mes_about(self, '请先选择一个人！')
             return
         else:
+            sjhm = self.table_track.getCurItemValueOfKey('sjhm')
             if not self.sms_ui:
                 self.sms_ui = SmsUI(self)
-            self.sms_ui.returnPressed.emit(self.cur_tjbh)
+            self.sms_ui.returnPressed.emit(self.cur_tjbh,sjhm)
             self.sms_ui.show()
 
     # 进入PIS
@@ -296,3 +391,26 @@ class ReportTrack(ReportTrackUI):
                 self.sms_ui.close()
         except Exception as e:
             self.log.info("ReportTrack 子UI关闭时发生错误：%s " %e)
+
+# 等待过程中的进度动态图
+class ProgressDialog(QDialog):
+
+    def __init__(self,parent):
+        super(ProgressDialog,self).__init__(parent)
+        self.initUI()
+
+    def initUI(self):
+        # 窗口模式，去掉标题栏
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setFixedSize(500,500)
+        lt_main = QVBoxLayout()
+        lb_pic = QLabel()
+        lb_mes = QLabel('正在查询，请您稍等')
+        lb_mes.setStyleSheet('''font: 75 28pt \"微软雅黑\";color: rgb(255, 0, 0);''')
+        movie = QMovie(file_ico('35.gif'))
+        lb_pic.setMovie(movie)
+        movie.start()
+        # 加入布局
+        lt_main.addWidget(lb_pic)
+        lt_main.addWidget(lb_mes)
+        self.setLayout(lt_main)

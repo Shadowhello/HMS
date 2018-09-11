@@ -62,7 +62,7 @@ class CollectHistory(CollectHistory_UI):
         row = QTableWidgetItem.row()
         if btn_name=='查看':
             url = self.show_url %(self.table_history.item(row,2).text(),'000001')
-            print(url)
+            # print(url)
             data = api_file_down(url)
             if data:
                 if not self.pic_ui:
@@ -73,36 +73,4 @@ class CollectHistory(CollectHistory_UI):
                 mes_about(self,'该人未拍照！')
 
 
-class PicDialog(QDialog):
 
-    def __init__(self,parent=None):
-        super(PicDialog,self).__init__(parent)
-        self.setWindowTitle('采血照片查看')
-        lt_main = QHBoxLayout()
-        self.lb_pic = PicLable()
-
-        lt_main.addWidget(self.lb_pic)
-        self.setLayout(lt_main)
-
-    # 设置二进制数据
-    def setData(self,data):
-        self.lb_pic.show2(data)
-
-
-
-class PicLable(QLabel):
-
-    def __init__(self):
-        super(PicLable,self).__init__()
-        self.setAlignment(Qt.AlignCenter)
-        self.setFixedWidth(352)
-        self.setFixedHeight(288)
-        self.setFrameShape(QFrame.Box)
-        self.setStyleSheet("border:None;")
-        # self.setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);")
-
-    def show2(self,datas):
-        # write_file(datas, filename)
-        p = QPixmap()
-        p.loadFromData(datas)          # 数据不落地,高效
-        self.setPixmap(p)

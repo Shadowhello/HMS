@@ -26,6 +26,7 @@ class CollectUrine_UI(Widget):
         self.lt_left_bottom = QGridLayout()
         gp_left_bottom = QGroupBox('留样详情')
         gp_left_bottom.setLayout(self.lt_left_bottom)
+        gp_left_bottom.layout()
 
         label = QLabel('条码号：')
         self.tmbh = QSerialNo()

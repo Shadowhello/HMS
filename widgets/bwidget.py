@@ -118,7 +118,7 @@ class TableWidget(QTableWidget):
         self.load_set(datas,heads)
         # 恢复公共设置
         self.setSortingEnabled(False)  # 避免点击排序造成BUG
-        # self.resizeColumnsToContents()  # 设置列适应大小    按需加，不要基础实现
+        # self.resizeColumnsToContents()  # 设置列适应大小    按需加，不要
 
     # 子控件 继承具体实现
     def load_set(self,datas,head):

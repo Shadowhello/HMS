@@ -11,6 +11,7 @@ class ReportTrackUI(Widget):
         lt_main = QVBoxLayout()
         lt_top = QHBoxLayout()
         lt_middle = QHBoxLayout()
+        self.gp_middle = QGroupBox('追踪列表（0）')
         lt_bottom = QHBoxLayout()
         gp_bottom = QGroupBox()
         #############################################
@@ -31,7 +32,7 @@ class ReportTrackUI(Widget):
         self.cb_report_track_timerout = ReportTrackTimeroutGroup()
         # 加入布局
         self.lt_where_search = WhereSearchGroup()
-        self.lt_where_search.addStates(['所有','待追踪','追踪中','追踪完成'])
+        self.lt_where_search.addStates(['待追踪','追踪中','追踪完成'],True)
         self.lt_where_search.addWidget(QLabel(), 0, 4, 1, 1)
         self.lt_where_search.addItem(self.cb_track_type, 0, 5, 1, 2)
         self.lt_where_search.addItem(self.cb_report_type, 0, 7, 1, 2)
@@ -41,7 +42,7 @@ class ReportTrackUI(Widget):
         self.lt_where_search.addWidget(self.btn_query, 0, 11, 2, 2)
         self.lt_where_search.addWidget(self.btn_task, 0, 13, 2, 2)
         self.lt_where_search.addWidget(self.btn_export, 0, 15, 2, 2)
-        self.lt_where_search.addWidget(self.btn_receive, 0, 17, 2, 2)
+        # self.lt_where_search.addWidget(self.btn_receive, 0, 17, 2, 2)
         gp_search.setLayout(self.lt_where_search)
 
         # 快速检索
@@ -73,6 +74,7 @@ class ReportTrackUI(Widget):
         self.table_track = ReportTrackTable(self.table_track_cols)
         self.table_track.verticalHeader().setVisible(False)  # 列表头
         lt_middle.addWidget(self.table_track)
+        self.gp_middle.setLayout(lt_middle)
 
         # 按钮功能区
         self.btn_item = QPushButton(Icon('项目'), '项目查看')         # 查看 LIS 结果
@@ -83,20 +85,20 @@ class ReportTrackUI(Widget):
         self.btn_phone = QPushButton(Icon('电话'),'电话记录')       # 查看电话记录
         self.btn_sms = QPushButton(Icon('短信'),'短信记录')         # 查看短信记录
         self.btn_sd = QPushButton(Icon('体检收单'),'导检收单')      # 导检收单
-        self.btn_djd = QPushButton(Icon('体检收单'),'电子导检单')   # 有拒检项目查看电子导检单
+        self.btn_djd = QPushButton(Icon('体检收单'),'纸质导检单')   # 有拒检项目查看电子导检单
         lt_bottom.addWidget(self.btn_item)
         lt_bottom.addWidget(self.btn_lis)
         lt_bottom.addWidget(self.btn_pacs)
         lt_bottom.addWidget(self.btn_pis)
-        lt_bottom.addWidget(self.btn_equip)
+        # lt_bottom.addWidget(self.btn_equip)
         lt_bottom.addWidget(self.btn_phone)
         lt_bottom.addWidget(self.btn_sms)
-        lt_bottom.addWidget(self.btn_sd)
+        # lt_bottom.addWidget(self.btn_sd)
         lt_bottom.addWidget(self.btn_djd)
         gp_bottom.setLayout(lt_bottom)
         # 整体布局
         lt_main.addLayout(lt_top)
-        lt_main.addLayout(lt_middle)
+        lt_main.addWidget(self.gp_middle)
         lt_main.addWidget(gp_bottom)
 
         self.setLayout(lt_main)

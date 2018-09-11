@@ -1,4 +1,5 @@
 from widgets.cwidget import *
+from .model import *
 from utils import gol
 from utils.api import request_get
 import win32api
@@ -54,18 +55,45 @@ class SelfHelpMachine(Widget):
         lt_main.addLayout(lt_middle,1)
         lt_main.addLayout(lt_bottom,1)
         self.setLayout(lt_main)
+        self.table_user_cols = OrderedDict([
+            ('tjbh', '体检编号'),
+            ('xm', '姓名'),
+            ('xb', '性别'),
+            ('nl', '年龄'),
+            ('sfzh', '身份证号'),
+            ('sjhm', '手机号码'),
+            ('qdrq', '体检日期'),
+            ('shrq', '审核日期'),
+            ('ck', '')
+        ])
+        self.table_user = UserTable(self.table_user_cols)
 
     # 扫描体检编号或者手工输入回车
     def on_le_tjbh_press(self):
         if len(self.le_tjbh.text())==9:
-            self.on_print_thread(self.le_tjbh.text())
-            self.dg_p = ProgressDialog(self)
-            self.dg_p.show()
+            mes_about(self, '请输入正确的身份证号！')
+            # self.on_print_thread(self.le_tjbh.text())
+            # self.dg_p = ProgressDialog(self)
+            # self.dg_p.show()
         elif len(self.le_tjbh.text())==18:
-            pass
-            # self.session.
+            results = self.session.execute(get_report_detail_sql(self.le_tjbh.text())).fetchall()
+            self.table_user.load(results)
+            rect=self.le_tjbh.geometry()
+            width = rect.width()
+            bottom = rect.bottom()
+            left = rect.left()
+            lt_1 = QHBoxLayout()
+            lt_1.addWidget(self.table_user)
+            if not self.gp_keyboard:
+                self.gp_keyboard = QGroupBox(self)
+            self.gp_keyboard.setLayout(lt_1)
+            self.gp_keyboard.setGeometry(QRect(left,bottom,width,200))
+            self.gp_keyboard.show()
+            # self.table_user.setGeometry()
+            # self.table_user.setGeometry(QRect(left, bottom, width, height))
+
         else:
-            mes_about(self,'请输入正确的体检编号或者身份证号！')
+            mes_about(self,'请输入正确的身份证号！')
 
         self.le_tjbh.setText('')
 
@@ -107,48 +135,50 @@ class SelfHelpMachine(Widget):
 
     # 数字小键盘，用于手工输入内容
     def on_btn_keyboard_click(self):
+        # 不存在 则新建
         if not self.gp_keyboard:
-            rect=self.le_tjbh.geometry()
-            width = rect.width()
-            bottom = rect.bottom()
-            left = rect.left()
-
-            # 数字 字母 中文
-            btn_names = ['ESC','0','1','2','3','4','5','6','7','8','9','搜索']
-            # 一行几个按钮
-            size = 3
-            height = 400
             self.gp_keyboard = QGroupBox(self)
-            lt_keyboard = QGridLayout()
-            for i,btn_name in enumerate(btn_names):
-                # 获取坐标
-                btn_pos_x = i // size
-                btn_pos_y = i % size
-                # 初始化按钮
-                btn_obj = QPushButton(btn_name)
-                btn_obj.setMinimumWidth(width//10)
-                btn_obj.setFixedHeight(height//4)
-                btn_obj.setStyleSheet('''font: 75 28pt \"微软雅黑\";''')
-                # 添加布局
-                btn_obj.clicked.connect(partial(self.on_btn_obj_click,btn_name))
-                lt_keyboard.addWidget(btn_obj, btn_pos_x, btn_pos_y, 1, 1)
+
+        rect=self.le_tjbh.geometry()
+        width = rect.width()
+        bottom = rect.bottom()
+        left = rect.left()
+
+        # 数字 字母 中文
+        btn_names = ['ESC','0','1','2','3','4','5','6','7','8','9','搜索']
+        # 一行几个按钮
+        size = 3
+        height = 400
+
+        lt_keyboard = QGridLayout()
+        for i,btn_name in enumerate(btn_names):
+            # 获取坐标
+            btn_pos_x = i // size
+            btn_pos_y = i % size
+            # 初始化按钮
+            btn_obj = QPushButton(btn_name)
+            btn_obj.setMinimumWidth(width//10)
+            btn_obj.setFixedHeight(height//4)
+            btn_obj.setStyleSheet('''font: 75 28pt \"微软雅黑\";''')
+            # 添加布局
+            btn_obj.clicked.connect(partial(self.on_btn_obj_click,btn_name))
+            lt_keyboard.addWidget(btn_obj, btn_pos_x, btn_pos_y, 1, 1)
 
 
-            lt_keyboard.setHorizontalSpacing(10)               # 设置水平间距
-            lt_keyboard.setVerticalSpacing(10)                 # 设置垂直间距
-            lt_keyboard.setContentsMargins(10, 10, 10, 10)     # 设置外间距
-            #lt_keyboard.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
+        lt_keyboard.setHorizontalSpacing(10)               # 设置水平间距
+        lt_keyboard.setVerticalSpacing(10)                 # 设置垂直间距
+        lt_keyboard.setContentsMargins(10, 10, 10, 10)     # 设置外间距
+        #lt_keyboard.setColumnStretch(5, 1)                 # 设置列宽，添加空白项的
 
-            self.gp_keyboard.setLayout(lt_keyboard)
-            self.gp_keyboard.setGeometry(QRect(left,bottom,width,height))
+        self.gp_keyboard.setLayout(lt_keyboard)
+        self.gp_keyboard.setGeometry(QRect(left,bottom,width,height))
+        self.gp_keyboard.show()
+
+        if self.gp_keyboard.isHidden():
             self.gp_keyboard.show()
         else:
-            #已存在，是否已隐藏
-            if self.gp_keyboard.isHidden():
-                self.gp_keyboard.show()
-            else:
-                # 再次点击 则隐藏
-                self.gp_keyboard.hide()
+            # 再次点击 则隐藏
+            self.gp_keyboard.hide()
 
     # 数字键盘信号槽
     def on_btn_obj_click(self,btn_name):
@@ -231,7 +261,33 @@ class ProgressDialog(Dialog):
         self.setLayout(lt_main)
 
 
+class UserTable(TableWidget):
 
+    def __init__(self, heads, parent=None):
+        super(UserTable, self).__init__(heads, parent)
+        self.setStyleSheet('''QHeaderView{font-size:28px;}QTableView::item {font-size:20px;}''')
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                if col_index in [1,2]:
+                    item = QTableWidgetItem(str2(col_value))
+                else:
+                    item = QTableWidgetItem(col_value)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(row_index, col_index, item)
+
+            self.setColumnWidth(0, 80)
+            self.setColumnWidth(1, 70)
+            self.setColumnWidth(2, 70)
+            self.setColumnWidth(3, 80)
+            self.setColumnWidth(4, 150)
+            self.setColumnWidth(5, 90)
+            # self.horizontalHeader().setStretchLastSection(True)
 
 if __name__ == '__main__':
     import sys

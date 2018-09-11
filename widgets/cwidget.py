@@ -643,54 +643,59 @@ class ItemsStateTable(TableWidget):
 
         for row_index, row_data in enumerate(datas):
             self.insertRow(row_index)                # 插入一行
-            for col_index, col_name in enumerate(heads.keys()):
-                data = row_data[col_name]
-                item = QTableWidgetItem(data)
+            for col_index, col_value in enumerate(row_data):
                 if col_index == 0:
-                    if data == '已小结':
+                    item = QTableWidgetItem(str2(col_value))
+                    col_value = str2(col_value)
+                    if col_value == '已小结':
                         pass
-                    elif data in ['已检查','已抽血','已留样']:
+                    elif col_value in ['已检查','已抽血','已留样']:
                         item.setBackground(QColor("#f0e68c"))
-                    elif data == '核实':
+                    elif col_value == '核实':
                         item.setBackground(QColor("#FF0000"))
-                    elif data == '已拒检':
+                    elif col_value == '已拒检':
                         item.setBackground(QColor("#008000"))
-                    elif data == '已接收':
+                    elif col_value == '已接收':
                         item.setBackground(QColor("#b0c4de"))
-                    elif data == '已回写':
+                    elif col_value == '已回写':
                         item.setBackground(QColor("#1e90ff"))
-                elif col_index == 4:
-                    item = QTableWidgetItem('打印')
-                    item.setFont(get_font())
-                    item.setBackground(QColor(218, 218, 218))
-                    item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-                elif col_index == 5:
-                    if row_data[list(heads.keys())[0]] in ['已小结','已拒检']:
+                    elif col_value == '已登记':
+                        item.setBackground(QColor("#b0c4de"))
+
+                elif col_index == 9:
+                    print(555555555)
+                    if str2(row_data[0])=='已小结':
                         item = QTableWidgetItem('')
-                    else:
+                    elif str2(row_data[0])=='核实':
                         item = QTableWidgetItem('拒检')
                         item.setFont(get_font())
                         item.setBackground(QColor(218, 218, 218))
                         item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-                elif col_index == 6:
-                    if row_data[list(heads.keys())[0]] in ['已小结','已拒检']:
-                        item = QTableWidgetItem('')
                     else:
                         item = QTableWidgetItem('核实')
                         item.setFont(get_font())
                         item.setBackground(QColor(218, 218, 218))
                         item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
 
+                else:
+                    item = QTableWidgetItem(str2(col_value))
+
                 self.setItem(row_index, col_index, item)
-                # 除第三列 都居中
-                if col_index!= 3:
+                # # 除第三列 都居中
+                if col_index not in [2,3]:
                     item.setTextAlignment(Qt.AlignCenter)
 
-        self.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        # self.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
         self.horizontalHeader().setStretchLastSection(True)
         self.setColumnWidth(0, 50)
         self.setColumnWidth(1, 60)
-        self.setColumnWidth(2, 60)
+        self.setColumnWidth(2, 150)
+        self.setColumnWidth(3, 80)
+        self.setColumnWidth(4, 80)
+        self.setColumnWidth(5, 60)
+        self.setColumnWidth(6, 80)
+        self.setColumnWidth(7, 60)
+        self.setColumnWidth(8, 80)
 
 
 # 报告打印列表
@@ -777,12 +782,29 @@ class SlowHealthTable(TableWidget):
                         item = QTableWidgetItem(str(data))
                         if row_data['is_yc_%s' %col_name]:  # 对应列异常
                             item.setBackground(QColor("#FF0000"))
+                        item.setTextAlignment(Qt.AlignCenter)
                     else:
                         item = QTableWidgetItem('')
+
+                elif col_name in ['xm', 'xb', 'dwmc']:
+                    item = QTableWidgetItem(str2(data))
+
                 else:
                     item = QTableWidgetItem(data)
 
                 self.setItem(row_index, col_index, item)
+
+        self.setColumnWidth(0, 70)      # 体检编号
+        self.setColumnWidth(1, 50)      # 姓名
+        self.setColumnWidth(2, 40)      # 性别
+        self.setColumnWidth(3, 40)      # 年龄
+        self.setColumnWidth(4, 80)      # 手机号码
+        self.setColumnWidth(5, 130)      # 身份证号
+        self.setColumnWidth(6, 60)      # 体检金额
+        self.horizontalHeader().setStretchLastSection(True)
+
+
+
 
 
 # 检查表格
@@ -933,9 +955,10 @@ class Timer2Button(ToolButton):
         self.old_text = self.text()
 
     def start(self):
-        self.timer.start(1000)
+        # self.timer.start(1000)
         self.num = 0
-        self.timer.timeout.connect(self.on_btn_timer)
+        self.setText('%s' %self.old_text)
+        # self.timer.timeout.connect(self.on_btn_timer)
 
     def stop(self):
         self.timer.stop()
@@ -1152,7 +1175,7 @@ class PrintSetupGroup(QGroupBox):
     def __init__(self):
         super(PrintSetupGroup, self).__init__()
         self.initUI()
-
+        self.is_remote_print = True
         self.rb_local_check.clicked.connect(partial(self.on_btn_state_change,False))
         self.rb_remote_check.clicked.connect(partial(self.on_btn_state_change, True))
 
@@ -1182,9 +1205,17 @@ class PrintSetupGroup(QGroupBox):
         if btn_is_click:
             self.cb_remote_printer.setDisabled(False)
             self.cb_local_printer.setDisabled(True)
+            self.is_remote_print = True
         else:
             self.cb_local_printer.setDisabled(False)
             self.cb_remote_printer.setDisabled(True)
+            self.is_remote_print = False
+
+    def get_printer(self):
+        if self.is_remote_print:
+            return self.is_remote_print,self.cb_remote_printer.currentText()
+        else:
+            return self.is_remote_print, self.cb_local_printer.currentText()
 
 
 
@@ -1265,6 +1296,13 @@ class ReportStateGroup(QHBoxLayout):
             self.cb_report_state.setDisabled(False)
         else:
             self.cb_report_state.setDisabled(True)
+
+    def setChecked(self):
+        self.cb_report_state.setDisabled(False)
+        self.is_check.setChecked(True)
+        self.is_check.stateChanged.disconnect()
+        self.is_check.setDisabled(True)
+
 
     @property
     def where_state(self):
@@ -1503,7 +1541,7 @@ class AreaGroup(QHBoxLayout):
         if self.is_check.isChecked():
             if self.cb_area.currentText() == '所有':
                 return False
-            elif self.cb_area.currentText():
+            elif self.cb_area.currentText() == '明州':
                 return ''' AND TJQY IN ('明州1楼','明州1楼','明州3楼') '''
             else:
                 return ''' AND TJQY='%s' ''' % self.cb_area.currentText()
@@ -1691,7 +1729,7 @@ class MoneyGroup(QHBoxLayout):
 
     def get_where_text(self):
         if self.is_check.isChecked():
-            return ''' YSJE >= '%s' AND YSJE <= '%s' ''' %(str(self.je_min.value()),str(self.je_max.value()))
+            return ''' AND YSJE >= '%s' AND YSJE <= '%s' ''' %(str(self.je_min.value()),str(self.je_max.value()))
         else:
             return ''
 
@@ -1901,10 +1939,10 @@ class BaseCondiSearchGroup(QGroupBox):
 # 定制类：
 class WhereSearchGroup(QGridLayout):
 
-    def __init__(self):
+    def __init__(self,diff=-3):
         super(WhereSearchGroup,self).__init__()
 
-        self.s_date = DateGroup(-3)
+        self.s_date = DateGroup(diff)
         self.s_dwbh = TUintGroup({},{})
         self.s_report_state = ReportStateGroup()
         self.s_area = AreaGroup()
@@ -1946,8 +1984,10 @@ class WhereSearchGroup(QGridLayout):
     def where_bgzt(self):
         return self.s_report_state.where_state2
 
-    def addStates(self,states):
+    def addStates(self,states,is_check=False):
         self.s_report_state.addStates(states)
+        if is_check:
+            self.s_report_state.setChecked()
 
     def get_date_text(self):
         return self.s_date.jsrq.currentText()
@@ -2149,8 +2189,8 @@ class UserBaseGroup(QGroupBox):
         lt_main.addWidget(self.lb_user_age)
         lt_main.addWidget(QLabel('手机号码：'))
         lt_main.addWidget(self.lb_sjhm)
-        lt_main.addWidget(QLabel('身份证号：'))
-        lt_main.addWidget(self.lb_sfzh)
+        # lt_main.addWidget(QLabel('身份证号：'))
+        # lt_main.addWidget(self.lb_sfzh)
         lt_main.addStretch()                  #设置列宽，添加空白项的
         self.setLayout(lt_main)
 
@@ -2162,7 +2202,7 @@ class UserBaseGroup(QGroupBox):
         self.lb_user_sex.setText(data.get('xb','未获取到'))
         self.lb_user_age.setText(data.get('nl','未获取到'))
         self.lb_sjhm.setText(data.get('sjhm','未获取到'))
-        self.lb_sfzh.setText(data.get('sfzh','未获取到'))
+        # self.lb_sfzh.setText(data.get('sfzh','未获取到'))
 
     # 清空数据
     def clearData(self):
@@ -2171,7 +2211,7 @@ class UserBaseGroup(QGroupBox):
         self.lb_user_sex.setText('')
         self.lb_user_age.setText('')
         self.lb_sjhm.setText('')
-        self.lb_sfzh.setText('')
+        # self.lb_sfzh.setText('')
 
 class EquipTypeLayout(QHBoxLayout):
 
@@ -2279,6 +2319,8 @@ class ReadChinaIdCard_UI(QDialog):
         self.setFixedSize(498,394)
         self.setStyleSheet(self.widget_style)
         self.initUI()
+        # 特殊变量
+        self.read_card_thread = None
         self.readidcard()
         # 绑定信号槽
         self.buttonBox.accepted.connect(self.on_sure)
@@ -2313,10 +2355,11 @@ class ReadChinaIdCard_UI(QDialog):
         #self.buttonBox.setCenterButtons(True)
 
     def readidcard(self):
-        self.cur_thread = ReadThread()
-        self.cur_thread.signalPost.connect(self.setData, type=Qt.QueuedConnection)
-        self.cur_thread.signalError.connect(self.showMes, type=Qt.QueuedConnection)
-        self.cur_thread.start()
+        if not self.read_card_thread:
+            self.read_card_thread = ReadThread()
+        self.read_card_thread.signalPost.connect(self.setData, type=Qt.QueuedConnection)
+        self.read_card_thread.signalError.connect(self.showMes, type=Qt.QueuedConnection)
+        self.read_card_thread.start()
 
     def setData(self,data:list):
         self.lb_user_name.setText(data[0])
@@ -2343,8 +2386,9 @@ class ReadChinaIdCard_UI(QDialog):
 
     def closeEvent(self, *args, **kwargs):
         super(ReadChinaIdCard_UI, self).closeEvent(*args, **kwargs)
-        if self.cur_thread:
-            self.cur_thread.stop()
+        if self.read_card_thread:
+            self.read_card_thread.stop()
+            self.read_card_thread = None
 
 class ReadThread(QThread):
 
@@ -2445,6 +2489,99 @@ class SearchGroup(QGroupBox):
     def setText(self,p_str):
         self.le_tjbh.setText(p_str)
 
+
+class PicDialog(QDialog):
+
+    def __init__(self,parent=None):
+        super(PicDialog,self).__init__(parent)
+        self.setWindowTitle('采血照片查看')
+        lt_main = QHBoxLayout()
+        self.lb_pic = PicLable()
+
+        lt_main.addWidget(self.lb_pic)
+        self.setLayout(lt_main)
+
+    # 设置二进制数据
+    def setData(self,data):
+        self.lb_pic.show2(data)
+
+class PicLable(QLabel):
+
+    def __init__(self):
+        super(PicLable,self).__init__()
+        self.setAlignment(Qt.AlignCenter)
+        self.setFixedWidth(352)
+        self.setFixedHeight(288)
+        self.setFrameShape(QFrame.Box)
+        self.setStyleSheet("border:None;")
+        # self.setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);")
+
+    def show2(self,datas):
+        # write_file(datas, filename)
+        p = QPixmap()
+        p.loadFromData(datas)          # 数据不落地,高效
+        self.setPixmap(p)
+
+class ZYDDialog(QDialog):
+    def __init__(self, parent=None):
+        super(ZYDDialog, self).__init__(parent)
+        self.setWindowTitle('纸质导检单查看')
+        lt_main = QHBoxLayout()
+        self.lb_pic = ZydLable()
+
+        lt_main.addWidget(self.lb_pic)
+        self.setLayout(lt_main)
+
+    # 设置二进制数据
+    def setData(self, data):
+        self.lb_pic.show2(data)
+
+class ZydLable(QLabel):
+    def __init__(self):
+        super(ZydLable, self).__init__()
+        self.setAlignment(Qt.AlignCenter)
+        self.setFixedWidth(600)
+        self.setFixedHeight(600)
+        self.setFrameShape(QFrame.Box)
+        self.setStyleSheet("border:None;")
+        # self.setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);")
+
+    def show2(self, datas):
+        # write_file(datas, filename)
+        p = QPixmap()
+        p.loadFromData(datas)  # 数据不落地,高效
+        self.setPixmap(p)
+
+# 运行线程
+class QueryThread(QThread):
+
+    # 定义信号,定义参数为str类型
+    signalMes = pyqtSignal(bool,list,int)        #成功/失败，任务结果 最后一个参数，用于防止静态方法mes_about 重复弹出的问题
+    signalExit = pyqtSignal()                # 退出线程
+
+    def __init__(self,session):
+        super(QueryThread,self).__init__()
+        self.runing = False
+        self.session = session               # 数据库会话
+        self.num = 1
+
+    def stop(self):
+        self.runing = False
+
+    # 启动任务
+    def setTask(self,sql:str):
+        self.sql =sql
+        self.runing = True
+
+    def run(self):
+        while self.runing:
+            try:
+                results = self.session.execute(self.sql).fetchall()
+                self.signalMes.emit(True, results,self.num)
+            except Exception as e:
+                self.signalMes.emit(False, [e],self.num)
+            self.num = self.num + 1
+            self.stop()
 
 if __name__ == '__main__':
     import sys

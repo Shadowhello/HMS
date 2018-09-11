@@ -1,6 +1,7 @@
 from widgets.cwidget import *
 from widgets.bweb import *
 from .model import *
+from utils import cur_datetime,request_create_report
 
 
 
@@ -25,7 +26,7 @@ class ReportReviewUI(Widget):
         lt_main = QHBoxLayout()
         lt_left = QVBoxLayout()
         self.btn_query = ToolButton(Icon('query'), '查询')
-        self.btn_review_mode = ToolButton(Icon('全屏'), '进入审阅模式')
+        self.btn_review_mode = ToolButton(Icon('全屏'), '全屏审阅')
         self.gp_where_search = BaseCondiSearchGroup(1)
         self.gp_where_search.setText('审核日期')
         self.gp_where_search.setNoChoice()
@@ -96,6 +97,7 @@ class ReportReviewTable(TableWidget):
 
     tjqy = None  # 体检区域
     tjlx = None  # 体检类型
+    cur_data_set = []
 
     def __init__(self, heads, parent=None):
         super(ReportReviewTable, self).__init__(heads, parent)
@@ -103,19 +105,24 @@ class ReportReviewTable(TableWidget):
 
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
+        self.cur_data_set = []
         # list 实现
         for row_index, row_data in enumerate(datas):
             # 插入一行
+            tmp = []
             self.insertRow(row_index)
             for col_index, col_value in enumerate(row_data):
                 item = QTableWidgetItem(str2(col_value))
+                tmp.append(str2(col_value))
                 if col_index==0:
                     if str2(col_value)=='已审核':
                         item.setBackground(QColor("#FF0000"))
                     else:
                         item.setBackground(QColor("#f0e68c"))
+
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
+            self.cur_data_set.append(tmp)
         # 布局
         self.setColumnWidth(0, 50)  # 状态
         self.setColumnWidth(1, 50)  # 类型
@@ -181,6 +188,7 @@ class ReportReviewUser(QGroupBox):
     # 设置数据
     def setData(self,data:dict):
         self.btn_review.stop()
+        print(data['syzt'])
         if data['syzt']=='已审核':
             self.lb_review_bz.show2(False)
             self.btn_review.start()
@@ -242,6 +250,182 @@ class StateLable(QLabel):
         else:
             self.clear()
 
+class ReportReviewFullScreen(Dialog):
+
+    # 自定义 信号，封装对外使用
+    opened = pyqtSignal(list)
+
+    def __init__(self,parent=None):
+        super(ReportReviewFullScreen,self).__init__(parent)
+        self.initUI()
+        self.datas = None   # 结果集
+        self.cur_index = 0  # 当前索引
+        self.opened.connect(self.initData)
+        self.btn_previous.clicked.connect(self.on_btn_previous_click)
+        self.btn_next.clicked.connect(self.on_btn_next_click)
+        self.btn_fullscreen.clicked.connect(self.on_btn_fullscreen_click)
+        # 审阅
+        self.gp_review_user.btnClick.connect(self.on_btn_review_click)
+        # 特殊变量 用于快速获取 复用
+        self.cur_tjbh = None
+        self.cur_data = None
+
+    def on_btn_fullscreen_click(self):
+        button = mes_warn(self,"您确定退出全屏审阅模式？")
+        if button == QMessageBox.Yes:
+            self.close()
+        else:
+            pass
+
+    def on_btn_previous_click(self):
+        try:
+            self.cur_index = self.cur_index - 1
+            self.open_page(self.datas[self.cur_index])
+        except Exception as e:
+            mes_about(self,'当前是最后一份报告')
+        # if abs(self.cur_index) <= len(self.datas)-1:
+        #     mes_about(self,'当前是最后一份报告')
+        #     return
+
+    def on_btn_next_click(self):
+        # if self.cur_index <= len(self.datas)-1:
+        #     mes_about(self,'当前是最后一份报告')
+        #     return
+        try:
+            self.cur_index = self.cur_index + 1
+            self.open_page(self.datas[self.cur_index])
+        except Exception as e:
+            mes_about(self, '当前是最后一份报告')
+
+    def initData(self,datas):
+        self.datas=datas
+        self.open_page(datas[self.cur_index])
+        # self.cur_index = self.cur_index + 1
+
+    def open_page(self,data):
+        self.cur_data = data
+        bgzt = data[0]
+        tjbh = data[3]
+        xm = data[4]
+        xb = data[5]
+        nl = data[6]
+        syrq = data[7]
+        syxm = data[8]
+        sybz = data[10]
+        self.cur_tjbh = tjbh
+        # 更新title
+        self.gp_bottom.setTitle('报告预览   体检编号：%s  姓名：%s 性别：%s  年龄：%s' %(tjbh,xm,xb,nl))
+        self.gp_bottom.setStyleSheet('''font: 75 12pt '微软雅黑';color: rgb(0,128,0);''')
+        # 未审阅则打开HTML 页面
+        url = gol.get_value('api_report_preview') %('html',tjbh)
+        self.wv_report_equip.load(url)
+        # 刷新界面
+        self.gp_review_user.setData({'sybz':sybz,'syrq':syrq,'syxm':syxm,'syzt':bgzt})
+
+    def initUI(self):
+        lt_main = QVBoxLayout()
+        # 审阅栏信息
+        self.gp_review_user = ReportReviewUser()
+        lt_middle = QHBoxLayout()
+        self.btn_previous = QPushButton(Icon('向左'), '上一个')
+        self.btn_fullscreen = QPushButton(Icon('全屏'),'退出全屏')
+        self.btn_next = QPushButton(Icon('向右'),'下一个')
+        lt_middle.addStretch()
+        lt_middle.addWidget(self.btn_previous)
+        lt_middle.addSpacing(20)
+        lt_middle.addWidget(self.btn_fullscreen)
+        lt_middle.addSpacing(20)
+        lt_middle.addWidget(self.btn_next)
+        lt_middle.addStretch()
+        # 报告预览
+        self.wv_report_equip = WebView()
+        lt_bottom = QHBoxLayout()
+        lt_bottom.addWidget(self.wv_report_equip)
+        self.gp_bottom = QGroupBox('报告预览')
+        self.gp_bottom.setLayout(lt_bottom)
+
+        lt_main.addWidget(self.gp_review_user,2)
+        lt_main.addWidget(self.gp_bottom,37)
+        lt_main.addLayout(lt_middle,1)
+
+        self.setLayout(lt_main)
+
+    # 审阅/取消审阅
+    def on_btn_review_click(self,syzt:bool,num:int):
+        # 未双击过查看过报告 不允许审核
+        if not self.cur_tjbh:
+            mes_about(self,'您还未打开报告，不允许审阅')
+            return
+        # 完成审阅
+        if syzt:
+            # 更新数据库 TJ_CZJLB TJ_BGGL
+            data_obj = {'jllx':'0031','jlmc':'报告审阅','tjbh':self.cur_tjbh,'mxbh':'',
+                         'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'jlnr':str(num),'bz':self.gp_review_user.get_sybz()}
+            try:
+                self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).update(
+                    {
+                        MT_TJ_BGGL.syxm: self.login_name,
+                        MT_TJ_BGGL.sygh: self.login_id,
+                        MT_TJ_BGGL.syrq: cur_datetime(),
+                        MT_TJ_BGGL.sybz: self.gp_review_user.get_sybz(),
+                        MT_TJ_BGGL.sysc: num,
+                        MT_TJ_BGGL.bgzt: 2,
+                    }
+                )
+                self.session.commit()
+            except Exception as e:
+                self.session.rollback()
+                mes_about(self,'更新数据库失败！错误信息：%s' %e)
+                return
+            # 刷新控件
+            self.gp_review_user.statechange()
+            # 刷新内存中的数据
+            self.cur_data[0] = '已审阅'
+            self.cur_data[7] = cur_datetime()
+            self.cur_data[8] = self.login_name
+            self.cur_data[10] = self.gp_review_user.get_sybz()
+            self.datas[self.cur_index] = self.cur_data
+            self.gp_review_user.setData({'sybz': self.gp_review_user.get_sybz(), 'syrq': cur_datetime(), 'syxm': self.login_name, 'syzt': 2})
+            # 向服务端 发送请求
+            # HTML 报告需要重新生成
+            request_create_report(self.cur_tjbh, 'html')
+            # 生成PDF 报告请求
+            request_create_report(self.cur_tjbh, 'pdf')
+
+        # 取消审阅
+        else:
+            if not self.gp_review_user.get_sybz():
+                mes_about(self,'请您输入取消审阅原因！')
+                return
+            # 更新数据库 TJ_CZJLB TJ_BGGL
+            data_obj = {'jllx':'0032','jlmc':'取消审阅','tjbh':self.cur_tjbh,'mxbh':'',
+                         'czgh':self.login_id,'czxm':self.login_name,'czqy':self.login_area,'bz':self.gp_review_user.get_sybz()}
+            try:
+                self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).update(
+                    {
+                        MT_TJ_BGGL.syxm: None,
+                        MT_TJ_BGGL.sygh: None,
+                        MT_TJ_BGGL.syrq: None,
+                        MT_TJ_BGGL.sybz: None,
+                        MT_TJ_BGGL.sysc: 0,
+                        MT_TJ_BGGL.bgzt: 1,
+                    }
+                )
+                self.session.commit()
+            except Exception as e:
+                self.session.rollback()
+                mes_about(self,'更新数据库失败！错误信息：%s' %e)
+                return
+            # 刷新控件
+            self.gp_review_user.clearData()                                                     # 清空数据
+            # 刷新内存中的数据
+            self.cur_data[0] = '已审核'
+            self.cur_data[7] = ''
+            self.cur_data[8] = ''
+            self.cur_data[10] = self.gp_review_user.get_sybz()
+            self.datas[self.cur_index] = self.cur_data
 
 if __name__ == '__main__':
     import sys

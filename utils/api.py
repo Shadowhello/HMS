@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import requests
 from pprint import pprint
 import urllib.parse
@@ -13,6 +14,19 @@ from utils import gol
 # print(response.text)            # 以文本形式打印网页源码
 # print(response.content)         # 以字节流形式打印
 # print(response.json())          # 同json.loads(response.text)
+
+# 发送短信
+def sms_api(mobile,context):
+    url = "http://10.8.200.103/MzyySoa/soa/sendSms"
+    #url="http://10.8.200.103/MzyySoa/soa/sendSms2?"
+    data = OrderedDict([('mobile', mobile), ('content', context.encode("gbk")), ('smsId', 999)])
+    response = requests.post(url, params=data)
+    #response.text ={"msg": "参数异常!", "ret": "4"}
+    #response.text ={"msg": "执行成功!", "ret": "1"}
+    if "执行成功" in response.text:
+        return 1
+    else:
+        return 0
 
 
 # 从微信端获取二维码图片 字节流
@@ -51,12 +65,16 @@ def request_get(url,save_file=None):
     '''
     response = requests.get(url)
     if response.status_code==200:
-        f = open(save_file, "wb")
-        for chunk in response.iter_content(chunk_size=512):
-            if chunk:
-                f.write(chunk)
-        f.close()
-        return True
+        try:
+            f = open(save_file, "wb")
+            for chunk in response.iter_content(chunk_size=512):
+                if chunk:
+                    f.write(chunk)
+            f.close()
+            return True
+        except Exception as e:
+            print(e)
+            return False
     else:
         return False
 

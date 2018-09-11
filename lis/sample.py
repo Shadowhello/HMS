@@ -4,7 +4,7 @@ from widgets.cwidget import *
 class SampleManager(DirTabWidget):
 
     def __init__(self):
-        nodes= ['抽血采集','留样采集','样本交接','历史查询','工作量']
+        nodes= ['抽血采集','留样采集','样本交接','历史查询']
         super(SampleManager,self).__init__('采血台',nodes)
         self.addTab('抽血采集')
 

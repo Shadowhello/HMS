@@ -121,6 +121,7 @@ SYS_MENU_TREE = {   # 系统
              'state': True,
              'childs': OrderedDict([
                  ('医护绩效',{'pid': 600, 'sid': 6001, 'title': '医护绩效', 'tip': None, 'state': True,'icon':'','is_tool':False,'shortcut':None}),
+                 ('体检时效',{'pid': 600, 'sid': 6002, 'title': '体检时效', 'tip': None, 'state': True,'icon':'','is_tool':False,'shortcut':None}),
              # ('科室工作量',{'pid': 500, 'id': 5002, 'title': '科室工作量', 'tip': None, 'state': True,'icon':'','is_tool':False,'shortcut':None}),
              # ('工作效率统计',{'pid': 500, 'id': 5003, 'title': '工作效率统计', 'tip': None, 'state': True,'icon':'','is_tool':False,'shortcut':None}),
              # ('日签到统计',{'pid': 500, 'id': 5004, 'title': '日签到统计', 'tip': None, 'state': True,'icon':'','is_tool':False,'shortcut':None}),
@@ -200,8 +201,8 @@ SYS_MENU_MODULE_CLASS = {
     5006: {'module': None, 'class': None, 'enabled': False},
     5007: {'module': None, 'class': None, 'enabled': False},
     5008: {'module': None, 'class': None, 'enabled': False},
-    6001: {'module':'statistics', 'class':'DN_MeritPay', 'enabled': True}, #医护绩效
-    6002: {'module': None, 'class': None, 'enabled': False},
+    6001: {'module': 'statistics', 'class': 'DN_MeritPay', 'enabled': True}, #医护绩效
+    6002: {'module': 'statistics', 'class': 'TimeEfficency', 'enabled': True},  # 医护绩效
     6003: {'module': None, 'class': None, 'enabled': False},
     6004: {'module': None, 'class': None, 'enabled': False},
     6005: {'module': None, 'class': None, 'enabled': False},

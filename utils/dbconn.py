@@ -98,7 +98,6 @@ def get_wx_session():
     # UnicodeEncodeError: 'ascii' codec can't encode characters in position 1-7: ordinal not in range(128)
     os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
     #create_engine('oracle://scott:tiger@127.0.0.1:1521/sidname')   #SID方式
-    # engine = create_engine('oracle://TJ_CXK:TJ_CXK@10.7.200.101:1521/orcl', encoding='utf8', echo=False)        # SID 方式
     engine = create_engine('oracle+cx_oracle://mzyyapp:rzhyadmin@hisapp', encoding='utf8')                       # TNS 方式
 
     session = sessionmaker(bind=engine)

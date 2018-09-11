@@ -9,11 +9,12 @@ import win32print
 def print_pdf(filename,printer=None):
     try:
         if printer:
-            win32api.ShellExecute(0, 'print', filename, printer, '.', 0)
+            return win32api.ShellExecute(0, 'print', filename, printer, '.', 0)
         else:
-            win32api.ShellExecute(0, 'print', filename, win32print.GetDefaultPrinter(), '.', 0)
+            return win32api.ShellExecute(0, 'print', filename, win32print.GetDefaultPrinter(), '.', 0)
     except Exception as e:
         print('打印失败！错误信息：%s \n 处理方式：请安装PDF阅读器 AcroRd32.exe 并设置为默认打开方式。')
+        return False
 
 
 

@@ -16,9 +16,10 @@ class PacsResultUI(PacsDialog):
         self.p_tjbh = QTJBH()
         self.btn_query = QPushButton(Icon('query'),'查询')
         self.btn_receive = QPushButton(Icon('接收'),'强制接收')
-        lt_top.addWidget(QLabel('体检编号：'))
-        lt_top.addWidget(self.p_tjbh)
-        lt_top.addWidget(self.btn_query)
+        lt_top.addStretch()
+        # lt_top.addWidget(QLabel('体检编号：'))
+        # lt_top.addWidget(self.p_tjbh)
+        # lt_top.addWidget(self.btn_query)
         lt_top.addWidget(self.btn_receive)
 
         lt_middle = QHBoxLayout()

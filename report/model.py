@@ -47,7 +47,7 @@ class MT_TJ_BGGL(BaseModel):
     dyrq = Column(DateTime, nullable=False)                             # 打印日期
     dygh = Column(String(16), nullable=False)                           # 打印工号
     dyxm = Column(String(16), nullable=False)                           # 打印姓名
-    dyfs = Column(CHAR(1), nullable=False)                              # 打印方式 默认 0 报告室  自助打印 1
+    dyfs = Column(CHAR(1), nullable=False)                              # 打印方式 默认 0 租赁打印  1 本地打印  2 自助打印
     dycs = Column(Integer, nullable=True, default=0)                    # 打印次数 默认 0
     zlrq = Column(DateTime, nullable=False)                             # 整理日期
     zlgh = Column(String(16), nullable=False)                           # 整理工号
@@ -61,6 +61,12 @@ class MT_TJ_BGGL(BaseModel):
     bgym = Column(Integer, nullable=True, default=0)                    # 报告页码，默认0页
     bglj = Column(String(250), nullable=False)                          # 报告路径 只存储对应PDF、HTML根路径
     bgms = Column(CHAR(1), nullable=False,default='0')                  # 报告模式 默认HTML 1 PDF
+    last_item_done = Column(DateTime, nullable=False)                   # 最后一个项目完成时间
+    jpdyrq = Column(DateTime, nullable=False)                           # 胶片打印日期
+    jpdygh = Column(String(16), nullable=False)                         # 胶片打印工号
+    jpdyxm = Column(String(16), nullable=False)                         # 胶片打印姓名
+    jpsl = Column(String(16), nullable=False)                           # 胶片数量
+    jpjjjl = Column(String(250), nullable=False)                        # 胶片交接记录
 
 def get_report_track_sql(tstart,tend):
     sql= '''
@@ -396,14 +402,18 @@ def get_report_print2_sql():
                         ELSE TJ_BGGL.DYXM END
                     ) AS DYXM,
                     (CASE 
-                        WHEN TJ_BGGL.DYCS IS NULL AND dybj='1' THEN 1 
-                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN 0 
-                        ELSE TJ_BGGL.DYCS END
+                        WHEN TJ_BGGL.DYCS IS NULL AND dybj='1' THEN '1' 
+                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
+                        WHEN TJ_BGGL.DYCS = 0 THEN ''
+                        ELSE CAST(TJ_BGGL.DYCS AS VARCHAR) END
                     ) AS DYCS,
                     (CASE 
-                        WHEN TJ_BGGL.DYFS IS NULL AND dybj='1' THEN '报告室' 
+                        WHEN TJ_BGGL.DYFS IS NULL AND dybj='1' THEN '租赁打印' 
                         WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
-                        ELSE TJ_BGGL.DYFS END
+                        WHEN TJ_BGGL.DYCS = 0 THEN '租赁打印'
+                        WHEN TJ_BGGL.DYCS = 1 THEN '本地打印'
+                        WHEN TJ_BGGL.DYCS = 2 THEN '自助打印'
+                        ELSE '' END
                     ) AS DYFS,
                     TJ_BGGL.ZLXM,
                     TJ_BGGL.ZLRQ,
@@ -510,6 +520,187 @@ def get_report_review_sql2(where_str):
             INNER JOIN TJ_TJDAB b ON a.DABH=b.DABH  AND %s
         '''%where_str
 
+def get_item_state_sql(tjbh):
+    return '''
+            SELECT 
+            
+                (CASE 
+                    WHEN qzjs ='1' THEN '已拒检'
+                    WHEN qzjs IS NULL AND jsbz ='1' THEN '已小结'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='0' THEN '核实'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='1' THEN '已回写'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='2' THEN '已登记'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='3' THEN '已检查'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='4' THEN '已抽血'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='5' THEN '已留样'
+                    ELSE '未定义' END
+                ) AS STATE,
+                XMBH,
+                XMMC,
+                (SELECT KSMC FROM TJ_KSDM WHERE KSBM=TJ_TJJLMXB.KSBM) AS KSMC,
+                substring(convert(char,JCRQ,120),1,10) AS JCRQ,
+                (SELECT YGXM FROM TJ_YGDM WHERE YGGH=TJ_TJJLMXB.JCYS) AS JCYS,
+                substring(convert(char,shrq,120),1,10) AS SHRQ,
+                (SELECT YGXM FROM TJ_YGDM WHERE YGGH=TJ_TJJLMXB.shys) AS SHYS,
+                TMBH1,'' AS btn_name
+            FROM TJ_TJJLMXB 
+                WHERE TJBH='%s' AND SFZH='1' 
+                AND XMBH NOT IN (SELECT XMBH FROM TJ_KSKZXM  WHERE KSBM='0028')
+            ORDER BY qzjs DESC,jsbz,ZXPB DESC,KSBM,ZHBH,XSSX;
+    ''' %tjbh
+
+
+def get_report_efficiency_sql(start,end):
+    return '''
+            SELECT 
+                TJBH,
+                DATEDIFF ( Hour , QDRQ , SDRQ ) AS SDSC,
+                DATEDIFF ( Hour , QDRQ , ZZRQ ) AS ZZSC,
+                DATEDIFF ( Hour , Last_Item_Done , ZJRQ) AS ZJSC,
+                DATEDIFF ( Hour , ZJRQ , SHRQ) AS SHSC,
+                DATEDIFF ( Hour , SHRQ , SYRQ) AS SYSC,
+                DATEDIFF ( Hour , SYRQ , DYRQ) AS DYSC
+            FROM TJ_BGGL WHERE QDRQ>='%s' AND QDRQ<'%s'
+    ''' %(start,end)
+
+# 获取打印时长
+def get_report_dy_sql(start,end):
+    return '''
+    SELECT  
+        TJBH,substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,SDRQ,120),1,10) AS SDRQ,
+        SDXM,
+        substring(convert(char,ZZRQ,120),1,10) AS ZZRQ,
+        ZZXM,
+        substring(convert(char,ZJRQ,120),1,10) AS ZJRQ,
+        ZJXM,
+        substring(convert(char,SHRQ,120),1,10) AS SHRQ,
+        SHXM,
+        substring(convert(char,SYRQ,120),1,10) AS SYRQ,
+        SYXM,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM 
+    FROM TJ_BGGL 
+    WHERE (QDRQ>='%s' AND QDRQ<'%s') 
+    AND (DATEDIFF ( Hour , SYRQ , DYRQ) IS NULL OR DATEDIFF ( Hour , SYRQ , DYRQ)>24)
+    ORDER BY QDRQ
+    '''%(start,end)
+
+# 获取审阅时长
+def get_report_sy_sql(start,end):
+    return '''
+    SELECT
+        TJBH,substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,SDRQ,120),1,10) AS SDRQ,
+        SDXM,
+        substring(convert(char,ZZRQ,120),1,10) AS ZZRQ,
+        ZZXM,
+        substring(convert(char,ZJRQ,120),1,10) AS ZJRQ,
+        ZJXM,
+        substring(convert(char,SHRQ,120),1,10) AS SHRQ,
+        SHXM,
+        substring(convert(char,SYRQ,120),1,10) AS SYRQ,
+        SYXM,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM
+    FROM TJ_BGGL 
+    WHERE (QDRQ>='%s' AND QDRQ<'%s') 
+    AND (DATEDIFF ( Hour , SHRQ , SYRQ) IS NULL OR DATEDIFF (Hour , SHRQ , SYRQ)>24)
+    ORDER BY QDRQ
+    '''%(start,end)
+
+# 获取审核时长
+def get_report_sh_sql(start,end):
+    return '''
+    SELECT
+        TJBH,substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,SDRQ,120),1,10) AS SDRQ,
+        SDXM,
+        substring(convert(char,ZZRQ,120),1,10) AS ZZRQ,
+        ZZXM,
+        substring(convert(char,ZJRQ,120),1,10) AS ZJRQ,
+        ZJXM,
+        substring(convert(char,SHRQ,120),1,10) AS SHRQ,
+        SHXM,
+        substring(convert(char,SYRQ,120),1,10) AS SYRQ,
+        SYXM,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM
+    FROM TJ_BGGL 
+    WHERE (QDRQ>='%s' AND QDRQ<'%s') 
+    AND (DATEDIFF ( Hour , ZJRQ , SHRQ) IS NULL OR DATEDIFF (Hour , ZJRQ , SHRQ)>24)
+    ORDER BY QDRQ
+    '''%(start,end)
+
+# 获取总检时长
+def get_report_zj_sql(start,end):
+    return '''
+    SELECT
+        TJBH,substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,SDRQ,120),1,10) AS SDRQ,
+        SDXM,
+        substring(convert(char,ZZRQ,120),1,10) AS ZZRQ,
+        ZZXM,
+        substring(convert(char,ZJRQ,120),1,10) AS ZJRQ,
+        ZJXM,
+        substring(convert(char,SHRQ,120),1,10) AS SHRQ,
+        SHXM,
+        substring(convert(char,SYRQ,120),1,10) AS SYRQ,
+        SYXM,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM
+    FROM TJ_BGGL 
+    WHERE (QDRQ>='%s' AND QDRQ<'%s') 
+    AND (DATEDIFF ( Hour , Last_Item_Done , ZJRQ) IS NULL OR DATEDIFF (Hour , Last_Item_Done , ZJRQ)>24)
+    ORDER BY QDRQ
+    '''%(start,end)
+
+# 获取追踪时长
+def get_report_zz_sql(start,end):
+    return '''
+    SELECT
+        TJBH,substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,SDRQ,120),1,10) AS SDRQ,
+        SDXM,
+        substring(convert(char,ZZRQ,120),1,10) AS ZZRQ,
+        ZZXM,
+        substring(convert(char,ZJRQ,120),1,10) AS ZJRQ,
+        ZJXM,
+        substring(convert(char,SHRQ,120),1,10) AS SHRQ,
+        SHXM,
+        substring(convert(char,SYRQ,120),1,10) AS SYRQ,
+        SYXM,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM
+    FROM TJ_BGGL 
+    WHERE (QDRQ>='%s' AND QDRQ<'%s') 
+    AND (DATEDIFF ( Hour , QDRQ , ZZRQ) IS NULL OR DATEDIFF (Hour , QDRQ , ZZRQ)>72)
+    ORDER BY QDRQ
+    '''%(start,end)
+
+# 获取追踪时长
+def get_report_sd_sql(start,end):
+    return '''
+    SELECT
+        TJBH,substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,SDRQ,120),1,10) AS SDRQ,
+        SDXM,
+        substring(convert(char,ZZRQ,120),1,10) AS ZZRQ,
+        ZZXM,
+        substring(convert(char,ZJRQ,120),1,10) AS ZJRQ,
+        ZJXM,
+        substring(convert(char,SHRQ,120),1,10) AS SHRQ,
+        SHXM,
+        substring(convert(char,SYRQ,120),1,10) AS SYRQ,
+        SYXM,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM
+    FROM TJ_BGGL 
+    WHERE (QDRQ>='%s' AND QDRQ<'%s') 
+    AND (DATEDIFF ( Hour , QDRQ , SDRQ) IS NULL OR DATEDIFF (Hour , QDRQ , ZZRQ)>8)
+    ORDER BY QDRQ
+    '''%(start,end)
+
 # ORACLE PDF 路径 属于历史的
 class MT_TJ_PDFRUL(BaseModel):
 
@@ -527,3 +718,73 @@ class MT_TJ_DWBH(BaseModel):
 
     dwbh = Column(VARCHAR(5), nullable=True,primary_key=True)
     zlhm = Column(Integer, nullable=True,default=0)
+
+class MT_TJ_PHOTO_ZYD(BaseModel):
+
+    __tablename__ = 'TJ_PHOTO_ZYD'
+
+    tjbh = Column(String(16), primary_key=True)                         # 体检编号
+    picture_zyd = Column(BLOB, nullable=True)
+
+# 所有的报告
+def get_report_all_sql(start,end):
+    return '''
+        SELECT TJBH,
+        substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        (CASE DYFS 
+            WHEN 0 THEN '租赁机打印'
+            WHEN 1 THEN '本地打印'
+            WHEN 2 THEN '自助机打印'
+            ELSE '' END
+        ) AS DYFS,
+        DYCS FROM TJ_BGGL  WHERE QDRQ>='%s' AND QDRQ<='%s'
+    '''%(start,end)
+
+# 租赁打印报告
+def get_report_zl_sql(start,end):
+    return '''
+        SELECT TJBH,
+        substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM,
+        (CASE DYFS 
+            WHEN 0 THEN '租赁机打印'
+            WHEN 1 THEN '本地打印'
+            WHEN 2 THEN '自助机打印'
+            ELSE '' END
+        ) AS DYFS,
+        DYCS FROM TJ_BGGL  WHERE QDRQ>='%s' AND QDRQ<='%s' AND BGZT IN ('3','4','5') AND DYFS='0'
+    '''%(start,end)
+
+# 本地打印报告
+def get_report_bd_sql(start,end):
+    return '''
+        SELECT TJBH,
+        substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM,
+        (CASE DYFS 
+            WHEN 0 THEN '租赁机打印'
+            WHEN 1 THEN '本地打印'
+            WHEN 2 THEN '自助机打印'
+            ELSE '' END
+        ) AS DYFS,
+        DYCS FROM TJ_BGGL  WHERE QDRQ>='%s' AND QDRQ<='%s' AND BGZT IN ('3','4','5') AND DYFS='1'
+    '''%(start,end)
+
+# 自助打印报告
+def get_report_zzj_sql(start,end):
+    return '''
+        SELECT TJBH,
+        substring(convert(char,QDRQ,120),1,10) AS QDRQ,
+        substring(convert(char,DYRQ,120),1,10) AS DYRQ,
+        DYXM,
+        (CASE DYFS 
+            WHEN 0 THEN '租赁机打印'
+            WHEN 1 THEN '本地打印'
+            WHEN 2 THEN '自助机打印'
+            ELSE '' END
+        ) AS DYFS,
+        DYCS FROM TJ_BGGL  WHERE QDRQ>='%s' AND QDRQ<='%s' AND BGZT IN ('3','4','5') AND DYFS='2'
+    '''%(start,end)
