@@ -1,8 +1,15 @@
 from .report_print_ui import *
 from .model import *
-from utils import request_get,print_pdf,cur_datetime
+from utils import request_get,print_pdf,cur_datetime,api_print
 from widgets.bweb import WebView
 import webbrowser
+
+printers = {
+    '77号打印机':'77',
+    '78号打印机':'78',
+    '79号打印机':'79',
+    '江东打印机':'jd'
+}
 
 # 报告追踪
 class ReportPrint(ReportPrintUI):
@@ -77,7 +84,10 @@ class ReportPrint(ReportPrintUI):
                     self.table_print.setItemValueOfKey(row, 'dycs', '1')
                     self.table_print.setItemValueOfKey(row, 'dyfs', '租赁打印')
                     self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
-                    mes_about(self, "打印成功！")
+                    if api_print(tjbh,printers[printer]):
+                        mes_about(self, "打印成功！")
+                    else:
+                        mes_about(self, "打印失败！")
                 else:
                     # 本地打印 需要下载
                     url = gol.get_value('api_report_down') %tjbh
@@ -122,6 +132,9 @@ class ReportPrint(ReportPrintUI):
 
     # 查询
     def on_btn_query_click(self):
+        if self.lt_where_search.where_dwbh=='00000':
+            mes_about(self,'不存在该单位，请重新选择！')
+            return
         sql = get_report_print2_sql()
         t_start,t_end = self.lt_where_search.date_range
         if self.lt_where_search.get_date_text() == '签到日期':
@@ -237,39 +250,9 @@ class ReportPrint(ReportPrintUI):
                 dwbh = self.table_print.getItemValueOfKey(row, 'dwbh')
                 if not zlxm:
                     result = self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).scalar()
-                    if result:
-                        new_zlhm = "%s-%s-%s" %(dwbh,result.zlhm // self.gp_order_setup.get_size()+1,result.zlhm % self.gp_order_setup.get_size())
-
-                        # 更新数据库 TJ_CZJLB TJ_DWBH
-                        data_obj = {'jllx': '0035', 'jlmc': '报告整理', 'tjbh': tjbh, 'mxbh': '',
-                                    'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                                    'bz': new_zlhm}
-
-                        try:
-                            # 自增
-                            self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).update(
-                                {MT_TJ_DWBH.zlhm : result.zlhm + 1}
-                            )
-                            # 更新
-                            self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
-                                {
-                                    MT_TJ_BGGL.zlrq: cur_datetime(),
-                                    MT_TJ_BGGL.zlhm: new_zlhm,
-                                    MT_TJ_BGGL.zlgh: self.login_id,
-                                    MT_TJ_BGGL.zlxm: self.login_name,
-                                    MT_TJ_BGGL.bgzt: '4',
-                                }
-                            )
-                            # 插入
-                            self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
-                            self.session.commit()
-                        except Exception as e:
-                            self.session.rollback()
-                            mes_about(self, '更新数据库失败！错误信息：%s' % e)
-                            return
-                    else:
-                        # 插入数据库
-                        sql = "INSERT INTO TJ_DWBH(DWBH,ZLHM)VALUES('%s',0)" % dwbh
+                    if not result:
+                        # 不存在该单位货架号，则插入 插入数据库
+                        sql = "INSERT INTO TJ_DWBH(DWBH,ZLHM)VALUES('%s',1)" % dwbh
                         try:
                             self.session.execute(sql)
                             self.session.commit()
@@ -277,6 +260,45 @@ class ReportPrint(ReportPrintUI):
                             self.session.rollback()
                             mes_about(self,'执行SQL：%s 出错，错误信息：%s' %(sql,e))
                             return
+                    # 重新获取货架号
+                    result = self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).scalar()
+                    # 获取货号
+                    new_zlhm = "%s-%s-%s" %(dwbh,result.zlhm // self.gp_order_setup.get_size()+1,result.zlhm % self.gp_order_setup.get_size())
+
+                    # 更新数据库 TJ_CZJLB TJ_DWBH
+                    data_obj = {'jllx': '0035', 'jlmc': '报告整理', 'tjbh': tjbh, 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                'bz': new_zlhm}
+
+                    try:
+                        # 自增
+                        self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).update(
+                            {MT_TJ_DWBH.zlhm : result.zlhm + 1}
+                        )
+                        # 更新
+                        self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                            {
+                                MT_TJ_BGGL.zlrq: cur_datetime(),
+                                MT_TJ_BGGL.zlhm: new_zlhm,
+                                MT_TJ_BGGL.zlgh: self.login_id,
+                                MT_TJ_BGGL.zlxm: self.login_name,
+                                MT_TJ_BGGL.bgzt: '4',
+                            }
+                        )
+                        # 插入
+                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self, '更新数据库失败！错误信息：%s' % e)
+                        return
+
+                    # 刷新界面
+                    self.table_print.setItemValueOfKey(row,'zlxm', self.login_name)
+                    self.table_print.setItemValueOfKey(row,'zlrq', cur_datetime())
+                    self.table_print.setItemValueOfKey(row,'zlhh', new_zlhm)
+                    self.table_print.setItemValueOfKey(row,'bgzt', '已整理')
+                    mes_about(self,'整理成功！')
 
     # 表格右键功能
     def onTableMenu(self,pos):

@@ -10,16 +10,46 @@ class ReportReview(ReportReviewUI):
         # 右键、双击、单击
         self.table_report_review.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_report_review.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
+        self.table_report_review.itemClicked.connect(self.on_table_set)
         self.btn_query.clicked.connect(self.on_btn_query_click)
         # 表格双击
         self.table_report_review.doubleClicked.connect(self.on_table_double_click)
         # 审阅
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
         self.btn_review_mode.clicked.connect(self.on_btn_review_mode_click)
+        self.gp_review_user.btnCancle.connect(self.on_btn_cancle_click)
         # 设置快速获取的变量
         self.cur_tjbh = None
         self.cur_row = None
 
+    # 退回
+    def on_btn_cancle_click(self,p_str):
+        # 更新数据库 TJ_CZJLB TJ_BGGL
+        data_obj = {'jllx': '0033', 'jlmc': '审阅退回', 'tjbh': self.cur_tjbh, 'mxbh': '','czgh': self.login_id,
+                    'czxm': self.login_name, 'czqy': self.login_area,'bz': p_str
+                    }
+        try:
+            sql = "UPDATE TJ_TJDJB SET TJZT='4' WHERE TJBH ='%s' " %self.cur_tjbh
+            self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+            self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).update({
+                MT_TJ_BGGL.bgzt: '0', MT_TJ_BGGL.bgth: '1',MT_TJ_BGGL.gcbz: p_str,MT_TJ_BGGL.sybz: p_str
+            })
+            self.session.execute(sql)
+            self.session.commit()
+            mes_about(self,'退回成功！')
+        except Exception as e:
+            self.session.rollback()
+            mes_about(self, '更新数据库失败！错误信息：%s' % e)
+            return
+
+    # 设置快速检索文本
+    def on_table_set(self,tableWidgetItem):
+        row = tableWidgetItem.row()
+        tjbh = self.table_report_review.item(row, 3).text()
+        xm = self.table_report_review.item(row, 4).text()
+        self.gp_quick_search.setText(tjbh,xm,'','')
+
+    # 全屏操作
     def on_btn_review_mode_click(self):
         if self.table_report_review.rowCount():
             ui = ReportReviewFullScreen(self)
@@ -29,6 +59,9 @@ class ReportReview(ReportReviewUI):
             mes_about(self,"请先筛选需要审阅的报告，再全屏操作！")
 
     def on_btn_query_click(self):
+        if self.gp_where_search.where_dwbh=='00000':
+            mes_about(self,'不存在该单位，请重新选择！')
+            return
         # 日期范围 必选
         tstart,tend = self.gp_where_search.date_range
         sql = get_report_review_sql(tstart,tend)
@@ -49,11 +82,13 @@ class ReportReview(ReportReviewUI):
         # 是否选择 报告类型
         if self.cb_report_type.where_tjlx2:
             sql = sql + self.cb_report_type.where_tjlx2
+
         try:
             results = self.session.execute(sql).fetchall()
         except Exception as e:
             results = []
             mes_about(self,'执行SQL：%s 出错，错误信息：%s' %(sql,e))
+
         self.table_report_review.load(results)
         self.gp_table.setTitle('审阅列表（%s）' %self.table_report_review.rowCount())
         mes_about(self, '检索出数据%s条' % self.table_report_review.rowCount())
@@ -165,6 +200,7 @@ class ReportReview(ReportReviewUI):
                         MT_TJ_BGGL.sygh: self.login_id,
                         MT_TJ_BGGL.syrq: cur_datetime(),
                         MT_TJ_BGGL.sybz: self.gp_review_user.get_sybz(),
+                        MT_TJ_BGGL.gcbz: self.gp_review_user.get_sybz(),
                         MT_TJ_BGGL.sysc: num,
                         MT_TJ_BGGL.bgzt: 2,
                     }
@@ -203,6 +239,7 @@ class ReportReview(ReportReviewUI):
                         MT_TJ_BGGL.sygh: None,
                         MT_TJ_BGGL.syrq: None,
                         MT_TJ_BGGL.sybz: None,
+                        MT_TJ_BGGL.gcbz: self.gp_review_user.get_sybz(),
                         MT_TJ_BGGL.sysc: 0,
                         MT_TJ_BGGL.bgzt: 1,
                     }

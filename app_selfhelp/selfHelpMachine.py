@@ -72,23 +72,30 @@ class SelfHelpMachine(Widget):
     def on_le_tjbh_press(self):
         if len(self.le_tjbh.text())==9:
             mes_about(self, '请输入正确的身份证号！')
-            # self.on_print_thread(self.le_tjbh.text())
-            # self.dg_p = ProgressDialog(self)
-            # self.dg_p.show()
+            self.on_print_thread(self.le_tjbh.text())
+            self.dg_p = ProgressDialog(self)
+            self.dg_p.show()
         elif len(self.le_tjbh.text())==18:
             results = self.session.execute(get_report_detail_sql(self.le_tjbh.text())).fetchall()
-            self.table_user.load(results)
-            rect=self.le_tjbh.geometry()
-            width = rect.width()
-            bottom = rect.bottom()
-            left = rect.left()
-            lt_1 = QHBoxLayout()
-            lt_1.addWidget(self.table_user)
-            if not self.gp_keyboard:
-                self.gp_keyboard = QGroupBox(self)
-            self.gp_keyboard.setLayout(lt_1)
-            self.gp_keyboard.setGeometry(QRect(left,bottom,width,200))
-            self.gp_keyboard.show()
+            if results:
+                try:
+                    self.on_print_thread(results[0][4])
+                    self.dg_p = ProgressDialog(self)
+                    self.dg_p.show()
+                except Exception as e:
+                    mes_about(self,'数据获取失败！请联系管理员！')
+            #self.table_user.load(results)
+            # rect=self.le_tjbh.geometry()
+            # width = rect.width()
+            # bottom = rect.bottom()
+            # left = rect.left()
+            # lt_1 = QHBoxLayout()
+            # lt_1.addWidget(self.table_user)
+            # if not self.gp_keyboard:
+            #     self.gp_keyboard = QGroupBox(self)
+            # self.gp_keyboard.setLayout(lt_1)
+            # self.gp_keyboard.setGeometry(QRect(left,bottom,width,200))
+            # self.gp_keyboard.show()
             # self.table_user.setGeometry()
             # self.table_user.setGeometry(QRect(left, bottom, width, height))
 
@@ -246,7 +253,7 @@ class ProgressDialog(Dialog):
         self.setFixedSize(500,500)
         lt_main = QVBoxLayout()
         lb_p = QLabel()
-        lb_dec = QLabel('正在打印，请您稍等！')
+        lb_dec = QLabel('正在查找，请您稍等！')
         lb_dec.setStyleSheet('''font: 75 40pt \"微软雅黑\";''')
         movie = QMovie(file_ico('35.gif'))
         lb_p.setMovie(movie)

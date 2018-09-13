@@ -152,7 +152,7 @@ def get_key(p_dict, p_value):
     if tmp:
         return tmp[0]
     else:
-        return False
+        return '00000'
 
 def version_sort(versions):
     # versions = ['v2.0.1', 'v1.0.2', 'v1.0.21', 'v2.2.9', 'v1.2.11']
@@ -217,3 +217,8 @@ def fileRename(filepath):
         os.remove(filepath)
     else:
         os.rename(filepath,new_filepath)
+
+# 固定短信
+report_sms_content = '''尊敬的客户：您好！
+    您的体检报告已经可以取了。请您于收到短信后的第二天下午2点至4点半来领取您的体检报告。
+    明州国际保健关心您！'''

@@ -4,7 +4,7 @@ class Report_UI(DirTabWidget):
 
     def __init__(self,title):
         # '报告发布' '报告领取' '报告整理' '报告进度'
-        self.nodes = ['报告追踪', '报告审阅', '报告打印', '设备报告']
+        self.nodes = ['报告追踪', '报告审阅', '报告打印', '设备报告','报告进度']
         super(Report_UI,self).__init__(title,self.nodes)
         self.addTab('报告审阅')
 
@@ -26,6 +26,10 @@ class Report_UI(DirTabWidget):
         elif title=='设备报告':
             from .report_equip import ReportEquip
             widget=ReportEquip()
+            self.rwidget.addPage(widget,Icon(title),title)
+        elif title=='报告进度':
+            from .report_progress import ReportProgress
+            widget=ReportProgress()
             self.rwidget.addPage(widget,Icon(title),title)
 
 

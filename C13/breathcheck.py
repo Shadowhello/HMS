@@ -33,6 +33,40 @@ class BreathCheck(BreathCheckUI):
         self.table_c13_nocheck.itemClicked.connect(partial(self.on_table_oncheck_show,self.table_c13_nocheck))
         self.table_c13_checking_2.itemClicked.connect(partial(self.on_table_oncheck_show,self.table_c13_checking_2))
         self.table_c13_checking_1.itemDroped.connect(self.on_table_checking2_insert)
+        # 吃药丸界面
+        self.table_c13_checking_1.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
+        self.table_c13_checking_1.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
+
+    # 表格右键功能
+    def onTableMenu(self,pos):
+        row_num = -1
+        indexs=self.table_c13_checking_1.selectionModel().selection().indexes()
+        if indexs:
+            for i in indexs:
+                row_num = i.row()
+            menu = QMenu()
+            item1 = menu.addAction(Icon("取消"), "取消吃药")
+            action = menu.exec_(self.table_c13_checking_1.mapToGlobal(pos))
+
+            tjbh = self.table_c13_checking_1.getCurItemValueOfKey('tjbh')
+            if action == item1:
+                button = mes_warn(self,'您确定取消吃药丸？')
+                if button == QMessageBox.Yes:
+                    # 从当前位置删除
+                    self.table_c13_checking_1.removeRow(self.table_c13_checking_1.currentRow())
+                    self.gp_right_up.setTitle('2、吃药丸 计时中：总人数 %s' %self.table_c13_checking_1.rowCount())
+                    # 回到待测位置
+                    item = self.c13_items[tjbh]
+                    item.setState(1)
+                    self.table_c13_nocheck.insert4(item.getData())
+                    self.gp_left.setTitle('1、待测：总人数 %s 人' % str(self.table_c13_nocheck.rowCount()))
+                    try:
+                        self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.tjbh == tjbh,MT_TJ_CZJLB.jllx == '0026').delete()
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self,'MT_TJ_CZJLB 删除 记录失败！错误信息：%s' %e)
+
 
     # 刷新 获取待测数据
     def initDatas(self,up_time=None):

@@ -49,6 +49,22 @@ def get_barcode_wx(xm,sfzh,sjhm,email='',address=''):
                 f.write(chunk)
         f.close()
 
+def api_print(tjbh,printer):
+    url = gol.get_value("api_report_print",None)
+    if url:
+        try:
+            response = requests.get(url %(tjbh,printer))
+            if response.status_code == 200:
+                if '报告打印成功' in response.json():
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        except Exception as e:
+            return False
+
+
 # 构建二维码测试请求
 def request_post_wx():
     params= {'tjbh': '100000125', 'xm': '张三', 'sfzh': '330227198702040773','sjhm':'15058494793','login_id':'17sx15'}
@@ -155,11 +171,13 @@ if __name__=="__main__":
     from utils.envir import set_env
     sql = "SELECT TJBH FROM TJ_TJDJB WHERE  (del <> '1' or del is null) and QD='1' and SHRQ>='2018-08-25' AND SHRQ<'2018-09-01' AND SUMOVER='1'; "
     set_env()
+    # 网络打印
+
     # session = gol.get_value('tjxt_session_local')
     # results = session.execute(sql).fetchall()
     # for result in results:
     #     request_create_report(result[0], 'html')
         # request_create_report(result[0], 'pdf')
     # print(get_barcode_wx('测试5','330227199902040663','13736093866'))
-    request_create_report('111481599','html')
+    request_create_report('166820109','html')
     # request_post_wx()

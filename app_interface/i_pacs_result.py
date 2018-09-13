@@ -59,8 +59,9 @@ class PacsResult(PacsResultUI):
                 if result:
                     if result.item_state=='已拒检':
                         mes_about(self,'体检系统中该项目已被拒检！')
-                    elif result.item_state=='已小结':
-                        mes_about(self,'体检系统中该项目已被小结，请勿重复接收！')
+                    # -- 2018-09-13 zhufd 取消此代码 原因：适应于医生退回护士追踪，B超等结果重新接收一次
+                    # elif result.item_state=='已小结':
+                    #     mes_about(self,'体检系统中该项目已被小结，请勿重复接收！')
                     else:
                         try:
                             # 组合和子项 均写入 jcrq，jcys，zxpb，jsbz

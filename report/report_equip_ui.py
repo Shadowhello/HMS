@@ -21,8 +21,8 @@ class ReportEquipUI(Widget):
         self.cb_user.addUsers(['所有',self.login_name])
         # 区域
         self.cb_area = AreaGroup()
-        self.gp_where_search.addItem(self.cb_area, 0, 3, 1, 2)
-        self.gp_where_search.addItem(self.cb_report_state, 1, 3, 1, 2)
+        # self.gp_where_search.addItem(self.cb_area, 0, 3, 1, 2)
+        # self.gp_where_search.addItem(self.cb_report_state, 1, 3, 1, 2)
         self.gp_where_search.addItem(self.cb_user, 0, 5, 1, 2)
         self.gp_where_search.addItem(self.cb_equip_type, 1, 5, 1, 2)
         # 按钮
@@ -51,7 +51,7 @@ class ReportEquipUI(Widget):
         lt_left.addWidget(self.gp_where_search,1)
         lt_left.addWidget(self.gp_quick_search,1)
         lt_left.addWidget(self.gp_table,7)
-        lt_left.addWidget(self.gp_review_user,1)
+        # lt_left.addWidget(self.gp_review_user,1)
 
         ####################右侧布局#####################
         self.wv_report_equip = WebView()

@@ -26,6 +26,9 @@ class ReportEquip(ReportEquipUI):
         self.gp_where_search.s_dwbh.setValues(self.dwmc_bh,self.dwmc_py)
 
     def on_btn_query_click(self):
+        if self.gp_where_search.where_dwbh=='00000':
+            mes_about(self,'不存在该单位，请重新选择！')
+            return
         t_start,t_end = self.gp_where_search.date_range     # 日期范围
         dwbh = self.gp_where_search.where_dwbh              # 单位编号
         equip_type = self.cb_equip_type.get_equip_type()    #设备编号

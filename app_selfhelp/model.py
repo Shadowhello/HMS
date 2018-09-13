@@ -15,5 +15,6 @@ def get_report_detail_sql(sfzh):
             AND (del <> '1' or del is null) 
             AND QD='1' 
             AND SUMOVER ='1' 
-            AND b.sfzh='%s'
+            AND b.sfzh='%s' 
+        ORDER BY QDRQ DESC
     '''%sfzh

@@ -46,7 +46,7 @@ class CollectBlood_UI(UI):
         self.left_down_gp = QGroupBox('采血列表')
         left_down_lt = QVBoxLayout()
         self.blood_cols = OrderedDict([
-            ("cjzt", ""),
+            ("cjzt", "状态"),
             ("tmbh", "条码号"),
             ("tjbh","体检编号"),
             ("xm","姓名"),

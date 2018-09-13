@@ -1,9 +1,7 @@
 from widgets.cwidget import *
 from widgets.bweb import *
 from .model import *
-from utils import cur_datetime,request_create_report
-
-
+from utils import cur_datetime,request_create_report,report_sms_content,sms_api
 
 class ReportReviewUI(Widget):
 
@@ -143,11 +141,14 @@ class ReportReviewUser(QGroupBox):
 
     # 自定义 信号，封装对外使用
     btnClick = pyqtSignal(bool,int)
+    # 取消事件
+    btnCancle = pyqtSignal(str)
 
     def __init__(self):
         super(ReportReviewUser,self).__init__()
         self.initUI()
         self.btn_review.clicked.connect(self.on_btn_review_click)
+        self.btn_cancle.clicked.connect(self.on_btn_cancle_click)
 
     def initUI(self):
         self.setTitle('审阅信息')
@@ -156,6 +157,7 @@ class ReportReviewUser(QGroupBox):
         self.review_time = ReviewLabel()
         self.review_comment = QPlainTextEdit()
         self.review_comment.setStyleSheet('''font: 75 12pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
+        self.btn_cancle = ToolButton(Icon('取消'),'退回追踪')
         self.btn_review = Timer2Button(Icon('样本签收'),'完成审阅')
         ###################基本信息  第一行##################################
         lt_main.addWidget(QLabel('审阅者：'), 0, 0, 1, 1)
@@ -163,10 +165,11 @@ class ReportReviewUser(QGroupBox):
         lt_main.addWidget(QLabel('审阅时间：'), 1, 0, 1, 1)
         lt_main.addWidget(self.review_time, 1, 1, 1, 1)
         # 按钮
+        lt_main.addWidget(self.btn_cancle, 0, 7, 2, 2)
         lt_main.addWidget(self.btn_review, 0, 9, 2, 2)
         ###################基本信息  第二行##################################
         # lt_main.addWidget(QLabel('审阅备注：'), 0, 2, 2, 2)
-        lt_main.addWidget(self.review_comment, 0, 2, 2, 7)
+        lt_main.addWidget(self.review_comment, 0, 2, 2, 5)
 
         lt_main.setHorizontalSpacing(10)            #设置水平间距
         lt_main.setVerticalSpacing(10)              #设置垂直间距
@@ -176,7 +179,6 @@ class ReportReviewUser(QGroupBox):
         # 状态标签
         self.lb_review_bz = StateLable(self)
         self.lb_review_bz.show()
-
 
     # 清空数据
     def clearData(self):
@@ -206,7 +208,8 @@ class ReportReviewUser(QGroupBox):
             self.btn_review.stop()
             self.btn_review.setText('取消审阅')
         else:
-            pass
+            # 刷新控件
+            self.btn_cancle.emit(self.review_comment.toPlainText())
 
     # 获取审阅备注信息
     def get_sybz(self):
@@ -224,6 +227,16 @@ class ReportReviewUser(QGroupBox):
             num = 0
         self.btnClick.emit(syzt,num)
 
+    # 退回
+    def on_btn_cancle_click(self):
+        if self.btn_review.text()=='取消审阅':
+            mes_about(self,'请先对报告进行取消审阅操作！')
+        else:
+            # 退回
+            if not self.review_comment.toPlainText():
+                mes_about(self,'请先输入报告退回原因')
+            else:
+                self.btnCancle.emit(self.review_comment.toPlainText())
 
 class ReviewLabel(QLabel):
 
@@ -266,10 +279,33 @@ class ReportReviewFullScreen(Dialog):
         self.btn_fullscreen.clicked.connect(self.on_btn_fullscreen_click)
         # 审阅
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
+        self.gp_review_user.btnCancle.connect(self.on_btn_cancle_click)
         # 特殊变量 用于快速获取 复用
         self.cur_tjbh = None
         self.cur_data = None
 
+    # 退回
+    def on_btn_cancle_click(self,p_str):
+        # 更新数据库 TJ_CZJLB TJ_BGGL
+        data_obj = {
+            'jllx': '0033', 'jlmc': '审阅退回', 'tjbh': self.cur_tjbh, 'mxbh': '','czgh': self.login_id,
+            'czxm': self.login_name, 'czqy': self.login_area,'bz': p_str
+            }
+        try:
+            sql = "UPDATE TJ_TJDJB SET TJZT='4' WHERE TJBH ='%s' " %self.cur_tjbh
+            self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+            self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).update({
+                MT_TJ_BGGL.bgzt:'0', MT_TJ_BGGL.bgth:'1',MT_TJ_BGGL.gcbz: p_str,MT_TJ_BGGL.sybz: p_str
+            })
+            self.session.execute(sql)
+            self.session.commit()
+            mes_about(self,'退回成功！')
+        except Exception as e:
+            self.session.rollback()
+            mes_about(self, '更新数据库失败！错误信息：%s' % e)
+            return
+
+    # 全屏
     def on_btn_fullscreen_click(self):
         button = mes_warn(self,"您确定退出全屏审阅模式？")
         if button == QMessageBox.Yes:
@@ -277,6 +313,7 @@ class ReportReviewFullScreen(Dialog):
         else:
             pass
 
+    # 上一个
     def on_btn_previous_click(self):
         try:
             self.cur_index = self.cur_index - 1
@@ -287,6 +324,7 @@ class ReportReviewFullScreen(Dialog):
         #     mes_about(self,'当前是最后一份报告')
         #     return
 
+    # 下一个
     def on_btn_next_click(self):
         # if self.cur_index <= len(self.datas)-1:
         #     mes_about(self,'当前是最后一份报告')
@@ -330,6 +368,8 @@ class ReportReviewFullScreen(Dialog):
         self.btn_previous = QPushButton(Icon('向左'), '上一个')
         self.btn_fullscreen = QPushButton(Icon('全屏'),'退出全屏')
         self.btn_next = QPushButton(Icon('向右'),'下一个')
+        self.btn_sms_auto = QCheckBox('审阅后自动发送短信')
+        self.btn_sms_auto.setChecked(True)
         lt_middle.addStretch()
         lt_middle.addWidget(self.btn_previous)
         lt_middle.addSpacing(20)
@@ -337,6 +377,7 @@ class ReportReviewFullScreen(Dialog):
         lt_middle.addSpacing(20)
         lt_middle.addWidget(self.btn_next)
         lt_middle.addStretch()
+        lt_middle.addWidget(self.btn_sms_auto)
         # 报告预览
         self.wv_report_equip = WebView()
         lt_bottom = QHBoxLayout()
@@ -387,11 +428,18 @@ class ReportReviewFullScreen(Dialog):
             self.cur_data[10] = self.gp_review_user.get_sybz()
             self.datas[self.cur_index] = self.cur_data
             self.gp_review_user.setData({'sybz': self.gp_review_user.get_sybz(), 'syrq': cur_datetime(), 'syxm': self.login_name, 'syzt': 2})
-            # 向服务端 发送请求
             # HTML 报告需要重新生成
             request_create_report(self.cur_tjbh, 'html')
             # 生成PDF 报告请求
             request_create_report(self.cur_tjbh, 'pdf')
+            # 发送短信
+            if self.btn_sms_auto.isChecked():
+                try:
+                    result = self.session.query(MV_RYXX).filter(MV_RYXX.tjbh == self.cur_tjbh).scalar()
+                    if result.sjhm:
+                        sms_api(result.sjhm,report_sms_content)
+                except Exception as e:
+                    mes_about(self,"短信发送失败！错误信息：%s" %e)
 
         # 取消审阅
         else:
@@ -409,6 +457,7 @@ class ReportReviewFullScreen(Dialog):
                         MT_TJ_BGGL.sygh: None,
                         MT_TJ_BGGL.syrq: None,
                         MT_TJ_BGGL.sybz: None,
+                        MT_TJ_BGGL.gcbz: self.gp_review_user.get_sybz(),
                         MT_TJ_BGGL.sysc: 0,
                         MT_TJ_BGGL.bgzt: 1,
                     }

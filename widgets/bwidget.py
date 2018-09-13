@@ -229,6 +229,8 @@ class ArrowButton(QPushButton):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setIcon(Icon(name))
         self.setFixedWidth(6)
+        self.setMinimumWidth(6)
+        self.setMaximumWidth(6)
         self.setFocusPolicy(Qt.NoFocus)
         self.setStyleSheet("background: #E8E8E8; border: none; padding: 0px;")
         self.setObjectName(name)

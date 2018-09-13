@@ -116,18 +116,18 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
             # 特殊项目提醒
             results = dict(self.session.query(MT_TJ_TJJLMXB.xmbh,MT_TJ_TJJLMXB.xmmc).filter(MT_TJ_TJJLMXB.tjbh == tjbh).all())
             xmbhs = results.keys()
+            message = ''
             if list_in_list(['501722','501702'],xmbhs):
-                self.widget1 = PreviewWidget('该顾客有前列腺彩超，请您提醒：做完前列腺彩超后，再进行留尿！')
-                self.serialno.setFocus()
+                message = '该顾客有前列腺彩超，请您提醒：做完前列腺彩超后，再进行留尿！\r\n'
 
             if list_in_list(['5004','5001'],xmbhs):
-                self.widget2 = PreviewWidget('该顾客有C13/C14，请您提醒：先留尿，再做C13/C14吹气！')
-                self.serialno.setFocus()
+                message = message + '该顾客有C13/C14，请您提醒：先留尿，再做C13/C14吹气！\r\n'
 
             if list_in_list(['1103','1104','1105','1106','1107'],xmbhs):
-                self.widget3 = PreviewWidget('该顾客有餐后血糖（OGTT），请您提醒：先留尿，再喝糖水！')
+                message = message + '该顾客有餐后血糖（OGTT），请您提醒：先留尿，再喝糖水！ \r\n'
+            if message:
+                self.widget3 = PreviewWidget(message)
                 self.serialno.setFocus()
-
             return True
         else:
             mes_about(self,'请输入正确的体检编号/条码编号！')

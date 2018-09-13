@@ -41,7 +41,7 @@ class Doubtful(Widget):
         row = tableWidgetItem.row()
         tjbh = self.table.item(row, 0).text()
         xm = self.table.item(row, 1).text()
-        sfzh = self.table.item(row, 4).text()
+        sfzh = self.table.item(row, 5).text()
         sjhm = self.table.item(row, 4).text()
         self.gp_quick_search.setText(tjbh, xm, sjhm, sfzh)
 

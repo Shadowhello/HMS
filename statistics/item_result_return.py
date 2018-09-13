@@ -104,9 +104,18 @@ class ItemResultReturn(Widget):
                     else:
                         pacs_count = i[1]
 
-            self.lb_item_lis.setText('{:.1f}%'.format(lis_cq_count / (lis_count+lis_cq_count) * 100))
-            self.lb_item_pacs.setText('{:.1f}%'.format(pacs_cq_count / (pacs_count + pacs_cq_count) * 100))
-            self.lb_item_pis.setText('{:.1f}%'.format(pis_cq_count / (pis_count + pis_cq_count) * 100))
+            try:
+                self.lb_item_lis.setText('{:.1f}%'.format(lis_cq_count / (lis_count+lis_cq_count) * 100))
+            except Exception as e:
+                self.lb_item_lis.setText('{:.1f}%'.format(0 * 100))
+            try:
+                self.lb_item_pacs.setText('{:.1f}%'.format(pacs_cq_count / (pacs_count + pacs_cq_count) * 100))
+            except Exception as e:
+                self.lb_item_pacs.setText('{:.1f}%'.format(0 * 100))
+            try:
+                self.lb_item_pis.setText('{:.1f}%'.format(pis_cq_count / (pis_count + pis_cq_count) * 100))
+            except Exception as e:
+                self.lb_item_pis.setText('{:.1f}%'.format(0 * 100))
             self.gp_left_middle.setTitle('项目结果超期率 总数：%s  检验：%s  检查：%s  功能：%s' %(
                 count,lis_count+lis_cq_count,pacs_count + pacs_cq_count,pis_count + pis_cq_count
             ))

@@ -50,11 +50,11 @@ def get_tmxx_sql(tjbh):
     sql='''
     WITH 
         T1 AS (
-            SELECT TJBH,XMMC,(CASE WHEN XMBH IN ('1931','5010','1926') THEN TJBH+XMBH ELSE TMBH1 END) AS TMBH 
+            SELECT TJBH,XMMC,(CASE WHEN XMBH IN ('1931','5010','1926','1000320','1000321') THEN TJBH+XMBH ELSE TMBH1 END) AS TMBH 
             FROM TJ_TJJLMXB WHERE TJBH='%s' AND SFZH='1' 
             AND (
                        (XMBH IN (SELECT XMBH FROM TJ_XMDM WHERE LBBM IN (SELECT LBBM FROM TJ_XMLB WHERE XMLX='2' )) AND TMBH1 IS NOT NULL) 
-                    OR (XMBH IN ('1931','5010','1926'))
+                    OR (XMBH IN ('1931','5010','1926','1000320','1000321'))
                  )
         ),
         T2 AS (

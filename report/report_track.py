@@ -6,7 +6,7 @@ from report.report_item_ui import ItemsStateUI
 from report.report_track_thread import *
 from widgets.cwidget import *
 from .report_track_ui import ReportTrackUI
-from utils import api_file_down
+from utils import api_file_down,cur_datetime
 
 # 报告追踪
 class ReportTrack(ReportTrackUI):
@@ -26,6 +26,7 @@ class ReportTrack(ReportTrackUI):
         self.btn_query.clicked.connect(self.on_btn_query_click)             # 查询
         self.btn_task.clicked.connect(self.on_btn_task_click)               # 任务领取
         self.btn_receive.clicked.connect(self.on_btn_receive_click)         # 结果接收
+        self.btn_myself.clicked.connect(self.on_btn_myself_click)           # 查看我自己的领取任务
         self.btn_djd.clicked.connect(self.on_btn_djd_click)
         # 功能栏
         self.btn_item.clicked.connect(self.on_btn_item_click)
@@ -141,6 +142,10 @@ class ReportTrack(ReportTrackUI):
                 else:
                     mes_about(self, '该人导检单未拍照！')
 
+    # 查询我自己追踪的任务
+    def on_btn_myself_click(self):
+        pass
+
     def on_btn_djd_click(self):
         result = self.session.query(MT_TJ_PHOTO_ZYD).filter(MT_TJ_PHOTO_ZYD.tjbh == self.cur_tjbh).scalar()
         if result:
@@ -181,8 +186,21 @@ class ReportTrack(ReportTrackUI):
 
     # 查询功能
     def on_btn_query_click(self):
+        if self.lt_where_search.where_dwbh=='00000':
+            mes_about(self,'不存在该单位，请重新选择！')
+            return
         tstart,tend = self.lt_where_search.date_range             # 日期
-        sql = get_report_track_sql(tstart, tend)
+
+        # 报告状态优先选择
+        print(self.lt_where_search.where_bgzt_text)
+        if self.lt_where_search.where_bgzt_text =='待追踪':
+            sql = get_report_track_sql(tstart, tend)
+        elif self.lt_where_search.where_bgzt_text =='追踪中':
+            sql = get_report_tracking_sql(tstart, tend)
+        else:
+            sql = get_report_tracked_sql(tstart, tend)
+
+        print(sql)
 
         where_tjqy = self.lt_where_search.where_tjqy             # 体检区域
         if where_tjqy:
@@ -196,7 +214,22 @@ class ReportTrack(ReportTrackUI):
         if where_dwmc:
             sql = sql + where_dwmc
 
-        sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC ; '''
+        # sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC  '''
+        # 追踪类型
+        if not self.cb_track_type.text():
+            if self.lt_where_search.where_bgzt_text == '待追踪':
+                # 所有
+                sql = sql + ''' UNION ALL ''' +get_report_bgth_sql()
+            else:
+                sql = sql
+        elif self.cb_track_type.text() == '未结束':
+            sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC  '''
+        elif self.cb_track_type.text() == '审核退回':
+            sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '0' '''
+        else:
+            sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '1' '''
+
+
         # print(sql)
         # 执行查询
         self.execQuery(sql)
@@ -353,6 +386,20 @@ class ReportTrack(ReportTrackUI):
             tmp.append(data_obj)
             self.table_track.item(row, 2).setText('追踪中')
             self.table_track.item(row, 3).setText(self.login_name)
+
+            result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).scalar()
+            if result:
+                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).update(
+                    {
+                        MT_TJ_BGGL.zzxm: self.login_name,
+                        MT_TJ_BGGL.zzgh: self.login_id,
+                        MT_TJ_BGGL.zzrq: cur_datetime(),
+                        MT_TJ_BGGL.bgzt: '0',
+                    }
+                )
+            else:
+                self.session.bulk_insert_mappings(MT_TJ_BGGL, [{'tjbh':self.cur_tjbh,'bgzt':'0','zzxm':self.login_name,'zzgh':self.login_id,'zzrq':cur_datetime()}])
+            self.session.commit()
         try:
             self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
             self.session.commit()

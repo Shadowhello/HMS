@@ -354,6 +354,16 @@ class C13InspectTable(TableWidget):
 
         self.horizontalHeader().setStretchLastSection(True)
 
+    # 退回删除列表
+    def insert4(self,data):
+        self.insertRow(self.rowCount())
+        for col_index, col_value in enumerate(data):
+            item = QTableWidgetItem(str2(col_value))
+            item.setTextAlignment(Qt.AlignCenter)
+            self.setItem(self.rowCount() - 1, col_index, item)
+
+        self.horizontalHeader().setStretchLastSection(True)
+
     # 增量增加，不清除原来的数据
     def insertMany(self,datas):
         # old_row = self.rowCount()
@@ -717,13 +727,15 @@ class ReportTrackTable(TableWidget):
                 if col_index==1:
                     item = QTableWidgetItem(str(col_value))
                     item.setTextAlignment(Qt.AlignCenter)
-                    if col_value < 0:
+                    if col_value is None:
+                        item = QTableWidgetItem('')
+                    elif col_value < 0:
                         item.setBackground(QColor("#FF0000"))
                     elif col_value == 0:
                         item.setBackground(QColor('#FFB90F'))
                 else:
                     if col_value:
-                        if  col_index in [11,12,14,15]:
+                        if  col_index in [11,12,14]:
                             item = QTableWidgetItem(col_value)
                         else:
                             item = QTableWidgetItem(str2(col_value))
@@ -1060,7 +1072,8 @@ class TrackTypeGroup(QHBoxLayout):
     def initUI(self):
         self.is_check = QCheckBox('追踪类型：')
         self.cb_track_type = QComboBox()
-        self.track_type = OrderedDict([('所有',0),('未收单',1),('未结束',2),('有错误',3),('审核退回',4),('审阅退回',5)])
+        #self.track_type = OrderedDict([('所有',0),('未收单',1),('未结束',2),('有错误',3),('审核退回',4),('审阅退回',5)])
+        self.track_type = OrderedDict([('所有', 0),('未结束', 1), ('审核退回', 2), ('审阅退回', 3)])
         self.cb_track_type.addItems(list(self.track_type.keys()))
         self.cb_track_type.setDisabled(True)
         self.cb_track_type.setMinimumWidth(80)
@@ -1070,6 +1083,15 @@ class TrackTypeGroup(QHBoxLayout):
             self.cb_track_type.setDisabled(False)
         else:
             self.cb_track_type.setDisabled(True)
+
+    def text(self):
+        if self.is_check.isChecked():
+            if self.cb_track_type.currentText()=='所有':
+                return False
+            else:
+                return self.cb_track_type.currentText()
+        else:
+            return False
 
 class OrderSetupGroup(QGroupBox):
 
@@ -1081,6 +1103,7 @@ class OrderSetupGroup(QGroupBox):
         self.setTitle('整理选项')
         self.sb_size = QSpinBox()
         self.sb_size.setMinimum(10)
+        self.sb_size.setValue(50)
         self.sb_size.setMaximum(100)
         lt_main = QHBoxLayout()
         lt_main.addWidget(QLabel('份数：'))
@@ -1303,6 +1326,10 @@ class ReportStateGroup(QHBoxLayout):
         self.is_check.stateChanged.disconnect()
         self.is_check.setDisabled(True)
 
+
+    @property
+    def text(self):
+        return self.cb_report_state.currentText()
 
     @property
     def where_state(self):
@@ -1542,7 +1569,7 @@ class AreaGroup(QHBoxLayout):
             if self.cb_area.currentText() == '所有':
                 return False
             elif self.cb_area.currentText() == '明州':
-                return ''' AND TJQY IN ('明州1楼','明州1楼','明州3楼') '''
+                return ''' AND TJQY IN ('明州1楼','明州2楼','明州3楼') '''
             else:
                 return ''' AND TJQY='%s' ''' % self.cb_area.currentText()
         else:
@@ -1984,6 +2011,10 @@ class WhereSearchGroup(QGridLayout):
     def where_bgzt(self):
         return self.s_report_state.where_state2
 
+    @property
+    def where_bgzt_text(self):
+        return self.s_report_state.text
+
     def addStates(self,states,is_check=False):
         self.s_report_state.addStates(states)
         if is_check:
@@ -2106,7 +2137,8 @@ class DirTabWidget(QSplitter):
         self.setOrientation(Qt.Horizontal)
         self.setChildrenCollapsible(True)
         self.setHandleWidth(0)
-        self.setMinimumWidth(0)
+        self.setMinimumWidth(6)
+        self.setChildrenCollapsible(False)  # 控件调整成过小时是否会隐藏
         self.setWindowTitle(title)
         # 初始化界面控件
         self.initUI()
@@ -2120,8 +2152,9 @@ class DirTabWidget(QSplitter):
     def initUI(self):
         ################## 控件区 ########################################
         self.lwidget=TreeWidget(self,self.nodes)
-        self.lwidget.setMaximumWidth(150)
+        self.lwidget.setFixedWidth(120)
         self.button = ArrowButton("left")
+        self.button.setMinimumWidth(6)
         self.rwidget=TabWidget(self,self.lb_is_close)
 
         ########################添加控件##################################
@@ -2130,9 +2163,9 @@ class DirTabWidget(QSplitter):
         self.addWidget(self.rwidget)
 
         #########################布局######################################
-        self.setStretchFactor(0, 2)   #第一个参数代表控件序号，第二个参数0表示不可伸缩，非0可伸缩
+        self.setStretchFactor(0, 1)   #第一个参数代表控件序号，第二个参数0表示不可伸缩，非0可伸缩
         self.setStretchFactor(1, 1)
-        self.setStretchFactor(2, 10)
+        self.setStretchFactor(2, 15)
 
     def closeEvent(self, *args, **kwargs):
         super(DirTabWidget,self).closeEvent(*args, **kwargs)
