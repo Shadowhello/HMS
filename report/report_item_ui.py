@@ -1,7 +1,7 @@
 from widgets.cwidget import *
 from report.model import *
-# 查看项目状态
 
+# 查看项目状态
 class ItemsStateUI(Dialog):
 
     # 自定义 信号，封装对外使用
@@ -11,11 +11,13 @@ class ItemsStateUI(Dialog):
         super(ItemsStateUI,self).__init__(parent)
         self.setWindowTitle('项目查看')
         self.setMinimumHeight(500)
+        self.setMinimumWidth(880)
         self.initUI()
         # 绑定信号槽
         self.returnPressed.connect(self.setDatas)
         self.le_tjbh.returnPressed.connect(self.on_le_tjbh_press)
         self.btn_query.clicked.connect(self.on_le_tjbh_press)
+        self.table_item.itemClicked.connect(self.on_table_item_click)
 
     def initUI(self):
         self.item_cols = OrderedDict(
@@ -36,7 +38,7 @@ class ItemsStateUI(Dialog):
         lt_top = QHBoxLayout()
         self.le_tjbh = QTJBH()
         self.btn_query = QPushButton(Icon('query'),'查询')
-        gp_top = QGroupBox()
+        gp_top = QGroupBox('检索条件')
         lt_top.addWidget(QLabel('体检编号：'))
         lt_top.addWidget(self.le_tjbh)
         lt_top.addWidget(self.btn_query)
@@ -53,9 +55,65 @@ class ItemsStateUI(Dialog):
         self.gp_middle.setLayout(lt_middle)
 
         lt_main.addWidget(gp_top)
-        lt_main.addWidget(self.gp_user)
+        lt_main.addLayout(self.gp_user)
         lt_main.addWidget(self.gp_middle)
         self.setLayout(lt_main)
+
+    # 变更项目状态
+    def on_table_item_click(self,QTableWidgetItem):
+        row = QTableWidgetItem.row()
+        col = QTableWidgetItem.column()
+        if col != self.table_item.getLastCol():
+            return
+        tjbh = self.le_tjbh.text()
+        btn_name = self.table_item.getItemValueOfKey(row, "btn_name")
+        xmbh = self.table_item.getItemValueOfKey(row, "xmbh")
+        xmmc = self.table_item.getItemValueOfKey(row, "xmmc")
+        if btn_name:
+            if btn_name=='核实':
+                button = mes_warn(self, '您是否继续？')
+                if button != QMessageBox.Yes:
+                    return
+                try:
+                    data_obj = {'jllx': '0121', 'jlmc': '项目核实', 'tjbh':tjbh , 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': xmmc,
+                                'bz': None}
+                    self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh==tjbh,MT_TJ_TJJLMXB.zhbh==xmbh).update({
+                        MT_TJ_TJJLMXB.zxpb: '0',
+                        MT_TJ_TJJLMXB.jsbz: '0',
+                        MT_TJ_TJJLMXB.qzjs: None
+                    })
+                    self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                    self.session.commit()
+                except Exception as e:
+                    self.session.rollback()
+                    mes_about(self,'执行出错，错误信息：%s' %e)
+                    return
+                # 刷新界面
+                self.table_item.setItemValueOfKey(row,'state','核实',QColor("#FF0000"))
+            elif btn_name=='拒检':
+                button = mes_warn(self, '您是否继续？')
+                if button != QMessageBox.Yes:
+                    return
+                try:
+                    data_obj = {'jllx': '0012', 'jlmc': '项目拒检', 'tjbh':tjbh , 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': xmmc,
+                                'bz': None}
+                    self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh==tjbh,MT_TJ_TJJLMXB.zhbh==xmbh).update({
+                        MT_TJ_TJJLMXB.zxpb: '1',
+                        MT_TJ_TJJLMXB.jsbz: '1',
+                        MT_TJ_TJJLMXB.qzjs: '1'
+                    })
+                    self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                    self.session.commit()
+                except Exception as e:
+                    self.session.rollback()
+                    mes_about(self,'执行出错，错误信息：%s' %e)
+                    return
+                # 刷新界面
+                self.table_item.setItemValueOfKey(row,'state','已拒检',QColor("#008000"))
+            else:
+                mes_about(self,'功能未定义，请联系管理员！')
 
     # 初始化数据
     def setDatas(self,p_str):

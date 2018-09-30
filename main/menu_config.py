@@ -89,9 +89,9 @@ SYS_MENU_TREE = {   # 系统
              'state': True,
              'childs': OrderedDict([
              # ('体检预约',{'pid': 300, 'sid': 3001, 'title': '体检预约', 'tip': None, 'state': True, 'icon':'预约','is_tool':True,'shortcut':None}),
-             # ('体检登记',{'pid': 300, 'sid': 3002, 'title': '体检登记', 'tip': None, 'state': True, 'icon':'登记','is_tool':True,'shortcut':None}),
+             ('体检登记',{'pid': 400, 'sid': 4002, 'title': '体检登记', 'tip': None, 'state': True, 'icon':'体检登记','is_tool':False,'shortcut':None}),
              # ('体检收费',{'pid': 300, 'sid': 3003, 'title': '体检收费', 'tip': None, 'state': True, 'icon':'收费','is_tool':True,'shortcut':None}),
-                ('结果录入',{'pid': 400, 'sid': 4004, 'title': '结果录入', 'tip': None, 'state': True, 'icon':'结果录入','is_tool':True,'shortcut':None}),
+                ('结果录入',{'pid': 400, 'sid': 4004, 'title': '结果录入', 'tip': None, 'state': True, 'icon':'结果录入','is_tool':False,'shortcut':None}),
              # ('医生总检',{'pid': 300, 'sid': 3005, 'title': '医生总检', 'tip': None, 'state': True, 'icon':'预约','is_tool':True,'shortcut':None}),
              # ('智能导检',{'pid': 300, 'sid': 3006, 'title': '智能导检', 'tip': None, 'state': False, 'icon':'导检','is_tool':True,'shortcut':None}),
              # ('短信平台',{'pid': 300, 'sid': 3007, 'title': '短信平台', 'tip': None, 'state': False, 'icon':'短信','is_tool':True,'shortcut':None})
@@ -185,16 +185,16 @@ SYS_MENU_MODULE_CLASS = {
     3007: {'module': None, 'class': None, 'enabled': False},
     3008: {'module': None, 'class': None, 'enabled': False},
     4001: {'module': None, 'class': None, 'enabled': False},
-    4002: {'module': None, 'class': None, 'enabled': False},
+    4002: {'module': 'register', 'class': "RegisterManager", 'enabled': True},
     4003: {'module': None, 'class': None, 'enabled': False},
     4004: {'module': 'result', 'class': 'ResultManager', 'enabled': True},
     4005: {'module': None, 'class': None, 'enabled': False},
     4006: {'module': None, 'class': None, 'enabled': False},
     4007: {'module': 'vip', 'class': 'VipManager', 'enabled': True},
     4008: {'module': 'lis', 'class': 'SampleManager', 'enabled': True},       # 采血台
-    4009: {'module': 'C13', 'class': 'BreathManager', 'enabled': True},    # 呼气室
+    4009: {'module': 'C13', 'class': 'BreathManager', 'enabled': True},       # 呼气室
     5001: {'module': 'report', 'class': 'ReportManager', 'enabled': True},    # 报告中心
-    5002: {'module': 'mbgl', 'class': 'NCDManager', 'enabled': True},                  # 慢病管理
+    5002: {'module': 'mbgl', 'class': 'NCDManager', 'enabled': True},         # 慢病管理
     5003: {'module': None, 'class': None, 'enabled': False},
     5004: {'module': None, 'class': None, 'enabled': False},
     5005: {'module': None, 'class': None, 'enabled': False},

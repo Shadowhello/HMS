@@ -77,22 +77,36 @@ class CollectHandover_UI(Widget):
         # 汇总
         self.table_handover_master = CollectHandoverTable(self.collect_cols)
         self.gp_bottom_left = QGroupBox('样本交接汇总')
-        lt_bottom_left = QHBoxLayout()
+        lt_bottom_left = QVBoxLayout()
         lt_bottom_left.addWidget(self.table_handover_master)
-        self.gp_bottom_left.setLayout(lt_bottom_left)
+
         # 详细
         self.table_handover_detail = CollectHandoverDTable(self.collect_detail_cols)
         self.table_handover_detail.verticalHeader().setVisible(False)  # 列表头
         self.table_handover_detail.horizontalHeader().setStretchLastSection(True)
-        self.gp_bottom_right = QGroupBox('样本交接详细')
+        self.gp_bottom_right = QGroupBox('样本交接明细')
         lt_bottom_right = QHBoxLayout()
         lt_bottom_right.addWidget(self.table_handover_detail)
         self.gp_bottom_right.setLayout(lt_bottom_right)
-
+        ################################################################
+        gp_sample_jj_sum = QGroupBox('样本待交接')
+        self.lt_sample_jj_sum = QHBoxLayout()
+        gp_sample_jj_sum.setLayout(self.lt_sample_jj_sum)
+        gp_sample_qs_sum = QGroupBox('样本待签收')
+        self.lt_sample_qs_sum = QHBoxLayout()
+        gp_sample_qs_sum.setLayout(self.lt_sample_qs_sum)
+        gp_sample_sum = QGroupBox('样本完成')
+        self.lt_sample_sum = QHBoxLayout()
+        gp_sample_sum.setLayout(self.lt_sample_sum)
         #self.table_history.verticalHeader().setVisible(False)  # 去掉行头
         # 设置列宽
         # self.table_handover.setColumnWidth(0, 40)
         # self.table_handover.setColumnWidth(5, 150)
+        lt_bottom_left.addWidget(gp_sample_jj_sum)
+        lt_bottom_left.addWidget(gp_sample_qs_sum)
+        lt_bottom_left.addWidget(gp_sample_jj_sum)
+        self.gp_bottom_left.setLayout(lt_bottom_left)
+
         lt_bottom.addWidget(self.gp_bottom_left,3)
         lt_bottom.addWidget(self.gp_bottom_right,2)
 

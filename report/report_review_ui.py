@@ -1,6 +1,7 @@
 from widgets.cwidget import *
 from widgets.bweb import *
 from .model import *
+from .report_item_ui import ItemsStateUI
 from utils import cur_datetime,request_create_report,report_sms_content,sms_api
 
 class ReportReviewUI(Widget):
@@ -25,12 +26,13 @@ class ReportReviewUI(Widget):
         lt_left = QVBoxLayout()
         self.btn_query = ToolButton(Icon('query'), '查询')
         self.btn_review_mode = ToolButton(Icon('全屏'), '全屏审阅')
+        self.btn_review_mode2 = ToolButton(Icon('全屏'), '大屏审阅')
         self.gp_where_search = BaseCondiSearchGroup(1)
         self.gp_where_search.setText('审核日期')
         self.gp_where_search.setNoChoice()
         # 报告状态
         self.cb_report_state = ReportStateGroup()
-        self.cb_report_state.addStates(['所有','未审阅','已审阅'])
+        self.cb_report_state.addStates(['所有','未审阅','已审阅','老未打/新未审'])
         self.cb_report_type = ReportTypeGroup()
         # 区域
         self.cb_area = AreaGroup()
@@ -48,6 +50,7 @@ class ReportReviewUI(Widget):
         self.gp_quick_search = QuickSearchGroup(1)
         lt_1.addWidget(self.gp_quick_search)
         lt_1.addWidget(self.btn_review_mode)
+        lt_1.addWidget(self.btn_review_mode2)
 
         self.table_report_review_cols = OrderedDict([
             ('bgzt', '状态'),
@@ -157,6 +160,17 @@ class ReportReviewUser(QGroupBox):
         self.review_time = ReviewLabel()
         self.review_comment = QPlainTextEdit()
         self.review_comment.setStyleSheet('''font: 75 12pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
+        self.review_comment.setPlaceholderText("审阅备注")
+        # 外出项目
+        self.review_item = QPlainTextEdit()
+        self.review_item.setStyleSheet('''font: 75 10pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
+        self.review_item.setDisabled(True)
+        self.review_item.setPlaceholderText("外送备注")
+        # 外出项目
+        self.review_film = QPlainTextEdit()
+        self.review_film.setStyleSheet('''font: 75 10pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
+        self.review_film.setDisabled(True)
+        self.review_film.setPlaceholderText("胶片备注")
         self.btn_cancle = ToolButton(Icon('取消'),'退回追踪')
         self.btn_review = Timer2Button(Icon('样本签收'),'完成审阅')
         ###################基本信息  第一行##################################
@@ -164,17 +178,18 @@ class ReportReviewUser(QGroupBox):
         lt_main.addWidget(self.review_user, 0, 1, 1, 1)
         lt_main.addWidget(QLabel('审阅时间：'), 1, 0, 1, 1)
         lt_main.addWidget(self.review_time, 1, 1, 1, 1)
+        ###################基本信息  第二行##################################
+        lt_main.addWidget(self.review_item, 0, 2, 2, 1)
+        lt_main.addWidget(self.review_film, 0, 3, 2, 1)
+        lt_main.addWidget(self.review_comment, 0, 4, 2, 3)
         # 按钮
         lt_main.addWidget(self.btn_cancle, 0, 7, 2, 2)
         lt_main.addWidget(self.btn_review, 0, 9, 2, 2)
-        ###################基本信息  第二行##################################
-        # lt_main.addWidget(QLabel('审阅备注：'), 0, 2, 2, 2)
-        lt_main.addWidget(self.review_comment, 0, 2, 2, 5)
 
         lt_main.setHorizontalSpacing(10)            #设置水平间距
         lt_main.setVerticalSpacing(10)              #设置垂直间距
         lt_main.setContentsMargins(10, 10, 10, 10)  #设置外间距
-        lt_main.setColumnStretch(6, 1)             #设置列宽，添加空白项的
+        lt_main.setColumnStretch(4, 1)             #设置列宽，添加空白项的
         self.setLayout(lt_main)
         # 状态标签
         self.lb_review_bz = StateLable(self)
@@ -190,7 +205,6 @@ class ReportReviewUser(QGroupBox):
     # 设置数据
     def setData(self,data:dict):
         self.btn_review.stop()
-        print(data['syzt'])
         if data['syzt']=='已审核':
             self.lb_review_bz.show2(False)
             self.btn_review.start()
@@ -200,6 +214,10 @@ class ReportReviewUser(QGroupBox):
         self.review_user.setText(data['syxm'])
         self.review_time.setText(data['syrq'])
         self.review_comment.setPlainText(data['sybz'])
+
+    # 显示是否有外送项目，2018-09-27 新增，个人感觉价值不大，故不合并setData
+    def setData2(self,item_name):
+        self.review_item.setPlainText(item_name)
 
     # 状态变更
     def statechange(self):
@@ -253,7 +271,7 @@ class StateLable(QLabel):
         self.setGeometry(200,-60,100,100)
         self.setStyleSheet('''font: 75 28pt "微软雅黑";color: rgb(255, 0, 0);''')
         self.setAttribute(Qt.WA_TranslucentBackground)                               #背景透明
-        self.data = open(file_ico('已审核.png'),'rb').read()
+        self.data = open(file_ico('已审阅.png'),'rb').read()
 
     def show2(self,flag = True):
         if flag:
@@ -266,7 +284,7 @@ class StateLable(QLabel):
 class ReportReviewFullScreen(Dialog):
 
     # 自定义 信号，封装对外使用
-    opened = pyqtSignal(list)
+    opened = pyqtSignal(list,int) #待审阅的数据，和当前开始审阅的索引
 
     def __init__(self,parent=None):
         super(ReportReviewFullScreen,self).__init__(parent)
@@ -277,12 +295,14 @@ class ReportReviewFullScreen(Dialog):
         self.btn_previous.clicked.connect(self.on_btn_previous_click)
         self.btn_next.clicked.connect(self.on_btn_next_click)
         self.btn_fullscreen.clicked.connect(self.on_btn_fullscreen_click)
+        self.btn_item.clicked.connect(self.on_btn_item_click)
         # 审阅
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
         self.gp_review_user.btnCancle.connect(self.on_btn_cancle_click)
         # 特殊变量 用于快速获取 复用
         self.cur_tjbh = None
         self.cur_data = None
+        self.item_ui = None
 
     # 退回
     def on_btn_cancle_click(self,p_str):
@@ -335,8 +355,9 @@ class ReportReviewFullScreen(Dialog):
         except Exception as e:
             mes_about(self, '当前是最后一份报告')
 
-    def initData(self,datas):
+    def initData(self,datas,index):
         self.datas=datas
+        self.cur_index=index
         self.open_page(datas[self.cur_index])
         # self.cur_index = self.cur_index + 1
 
@@ -349,16 +370,20 @@ class ReportReviewFullScreen(Dialog):
         nl = data[6]
         syrq = data[7]
         syxm = data[8]
+        dwmc = data[9]
         sybz = data[10]
         self.cur_tjbh = tjbh
         # 更新title
-        self.gp_bottom.setTitle('报告预览   体检编号：%s  姓名：%s 性别：%s  年龄：%s' %(tjbh,xm,xb,nl))
-        self.gp_bottom.setStyleSheet('''font: 75 12pt '微软雅黑';color: rgb(0,128,0);''')
+        self.gp_bottom.setTitle('体检编号：%s  姓名：%s 性别：%s  年龄：%s  单位名称：%s' %(tjbh,xm,xb,nl,dwmc))
+        self.gp_bottom.setStyleSheet('''font: 75 14pt '微软雅黑';color: rgb(0,128,0);''')
         # 未审阅则打开HTML 页面
         url = gol.get_value('api_report_preview') %('html',tjbh)
         self.wv_report_equip.load(url)
         # 刷新界面
         self.gp_review_user.setData({'sybz':sybz,'syrq':syrq,'syxm':syxm,'syzt':bgzt})
+        results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == self.cur_tjbh,MT_TJ_TJJLMXB.xmbh.in_(('1122','1931'))).all()
+        if results:
+            self.gp_review_user.setData2(",".join([result.xmmc for result in results]))
 
     def initUI(self):
         lt_main = QVBoxLayout()
@@ -368,14 +393,17 @@ class ReportReviewFullScreen(Dialog):
         self.btn_previous = QPushButton(Icon('向左'), '上一个')
         self.btn_fullscreen = QPushButton(Icon('全屏'),'退出全屏')
         self.btn_next = QPushButton(Icon('向右'),'下一个')
+        self.btn_item = QPushButton(Icon('项目'), '项目查看')
         self.btn_sms_auto = QCheckBox('审阅后自动发送短信')
-        self.btn_sms_auto.setChecked(True)
+        self.btn_sms_auto.setChecked(False)
         lt_middle.addStretch()
         lt_middle.addWidget(self.btn_previous)
         lt_middle.addSpacing(20)
         lt_middle.addWidget(self.btn_fullscreen)
         lt_middle.addSpacing(20)
         lt_middle.addWidget(self.btn_next)
+        lt_middle.addSpacing(20)
+        lt_middle.addWidget(self.btn_item)
         lt_middle.addStretch()
         lt_middle.addWidget(self.btn_sms_auto)
         # 报告预览
@@ -390,6 +418,17 @@ class ReportReviewFullScreen(Dialog):
         lt_main.addLayout(lt_middle,1)
 
         self.setLayout(lt_main)
+
+    #体检系统项目查看
+    def on_btn_item_click(self):
+        if not self.cur_tjbh:
+            mes_about(self,'请先选择一个人！')
+            return
+        else:
+            if not self.item_ui:
+                self.item_ui = ItemsStateUI(self)
+            self.item_ui.returnPressed.emit(self.cur_tjbh)
+            self.item_ui.show()
 
     # 审阅/取消审阅
     def on_btn_review_click(self,syzt:bool,num:int):
@@ -414,6 +453,8 @@ class ReportReviewFullScreen(Dialog):
                         MT_TJ_BGGL.bgzt: 2,
                     }
                 )
+                sql = "UPDATE TJ_TJDJB SET TJZT='8' WHERE TJBH='%s';" %self.cur_tjbh
+                self.session.execute(sql)
                 self.session.commit()
             except Exception as e:
                 self.session.rollback()
@@ -462,6 +503,8 @@ class ReportReviewFullScreen(Dialog):
                         MT_TJ_BGGL.bgzt: 1,
                     }
                 )
+                sql = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" %self.cur_tjbh
+                self.session.execute(sql)
                 self.session.commit()
             except Exception as e:
                 self.session.rollback()
@@ -475,6 +518,11 @@ class ReportReviewFullScreen(Dialog):
             self.cur_data[8] = ''
             self.cur_data[10] = self.gp_review_user.get_sybz()
             self.datas[self.cur_index] = self.cur_data
+
+    def closeEvent(self, QCloseEvent):
+        if self.item_ui:
+            self.item_ui.close()
+        super(ReportReviewFullScreen, self).closeEvent(QCloseEvent)
 
 if __name__ == '__main__':
     import sys

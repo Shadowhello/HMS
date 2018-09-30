@@ -1,4 +1,5 @@
 from widgets.cwidget import *
+from utils import gol
 
 # 采集样本管理：尿液、粪便、血液
 class SampleManager(DirTabWidget):
@@ -6,7 +7,9 @@ class SampleManager(DirTabWidget):
     def __init__(self):
         nodes= ['抽血采集','留样采集','样本交接','历史查询']
         super(SampleManager,self).__init__('采血台',nodes)
-        self.addTab('抽血采集')
+        default_menu_name = gol.get_value('menu_child_name','')
+        if default_menu_name in nodes:
+            self.addTab(default_menu_name)
 
     def addTab(self,title):
         super(SampleManager, self).addTab(title)

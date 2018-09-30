@@ -16,7 +16,8 @@ class ReportReview(ReportReviewUI):
         self.table_report_review.doubleClicked.connect(self.on_table_double_click)
         # 审阅
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
-        self.btn_review_mode.clicked.connect(self.on_btn_review_mode_click)
+        self.btn_review_mode.clicked.connect(partial(self.on_btn_review_mode_click,True))
+        self.btn_review_mode2.clicked.connect(partial(self.on_btn_review_mode_click,False))
         self.gp_review_user.btnCancle.connect(self.on_btn_cancle_click)
         # 设置快速获取的变量
         self.cur_tjbh = None
@@ -50,11 +51,14 @@ class ReportReview(ReportReviewUI):
         self.gp_quick_search.setText(tjbh,xm,'','')
 
     # 全屏操作
-    def on_btn_review_mode_click(self):
+    def on_btn_review_mode_click(self,is_full):
         if self.table_report_review.rowCount():
             ui = ReportReviewFullScreen(self)
-            ui.opened.emit(self.table_report_review.cur_data_set)
-            ui.showFullScreen()
+            ui.opened.emit(self.table_report_review.cur_data_set,self.table_report_review.currentIndex().row())
+            if is_full:
+                ui.showFullScreen()
+            else:
+                ui.showMaximized()
         else:
             mes_about(self,"请先筛选需要审阅的报告，再全屏操作！")
 
@@ -205,6 +209,8 @@ class ReportReview(ReportReviewUI):
                         MT_TJ_BGGL.bgzt: 2,
                     }
                 )
+                sql = "UPDATE TJ_TJDJB SET TJZT='8' WHERE TJBH='%s';" %self.cur_tjbh
+                self.session.execute(sql)
                 self.session.commit()
             except Exception as e:
                 self.session.rollback()
@@ -244,6 +250,8 @@ class ReportReview(ReportReviewUI):
                         MT_TJ_BGGL.bgzt: 1,
                     }
                 )
+                sql = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" %self.cur_tjbh
+                self.session.execute(sql)
                 self.session.commit()
             except Exception as e:
                 self.session.rollback()

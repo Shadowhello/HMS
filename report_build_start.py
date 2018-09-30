@@ -57,7 +57,7 @@ def report_run(queue):
     while True:
         if not queue.empty():                                                           # 循环
             mes_obj = queue.get_nowait()                                                 # 获取进程队列消息,非阻塞模式
-            print('从进程队列中获得消息：%s' %ujson.dumps(mes_obj))
+            # print('%s 从进程队列中获得消息：%s' %(cur_datetime(),ujson.dumps(mes_obj)))
             log.info('从进程队列中获得消息：%s' %ujson.dumps(mes_obj))
             tjbh = mes_obj['tjbh']                                                      # 获取体检编号
             action = mes_obj['action']                                                  # 获取执行动作 ：生成HTML还是生成PDF
@@ -188,7 +188,8 @@ class buildBodyHtml(object):
 
     # 写入体检建议
     def write_jy(self,suggestions):
-        self.html_obj.write(Template(pdf_html_suggest_page).render(suggestions=suggestions))
+        if suggestions:
+            self.html_obj.write(Template(pdf_html_suggest_page).render(suggestions=suggestions))
 
     # 写入体检注意事项及公章
     def write_cachet(self,cachet):
@@ -285,6 +286,7 @@ class PdfData(object):
         self.user_data = {
             'tjbh':tjbh,
             'sybz':[]
+
         }
 
     # 设置报告状态 这里只有 html 审核完成待审阅 pdf 审阅完成待打印
@@ -404,6 +406,15 @@ class PdfData(object):
         for result in results:
             summarys.append(str2(result.jbmc))
             suggestions.append(str2(result.jynr))
+        if not summarys:
+            sql = "select jy from tj_tjdjb where tjbh='%s';" %self.tjbh
+            results = self.session_tjk.execute(sql).fetchall()
+            if results:
+                try:
+                    summarys = [str2(results[0][0])]
+                except Exception as e:
+                    print(e,results[0])
+
         return summarys, suggestions
 
     @property
@@ -498,8 +509,8 @@ class PdfData(object):
                         if not self.pic.get(result.zhbh, 0):
                             self.pic[result.zhbh] = []
                         if flag:
-                            print(file_local)
-                            print(file_local.replace(self.html_path, ''))
+                            # print(file_local)
+                            # print(file_local.replace(self.html_path, ''))
                             self.pic[result.zhbh].append(file_local.replace(self.html_path, ''))
                         else:
                             self.pic[result.zhbh].append(file_local)
@@ -629,7 +640,6 @@ class PdfData(object):
 
             health['body'] = bjcf_body
             # pprint(bjcf_body)
-
         return health
 
     # 更新用户数据
@@ -641,12 +651,23 @@ class PdfData(object):
         if result:
             if result.bgzt== '0':
                 # 待追踪
-                pass
-            elif result.bgzt== '1':
-                pass
+                try:
+                    self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.tjbh).update({
+                        MT_TJ_BGGL.sybz: self.user_data['sybz'],
+                        MT_TJ_BGGL.bgzt: '1',
+                        MT_TJ_BGGL.zjrq: self.user_data['zjrq'],
+                        MT_TJ_BGGL.zjgh: self.user_data['zjgh'],
+                        MT_TJ_BGGL.zjxm: self.user_data['zjxm'],
+                        MT_TJ_BGGL.shrq: self.user_data['shrq'],
+                        MT_TJ_BGGL.shgh: self.user_data['shgh'],
+                        MT_TJ_BGGL.shxm: self.user_data['shxm']
+                    })
+                    self.session_tjk.commit()
+                except Exception as e:
+                    self.session_tjk.rollback()
+                    print('插入 MT_TJ_BGGL 记录失败！错误代码：%s' % e)
             else:
                 pass
-
         else:
             try:
                 self.session_tjk.bulk_insert_mappings(MT_TJ_BGGL, [self.user_data])
@@ -677,18 +698,40 @@ def pdf2pic(pdf,new_file=None):
 
     return new_file
 
-
 # 指定文件存在，则重命名
 def report_file_rename(path,tjbh,action):
     filename = os.path.join(path, '%s.%s' %(tjbh,action))
     if os.path.exists(filename):
         fileRename(filename)
 
-
-
-
 if __name__ =='__main__':
+    # import cgitb
+    # # 非pycharm编辑器可用输出错误
+    # #sys.excepthook = cgitb.Hook(1, None, 5, sys.stderr, 'text')
+    # cgitb.enable(logdir="./error/",format="text")
+    from utils.dbconn import get_tjxt_session
     from queue import Queue
+    session = get_tjxt_session(
+        hostname='10.8.200.201',
+        dbname='tjxt',
+        user='bsuser',
+        passwd='admin2389',
+        port=1433
+    )
     q = Queue()
-    q.put({'tjbh':'166772601','action':'pdf'})
+    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE  (del <> '1' or del is null) and QD='1' and SHRQ>='2018-08-25' AND SHRQ<'2018-09-30' AND SUMOVER='1'; "
+    # 处理遗漏的
+    sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND QD='1' AND (del <> '1' or del is null) AND TJBH NOT IN (SELECT TJBH FROM TJ_BGGL WHERE BGZT<>'0')"
+    # 处理没有报告路径的
+    sql2 = "SELECT TJBH FROM TJ_BGGL WHERE bgzt='1' AND BGLJ IS NULL"
+    # 处理PDF 生成的
+    # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
+    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
+    # results = session.execute(sql).fetchall()
+    # for result in results:
+    #     q.put({'tjbh': result[0], 'action': 'html'})
+    # results = session.execute(sql2).fetchall()
+    # for result in results:
+    #     q.put({'tjbh': result[0], 'action': 'html'})
+    sql = "SELECT  "
     report_run(q)

@@ -91,6 +91,8 @@ class ReportTrack(ReportTrackUI):
             item3 = menu.addAction(Icon("短信"), "发送短信")
             item4 = menu.addAction(Icon("采血台"), "查看采血照片")
             item5 = menu.addAction(Icon("体检收单"), "纸质导检单")
+            item6 = menu.addAction(Icon("取消"), "取消到达")
+            item7 = menu.addAction(Icon("编辑"), "修改备注")
             action = menu.exec_(self.table_track.mapToGlobal(pos))
             # 获取变量
             tjbh = self.table_track.getCurItemValueOfKey('tjbh')
@@ -99,8 +101,27 @@ class ReportTrack(ReportTrackUI):
                 if self.table_track.getCurItemValueOfKey('lqry'):
                     button = mes_warn(self,'您确认自己追踪本报告吗？')
                     if button == QMessageBox.Yes:
-                        pass
-                        mes_about(self,'更新成功！')
+                        try:
+                            # 更新
+                            self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh ==tjbh).update({
+                                MT_TJ_BGGL.zzgh: self.login_id,
+                                MT_TJ_BGGL.zzxm: self.login_name
+                            })
+                            # 更新
+                            self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.tjbh ==tjbh,MT_TJ_CZJLB.jllx =='0030').update({
+                                MT_TJ_CZJLB.jllx: '0000',
+                                MT_TJ_CZJLB.jlnr: '更换追踪人，原追踪人：%s,现追踪人：%s' %(MT_TJ_CZJLB.czxm,self.login_name)
+                            })
+                            # 插入记录
+                            data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
+                                        'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                        'jlnr': '','bz': None}
+                            self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                            self.session.commit()
+                            mes_about(self,'更新成功！')
+                        except Exception as e:
+                            self.session.rollback()
+                            mes_about(self,'执行发生错误：%s' %e)
                 else:
                     mes_about(self,'该体检报告当前无追踪护士，无须更换！')
             elif action == item2:
@@ -141,11 +162,61 @@ class ReportTrack(ReportTrackUI):
                         self.zyd_ui.show()
                 else:
                     mes_about(self, '该人导检单未拍照！')
+            elif action == item6:
+                button = mes_warn(self, '您确认取消到达吗？')
+                if button == QMessageBox.Yes:
+                    tjbh = self.table_track.getCurItemValueOfKey('tjbh')
+                    sql = " UPDATE TJ_TJDJB SET del='1' WHERE TJBH='%s';"%tjbh
+                    # 插入记录
+                    data_obj = {'jllx': '0007', 'jlmc': '取消签到', 'tjbh': tjbh, 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                'jlnr': '', 'bz': None}
+                    try:
+                        self.session.execute(sql)
+                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                        self.session.commit()
+                        mes_about(self, '取消到达成功！')
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self, '执行发生错误：%s' % e)
+            elif action == item7:
+                tjbh = self.table_track.getCurItemValueOfKey('tjbh')
+                bz= self.table_track.getCurItemValueOfKey('bz')
+                text, ok = QInputDialog.getText(self, '明州体检', '当前备注信息：',QLineEdit.Normal, bz)
+                if ok:
+                    sql = "UPDATE TJ_TJDJB SET bz=cast('%s' as text) WHERE TJBH='%s';" %(str(text),tjbh)
+                    # 插入记录
+                    data_obj = {'jllx': '0000', 'jlmc': '修改备注', 'tjbh': tjbh, 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                'jlnr': '原备注内容：%s，新备注内容：%s' %(bz,str(text)), 'bz': None}
+                    try:
+                        self.session.execute(sql)
+                        self.session.commit()
+                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                        self.session.commit()
+                        self.table_track.setCurItemValueOfKey('bz', str(text))
+                        mes_about(self, '备注修改成功！')
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self, '执行发生错误：%s' % e)
+
+
+    # 手动接收结果
+    def on_btn_receive_click(self):
+        if not self.table_track.rowCount():
+            mes_about(self,'请先查询后再进行手工结果接收！')
+            return
+        receive_ui = ResultReceiveDialog(self)
+        receive_ui.started.emit(self.table_track.isSelectRowsValue('tjbh'))
+        receive_ui.exec_()
 
     # 查询我自己追踪的任务
     def on_btn_myself_click(self):
-        pass
+        tstart, tend = self.lt_where_search.date_range  # 日期
+        results = self.session.execute(get_report_track_myself_sql(tstart, tend,self.login_id)).fetchall()
+        self.table_track.load(results)
 
+    # 查看导检单
     def on_btn_djd_click(self):
         result = self.session.query(MT_TJ_PHOTO_ZYD).filter(MT_TJ_PHOTO_ZYD.tjbh == self.cur_tjbh).scalar()
         if result:
@@ -192,15 +263,20 @@ class ReportTrack(ReportTrackUI):
         tstart,tend = self.lt_where_search.date_range             # 日期
 
         # 报告状态优先选择
-        print(self.lt_where_search.where_bgzt_text)
         if self.lt_where_search.where_bgzt_text =='待追踪':
             sql = get_report_track_sql(tstart, tend)
         elif self.lt_where_search.where_bgzt_text =='追踪中':
             sql = get_report_tracking_sql(tstart, tend)
-        else:
+        elif self.lt_where_search.where_bgzt_text == '待总检':
             sql = get_report_tracked_sql(tstart, tend)
-
-        print(sql)
+        elif self.lt_where_search.where_bgzt_text == '待审核':
+            sql = get_report_tracked_zj_sql(tstart, tend)
+        elif self.lt_where_search.where_bgzt_text == '待审阅':
+            sql = get_report_tracked_sh_sql(tstart, tend)
+        elif self.lt_where_search.where_bgzt_text == '待打印':
+            sql = get_report_tracked_sy_sql(tstart, tend)
+        else:
+            sql = None
 
         where_tjqy = self.lt_where_search.where_tjqy             # 体检区域
         if where_tjqy:
@@ -214,12 +290,12 @@ class ReportTrack(ReportTrackUI):
         if where_dwmc:
             sql = sql + where_dwmc
 
-        # sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC  '''
         # 追踪类型
         if not self.cb_track_type.text():
             if self.lt_where_search.where_bgzt_text == '待追踪':
                 # 所有
                 sql = sql + ''' UNION ALL ''' +get_report_bgth_sql()
+                sql = sql + ''' ORDER BY XMZQ,QDRQ,DWMC  '''
             else:
                 sql = sql
         elif self.cb_track_type.text() == '未结束':
@@ -373,46 +449,48 @@ class ReportTrack(ReportTrackUI):
         else:
             pass
 
+    # 追踪任务领取
     def on_btn_task_click(self):
         tmp = []
 
         rows = self.table_track.isSelectRows()
         for row in rows:
-            data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': '', 'mxbh': '',
-                        'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': None,
-                        'bz': None}
-            data_obj['tjbh'] = self.table_track.item(row, 7).text()
-            data_obj['jlnr'] = self.table_track.item(row, 15).text()
-            tmp.append(data_obj)
-            self.table_track.item(row, 2).setText('追踪中')
-            self.table_track.item(row, 3).setText(self.login_name)
+            if not self.table_track.getItemValueOfKey(row,'lqry'):
+                data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': '', 'mxbh': '',
+                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': None,
+                            'bz': None}
+                tjbh = self.table_track.getItemValueOfKey(row,'tjbh')
+                jlnr = self.table_track.getItemValueOfKey(row,'wjxm')
+                data_obj['tjbh'] = tjbh
+                data_obj['jlnr'] = jlnr
+                tmp.append(data_obj)
+                self.table_track.item(row, 2).setText('追踪中')
+                self.table_track.item(row, 3).setText(self.login_name)
 
-            result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).scalar()
-            if result:
-                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).update(
-                    {
-                        MT_TJ_BGGL.zzxm: self.login_name,
-                        MT_TJ_BGGL.zzgh: self.login_id,
-                        MT_TJ_BGGL.zzrq: cur_datetime(),
-                        MT_TJ_BGGL.bgzt: '0',
-                    }
-                )
-            else:
-                self.session.bulk_insert_mappings(MT_TJ_BGGL, [{'tjbh':self.cur_tjbh,'bgzt':'0','zzxm':self.login_name,'zzgh':self.login_id,'zzrq':cur_datetime()}])
-            self.session.commit()
-        try:
-            self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
-            self.session.commit()
-            mes_about(self,'领取成功！')
-        except Exception as e:
-            self.session.rollback()
-            mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
+                result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
+                if result:
+                    self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                        {
+                            MT_TJ_BGGL.zzxm: self.login_name,
+                            MT_TJ_BGGL.zzgh: self.login_id,
+                            MT_TJ_BGGL.zzrq: cur_datetime(),
+                            MT_TJ_BGGL.bgzt: '0',
+                        }
+                    )
+                else:self.session.bulk_insert_mappings(MT_TJ_BGGL, [{'tjbh':tjbh,'bgzt':'0','zzxm':self.login_name,'zzgh':self.login_id,'zzrq':cur_datetime()}])
+                self.session.commit()
 
-    def on_btn_receive_click(self):
-        rows =self.table_track.isSelectRows()
-        for row in rows:
-            pass
-
+                if len(rows)==1:
+                    mes_about(self, '领取成功！')
+        if tmp:
+            try:
+                self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
+                self.session.commit()
+                if len(rows)>1:
+                    mes_about(self, '领取成功！')
+            except Exception as e:
+                self.session.rollback()
+                mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
 
     def closeEvent(self, *args, **kwargs):
         super(ReportTrack, self).closeEvent(*args, **kwargs)
@@ -461,3 +539,331 @@ class ProgressDialog(QDialog):
         lt_main.addWidget(lb_pic)
         lt_main.addWidget(lb_mes)
         self.setLayout(lt_main)
+
+class ResultReceiveDialog(Dialog):
+
+    started = pyqtSignal(list)
+
+    def __init__(self,parent=None):
+        super(ResultReceiveDialog,self).__init__(parent)
+        self.setWindowTitle('明州体检')
+        self.initUI()
+        # 绑定信号
+        self.started.connect(self.initDatas)
+        self.btn_start.clicked.connect(self.on_btn_start_click)
+        self.btn_stop.clicked.connect(self.on_btn_stop_click)
+        # 特殊变量
+        self.datas = None
+        self.result_receive_thread = None
+
+    def initUI(self):
+        lt_main = QVBoxLayout()
+        ###########################################################
+        lt_top = QHBoxLayout()
+        gp_top = QGroupBox('进度总览')
+        # 待接收的总数
+        self.sb_all = ProcessLable()
+        # 已完成接收数
+        self.sb_is_done = ProcessLable()
+        # 未完成总数
+        self.sb_no_done = ProcessLable()
+        # 错误数
+        self.sb_error = ProcessLable()
+        # 添加布局
+        lt_top.addWidget(QLabel('总数：'))
+        lt_top.addWidget(self.sb_all)
+        lt_top.addWidget(QLabel('完成数：'))
+        lt_top.addWidget(self.sb_is_done)
+        lt_top.addWidget(QLabel('未完成数：'))
+        lt_top.addWidget(self.sb_no_done)
+        lt_top.addWidget(QLabel('错误数：'))
+        lt_top.addWidget(self.sb_error)
+        gp_top.setLayout(lt_top)
+        ###########################################################
+        lt_middle = QHBoxLayout()
+        gp_middle = QGroupBox('处理详情')
+        ###########################################################
+        lt_bottom = QHBoxLayout()
+        gp_bottom = QGroupBox('接收进度')
+        self.pb_progress=QProgressBar()
+        self.pb_progress.setMinimum(0)
+        self.pb_progress.setValue(0)
+        lt_bottom.addWidget(self.pb_progress)
+        gp_bottom.setLayout(lt_bottom)
+        #########增加按钮组########################################
+        lt_1 = QHBoxLayout()
+        self.lb_timer = TimerLabel2()
+        self.btn_start = QPushButton(Icon("启动"),"启动")
+        self.btn_stop = QPushButton(Icon("停止"),"停止")
+        lt_1.addWidget(self.lb_timer)
+        lt_1.addStretch()
+        lt_1.addWidget(self.btn_start)
+        lt_1.addWidget(self.btn_stop)
+        # 布局
+        lt_main.addWidget(gp_top)
+        lt_main.addWidget(gp_middle)
+        lt_main.addWidget(gp_bottom)
+        lt_main.addLayout(lt_1)
+        self.setLayout(lt_main)
+
+    def on_progress_change(self,is_done,no_done,error):
+        self.sb_is_done.setText(str(is_done))
+        self.sb_no_done.setText(str(no_done))
+        self.sb_error.setText(str(error))
+        self.pb_progress.setValue(is_done)
+        dProgress = (self.pb_progress.value() - self.pb_progress.minimum()) * 100.0 / (self.pb_progress.maximum() - self.pb_progress.minimum())
+        #self.progress.setFormat("当前进度为：%s%" %dProgress)
+        self.pb_progress.setAlignment(Qt.AlignRight | Qt.AlignVCenter) #对齐方式
+
+    # 启动
+    def on_btn_start_click(self):
+        # 刷新界面控件
+        self.btn_start.setDisabled(True)
+        self.btn_stop.setDisabled(False)
+        self.lb_timer.start()
+        self.sb_all.setText(str(len(self.datas)))
+        self.pb_progress.setMaximum(len(self.datas))
+        if not self.result_receive_thread:
+            self.result_receive_thread = ResultReceiveThread()
+
+        self.result_receive_thread.setTask(self.datas)
+        self.result_receive_thread.signalCur.connect(self.on_mes_show, type=Qt.QueuedConnection)
+        self.result_receive_thread.signalDone.connect(self.on_progress_change, type=Qt.QueuedConnection)
+        self.result_receive_thread.signalExit.connect(self.on_thread_exit, type=Qt.QueuedConnection)
+        self.result_receive_thread.start()
+
+    # 停止接收数据
+    def on_btn_stop_click(self):
+        # 刷新界面控件
+        self.btn_start.setDisabled(False)
+        self.btn_stop.setDisabled(True)
+        self.lb_timer.stop()
+        # 停止线程
+        try:
+            if self.result_receive_thread:
+                self.result_receive_thread.stop()
+        except Exception as e:
+            print(e)
+
+    # 初始化数据
+    def initDatas(self,datas:list):
+        self.datas = datas
+        self.on_btn_start_click()
+
+    # 消息展示
+    def on_mes_show(self,tjbh:str,mes:str):
+        pass
+
+    def on_thread_exit(self,status:bool,error:str):
+        self.on_btn_stop_click()
+        self.result_receive_thread = None
+
+        mes_about(self,error)
+
+    def closeEvent(self, QCloseEvent):
+        try:
+            if self.result_receive_thread:
+                # button = mes_warn(self,"项目结果接收正在运行中，您是否确定立刻退出？")
+                # if button == QMessageBox.Yes:
+                self.result_receive_thread.stop()
+                self.result_receive_thread = None
+        except Exception as e:
+            print(e)
+        super(ResultReceiveDialog, self).closeEvent(QCloseEvent)
+
+# 运行线程
+class ResultReceiveThread(QThread):
+
+    # 定义信号,定义参数为str类型
+    signalCur = pyqtSignal(str,str)     # 处理过程：成功/失败，错误消息，
+    signalDone = pyqtSignal(int, int, int)   # 处理完成：成功/失败，错误消息，
+    signalExit = pyqtSignal(bool,str)   # 处理结束：成功/失败，是否异常退出
+
+    def __init__(self):
+        super(ResultReceiveThread,self).__init__()
+        self.runing = False
+        self.initParas()
+        # 特殊变量
+        self.num_all = 0
+        self.num_done = 0
+        self.num_undone = 0
+        self.num_error = 0
+
+    def initParas(self):
+        # 获取数据库连接会话
+        self.session_tj = gol.get_value("tjxt_session_thread")
+        self.session_pacs = gol.get_value("pacs_session")
+        self.session_pis = gol.get_value("pis_session")
+        self.session_lis = gol.get_value("lis_session")
+        self.num = 1
+
+    def stop(self):
+        self.runing = False
+
+    # 启动任务
+    def setTask(self,tjbhs:list):
+        self.tjbhs =tjbhs
+        self.num_all = len(tjbhs)
+        self.runing = True
+
+    def run(self):
+        while self.runing:
+            for tjbh in self.tjbhs:
+                # 连接PACS数据库，读取并接收更新
+                try:
+                    pacs_results = self.session_pacs.execute(get_pacs_result_sql(tjbh)).fetchall()
+                    self.signalCur.emit(tjbh, "接收检查项目结果")
+                except Exception as e:
+                    self.stop()
+                    self.signalExit.emit(False, "接收结果中断，错误信息：%s" %e)
+                    return
+                if pacs_results:
+                    for result in pacs_results:
+                        tjbh = result[0][0:9]       # 体检编号
+                        xmbh = result[0][9:]        # 项目编号
+                        shys = result[1]            # 审核医生
+                        shsj = result[2]            # 审核时间
+                        xmjg = result[3]            # 项目结果
+                        xmzd = result[4]            # 项目诊断
+                        # print(tjbh,xmbh,shys,shsj)
+                        # 更新数据库
+                        update_items_inspect(self.session_tj,tjbh,xmbh,shys,shsj,xmjg,xmzd)
+                # 连接PIS数据库，读取并接收更新
+                try:
+                    pis_results = self.session_pis.execute(get_pis_result_sql(tjbh)).fetchall()
+                    self.signalCur.emit(tjbh, "接收病理项目结果")
+                except Exception as e:
+                    self.stop()
+                    self.signalExit.emit(False, "连接病理数据库发生错误，错误信息：%s" %e)
+                    return
+                if pis_results:
+                    for result in pis_results:
+                        tjbh = result[0][0:9]       # 体检编号
+                        xmbh = result[0][9:]        # 项目编号
+                        shys = result[1]            # 审核医生
+                        shsj = result[2]            # 审核时间
+                        if result[3]:
+                            xmjg = result[3]            # 项目结果
+                        else:
+                            xmjg = result[4]            # 项目诊断 当做结果
+                        xmzd = result[4]            # 项目诊断
+                        filename = result[5]        # 病理图片路径
+                        update_items_inspect(self.session_tj, tjbh, xmbh, shys, shsj, xmjg, xmzd,filename)
+                self.num_done = self.num_done + 1
+                self.num_undone = self.num_all - self.num_done
+                self.signalDone.emit(self.num_done,self.num_undone,self.num_error)
+            self.stop()
+            self.signalExit.emit(True, "数据接收完成")
+
+
+def get_pacs_result_sql(tjbh):
+    return '''
+        SELECT 
+            HISORDER_IID,
+            RIS_BG_CSHYS AS SHYS,
+            RIS_BG_DSHSJ AS SHSJ,
+            RIS_BG_CBGSJ_HL7 AS XMJG,
+            RIS_BG_CBGZD AS XMZD 
+        FROM V_RIS2HIS_ALL 
+            WHERE CBLKH = '%s' AND CBGZT='已审核'
+    ''' %tjbh
+
+def get_pis_result_sql(tjbh):
+    return '''
+        SELECT  
+            HIS_keyCode,
+            AuditDoc,
+            AuditDate,
+            TJSJ,
+            TJZD,
+            filename
+        FROM V_PS_Report_TJ WHERE LEFT(HIS_keyCode,9)='%s' AND OrderState=3030;
+    ''' %tjbh
+
+# 更新结果记录表 检查和病理
+def update_items_inspect(session,tjbh,xmbh,shys,shsj,xmjg,xmzd,filename=None):
+    result = session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,
+                                                 MT_TJ_TJJLMXB.zhbh == xmbh,
+                                                 MT_TJ_TJJLMXB.sfzh == '1'
+                                                 ).scalar()
+    # 是否存在项目
+    if result:
+        if result.qzjs == '1':
+            pass
+        elif result.zxpb == '1' and result.jsbz == '1':
+            pass
+        else:
+            try:
+                session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh, MT_TJ_TJJLMXB.zhbh == xmbh).update({
+                    MT_TJ_TJJLMXB.shys: shys,
+                    MT_TJ_TJJLMXB.shsj: shsj,
+                    MT_TJ_TJJLMXB.zxpb: '1',
+                    MT_TJ_TJJLMXB.jsbz: '1',
+                    MT_TJ_TJJLMXB.qzjs: None,
+                    MT_TJ_TJJLMXB.ycbz: '1',
+                    MT_TJ_TJJLMXB.ycts: ''
+                })
+                session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh, MT_TJ_TJJLMXB.zhbh == xmbh,
+                                                            MT_TJ_TJJLMXB.sfzh == '0').update({
+                    MT_TJ_TJJLMXB.jg: xmjg,
+                    MT_TJ_TJJLMXB.zd: xmzd
+                })
+                session.commit()
+            except Exception as e:
+                session.rollback()
+    if filename:
+        result = session.query(MT_TJ_PACS_PIC).filter(MT_TJ_PACS_PIC.tjbh == tjbh,MT_TJ_PACS_PIC.zhbh == xmbh).scalar()
+        if not result:
+            data_obj = {
+                'tjbh':tjbh,
+                'ksbm':'0026',
+                'picpath':filename,
+                'picname': filename,
+                'path': filename,
+                'zhbh':xmbh,
+                'ftp_bz':'0'
+            }
+            try:
+                session.bulk_insert_mappings(MT_TJ_PACS_PIC, [data_obj])
+                session.commit()
+            except Exception as e:
+                session.rollback()
+
+# 更新结果记录表
+def update_items_lis(session,tjbh,xmbh,shys,shsj,xmjg,xmzd):
+    result = session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,
+                                                 MT_TJ_TJJLMXB.zhbh == xmbh,
+                                                 MT_TJ_TJJLMXB.sfzh == '1'
+                                                 ).scalar()
+    # 是否存在项目
+    if result:
+        if result.qzjs == '1':
+            pass
+        elif result.zxpb == '1' and result.jsbz == '1':
+            pass
+        else:
+            try:
+                session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh, MT_TJ_TJJLMXB.zhbh == xmbh).update({
+                    MT_TJ_TJJLMXB.shys: shys,
+                    MT_TJ_TJJLMXB.shsj: shsj,
+                    MT_TJ_TJJLMXB.zxpb: '1',
+                    MT_TJ_TJJLMXB.jsbz: '1',
+                    MT_TJ_TJJLMXB.qzjs: None,
+                    MT_TJ_TJJLMXB.ycbz: '1',
+                    MT_TJ_TJJLMXB.ycts: ''
+                })
+                session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh, MT_TJ_TJJLMXB.zhbh == xmbh,
+                                                            MT_TJ_TJJLMXB.sfzh == '0').update({
+                    MT_TJ_TJJLMXB.jg: xmjg,
+                    MT_TJ_TJJLMXB.zd: xmzd
+                })
+                session.commit()
+            except Exception as e:
+                session.rollback()
+
+class ProcessLable(QLabel):
+
+    def __init__(self):
+        super(ProcessLable,self).__init__()
+        self.setMinimumWidth(50)
+        self.setStyleSheet('''font: 75 14pt \"微软雅黑\";color: rgb(0, 85, 255);''')

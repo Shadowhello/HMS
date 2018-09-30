@@ -1,1 +1,2 @@
+from .selfhelpmanager import selfHelpManager
 from .selfHelpMachine import SelfHelpMachine

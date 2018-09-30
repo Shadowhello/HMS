@@ -7,9 +7,6 @@ from utils.buildbarcode import BarCodeBuild
 from utils.api import APIRquest
 from utils.base import cur_datetime
 
-# 上传队列
-UPLOAD_QUEUE = Queue()
-
 class CollectBlood(GolParasMixin,CollectBlood_UI):
 
     def __init__(self):
@@ -21,6 +18,8 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
 
     # 初始化 页面参数
     def initParas(self):
+        # 上传队列
+        self.queue_upload = Queue()
         # 条码横向排列个数 默认5
         self.collect_count = gol.get_value('collect_count',5)
         self.api = APIRquest(self.login_id,self.api_host,self.api_port,self.log)
@@ -38,7 +37,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
         if self.camera:
             if self.camera.cap.isOpened():
                 # 如果摄像头打开了，则开启上传线程
-                    self.timer_upload_thread = ThreadUpload(self.api,self.api_file_upload_url,self.log)
+                    self.timer_upload_thread = ThreadUpload(self.queue_upload,self.api,self.api_file_upload_url,self.log)
                     #self.timer_upload_thread.signalUploadState.connect(self.refresh_upload_state, type=Qt.QueuedConnection)
                     self.timer_upload_thread.start()
 
@@ -368,7 +367,7 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
                 img = self.camera.onTakeImage(file_photo)
                 self.photo_lable.setPixmap(QPixmap.fromImage(img, Qt.AutoColor))
                 #self.on_status_widget_show('拍照完成') 发射信号
-                UPLOAD_QUEUE.put(file_photo)
+                self.queue_upload.put(file_photo)
             else:
                 mes_about(self,'请扫描体检编号或者条码号！')
         else:
@@ -391,40 +390,6 @@ class CollectBlood(GolParasMixin,CollectBlood_UI):
             print(e)
         super(CollectBlood, self).closeEvent(*args, **kwargs)
 
-
-class ThreadUpload(QThread):
-    # 定义信号,定义参数为str类型
-    # signalUploadState = pyqtSignal(bool,str)  # 上传状态，体检标识
-    # signalPost = pyqtSignal(dict)     # 更新界面
-    signalExit = pyqtSignal()
-
-    def __init__(self,api,api_url,log,timer=2):
-        super(ThreadUpload, self).__init__()
-        self.running = True
-        self.timer = timer
-        self.log = log
-        self.api = api
-        self.api_url = api_url
-
-    def stop(self):
-        self.running = False
-
-    def run(self):
-        while self.running:
-            time.sleep(self.timer)
-            try:
-                item=UPLOAD_QUEUE.get_nowait()
-                self.log.info('后台线程，提取队列数据：%s 上传！' %item)
-            except Exception as e:
-                item = None
-            if item:
-                response = self.api.request(self.api_url,'post',filename=item)
-                print(response)
-                # if response:
-                #     # 更新
-                #     self.signalUploadState.emit(True, item['jglr_tjbs'])
-                # else:
-                #     self.signalUploadState.emit(False, item['jglr_tjbs'])
 
 def list_in_list(a_list,b_list):
     for i in a_list:

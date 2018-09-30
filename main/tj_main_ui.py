@@ -17,6 +17,8 @@ from result import ResultManager
 from vip import VipManager
 # 加入绩效
 from statistics import DN_MeritPay
+# 体检登记
+from register import RegisterManager
 
 WindowsTitle="明州体检"
 WindowsIcon="mztj"

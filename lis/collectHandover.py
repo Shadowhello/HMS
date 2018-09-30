@@ -12,10 +12,46 @@ class CollectHandover(CollectHandover_UI):
         self.table_handover_master.itemClicked.connect(self.on_table_handover_master_clicked)
         self.btn_handover.clicked.connect(self.on_collect_handover)
         self.btn_receive.clicked.connect(self.on_collect_receive)
+        # 新增抽血取消功能
+        self.table_handover_detail.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
+        self.table_handover_detail.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
 
     def initParas(self):
         pass
 
+    # 表格右键功能
+    def onTableMenu(self,pos):
+        row_num = -1
+        indexs=self.table_handover_detail.selectionModel().selection().indexes()
+        if indexs:
+            for i in indexs:
+                row_num = i.row()
+            menu = QMenu()
+            item1 = menu.addAction(Icon("取消"), "取消抽血")
+            action = menu.exec_(self.table_handover_detail.mapToGlobal(pos))
+            tjbh = self.table_handover_detail.getCurItemValueOfKey('tjbh')
+            mxbh = self.table_handover_detail.getCurItemValueOfKey('mxbh')
+            czsj = self.table_handover_detail.getCurItemValueOfKey('czsj')
+            czxm = self.table_handover_detail.getCurItemValueOfKey('czxm')
+            # 按钮功能
+            if action == item1:
+                button = mes_warn(self, "当前条码已抽血，是否取消该次扫描工作！")
+                if button == QMessageBox.Yes:
+                    qxbz = '取消当前条码扫描，操作人：%s，操作时间：%s，操作区域：%s 。' % (self.login_name, cur_datetime(), self.login_area)
+                    try:
+                        self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.tjbh == tjbh,
+                                                               MT_TJ_CZJLB.mxbh == mxbh,
+                                                               MT_TJ_CZJLB.czsj == czsj,
+                                                               MT_TJ_CZJLB.czxm == czxm
+                                                               ).update({MT_TJ_CZJLB.jllx: '0000', MT_TJ_CZJLB.bz: qxbz})
+                        self.session.commit()
+                        mes_about(self,"取消成功！请重新刷新！")
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self, '取消该条码出错！错误信息：%s' % e)
+
+
+    # 样本交接
     def on_collect_handover(self):
 
         row = self.table_handover_master.currentRow()
@@ -26,30 +62,57 @@ class CollectHandover(CollectHandover_UI):
                 mes_about(self,'样本已交接，请勿重复进行样本交接！')
             else:
                 for row in self.SelectedRows(self.table_handover_master.selectedItems()):
-                    self.table_handover_master.item(row, 5).setText(self.login_name)
-                    self.table_handover_master.item(row, 6).setText(cur_datetime())
-                    self.table_handover_master.item(row, 7).setText(self.collect_user.currentText())
                     #### 查询条件值
                     t_start = self.table_handover_master.item(row, 0).text()
                     t_end = self.table_handover_master.item(row, 1).text()
                     czqy = self.table_handover_master.item(row, 2).text()
                     sgys = self.table_handover_master.item(row, 3).text()
-                    try:
-                        self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
-                                                                MT_TJ_CZJLB.czqy==czqy,
-                                                                 MT_TJ_CZJLB.czsj.between(t_start, t_end),
-                                                                 cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys).update({
-                            MT_TJ_CZJLB.jjxm:self.login_name,
-                            MT_TJ_CZJLB.jjsj:cur_datetime(),
-                            MT_TJ_CZJLB.sjfs:self.collect_user.currentText()
-                        },synchronize_session=False)
-                        self.session.commit()
-                        mes_about(self,'样本交接成功！')
-                    except Exception as e:
-                        self.session.rollback()
-                        self.log.info(e)
-                        mes_about(self,'更新数据库TJ_CZJLB 出错！错误信息：%s' %e)
+                    if self.collect_user2.currentText() == '所有':
+                        button = mes_warn(self,"您确定交接当前楼层所有抽血人员的试管吗？")
+                        if button != QMessageBox.Yes:
+                            return
+                        try:
+                            self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.czsj.between(t_start, t_end),
+                                                                   MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                                    MT_TJ_CZJLB.czqy==czqy,
+                                                                     cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys).update({
+                                MT_TJ_CZJLB.jjxm:self.login_name,
+                                MT_TJ_CZJLB.jjsj:cur_datetime(),
+                                MT_TJ_CZJLB.sjfs:self.collect_user.currentText()
+                            },synchronize_session=False)
+                            self.session.commit()
+                            # 刷新控件
+                            self.table_handover_master.item(row, 5).setText(self.login_name)
+                            self.table_handover_master.item(row, 6).setText(cur_datetime())
+                            self.table_handover_master.item(row, 7).setText(self.collect_user.currentText())
+                            mes_about(self,'样本交接成功！')
+                        except Exception as e:
+                            self.session.rollback()
+                            self.log.info(e)
+                            mes_about(self,'更新数据库TJ_CZJLB 出错！错误信息：%s' %e)
+                    else:
+                        try:
+                            self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.czsj.between(t_start, t_end),
+                                                                   MT_TJ_CZJLB.czgh == self.login_id,
+                                                                   MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                                    MT_TJ_CZJLB.czqy==czqy,
+                                                                     cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys).update({
+                                MT_TJ_CZJLB.jjxm:self.login_name,
+                                MT_TJ_CZJLB.jjsj:cur_datetime(),
+                                MT_TJ_CZJLB.sjfs:self.collect_user.currentText()
+                            },synchronize_session=False)
+                            self.session.commit()
+                            # 刷新控件
+                            self.table_handover_master.item(row, 5).setText(self.login_name)
+                            self.table_handover_master.item(row, 6).setText(cur_datetime())
+                            self.table_handover_master.item(row, 7).setText(self.collect_user.currentText())
+                            mes_about(self,'样本交接成功！')
+                        except Exception as e:
+                            self.session.rollback()
+                            self.log.info(e)
+                            mes_about(self,'更新数据库TJ_CZJLB 出错！错误信息：%s' %e)
 
+    # 样本接收
     def on_collect_receive(self):
 
         row = self.table_handover_master.currentRow()
@@ -99,7 +162,7 @@ class CollectHandover(CollectHandover_UI):
         if self.collect_user2.currentText() =='所有':
             where_collect_user2 = ' AND 1 = 1 '
         else:
-            where_collect_user2 = "AND CZXM = '%s' " %self.collect_user2.currentText()
+            where_collect_user2 = "AND CZGH = '%s' " %self.login_id
         # 检索条件
         if self.collect_area.get_area == '明州':
             results = self.session.execute(get_handover2_sql(collect_time[0], collect_time[1], self.collect_area.get_area,where_collect_user2)).fetchall()
@@ -108,24 +171,90 @@ class CollectHandover(CollectHandover_UI):
         self.table_handover_master.load(results)
         rowcount = self.table_handover_master.rowCount()
         self.gp_bottom_left.setTitle('样本交接汇总 (%s)' %rowcount)
-        mes_about(self, '共检索出 %s 条数据！' %rowcount)
+        mes_about(self, '共检索出 %s 条数据！' % rowcount)
+        v1, v2, v3 = self.table_handover_master.status()
+        self.on_btn_query_detail(v1, v2, v3)
 
+    # 查看详细
     def on_table_handover_master_clicked(self,QTableWidgetItem):
         t_start = self.table_handover_master.item(QTableWidgetItem.row(),0).text()
         t_end = self.table_handover_master.item(QTableWidgetItem.row(), 1).text()
         czqy = self.table_handover_master.item(QTableWidgetItem.row(),2).text()
         sgys = self.table_handover_master.item(QTableWidgetItem.row(), 3).text()
-        if czqy=='明州':
-            results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
-                                                             MT_TJ_CZJLB.czqy.like('%s%%' % czqy),
-                                                             MT_TJ_CZJLB.czsj.between(t_start,t_end),
-                                                             cast(MT_TJ_CZJLB.bz,VARCHAR) == sgys).all()
+        jjxm = self.table_handover_master.item(QTableWidgetItem.row(), 5).text()
+        if not jjxm:
+            jjxm = None
+        # 条件：用户与区域
+        if self.collect_user2.currentText() =='所有':
+            if czqy=='明州':
+                results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.czsj.between(t_start, t_end),
+                                                                 MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                                 cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys,
+                                                                 MT_TJ_CZJLB.jjxm == jjxm,
+                                                                 MT_TJ_CZJLB.czqy.like('%s%%' % czqy)
+                                                                 ).all()
+            else:
+                results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.czsj.between(t_start,t_end),
+                                                                 MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                                 MT_TJ_CZJLB.czqy == czqy,
+                                                                 cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys,
+                                                                 MT_TJ_CZJLB.jjxm == jjxm
+                                                                 ).all()
         else:
-            results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
-                                                             MT_TJ_CZJLB.czqy == czqy,
-                                                             # MT_TJ_CZJLB.czqy.like('%s%%' % self.collect_area.get_area),
-                                                             MT_TJ_CZJLB.czsj.between(t_start,t_end),
-                                                             cast(MT_TJ_CZJLB.bz,VARCHAR) == sgys).all()
+            if czqy=='明州':
+                results = self.session.query(MT_TJ_CZJLB).filter(
+                                                                 MT_TJ_CZJLB.czsj.between(t_start, t_end),
+                                                                 MT_TJ_CZJLB.czgh == self.login_id,
+                                                                 MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                                 cast(MT_TJ_CZJLB.bz, VARCHAR) == sgys,
+                                                                 MT_TJ_CZJLB.jjxm == jjxm,
+                                                                 MT_TJ_CZJLB.czqy.like('%s%%' % czqy)
+                                                                 ).all()
+            else:
+                results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.czsj.between(t_start,t_end),
+                                                                 MT_TJ_CZJLB.czgh == self.login_id,
+                                                                 MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                                 MT_TJ_CZJLB.czqy == czqy,
+                                                                 cast(MT_TJ_CZJLB.bz,VARCHAR) == sgys,
+                                                                 MT_TJ_CZJLB.jjxm == jjxm
+                                                                 ).all()
 
         self.table_handover_detail.load((result.detail for result in results))
-        self.gp_bottom_right.setTitle('样本交接详细 (%s)' %self.table_handover_detail.rowCount())
+        self.gp_bottom_right.setTitle('样本交接明细 (%s)' %self.table_handover_detail.rowCount())
+
+    # 获取 待交接、待签收、完成 详情
+    def on_btn_query_detail(self,data1:dict,data2:dict,data3:dict):
+        # 销毁 旧的控件
+        while self.lt_sample_jj_sum.count():
+            item = self.lt_sample_jj_sum.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+        while self.lt_sample_qs_sum.count():
+            item = self.lt_sample_qs_sum.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+        # 刷新新的控件
+        for key,value in data1.items():
+            btn = QPushButton(Icon(key),key)
+            label = CollectLable(str(value))
+            self.lt_sample_jj_sum.addWidget(btn)
+            self.lt_sample_jj_sum.addWidget(label)
+        self.lt_sample_jj_sum.addStretch()
+
+        for key,value in data2.items():
+            btn = QPushButton(Icon(key),key)
+            label = CollectLable(str(value))
+            self.lt_sample_qs_sum.addWidget(btn)
+            self.lt_sample_qs_sum.addWidget(label)
+        self.lt_sample_qs_sum.addStretch()
+
+
+class CollectLable(QLabel):
+
+    def __init__(self,p1_str):
+        super(CollectLable,self).__init__()
+        self.setText(p1_str)
+        self.setMinimumWidth(30)
+        self.setStyleSheet('''font: 75 16pt \"微软雅黑\";color: rgb(0, 85, 255);''')

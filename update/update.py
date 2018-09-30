@@ -9,27 +9,35 @@ def update_version():
     values = {'version':str(float(gol.get_value('system_version'))+0.01)}
     config_write(filename, node, values)
 
-
 def extra_update_file():
     update_path = '%s/%s' %(gol.get_value('app_path') ,gol.get_value('update_path'))
-    # update_path_extract = gol.get_value('update_path_extract')
-    file_zip = glob.glob(os.path.join(update_path,'*.zip'))
-    file_rar = glob.glob(os.path.join(update_path,'*.rar'))
+    file_zips = glob.glob(os.path.join(update_path,'*.zip'))
+    file_rars = glob.glob(os.path.join(update_path,'*.rar'))
     # print(file_zip,file_rar)
 
-    if file_zip:
-        for file_name in file_zip:
-            file_zip = zipfile.ZipFile(file_name, 'r')
-            file_zip.extractall(gol.get_value('app_path'))
-            file_zip.close()
-            os.remove(file_name)
+    if file_zips:
+        for file_zip in file_zips:
+            file_zip_obj = zipfile.ZipFile(file_zip, 'r')
+            for file in file_zip_obj.namelist():
+                try:
+                    file_zip_obj.extract(file, gol.get_value('app_path'))
+                except Exception as e:
+                    print("文件%s：解压失败。错误信息：%s" %(file,e))
+            # file_zip.extractall(gol.get_value('app_path'))
+            file_zip_obj.close()
+            os.remove(file_zip)
 
-    if file_rar:
-        for file_name in file_rar:
-            file_zip = rarfile.RarFile(file_name, 'r')
-            file_zip.extractall(gol.get_value('app_path'))
-            file_zip.close()
-            os.remove(file_name)
+    if file_rars:
+        for file_rar in file_rars:
+            file_rar_obj = rarfile.RarFile(file_rar, 'r')
+            for file in file_rar_obj.namelist():
+                try:
+                    file_rar_obj.extract(file, gol.get_value('app_path'))
+                except Exception as e:
+                    print("文件%s：解压失败。错误信息：%s" %(file,e))
+            #file_rar_obj.extractall(gol.get_value('app_path'))
+            file_rar_obj.close()
+            os.remove(file_rar)
 
 def run():
     main_process_name = gol.get_value('main_process_name', 'hms.exe')

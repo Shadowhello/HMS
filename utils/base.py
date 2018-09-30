@@ -97,7 +97,7 @@ def str2(para):
                 try:
                     return para.encode('latin-1').decode('gbk')
                 except Exception as e:
-                    print('%s 转换失败！错误信息：%s' %(para,e))
+                    # print('%s 转换失败！错误信息：%s' %(para,e))
                     return para
         else:
             return str(para)
@@ -220,5 +220,5 @@ def fileRename(filepath):
 
 # 固定短信
 report_sms_content = '''尊敬的客户：您好！
-    您的体检报告已经可以取了。请您于收到短信后的第二天下午2点至4点半来领取您的体检报告。
+    您的体检报告已经可以取了。请您携带身份证并于收到短信后的第二天下午2点至4点半来领取您的体检报告。
     明州国际保健关心您！'''

@@ -81,6 +81,18 @@ def get_inspect_result_sql():
      FROM V_RIS2HIS_ALL WHERE CBLKH = '%s'
     '''
 
+class MV_ReportMicroView(BaseModel):
+
+    __tablename__ = 'ReportMicroView'
+
+    PatNo = Column(String(16), primary_key=True)        # 体检编号
+    ItemNo = Column(String(20), primary_key=True)       # 条码号
+    ReceiveDate = Column(String(10), primary_key=True)  # 项目编号
+    SectionNo = Column(String(10), nullable=False)      # 项目名称
+    Technician = Column(String(16), nullable=False)  # 项目结果
+    gdbj = Column(String(10), nullable=False)  # 项目标识
+    ckfw = Column(String(50), nullable=False)  # 项目参考范围
+
 # VI_TJ_RESULT 检验结果表
 class MV_VI_TJ_RESULT(BaseModel):
 
@@ -88,7 +100,7 @@ class MV_VI_TJ_RESULT(BaseModel):
 
     tjbh = Column(String(16), primary_key=True)         # 体检编号
     tmh = Column(String(20), primary_key=True)          # 条码号
-    xmxh = Column(String(10), primary_key=True)           # 项目编号
+    xmxh = Column(String(10), primary_key=True)         # 项目编号
     xmmc = Column(String(50), nullable=False)           # 项目名称
     xmjg = Column(String(250), nullable=False)          # 项目结果
     gdbj = Column(String(10), nullable=False)           # 项目标识

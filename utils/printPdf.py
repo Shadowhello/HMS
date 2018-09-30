@@ -1,12 +1,8 @@
 import win32api
 import win32print
+import subprocess
 
-# print('获得系统默认打印机名称：%s' %win32print.GetDefaultPrinter())    # 获得str
-# print('获得系统默认打印机名称：%s' %win32print.GetDefaultPrinterW())   # 获得unicode
-# print('获得指定打印机打开句柄：%s' %win32print.OpenPrinter(win32print.GetDefaultPrinter()))
-# print('获得指定打印机有关信息：%s' %win32print.ClosePrinter(win32print.GetDefaultPrinter()))
-
-def print_pdf(filename,printer=None):
+def print_pdf_acroRd32(filename,printer=None):
     try:
         if printer:
             return win32api.ShellExecute(0, 'print', filename, printer, '.', 0)
@@ -16,7 +12,21 @@ def print_pdf(filename,printer=None):
         print('打印失败！错误信息：%s \n 处理方式：请安装PDF阅读器 AcroRd32.exe 并设置为默认打开方式。')
         return False
 
+def print_pdf_gsprint(filename,printer=None,page_end=None):
+    if not printer:
+        printer = win32print.GetDefaultPrinter()
+    if page_end:
+        command = r'gsprint -color -printer "%s" %s -from 0 -to %s' % (printer, filename, page_end)
+    else:
+        command =r'gsprint -color -printer "%s" %s' %(printer,filename)
+    try:
+        result = subprocess.run(command, shell=True)
+        return result.returncode
+    except Exception as e:
+        result = subprocess.call(command, shell=True)
+        return result
 
 
-
-
+if __name__=="__main__":
+    #print(win32print.EnumPrinters())
+    print(print_pdf_gsprint("D:/155200056.pdf","pdfFactory Pro",11))

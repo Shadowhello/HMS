@@ -2,7 +2,7 @@ from flask import send_file,make_response,request,jsonify,abort,url_for
 from app_api.exception import *
 from app_api.model import *
 import os,ujson,time,urllib.parse,requests
-import mimetypes
+import mimetypes,subprocess
 from utils import gol,str2
 from app_api.dbconn import *
 import win32api
@@ -15,7 +15,6 @@ def init_views(app,db,queue=None):
     :param app:         应用程序本身
     :return:
     '''
-
     @app.route("/")
     def static_create():
         return url_for('static', filename='/css/report.css')
@@ -27,7 +26,7 @@ def init_views(app,db,queue=None):
         print(' %s：客户端(%s)：微信二维码请求！参数 tjbh：%s，login_id：%s' % (cur_datetime(), request.remote_addr, tjbh, login_id))
         user = get_user_info(tjbh,db)
         if user:
-            url = 'http://10.7.200.27:8080/tjadmin/pInfoSubmit'
+            url = 'http://10.7.200.60:80/tjadmin/pInfoSubmit'
             head = {}
             head['realName'] = urllib.parse.quote(user['xm'])
             head['idCardNum'] = user['sfzh']
@@ -77,9 +76,9 @@ def init_views(app,db,queue=None):
 
     # HTML 报告删除 医生取消审核
     # PDF 报告删除，护理取消审阅
-    @app.route('/api/report/delete/<string:filetype>/<int:tjbh>/<string:login_id>', methods=['GET','POST'])
-    def report_delete(filetype,tjbh,login_id):
-        print(' %s：客户端(%s)：%s报告取消审核请求！参数 tjbh：%s，login_id：%s' % (cur_datetime(), request.remote_addr, filetype, tjbh, login_id))
+    @app.route('/api/report/delete/<string:filetype>/<int:tjbh>/<string:login_id>/<string:czlx>', methods=['GET','POST'])
+    def report_delete(filetype,tjbh,login_id,czlx):
+        print(' %s：客户端(%s)：%s报告取消审核请求！参数 tjbh：%s，login_id：%s，czlx：%s' % (cur_datetime(), request.remote_addr, filetype, tjbh, login_id,czlx))
         if len(str(tjbh)) == 8:
             tjbh = '%09d' % tjbh
         elif len(str(tjbh)) == 9:
@@ -89,25 +88,25 @@ def init_views(app,db,queue=None):
         if filetype=='html':
             # 审核取消
             try:
-                sql1 = "UPDATE TJ_TJDJB SET TJZT='4' WHERE TJBH = '%s' " % tjbh
-                sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH='0' WHERE TJBH = '%s' " % tjbh
+                sql1 = " UPDATE TJ_TJDJB SET TJZT='%s' WHERE TJBH = '%s' ;" %(tjbh,czlx)
                 db.session.execute(sql1)
-                db.session.execute(sql2)
+                if czlx =='5':
+                    sql2 = " UPDATE TJ_BGGL SET BGZT='0',BGTH='0' WHERE TJBH = '%s' ;" % tjbh
+                    db.session.execute(sql2)
             except Exception as e:
-                print()
-            return ujson.dumps({'code': 1, 'mes': '取消审核，HTML报告删除', 'data': ''})
+                print(e)
+            return ujson.dumps({'code': 1, 'mes': '取消审核，删除HTML报告成功', 'data': ''})
         elif filetype=='pdf':
             # 审阅完成
             # 审核取消
             try:
-                sql1 = "UPDATE TJ_TJDJB SET TJZT='4' WHERE TJBH = '%s' " % tjbh
+                sql1 = "UPDATE TJ_TJDJB SET TJZT='%s' WHERE TJBH = '%s' " %(tjbh,czlx)
                 sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH='1' WHERE TJBH = '%s' " % tjbh
                 db.session.execute(sql1)
                 db.session.execute(sql2)
-                db.commit()
             except Exception as e:
-                db.rollback()
-            return ujson.dumps({'code': 1, 'mes': '取消审阅，PDF报告删除', 'data': ''})
+                print(e)
+            return ujson.dumps({'code': 1, 'mes': '取消审阅，删除PDF报告成功', 'data': ''})
         else:
             abort(404)
 
@@ -133,7 +132,7 @@ def init_views(app,db,queue=None):
         elif filetype =='pdf':     # report 报告
             result = db.session.query(MT_TJ_FILE_ACTIVE.filename).filter(MT_TJ_FILE_ACTIVE.tjbh == tjbh,MT_TJ_FILE_ACTIVE.filetype == 'report').scalar()
             if result:
-                print("http://10.8.200.201:8080/web/viewer.html?file=/tmp/%s" % result)
+                # print("http://10.8.200.201:8080/web/viewer.html?file=/tmp/%s" % result)
                 return "http://10.8.200.201:8080/web/viewer.html?file=/tmp/%s" % result
         else:
             abort(404)
@@ -167,12 +166,13 @@ def init_views(app,db,queue=None):
 
         # 向历史的报告服务发送请求
         url = "http://10.8.200.201:4000/api/file/down/%s/%s" %(tjbh,'report')
-        api_file_down(url)
+        return api_file_down(url)
 
 
     # PDF 报告打印，用户发起
     @app.route('/api/report/print/pdf/<int:tjbh>/<string:printer>', methods=['POST'])
     def report_print(tjbh,printer):
+        print(' %s：客户端(%s)：%s报告打印请求！' % (cur_datetime(), request.remote_addr, tjbh))
         if len(str(tjbh)) == 8:
             tjbh = '%09d' % tjbh
         elif len(str(tjbh)) == 9:
@@ -192,11 +192,15 @@ def init_views(app,db,queue=None):
                 filename = os.path.join('D:/tmp/','%s.pdf' %tjbh)
                 url = "http://10.8.200.201:4000/api/file/down/%s/%s" % (tjbh, 'report')
                 request_get(url,filename)
-
-        if print_pdf(filename,printer):
-            return ujson.dumps({'code': 1, 'mes': '报告打印成功！', 'data': ''})
+        if os.path.exists(filename):
+            result= print_pdf_gsprint(filename,printer)
+            print(result)
+            if result==0:
+                return ujson.dumps({'code': 1, 'mes': '报告打印成功！', 'data': ''})
+            else:
+                return ujson.dumps({'code': 0, 'mes': '报告打印失败！', 'data': ''})
         else:
-            return ujson.dumps({'code': 0, 'mes': '报告打印失败！', 'data': ''})
+            abort(404)
 
     # 设备 预览
     @app.route('/api/equip/preview/<string:equip_file>/<string:tjbh>', methods=['POST'])
@@ -261,11 +265,18 @@ def init_views(app,db,queue=None):
         :param filetype:    文件类型
         :return:
         '''
-        result = db.session.query(MT_TJ_FILE_ACTIVE).filter(MT_TJ_FILE_ACTIVE.tjbh == tjbh,MT_TJ_FILE_ACTIVE.filetype == filetype).order_by(desc(MT_TJ_FILE_ACTIVE.createtime)).scalar()
-        if result:
-            response = make_response(send_file(result.localfile,as_attachment=True))
-            response.headers['Content-Type'] = mimetypes.guess_type(result.filename)[0]
-            response.headers['Content-Disposition'] = 'attachment; filename={}'.format(result.filename)
+        results = db.session.query(MT_TJ_FILE_ACTIVE).filter(MT_TJ_FILE_ACTIVE.tjbh == tjbh,MT_TJ_FILE_ACTIVE.filetype == filetype).order_by(desc(MT_TJ_FILE_ACTIVE.createtime)).all()
+        if results:
+            filename = results[0].localfile
+            # print(results[0].localfile)
+            # response = make_response(send_file(results[0].localfile,as_attachment=True))
+            # response.headers['Content-Type'] = mimetypes.guess_type(results[0].filename)[0]
+            # response.headers['Content-Disposition'] = 'attachment; filename={}'.format(results[0].filename)
+            # return response
+            # 返回下载
+            response = make_response(send_file(filename, as_attachment=True))
+            response.headers['Content-Type'] = mimetypes.guess_type(os.path.basename(filename))[0]
+            response.headers['Content-Disposition'] = 'attachment; filename={}'.format(os.path.basename(filename))
             return response
         else:
             abort(404)
@@ -283,9 +294,19 @@ def init_views(app,db,queue=None):
         else:
             abort(404)
 
-    # @app.errorhandler(404)
-    # def page_not_found(error):
-    #     return render_template('404.html'), 404
+    # 图片识别出文字
+    @app.route('/api/pic2txt/', methods=['POST'])
+    def pic2txt():
+        file_obj = request.files['file']
+        print(' %s：客户端(%s)：OCR服务请求：%s' % (cur_datetime(), request.remote_addr,file_obj.filename))
+        url = "http://10.7.200.127:10006/api/pic2txt/"
+        try:
+            response = requests.post(url, files=request.files)
+            if response.status_code == 200:
+                return response.json()
+        except Exception as e:
+            print('URL：%s 请求失败！错误信息：%s' % (url, e))
+            abort(404)
 
     @app.errorhandler(BaseError)
     def custom_error_handler(e):
@@ -297,6 +318,7 @@ def init_views(app,db,queue=None):
         response = jsonify(e.to_dict())
         response.status_code = e.status_code
         return response
+
 
 # 获得当日的保存目录
 def get_cur_path(dirname):
@@ -331,7 +353,7 @@ def get_pre_suf(filename):
 # 获得用户信息二维码
 def get_user_info(tjbh,db):
     sql = "select XM,SFZH,SJHM FROM TJ_TJDAB WHERE DABH = (SELECT DABH FROM TJ_TJDJB where TJBH='%s') ;" %tjbh
-    print(sql)
+    # print(sql)
     results = db.session.execute(sql).fetchall()
     if results:
         result = results[0]
@@ -350,17 +372,12 @@ def api_file_down(url):
         abort(404)
 
 
-def print_pdf(filename,printer=None):
-    try:
-        if printer:
-            win32api.ShellExecute(0, 'print', filename, printer, '.', 0)
-            return True
-        else:
-            win32api.ShellExecute(0, 'print', filename, win32print.GetDefaultPrinter(), '.', 0)
-            return True
-    except Exception as e:
-        print('打印失败！错误信息：%s \n 处理方式：请安装PDF阅读器 AcroRd32.exe 并设置为默认打开方式。')
-        return False
+def print_pdf_gsprint(filename,printer=None):
+    if not printer:
+        printer = win32print.GetDefaultPrinter()
+    command =r'gsprint -color -printer "%s" %s' %(printer,filename)
+    result = subprocess.run(command, shell=True)
+    return result.returncode
 
 def request_get(url,save_file=None):
     '''

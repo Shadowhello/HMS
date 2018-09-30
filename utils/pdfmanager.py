@@ -77,6 +77,9 @@ def txtparse(filename,file_type,regular=None,error_path='D:/'):
             info["file"] = ''
             info["operate_time"] = ''
 
+    elif file_type == '03':  # 人体成分 图像识别进行解析
+        pass
+
 
     elif file_type == '04':     # 骨密度
 
@@ -241,6 +244,22 @@ def txtparse(filename,file_type,regular=None,error_path='D:/'):
         #         else:
         #             shutil.copy2(filename, os.path.join(r'E:\PDF-\04\tmp',os.path.basename(filename)))
         #             os.remove(filename)
+    elif file_type == '05':
+        pdfStrList = pdf2txt(filename)
+        print(pdfStrList)
+        # 超声骨密度有个解析结构
+        if pdfStrList[4].split("\n")[0].isdigit():
+            info["tjbh"] = pdfStrList[4].split("\n")[0]
+            info["file"] = pdfStrList[4].split("\n")[0] + "_05.pdf"
+            info["patient"] = pdfStrList[7].split("\n")[0]
+            info["operate_time"] = pdfStrList[15].split("\n")[0]
+            # info["JCYS"] = pdfStrList[-2].split("\n")[0]
+        else:
+            info["tjbh"] = pdfStrList[9].split("\n")[0]
+            info["file"] = pdfStrList[9].split("\n")[0] + "_05.pdf"
+            info["patient"] = pdfStrList[12].split("\n")[0]
+            info["operate_time"] = pdfStrList[15].split("\n")[0]
+            # info["JCYS"] = pdfStrList[-2].split("\n")[0]
 
     elif file_type == '08':
         # 心电图
@@ -355,9 +374,26 @@ def date_format(date_str):
     tmp = date_str.split('/')
     return tmp[0]+'-'+tmp[1].zfill(2)+'-'+tmp[2].zfill(2)+' 00.00.00'
 
+# 分割PDF
+def pdfSplit(pdf_main,pdf_part):
+    try:
+        pdf_read_obj = PdfFileReader(pdf_main)
+        pdf_write_obj = PdfFileWriter()
+        page_num = pdf_read_obj.getNumPages()
+        page_last_obj = pdf_read_obj.getPage(page_num - 1)
+        page_last_obj.rotateClockwise(90)
+        pdf_write_obj.addPage(page_last_obj)
+        pdf_write_obj.write(open(pdf_part, 'wb'))
+        return page_num - 1
+    except Exception as e:
+        return False
+
+#https://blog.csdn.net/xingxtao/article/details/79056341
+
 if __name__=="__main__":
-    dir = r'E:\PDF-\04\create'
-    for filename,_ in fileiter(dir):
-        print(txtparse(filename,'04'))
+    pdf2pic(r'E:\PDF-\03\document_8.pdf')
+    # dir = r'E:\PDF-\04\create'
+    # for filename,_ in fileiter(dir):
+    #     print(txtparse(filename,'04'))
             # if i.isdigit():
             #     print(i)

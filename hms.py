@@ -11,7 +11,6 @@ else:
 import multiprocessing
 from multiprocessing import Process, Queue
 from utils.envir import *
-import ctypes
 
 
 # 主界面
@@ -73,20 +72,24 @@ def start_run():
         main_ui(TJ_Main_UI(), app)
     # 进入自助机模式
     else:
-        from app_selfhelp import SelfHelpMachine
-        ui = SelfHelpMachine()
-        ui.showMaximized()
-        app.exec_()
+        from app_selfhelp import selfHelpManager,SelfHelpMachine
+        ui = selfHelpManager()
+        main_ui(ui,app)
 
 if __name__=="__main__":
+    import cgitb
+    # 非pycharm编辑器可用输出错误
+    #sys.excepthook = cgitb.Hook(1, None, 5, sys.stderr, 'text')
+    cgitb.enable(logdir="./error/",format="text")
     multiprocessing.freeze_support()
     # 启动主进程
     set_env()
     # 增加全局异常处理
-    try:
-        start_run()
-    except Exception as e:
-        error = '%s' %e
-        ctypes.windll.user32.MessageBoxA(0,error.encode('gb2312'),'明州体检'.encode('gb2312'),0)
+    start_run()
+    # try:
+    #     start_run()
+    # except Exception as e:
+    #     error = '%s' %e
+    #     ctypes.windll.user32.MessageBoxA(0,error.encode('gb2312'),'明州体检'.encode('gb2312'),0)
 
 

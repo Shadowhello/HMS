@@ -1,6 +1,6 @@
 from .report_print_ui import *
 from .model import *
-from utils import request_get,print_pdf,cur_datetime,api_print
+from utils import request_get,print_pdf_gsprint,cur_datetime,api_print
 from widgets.bweb import WebView
 import webbrowser
 
@@ -28,6 +28,8 @@ class ReportPrint(ReportPrintUI):
         self.table_print.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
         self.table_print.itemClicked.connect(self.on_table_set)
         self.table_print.itemDoubleClicked.connect(self.on_btn_item_click)
+        # 快速减速
+        self.gp_quick_search.returnPressed.connect(self.on_quick_search)    # 快速检索
         # 特殊变量
         self.cur_tjbh = None
         self.web_pdf_ui = None
@@ -42,6 +44,24 @@ class ReportPrint(ReportPrintUI):
             self.dwmc_py[result.pyjm.lower()] = str2(result.mc)
 
         self.lt_where_search.s_dwbh.setValues(self.dwmc_bh,self.dwmc_py)
+
+    #快速检索
+    def on_quick_search(self,p1_str,p2_str):
+        if p1_str == 'tjbh':
+            where_str = " TJ_TJDJB.TJBH = '%s' " %p2_str
+        elif p1_str == 'sjhm':
+            where_str = " TJ_TJDAB.SJHM = '%s' " % p2_str
+        elif p1_str == 'sfzh':
+            where_str = " TJ_TJDAB.SFZH = '%s' " % p2_str
+        else:
+            where_str = " TJ_TJDAB.XM ='%s' " % p2_str
+        sql = get_report_print2_sql()
+        sql = sql + ''' INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH=TJ_TJDAB.DABH '''
+        sql = sql +''' AND ''' + where_str
+        results = self.session.execute(sql).fetchall()
+        self.table_print.load(results)
+        self.gp_middle.setTitle('打印列表（%s）' %self.table_print.rowCount())
+        mes_about(self,'共检索出 %s 条数据！' %self.table_print.rowCount())
 
     # 打印
     def on_btn_print_click(self):
@@ -85,7 +105,8 @@ class ReportPrint(ReportPrintUI):
                     self.table_print.setItemValueOfKey(row, 'dyfs', '租赁打印')
                     self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
                     if api_print(tjbh,printers[printer]):
-                        mes_about(self, "打印成功！")
+                        if len(rows) == 1:
+                            mes_about(self, "打印成功！")
                     else:
                         mes_about(self, "打印失败！")
                 else:
@@ -94,7 +115,7 @@ class ReportPrint(ReportPrintUI):
                     filename = os.path.join(gol.get_value('path_tmp'),'%s.pdf' %tjbh)
                     if request_get(url,filename):
                         # 下载成功
-                        if print_pdf(filename) == 42:
+                        if print_pdf_gsprint(filename) == 0:
                             try:
                                 # 更新数据库 TJ_CZJLB TJ_BGGL
                                 data_obj = {'jllx': '0034', 'jlmc': '报告打印', 'tjbh': tjbh, 'mxbh': '',
@@ -122,11 +143,14 @@ class ReportPrint(ReportPrintUI):
                             self.table_print.setItemValueOfKey(row, 'dycs', '1')
                             self.table_print.setItemValueOfKey(row, 'dyfs', '本地打印')
                             self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
-                            mes_about(self, "打印成功！")
+                            if len(rows) == 1:
+                                mes_about(self, "打印成功！")
                         else:
                             mes_about(self, "打印失败！")
                     else:
                         mes_about(self,'未找到报告，无法打印！')
+            if len(rows) > 1:
+                mes_about(self, "打印成功！")
         else:
             mes_about(self,'请选择要打印的报告！')
 
@@ -164,10 +188,10 @@ class ReportPrint(ReportPrintUI):
             sql = sql + self.lt_where_search.where_tjqy2
 
         sql = sql + ''' INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH=TJ_TJDAB.DABH ;'''
-
         try:
             results = self.session.execute(sql).fetchall()
             self.table_print.load(results)
+            self.gp_middle.setTitle('打印列表（%s）' %self.table_print.rowCount())
             mes_about(self, '检索出数据%s条' % self.table_print.rowCount())
         except Exception as e:
             mes_about(self,'执行查询%s出错，错误信息：%s' %(sql,e))
@@ -312,6 +336,7 @@ class ReportPrint(ReportPrintUI):
             item2 = menu.addAction(Icon("报告中心"), "浏览器中打开HTML报告")
             item3 = menu.addAction(Icon("取消"), "取消整理")
             item4 = menu.addAction(Icon("取消"), "取消领取")
+            # item5 = menu.addAction(Icon("报告中心"), "打开PDF报告")
             action = menu.exec_(self.table_print.mapToGlobal(pos))
             tjbh = self.table_print.getCurItemValueOfKey('tjbh')
             zlxm = self.table_print.getCurItemValueOfKey('zlxm')
@@ -401,6 +426,20 @@ class ReportPrint(ReportPrintUI):
                     self.table_print.setCurItemValueOfKey('lqrq', '')
                     self.table_print.setCurItemValueOfKey('lqfs', '')
                     self.table_print.setCurItemValueOfKey('bgzt', '已打印')
+            # 取消领取
+            # elif action == item5:
+                # filename = r'C:\Users\Administrator\Desktop\pdf测试\168160026.pdf'
+                # local_open_pdf(filename)
+                # title = "%s - Adobe Reader" %os.path.basename(filename)
+                # import win32gui
+                # hwnd = win32gui.FindWindow("AcrobatSDIWindow", title)
+                # if hwnd==0:
+                #     return
+                # from widgets.embedWindow import EmbedWindow
+                # ui = EmbedWindow(self)
+                # ui.click_opened.emit(hwnd)
+                # ui.show()
+
 
     # 设置快速检索文本
     def on_table_set(self,QTableWidgetItem):
@@ -500,6 +539,12 @@ class PdfWebView(WebView):
     def on_web_url_change(self,url:str):
         self.load(url)
 
+def local_open_pdf(filename):
+    import subprocess
+    cmd = os.getenv("comspec")
+    acrobat = "acrord32.exe"
+    cmds = [cmd, "/c", "start", acrobat, "/s", filename]
+    subprocess.Popen(cmds)
 
 def get_bgzt(s_bgzt,t_bgzt):
     bgzt = {
@@ -514,3 +559,214 @@ def get_bgzt(s_bgzt,t_bgzt):
         return s_bgzt,str(bgzt.get(s_bgzt,0))
     else:
         return t_bgzt,str(bgzt.get(t_bgzt,0))
+
+# 运行打印线程
+class PrintThread(QThread):
+
+    # 定义信号,定义参数为str类型
+    signalMes = pyqtSignal(bool,list,int)        #成功/失败，任务结果 最后一个参数，用于防止静态方法mes_about 重复弹出的问题
+    signalExit = pyqtSignal()                # 退出线程
+
+    def __init__(self,session):
+        super(PrintThread,self).__init__()
+        self.runing = False
+        self.session = session               # 数据库会话
+        self.num = 1
+
+    def stop(self):
+        self.runing = False
+
+    # 启动任务
+    def setTask(self,sql:str):
+        self.sql =sql
+        self.runing = True
+
+    def run(self):
+        while self.runing:
+            try:
+                results = self.session.execute(self.sql).fetchall()
+                self.signalMes.emit(True, results,self.num)
+            except Exception as e:
+                self.signalMes.emit(False, [e],self.num)
+            self.num = self.num + 1
+            self.stop()
+
+# 进度对话框，需要实现启动和停止，及数据初始化
+class ProcessDialog(Dialog):
+
+    started = pyqtSignal(list)
+
+    def __init__(self,parent=None):
+        super(ProcessDialog,self).__init__(parent)
+        self.setWindowTitle('明州体检')
+        self.initUI()
+        # 绑定信号
+        self.started.connect(self.initDatas)
+        self.btn_start.clicked.connect(self.on_btn_start_click)
+        self.btn_stop.clicked.connect(self.on_btn_stop_click)
+        # 特殊变量
+        self.datas = None
+        self.task_type = None
+        self.thread = CustomThread()
+
+    def initUI(self):
+        lt_main = QVBoxLayout()
+        ###########################################################
+        lt_top = QHBoxLayout()
+        gp_top = QGroupBox('进度总览')
+        # 待接收的总数
+        self.lb_all = ProcessLable()
+        # 已完成接收数
+        self.lb_is_done = ProcessLable()
+        # 未完成总数
+        self.lb_no_done = ProcessLable()
+        # 错误数
+        self.lb_error = ProcessLable()
+        # 添加布局
+        lt_top.addWidget(QLabel('总数：'))
+        lt_top.addWidget(self.lb_all)
+        lt_top.addWidget(QLabel('完成数：'))
+        lt_top.addWidget(self.lb_is_done)
+        lt_top.addWidget(QLabel('未完成数：'))
+        lt_top.addWidget(self.lb_no_done)
+        lt_top.addWidget(QLabel('错误数：'))
+        lt_top.addWidget(self.lb_error)
+        gp_top.setLayout(lt_top)
+        ###########################################################
+        lt_middle = QHBoxLayout()
+        gp_middle = QGroupBox('处理详情')
+        ###########################################################
+        lt_bottom = QHBoxLayout()
+        gp_bottom = QGroupBox('进度')
+        self.pb_progress=QProgressBar()
+        self.pb_progress.setMinimum(0)
+        self.pb_progress.setValue(0)
+        lt_bottom.addWidget(self.pb_progress)
+        gp_bottom.setLayout(lt_bottom)
+        #########增加按钮组########################################
+        lt_1 = QHBoxLayout()
+        self.lb_timer = TimerLabel2()
+        self.btn_start = QPushButton(Icon("启动"),"启动")
+        self.btn_stop = QPushButton(Icon("停止"),"停止")
+        lt_1.addWidget(self.lb_timer)
+        lt_1.addStretch()
+        lt_1.addWidget(self.btn_start)
+        lt_1.addWidget(self.btn_stop)
+        # 布局
+        lt_main.addWidget(gp_top)
+        lt_main.addWidget(gp_middle)
+        lt_main.addWidget(gp_bottom)
+        lt_main.addLayout(lt_1)
+        self.setLayout(lt_main)
+
+    def on_progress_change(self,is_done,no_done,error):
+        self.sb_is_done.setText(str(is_done))
+        self.sb_no_done.setText(str(no_done))
+        self.sb_error.setText(str(error))
+        self.pb_progress.setValue(is_done)
+        dProgress = (self.pb_progress.value() - self.pb_progress.minimum()) * 100.0 / (self.pb_progress.maximum() - self.pb_progress.minimum())
+        #self.progress.setFormat("当前进度为：%s%" %dProgress)
+        self.pb_progress.setAlignment(Qt.AlignRight | Qt.AlignVCenter) #对齐方式
+
+    # 启动
+    def on_btn_start_click(self):
+        # 刷新界面控件
+        self.btn_start.setDisabled(True)
+        self.btn_stop.setDisabled(False)
+        self.lb_timer.start()
+        self.sb_all.setText(str(len(self.datas)))
+        self.pb_progress.setMaximum(len(self.datas))
+        self.thread.setTakType(self.task_type)
+        self.thread.setTask(self.datas)
+        self.thread.signalCur.connect(self.on_mes_show, type=Qt.QueuedConnection)
+        self.thread.signalDone.connect(self.on_progress_change, type=Qt.QueuedConnection)
+        self.thread.signalExit.connect(self.on_thread_exit, type=Qt.QueuedConnection)
+        self.thread.start()
+
+    # 停止接收数据
+    def on_btn_stop_click(self):
+        # 刷新界面控件
+        self.btn_start.setDisabled(False)
+        self.btn_stop.setDisabled(True)
+        self.lb_timer.stop()
+
+    # 初始化数据
+    def initDatas(self,datas:list,task_type=1):
+        self.datas = datas
+        self.task_type = task_type
+        self.on_btn_start_click()
+
+    # 消息展示
+    def on_mes_show(self,tjbh:str,mes:str):
+        pass
+
+    def on_thread_exit(self,status:bool,error:str):
+        self.on_btn_stop_click()
+        mes_about(self,error)
+
+    def closeEvent(self, QCloseEvent):
+        try:
+            if self.thread:
+                # button = mes_warn(self,"项目结果接收正在运行中，您是否确定立刻退出？")
+                # if button == QMessageBox.Yes:
+                self.thread.stop()
+                self.thread = None
+        except Exception as e:
+            print(e)
+        super(ProcessDialog, self).closeEvent(QCloseEvent)
+
+# 运行线程处理耗时任务：打印、下载、领取、整理
+class CustomThread(QThread):
+
+    # 定义信号,定义参数为str类型
+    signalCur = pyqtSignal(str,str)     # 处理过程：成功/失败，错误消息，
+    signalDone = pyqtSignal(int, int, int)   # 处理完成：成功/失败，错误消息，
+    signalExit = pyqtSignal(bool,str)   # 处理结束：成功/失败，是否异常退出
+
+    def __init__(self):
+        super(CustomThread,self).__init__()
+        self.runing = False
+        self.initParas()
+        # 特殊变量
+        self.num_all = 0            # 总数
+        self.num_is_done = 0        # 已完成
+        self.num_no_done = 0        # 未完成
+        self.num_error = 0          # 错误
+
+    # 完成参数初始化
+    def setParas(self,session):
+        self.session = session
+        self.num = 1
+
+    def stop(self):
+        self.runing = False
+
+    # 启动任务
+    def setTask(self,tjbhs:list):
+        self.tjbhs =tjbhs
+        self.num_all = len(tjbhs)
+        self.runing = True
+
+    def setTakType(self,taktype = 1):
+        self.taktype = taktype
+
+    def print_obj(self,tjbh):
+        pass
+
+    def run(self):
+        while self.runing:
+            for tjbh in self.tjbhs:
+                if self.runing:
+                    pass
+                self.num_done = self.num_done + 1
+                self.num_undone = self.num_all - self.num_done
+                self.signalDone.emit(self.num_done,self.num_undone,self.num_error)
+            self.signalExit.emit(True, "处理完成！")
+            self.stop()
+
+class ProcessLable(QLabel):
+
+    def __init__(self):
+        super(ProcessLable,self).__init__()
+        self.setMinimumWidth(50)
+        self.setStyleSheet('''font: 75 14pt \"微软雅黑\";color: rgb(0, 85, 255);''')

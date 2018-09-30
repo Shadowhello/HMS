@@ -28,10 +28,25 @@ def sms_api(mobile,context):
     else:
         return 0
 
+def get_ocr(picname):
+    url_default = "http://10.7.200.101:4009/api/pic2txt/"
+    # url_config = gol.get_value('api_pic2txt')
+    url_config = None
+    if url_config:
+        url = url_config
+    else:
+        url = url_default
+    file_obj = {"file": (picname, open(picname, "rb"))}
+    try:
+        response = requests.post(url,files=file_obj)
+        if response.status_code == 200:
+            return response.text
+    except Exception as e:
+        print('URL：%s 请求失败！错误信息：%s' %(url,e))
 
 # 从微信端获取二维码图片 字节流
 def get_barcode_wx(xm,sfzh,sjhm,email='',address=''):
-    url = 'http://10.7.200.27:8080/tjadmin/pInfoSubmit'
+    url = 'http://app.nbmzyy.com/tjadmin/pInfoSubmit'
     head = {}
     head['realName'] = urllib.parse.quote(xm)
     head['idCardNum'] = sfzh
@@ -52,17 +67,19 @@ def get_barcode_wx(xm,sfzh,sjhm,email='',address=''):
 def api_print(tjbh,printer):
     url = gol.get_value("api_report_print",None)
     if url:
-        try:
-            response = requests.get(url %(tjbh,printer))
-            if response.status_code == 200:
-                if '报告打印成功' in response.json():
-                    return True
-                else:
-                    return False
+        # try:
+        response = requests.post(url %(tjbh,printer))
+        if response.status_code == 200:
+            if response.json()['code']==1:
+            # if '报告打印成功' in response.json():
+                return True
             else:
                 return False
-        except Exception as e:
+        else:
             return False
+        # except Exception as e:
+        #     print(e)
+        #     return False
 
 
 # 构建二维码测试请求
@@ -169,15 +186,25 @@ def request_create_report(tjbh,filetype='html'):
 
 if __name__=="__main__":
     from utils.envir import set_env
-    sql = "SELECT TJBH FROM TJ_TJDJB WHERE  (del <> '1' or del is null) and QD='1' and SHRQ>='2018-08-25' AND SHRQ<'2018-09-01' AND SUMOVER='1'; "
+    from utils import str2
+    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE  (del <> '1' or del is null) and QD='1' and SHRQ>='2018-08-25' AND SHRQ<'2018-09-30' AND SUMOVER='1'; "
+    # 处理遗漏的
+    sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND QD='1' AND (del <> '1' or del is null) AND TJBH NOT IN (SELECT TJBH FROM TJ_BGGL WHERE BGZT<>'0')"
+    # 处理PDF 生成的
+    # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
+    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
     set_env()
-    # 网络打印
-
-    # session = gol.get_value('tjxt_session_local')
+    # # 网络打印
+    #
+    session = gol.get_value('tjxt_session_local')
+    # sql = "select jy from tj_tjdjb where tjbh='%s';" % '165582991'
+    # results = session.execute(sql).fetchall()
+    # print(str2(results[0][0]))
+    # raise
     # results = session.execute(sql).fetchall()
     # for result in results:
     #     request_create_report(result[0], 'html')
-        # request_create_report(result[0], 'pdf')
+    #     #request_create_report(result[0], 'pdf')
     # print(get_barcode_wx('测试5','330227199902040663','13736093866'))
-    request_create_report('166820109','html')
+    request_create_report('122740117','html')
     # request_post_wx()

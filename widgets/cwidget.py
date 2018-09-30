@@ -4,6 +4,35 @@ from utils.base import str2,get_key
 from functools import partial
 from utils.readcard import IdCard
 
+class MessageBox(QMessageBox):
+
+    def __init__(self, *args, count=10, **kwargs):
+        super(MessageBox, self).__init__(*args, **kwargs)
+        self.setWindowTitle('明州体检')
+        self.setWindowIcon(Icon('mztj'))
+        self.count = count
+        self.setStandardButtons(self.Close)  # 关闭按钮
+        self.closeBtn = self.button(self.Close)  # 获取关闭按钮
+        self.closeBtn.setText('关闭(%s)' % count)
+        self._timer = QTimer(self, timeout=self.doCountDown)
+        self._timer.start(1000)
+
+    def doCountDown(self):
+        self.closeBtn.setText('关闭(%s)' % self.count)
+        self.count -= 1
+        if self.count <= 0:
+            self._timer.stop()
+            self.accept()
+            self.close()
+
+def mes_about(parent,message):
+    MessageBox(parent, text=message).exec_()
+    # QMessageBox.about(parent, '明州体检', message)
+
+def mes_about2(parent,message):
+    # MessageBox(parent, text=message).exec_()
+    QMessageBox.about(parent, '明州体检', message)
+
 # 加粗字体
 def get_font():
     font = QFont()
@@ -85,7 +114,6 @@ class QTJBH(QLineEdit):
         # self.returnPressed.connect(self.validate)
 
     def validate(self):
-        print(self.text())
         if len(self.text())!=9:
             mes_about(self, "体检编号：%s不是9位，请重新输入！" %self.text())
             self.setText('')
@@ -124,7 +152,7 @@ class QSFZH(QLineEdit):
         super(QSFZH, self).__init__(parent)
 
         self.setPlaceholderText("输入身份证号回车，支持读卡")
-        regx = QRegExp("[0-9]+$")
+        regx = QRegExp("[X0-9]+$")
         validator = QRegExpValidator(regx, self)
         self.setValidator(validator)  # 根据正则做限制，只能输入数字
 
@@ -604,18 +632,52 @@ class CollectHandoverTable(TableWidget):
 
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
-
+        # 特殊变量
+        self.simple_jj_sum = OrderedDict()         # 待交接情况
+        self.simple_qs_sum = OrderedDict()         # 待签收情况
+        self.simple_done_sum = OrderedDict()       # 完成签收情况
+        self.simple_all = OrderedDict()            # 总体完成情况
+        # 载入数据到表格
         for row_index, row_data in enumerate(datas):
             self.insertRow(row_index)  # 插入一行
             for col_index, col_value in enumerate(row_data):
                 item = QTableWidgetItem(str2(col_value))
-
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
+                # 额外处理 特殊需求
+                if col_index ==3:   #试管颜色
+                    # 待交接
+                    if not row_data[5]:
+                        # 判断是否已存在字典
+                        if str2(col_value) in list(self.simple_jj_sum.keys()):
+                            self.simple_jj_sum[str2(col_value)] = self.simple_jj_sum[str2(col_value)] + row_data[4]
+                        else:
+                            self.simple_jj_sum[str2(col_value)] = row_data[4]
+                    # 已交接
+                    else:
+                        # 未签收
+                        if not row_data[8]:
+                            # 判断是否已存在字典
+                            if str2(col_value) in list(self.simple_qs_sum.keys()):
+                                self.simple_qs_sum[str2(col_value)] = self.simple_qs_sum[str2(col_value)] + row_data[4]
+                            else:
+                                self.simple_qs_sum[str2(col_value)] = row_data[4]
+                        # 已签收
+                        else:
+                            # 判断是否已存在字典
+                            if str2(col_value) in list(self.simple_done_sum.keys()):
+                                self.simple_done_sum[str2(col_value)] = self.simple_done_sum[str2(col_value)] + row_data[4]
+                            else:
+                                self.simple_done_sum[str2(col_value)] = row_data[4]
 
         self.setColumnWidth(0, 70)
         self.setColumnWidth(1, 70)
-        self.setColumnWidth(4, 50)
+        self.setColumnWidth(4, 60)
+
+    # 获取各状态数据
+    def status(self):
+        return self.simple_jj_sum,self.simple_qs_sum,self.simple_done_sum
+
 
 # 抽血交接记录表 详细
 class CollectHandoverDTable(TableWidget):
@@ -661,7 +723,7 @@ class ItemsStateTable(TableWidget):
                         pass
                     elif col_value in ['已检查','已抽血','已留样']:
                         item.setBackground(QColor("#f0e68c"))
-                    elif col_value == '核实':
+                    elif col_value in ['核实','未定义']:
                         item.setBackground(QColor("#FF0000"))
                     elif col_value == '已拒检':
                         item.setBackground(QColor("#008000"))
@@ -673,7 +735,6 @@ class ItemsStateTable(TableWidget):
                         item.setBackground(QColor("#b0c4de"))
 
                 elif col_index == 9:
-                    print(555555555)
                     if str2(row_data[0])=='已小结':
                         item = QTableWidgetItem('')
                     elif str2(row_data[0])=='核实':
@@ -739,7 +800,7 @@ class ReportTrackTable(TableWidget):
                             item = QTableWidgetItem(col_value)
                         else:
                             item = QTableWidgetItem(str2(col_value))
-                        if col_index not in [13,15]:
+                        if col_index not in [13,16]:
                              item.setTextAlignment(Qt.AlignCenter)
                         # self.resizeColumnToContents()
                     else:
@@ -926,7 +987,26 @@ class BloodTable(TableWidget):
 
         self.resizeColumnsToContents()  # 设置列适应大小
 
+# 计时标签
+class TimerLabel2(QLabel):
 
+    def __init__(self, *args):
+        super(TimerLabel2, self).__init__(*args)
+        self.timer = QTimer(self)
+        self.num = 0
+        self.setStyleSheet('''font: 75 18pt \"微软雅黑\";color: rgb(255, 0, 0);''')
+        self.setText(time.strftime('%H:%M:%S', time.gmtime(self.num)))
+        self.timer.timeout.connect(self.on_timer_out)
+
+    def start(self):
+        self.timer.start(1000)
+
+    def stop(self):
+        self.timer.stop()
+
+    def on_timer_out(self):
+        self.num = self.num + 1
+        self.setText(time.strftime('%H:%M:%S', time.gmtime(self.num)))
 
 # 倒计时按钮
 class TimerButton(QPushButton):
@@ -965,12 +1045,13 @@ class Timer2Button(ToolButton):
         super(Timer2Button, self).__init__(*args)
         self.timer = QTimer(self)
         self.old_text = self.text()
+        self.timer.timeout.connect(self.on_btn_timer)
+        self.num = 0
 
     def start(self):
-        # self.timer.start(1000)
-        self.num = 0
+        self.timer.start(1000)
         self.setText('%s' %self.old_text)
-        # self.timer.timeout.connect(self.on_btn_timer)
+
 
     def stop(self):
         self.timer.stop()
@@ -979,11 +1060,6 @@ class Timer2Button(ToolButton):
     def on_btn_timer(self):
         self.num = self.num + 1
         self.setText('%s(%s)' %(self.old_text,self.num))
-
-
-
-
-
 
 # 倒计时标签 15分钟
 class TimerLabel(QLabel):
@@ -1012,8 +1088,6 @@ class TimerLabel(QLabel):
         else:
             self.setText(time.strftime('%H:%M:%S', time.gmtime(self.num)))
             self.num = self.num - 1
-
-
 
 # # 复合控件，时间组 开始时间-结束时间
 # class StartEndDate(QWidget):
@@ -1304,10 +1378,13 @@ class ReportStateGroup(QHBoxLayout):
             '所有':False,
             '追踪中': '0',
             '已审核': '1',
-            '已审阅': '2',
-            '已打印': '3',
+            '已审阅': ['2','3','4','5'],
+            '未审阅': '1',
+            '已打印': ['3','4','5'],
+            '未打印': '2',
             '已整理': '4',
             '已领取': '5',
+            '老未打/新未审':0
         }
 
     def initUI(self):
@@ -1335,17 +1412,24 @@ class ReportStateGroup(QHBoxLayout):
     def where_state(self):
         if self.is_check.isChecked():
             value = self.bgzt.get(self.cb_report_state.currentText(),False)
-            if value:
+            if isinstance(value,list):
+                return ''' AND BGZT IN %s ''' %str(tuple(value))
+            elif isinstance(value, str):
                 return ''' AND BGZT = %s ''' % value
+            elif isinstance(value, int):
+                return ''' AND a.dybj IS NULL '''
             else:
                 return False
         return False
 
     @property
     def where_state2(self):
+        print(self.cb_report_state.currentText())
         if self.is_check.isChecked():
             value = self.bgzt.get(self.cb_report_state.currentText(),False)
-            if value:
+            if isinstance(value,list):
+                return ''' AND TJ_BGGL.BGZT IN %s ''' %str(tuple(value))
+            elif isinstance(value, str):
                 return ''' AND TJ_BGGL.BGZT = %s ''' % value
             else:
                 return False
@@ -2198,12 +2282,14 @@ class DirTabWidget(QSplitter):
             self.lwidget.setVisible(True)
 
 # 用户基础信息
-class UserBaseGroup(QGroupBox):
+class UserBaseGroup(QVBoxLayout):
 
     def __init__(self):
         super(UserBaseGroup,self).__init__()
-        self.setTitle('人员信息')
-        lt_main = QHBoxLayout()
+        gp_user = QGroupBox('人员信息')
+        lt_user = QHBoxLayout()
+        gp_inspect = QGroupBox('检查信息')
+        lt_inspect = QHBoxLayout()
         ########################控件区#####################################
         self.lb_user_id   = Lable()          # 体检编号
         self.lb_user_name = Lable()          # 姓名
@@ -2211,21 +2297,52 @@ class UserBaseGroup(QGroupBox):
         self.lb_user_age =  Lable()          # 年龄->自动转换出生年月
         self.lb_sjhm   =    Lable()          #手机号码
         self.lb_sfzh    =   Lable()          #身份证号
-
-        lt_main.addWidget(QLabel('体检编号：'))
-        lt_main.addWidget(self.lb_user_id)
-        lt_main.addWidget(QLabel('姓名：'))
-        lt_main.addWidget(self.lb_user_name)
-        lt_main.addWidget(QLabel('性别：'))
-        lt_main.addWidget(self.lb_user_sex)
-        lt_main.addWidget(QLabel('年龄：'))
-        lt_main.addWidget(self.lb_user_age)
-        lt_main.addWidget(QLabel('手机号码：'))
-        lt_main.addWidget(self.lb_sjhm)
+        ##################################################################
+        self.lb_zjrq = Lable()        # 总检日期
+        self.lb_zjrq.setMinimumWidth(80)
+        self.lb_zjys = Lable()          # 总检医生
+        self.lb_zjys.setMinimumWidth(50)
+        self.lb_shrq =  Lable()         # 审核日期
+        self.lb_shrq.setMinimumWidth(80)
+        self.lb_shys =  Lable()         # 审核医生
+        self.lb_shys.setMinimumWidth(50)
+        self.lb_yzjys = Lable()         # 责任总检医生
+        self.lb_yzjys.setMinimumWidth(50)
+        self.lb_yshys = Lable()         # 责任审核医生
+        self.lb_yshys.setMinimumWidth(50)
+        lt_user.addWidget(QLabel('体检编号：'))
+        lt_user.addWidget(self.lb_user_id)
+        lt_user.addWidget(QLabel('姓名：'))
+        lt_user.addWidget(self.lb_user_name)
+        lt_user.addWidget(QLabel('性别：'))
+        lt_user.addWidget(self.lb_user_sex)
+        lt_user.addWidget(QLabel('年龄：'))
+        lt_user.addWidget(self.lb_user_age)
+        lt_user.addWidget(QLabel('手机号码：'))
+        lt_user.addWidget(self.lb_sjhm)
         # lt_main.addWidget(QLabel('身份证号：'))
         # lt_main.addWidget(self.lb_sfzh)
-        lt_main.addStretch()                  #设置列宽，添加空白项的
-        self.setLayout(lt_main)
+        lt_user.addStretch()                  #设置列宽，添加空白项的
+        gp_user.setLayout(lt_user)
+        #######################################################
+        lt_inspect.addWidget(QLabel('总检医生：'))
+        lt_inspect.addWidget(self.lb_zjys)
+        lt_inspect.addWidget(QLabel('总检日期：'))
+        lt_inspect.addWidget(self.lb_zjrq)
+        lt_inspect.addWidget(QLabel('审核医生：'))
+        lt_inspect.addWidget(self.lb_shys)
+        lt_inspect.addWidget(QLabel('审核日期：'))
+        lt_inspect.addWidget(self.lb_shrq)
+        lt_inspect.addWidget(QLabel('责任总检：'))
+        lt_inspect.addWidget(self.lb_yzjys)
+        lt_inspect.addWidget(QLabel('责任审核：'))
+        lt_inspect.addWidget(self.lb_yshys)
+        # lt_main.addWidget(QLabel('身份证号：'))
+        # lt_main.addWidget(self.lb_sfzh)
+        lt_inspect.addStretch()                  #设置列宽，添加空白项的
+        gp_inspect.setLayout(lt_inspect)
+        self.addWidget(gp_user)
+        self.addWidget(gp_inspect)
 
     # 赋值
     def setData(self,data:dict):
@@ -2236,6 +2353,12 @@ class UserBaseGroup(QGroupBox):
         self.lb_user_age.setText(data.get('nl','未获取到'))
         self.lb_sjhm.setText(data.get('sjhm','未获取到'))
         # self.lb_sfzh.setText(data.get('sfzh','未获取到'))
+        self.lb_zjys.setText(data.get('zjys',''))
+        self.lb_zjrq.setText(data.get('zjrq', ''))
+        self.lb_shys.setText(data.get('shys', ''))
+        self.lb_shrq.setText(data.get('shrq', ''))
+        self.lb_yzjys.setText(data.get('yzjys', ''))
+        self.lb_yshys.setText(data.get('yshys', ''))
 
     # 清空数据
     def clearData(self):
@@ -2245,6 +2368,12 @@ class UserBaseGroup(QGroupBox):
         self.lb_user_age.setText('')
         self.lb_sjhm.setText('')
         # self.lb_sfzh.setText('')
+        self.lb_zjys.setText('')
+        self.lb_zjrq.setText('')
+        self.lb_shys.setText('')
+        self.lb_shrq.setText('')
+        self.lb_yzjys.setText('')
+        self.lb_yshys.setText('')
 
 class EquipTypeLayout(QHBoxLayout):
 
@@ -2252,7 +2381,7 @@ class EquipTypeLayout(QHBoxLayout):
         super(EquipTypeLayout,self).__init__()
         self.is_check = QCheckBox('设备类型：')
         self.cb_equip_type = QComboBox()
-        self.cb_equip_type.addItems(['所有','心电图','骨密度','电测听','人体成分'])
+        self.cb_equip_type.addItems(['所有','心电图','骨密度','电测听','人体成分','超声骨密度'])
         self.cb_equip_type.setCurrentText('所有')
         self.cb_equip_type.setDisabled(True)
         # 添加布局
@@ -2273,6 +2402,8 @@ class EquipTypeLayout(QHBoxLayout):
                 return '04'
             elif self.cb_equip_type.currentText()=='人体成分':
                 return '03'
+            elif self.cb_equip_type.currentText()=='超声骨密度':
+                return '05'
             else:
                 return '00'
 
@@ -2419,9 +2550,12 @@ class ReadChinaIdCard_UI(QDialog):
 
     def closeEvent(self, *args, **kwargs):
         super(ReadChinaIdCard_UI, self).closeEvent(*args, **kwargs)
-        if self.read_card_thread:
-            self.read_card_thread.stop()
-            self.read_card_thread = None
+        try:
+            if self.read_card_thread:
+                self.read_card_thread.stop()
+                self.read_card_thread = None
+        except Exception as e:
+            print(e)
 
 class ReadThread(QThread):
 
@@ -2556,6 +2690,7 @@ class PicLable(QLabel):
         self.setPixmap(p)
 
 class ZYDDialog(QDialog):
+
     def __init__(self, parent=None):
         super(ZYDDialog, self).__init__(parent)
         self.setWindowTitle('纸质导检单查看')
@@ -2615,6 +2750,207 @@ class QueryThread(QThread):
                 self.signalMes.emit(False, [e],self.num)
             self.num = self.num + 1
             self.stop()
+
+class ThreadUpload(QThread):
+    # 定义信号,定义参数为str类型
+    # signalUploadState = pyqtSignal(bool,str)  # 上传状态，体检标识
+    # signalPost = pyqtSignal(dict)     # 更新界面
+    signalExit = pyqtSignal()
+
+    def __init__(self,queue,api,api_url,log,timer=2):
+        super(ThreadUpload, self).__init__()
+        self.running = True
+        self.queue = queue
+        self.timer = timer
+        self.log = log
+        self.api = api
+        self.api_url = api_url
+
+    def stop(self):
+        self.running = False
+
+    def run(self):
+        while self.running:
+            time.sleep(self.timer)
+            try:
+                item=self.queue.get_nowait()
+                self.log.info('后台线程，提取队列数据：%s 上传！' %item)
+            except Exception as e:
+                item = None
+            if item:
+                response = self.api.request(self.api_url,'post',filename=item)
+                print(response)
+                # if response:
+                #     # 更新
+                #     self.signalUploadState.emit(True, item['jglr_tjbs'])
+                # else:
+                #     self.signalUploadState.emit(False, item['jglr_tjbs'])
+
+# 定制摄像头组件，要求分辨率、旋转角度、打开、暂停、关闭，拍照、设置、预览区
+class CameraGroup(QVBoxLayout):
+
+    photo_take = pyqtSignal(str)
+
+    def __init__(self,parent=None):
+        super(CameraGroup, self).__init__(parent)
+        self.initParas()
+        self.initUI()
+        # 绑定信号槽
+        self.btn_startup.clicked.connect(self.on_btn_startup_click)
+        self.cb_trans.currentTextChanged.connect(self.on_cb_trans_change)
+        self.btn_photo.clicked.connect(self.onTakeImage)
+        # 右键菜单
+        self.lb_cap.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
+        self.lb_cap.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
+
+    def initUI(self):
+        gp_up = QGroupBox('摄像头')
+        gp_up.setAlignment(Qt.AlignHCenter)
+        lt_up = QHBoxLayout()
+        # 摄像头展示控件
+        self.lb_cap = QLabel()
+        self.lb_cap.setFixedSize(self.cap_size[0],self.cap_size[1])
+        self.lb_cap.setScaledContents(1)       # 图片自适应QLabel大小
+        lt_up.addWidget(self.lb_cap)
+        gp_up.setLayout(lt_up)
+        ##################################
+        # 功能区：启动/暂停、打开/关闭、拍照、设置、旋转
+        gp_middle = QGroupBox()
+        lt_middle = QHBoxLayout()
+        self.btn_startup = QPushButton(Icon('打开'),'打开')
+        self.btn_photo = QPushButton(Icon('体检拍照'),'拍照')
+        self.btn_setup = QPushButton(Icon('参数'),'设置')
+        self.btn_see = QPushButton(Icon('查询'), '查看')
+        self.cb_trans = QComboBox()
+        self.cb_trans.addItems(['0','90','180','270'])
+        lt_middle.addWidget(self.btn_startup)
+        lt_middle.addWidget(self.btn_photo)
+        lt_middle.addWidget(self.btn_setup)
+        lt_middle.addWidget(self.btn_see)
+        lt_middle.addWidget(QLabel('逆时针旋转：'))
+        lt_middle.addWidget(self.cb_trans)
+        lt_middle.addStretch()
+        gp_middle.setLayout(lt_middle)
+        # 布局
+        self.addWidget(gp_up)
+        self.addWidget(gp_middle)
+        self.addStretch()
+        # self.setLayout(lt_main)
+
+    def on_btn_startup_click(self):
+        if self.btn_startup.text()=='打开':
+            self.btn_startup.setIcon(Icon('关闭2'))
+            self.btn_startup.setText('关闭')
+            # 启动摄像头
+            if not self.cap:
+                self.cap = cv2.VideoCapture(self.capture)
+                self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.save_size[0])
+                self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.save_size[1])
+            # 启动实时图片
+            self.start()
+        else:
+            self.btn_startup.setIcon(Icon('打开'))
+            self.btn_startup.setText('打开')
+            self.stop()
+            self.cap.release()
+            self.cap = None
+
+    def on_cb_trans_change(self,p_str):
+        if self.cap:
+            self.stop()
+            self.start()
+        else:
+            mes_about(self.parentWidget(),'请先打开摄像头！')
+
+    def initParas(self):
+        # 设置默认值
+        self.cap = None                 # 摄像头
+        self.capture = 0                # 第几个摄像头
+        self.isOpened = False           # 摄像头是否打开
+        self.cap_size = (480,640)       # 摄像头展示大小，即QLabel标签大小
+        self.save_size = (1024,1280)    # 实际图像大小即分辨率
+        self.show_size = (320,240)      # 预览区域大小
+        self.timer = QTimer(self)
+        self.fps = 24
+        self.save_name = "tmp.png"      # 拍照保存的文件名称
+
+    # 设置摄像头展示区大小 即QLabel标签大小
+    def set_cap_size(self,width:int,height:int):
+        self.cap_size = (width,height)
+
+    # 设置保存图像的大小，实际图像即分辨率
+    def set_save_size(self,width:int,height:int):
+        self.save_size = (width,height)
+
+    # 设置预览区大小
+    def set_show_size(self,width:int,height:int):
+        self.show_size = (width,height)
+
+    # 设置保存文件名称
+    def set_save_file(self,filename):
+        self.save_name = filename
+
+    # 打开摄像头
+    def start(self):
+        self.timer.start(1000 / self.fps)
+        self.timer.timeout.connect(partial(self.on_cap_start,int(self.cb_trans.currentText())))
+
+    # 暂停摄像头
+    def stop(self):
+        self.timer.stop()
+
+    # 显示摄像头当前图片在控件上
+    def on_cap_start(self,degree=0):
+        if self.cap.isOpened():
+            ret, frame = self.cap.read()
+            try:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                ##############处理旋转#####################################
+                if degree>0:
+                    rows, cols, count = frame.shape
+                    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), degree, 1)
+                    frame = cv2.warpAffine(frame, M, (cols, rows))
+                img = QImage(frame.data, frame.shape[1], frame.shape[0], frame.shape[1] * 3, QImage.Format_RGB888)
+                self.lb_cap.setPixmap(QPixmap.fromImage(img, Qt.AutoColor))
+            except Exception as e:
+                mes_about(self.parentWidget(), '类：CameraUI.onCapture() 执行出错！错误信息：%s' % e)
+                self.timer.stop()
+                # return
+        else:
+            self.lb_cap.setText('打开失败，请检查配置！')
+            self.lb_cap.setStyleSheet('''font: 75 14pt '黑体';color: rgb(204, 0, 0);''')
+
+    # 拍照
+    def onTakeImage(self):
+        if self.cap:
+            if self.cap.isOpened():
+                ret, frame = self.cap.read()
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                ##############处理旋转#####################################
+                if int(self.cb_trans.currentText()) > 0:
+                    rows, cols, count = frame.shape
+                    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), int(self.cb_trans.currentText()), 1)
+                    frame = cv2.warpAffine(frame, M, (cols, rows))
+                img = QImage(frame.data, frame.shape[1], frame.shape[0], frame.shape[1] * 3, QImage.Format_RGB888)
+                img.save(self.save_name)
+                self.take_photo.emit(self.save_name)
+            else:
+                mes_about(self.parentWidget(), "请打开摄像头！")
+        else:
+            mes_about(self.parentWidget(),"请打开摄像头！")
+
+    # 右键功能
+    def onTableMenu(self,pos):
+        menu = QMenu()
+        item1 = menu.addAction(Icon("体检拍照"), "拍照")
+        action = menu.exec_(self.lb_cap.mapToGlobal(pos))
+        if action == item1:
+            self.onTakeImage()
+
+    def deleteLater(self):
+        self.timer.stop()
+        self.cap.release()
+        super(CameraGroup, self).deleteLater()
 
 if __name__ == '__main__':
     import sys

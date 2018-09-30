@@ -4,6 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtPrintSupport import *
 from PyQt5.QtMultimedia import *
 from PyQt5.QtMultimediaWidgets import *
+# import cv2
+# print(cv2.G)
 
 import os
 import sys

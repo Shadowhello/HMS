@@ -162,9 +162,9 @@ class CollectBlood_UI(UI):
         self.cb_is_photo = QCheckBox('扫单自动拍照')
         self.cb_is_photo.setChecked(True)
         self.btn_take_photo = QPushButton(Icon('体检拍照'),'手动拍照')
-        right_up_gp = QGroupBox('摄像头')
-        right_up_gp.setAlignment(Qt.AlignHCenter)
-        right_up_lt = QVBoxLayout()
+        gp_right_up = QGroupBox('摄像头')
+        gp_right_up.setAlignment(Qt.AlignHCenter)
+        lt_right_up = QVBoxLayout()
         # 是否载入摄像头
         if gol.get_value('photo_enable'):
             show_x = gol.get_value('photo_capture_width')
@@ -173,27 +173,21 @@ class CollectBlood_UI(UI):
             fps = gol.get_value('photo_fps')
             try:
                 self.camera = CameraUI(show_x,show_y,capture,fps)
-                right_up_lt.addWidget(self.camera)
+                lt_right_up.addWidget(self.camera)
             except Exception as e:
                 mes_about(self,'载入摄像头功能失败，错误信息：%s' %e)
                 self.camera = None
         else:
             self.camera = None
-            # 不载入摄像头 则关闭右侧栏
-            self.on_right_clicked()
-            # 关闭 自动拍照
-            self.cb_is_photo.setChecked(False)
 
-        right_up_lt.addStretch()
-        right_up_gp.setLayout(right_up_lt)
+        lt_right_up.addStretch()
+        gp_right_up.setLayout(lt_right_up)
         # 按钮区
         right_middle_gp = QGroupBox()
         right_middle_lt = QHBoxLayout()
-
         right_middle_lt.addWidget(self.cb_is_photo)
         right_middle_lt.addWidget(self.btn_take_photo)
         right_middle_gp.setLayout(right_middle_lt)
-
         # 照片显示位置
         right_down_gp = QGroupBox('采血照片')
         right_down_gp.setAlignment(Qt.AlignHCenter)
@@ -205,7 +199,7 @@ class CollectBlood_UI(UI):
         right_down_lt.addWidget(self.photo_lable)
         right_down_lt.addStretch()
         right_down_gp.setLayout(right_down_lt)
-        self.right_layout.addWidget(right_up_gp)
+        self.right_layout.addWidget(gp_right_up)
         self.right_layout.addWidget(right_middle_gp)
         self.right_layout.addWidget(right_down_gp)
         self.right_layout.addStretch()

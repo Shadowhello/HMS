@@ -257,7 +257,7 @@ class MT_TJ_CZJLB(BaseModel):
             'mxbh': getattr(self, "mxbh"),
             'czxm': str2(getattr(self, "czxm")),
             'czqy': str2(getattr(self, "czqy")),
-            'czsj': str(getattr(self, "czsj"))[0:19],
+            'czsj': str(getattr(self, "czsj"))[0:23],
             'jlnr': str2(getattr(self, "jlnr"))
         }
 
@@ -337,11 +337,16 @@ class MV_RYXX(BaseModel):
     shrq = Column(String(20), nullable=False)
     zjxm = Column(String(20), nullable=False)
     shxm = Column(String(20), nullable=False)
+    yzjxm = Column(String(20), nullable=False)
+    yshxm = Column(String(20), nullable=False)
     zjys = Column(String(20), nullable=False)
     shys = Column(String(20), nullable=False)
+    yzjys = Column(String(20), nullable=False)
+    yshys = Column(String(20), nullable=False)
     sygh = Column(String(20), nullable=False)
     io_jkcf = Column(CHAR(1), nullable=False)
     bz = Column(Text, nullable=False)
+    tjzt = Column(CHAR(1), nullable=False)
 
     @property
     def to_dict(self):
@@ -356,7 +361,35 @@ class MV_RYXX(BaseModel):
             'dwmc': str2(getattr(self, "dwmc")),
             'djrq': getattr(self, "djrq"),
             'qdrq': getattr(self, "qdrq"),
+            'zjrq': str2(getattr(self, "zjrq"))[0:10],
+            'shrq': str2(getattr(self, "shrq"))[0:10],
+            'zjys': str2(getattr(self, "zjxm")),
+            'shys': str2(getattr(self, "shxm")),
+            'yzjys': str2(getattr(self, "yzjxm")),
+            'yshys': str2(getattr(self, "yshxm")),
+            'tjzt': self.get_tjzt
         }
+
+    @property
+    def get_tjzt(self):
+        if getattr(self, "tjzt")=='0':
+            return '已取消'
+        elif getattr(self, "tjzt")=='1':
+            return '已登记'
+        if getattr(self, "tjzt")=='2':
+            return '已预约'
+        elif getattr(self, "tjzt")=='3':
+            return '已签到'
+        if getattr(self, "tjzt")=='4':
+            return '已收单'
+        elif getattr(self, "tjzt")=='6':
+            return '已总检'
+        if getattr(self, "tjzt")=='7':
+            return '已审核'
+        elif getattr(self, "tjzt")=='8':
+            return '已审阅'
+        else:
+            return '未定义'
 
     @property
     def pdf_dict(self):
@@ -402,3 +435,33 @@ class MT_TJ_XMDM(BaseModel):
     xmbh = Column(VARCHAR(10), primary_key=True)
     xmmc = Column(VARCHAR(40), nullable=False)
     sfzh = Column(CHAR(1), nullable=False)
+
+
+def get_item_state_sql(tjbh):
+    return '''
+            SELECT 
+
+                (CASE 
+                    WHEN qzjs ='1' THEN '已拒检'
+                    WHEN jsbz ='1' THEN '已小结'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='0' THEN '核实'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='1' THEN '已回写'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='2' THEN '已登记'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='3' THEN '已检查'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='4' THEN '已抽血'
+                    WHEN qzjs IS NULL AND jsbz <>'1' AND ZXPB='5' THEN '已留样'
+                    ELSE '未定义' END
+                ) AS STATE,
+                XMBH,
+                XMMC,
+                (SELECT KSMC FROM TJ_KSDM WHERE KSBM=TJ_TJJLMXB.KSBM) AS KSMC,
+                substring(convert(char,JCRQ,120),1,10) AS JCRQ,
+                (SELECT YGXM FROM TJ_YGDM WHERE YGGH=TJ_TJJLMXB.JCYS) AS JCYS,
+                substring(convert(char,shrq,120),1,10) AS SHRQ,
+                (SELECT YGXM FROM TJ_YGDM WHERE YGGH=TJ_TJJLMXB.shys) AS SHYS,
+                TMBH1,'' AS btn_name
+            FROM TJ_TJJLMXB 
+                WHERE TJBH='%s' AND SFZH='1' 
+                AND XMBH NOT IN (SELECT XMBH FROM TJ_KSKZXM  WHERE KSBM='0028')
+            ORDER BY qzjs DESC,jsbz,ZXPB DESC,KSBM,ZHBH,XSSX;
+    ''' % tjbh

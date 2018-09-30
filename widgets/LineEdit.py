@@ -1,4 +1,5 @@
-from widgets.bwidget import *
+from PyQt5.QtWidgets import *
+import sys
 from functools import wraps
 
 _QT5 = _QT4 = False

@@ -1,6 +1,6 @@
 from main.model import *
 from widgets.LineEdit import *
-from widgets.bwidget import *
+from widgets.cwidget import *
 from utils import gol
 from utils import *
 
@@ -127,10 +127,13 @@ class Login_UI(QDialog):
     def user_get(self):
         userid = self.userid.text()
         if userid:
-            result=self.session.query(MT_TJ_USER).filter(MT_TJ_USER.xtsb=='101',MT_TJ_USER.yhdm==userid).scalar()
-            if result:
-                self.user.setText(str2(result.yhmc))
-                self.buttonBox.buttons()[0].setEnabled(True)
+            try:
+                result = self.session.query(MT_TJ_USER).filter(MT_TJ_USER.xtsb=='101',MT_TJ_USER.yhdm==userid).scalar()
+                if result:
+                    self.user.setText(str2(result.yhmc))
+                    self.buttonBox.buttons()[0].setEnabled(True)
+            except Exception as e:
+                mes_about(self,"连接体检数据库失败！请检查网络！错误信息：%s" %e)
 
     def set_empty(self,p_str):
         self.userid.setText(p_str.upper())
@@ -143,7 +146,12 @@ class Login_UI(QDialog):
         _user_name = self.user.text()
         _user_pwd=self.passwd.text()
         if _user_id:
-            result = self.session.query(MT_TJ_USER).filter(MT_TJ_USER.xtsb == '101', MT_TJ_USER.yhdm == _user_id).filter(or_(MT_TJ_USER.yhkl==_user_pwd,MT_TJ_USER.yhkl==None)).scalar()
+            try:
+                result = self.session.query(MT_TJ_USER).filter(MT_TJ_USER.xtsb == '101', MT_TJ_USER.yhdm == _user_id).filter(or_(MT_TJ_USER.yhkl==_user_pwd,MT_TJ_USER.yhkl==None)).scalar()
+            except Exception as e:
+                result = []
+                mes_about(self,"验证密码失败！请检查网络，错误信息：%s" %e)
+                return
             if result:
                 results = self.session.query(MT_TJ_YGQSKS).filter(MT_TJ_YGQSKS.yggh == _user_id).all()
                 ksbms = [result.ksbm.rstrip() for result in results]

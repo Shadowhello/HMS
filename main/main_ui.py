@@ -1,5 +1,6 @@
 from widgets.bwidget import *
 from importlib import import_module
+from .about import about_msessage
 from .menu_config import *
 from utils import gol
 from functools import partial
@@ -108,11 +109,14 @@ class MenuBar(QMenuBar):
         # for skin in skins:
         #     self.menu_help_skin.addAction(skin, partial(self.on_menu_help_skin_triggered, skin))
         menu_help.addAction(Icon('意见'), '意见')
-        menu_help.addAction(Icon('关于'), '关于')
+        menu_help.addAction(Icon('关于'), '关于',self.about)
 
     # 获取用户默认的菜单栏，便于程序自动打开
     def default_action(self,sid):
         return self.sys_action_obj.get(sid,None)
+
+    def about(self):
+        QMessageBox.about(self, "明州体检",about_msessage)
 
 # 菜单 按钮
 class Action(QAction):

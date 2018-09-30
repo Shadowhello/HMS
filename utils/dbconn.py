@@ -40,7 +40,7 @@ def get_cxk_session():
     os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
     #create_engine('oracle://scott:tiger@127.0.0.1:1521/sidname')   #SID方式
     engine = create_engine('oracle://TJ_CXK:TJ_CXK@10.7.200.101:1521/orcl', encoding='utf8', echo=False)        # SID 方式
-            #create_engine('oracle+cx_oracle://TJ_CXK:TJ_CXK@oracle101', encoding='utf8')                   # TNS 方式
+    #engine = create_engine('oracle+cx_oracle://TJ_CXK:TJ_CXK@oracle101', encoding='utf8')                   # TNS 方式
 
     session = sessionmaker(bind=engine)
 

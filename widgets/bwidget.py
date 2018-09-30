@@ -12,6 +12,7 @@ from collections import OrderedDict
 import pandas as pd
 from utils.base import desktop
 from queue import Queue
+import numpy as np
 
 
 def singleton(cls):
@@ -58,8 +59,63 @@ def mes_warn(parent,message):
     button = QMessageBox.warning(parent,"明州体检", message,QMessageBox.Yes | QMessageBox.No)
     return button
 
-def mes_about(parent,message):
-    QMessageBox.about(parent, '明州体检', message)
+# def mes_about(parent,message):
+#     MessageBox(self, text=mes).exec_()
+#     QMessageBox.about(parent, '明州体检', message)
+
+
+# 自带检索按钮、清除按钮
+class SearchLineEdit(QLineEdit):
+
+    searchTextChanged = pyqtSignal(str)
+
+    def __init__(self, parent=None):
+        super(SearchLineEdit,self).__init__(parent)
+        # 绑定信号槽
+        self.clearButton.clicked.connect(self.clear)
+        self.textChanged.connect(self.updateSearchText)
+
+    def initUI(self):
+        # 检索的文本
+        self.searchText = ""
+        # 清除按钮
+        self.clearButton = QToolButton(self)
+        self.clearButton.setIcon(Icon('清除'))
+        self.clearButton.setCursor(Qt.ArrowCursor)
+        self.clearButton.setStyleSheet("QToolButton { border: none; padding: 0px; }")
+        self.clearButton.hide()
+        # 检索按钮
+        self.searchButton = QToolButton(self)
+        self.searchButton.setIcon(Icon('查询'))
+        self.searchButton.setStyleSheet("QToolButton { border: none; padding: 0px; }")
+
+        frameWidth = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
+        buttonWidth = self.clearButton.sizeHint().width()
+        self.setStyleSheet("QLineEdit { padding-left: %spx; padding-right: %spx; } " % (self.searchButton.sizeHint().width() + frameWidth + 1, buttonWidth + frameWidth + 1))
+        msz = self.minimumSizeHint()
+        self.setMinimumSize(max(msz.width(),self.searchButton.sizeHint().width() + buttonWidth + frameWidth * 2 + 2),
+                            max(msz.height(), self.clearButton.sizeHint().height() + frameWidth * 2 + 2))
+        self.setPlaceholderText("Search")
+        # 设置快捷方式
+        # focusShortcut = QShortcut(QKeySequence("Ctrl+F"), self)
+        # focusShortcut.activated.connect(self.setFocus)
+
+    def resizeEvent(self, event):
+        sz = self.clearButton.sizeHint()
+        frameWidth = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
+        self.clearButton.move(self.rect().right() - frameWidth - sz.width(),(self.rect().bottom() + 1 - sz.height()) / 2)
+        self.searchButton.move(self.rect().left() + 1, (self.rect().bottom() + 1 - sz.height()) / 2)
+
+    def getSearchText(self):
+        return self.searchText
+
+    def updateSearchText(self, searchText):
+        self.searchText = searchText
+        self.searchTextChanged.emit(searchText)
+        self.updateCloseButton(bool(searchText))
+
+    def updateCloseButton(self, visible):
+        self.clearButton.setVisible(visible)
 
 class ToolButton(QToolButton):
 
@@ -132,6 +188,13 @@ class TableWidget(QTableWidget):
                rows.append(item.row())
         return rows
 
+    # 获取已选择行的关键字的值
+    def isSelectRowsValue(self,key):
+        tmp = []
+        for row in self.isSelectRows():
+            tmp.append(self.getItemValueOfKey(row,key))
+        return tmp
+
     # 插入一行 实现
     def insert(self,data):
         self.insertRow(self.rowCount())  # 特别含义
@@ -154,6 +217,9 @@ class TableWidget(QTableWidget):
     #获取某行某列值
     def getItemValue(self,row:int,col:int):
         return self.item(row,col).text()
+
+    def getLastCol(self):
+        return len(self.heads)-1
 
     # 根据key 获取某行列的值
     def getItemValueOfKey(self,row:int,key:str):
@@ -285,7 +351,8 @@ class UI(QSplitter):
         self.setStretchFactor(4, 5)
         ##########################自身样式########################################
         self.setHandleWidth(0)
-        self.setMinimumWidth(0)
+        self.setMinimumWidth(6)
+        self.setChildrenCollapsible(False)  # 控件调整成过小时是否会隐藏
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setStyleSheet("QSplitter.handle{background:lightgray}")
 
@@ -454,8 +521,6 @@ class PhotoUI(QLabel):
         xx.save(name)
         return xx
 
-
-
     def mouseMoveEvent(self, QMouseEvent):
         self.setMouseTracking(True)                         # 鼠标形状变化
         super(PhotoUI, self).mouseMoveEvent(QMouseEvent)
@@ -512,7 +577,6 @@ class CameraUI(QLabel):
     def __init__(self,show_x=320,show_y=240,capture=0,fps=24):
         super(CameraUI, self).__init__()
         self.resize(show_x,show_y)
-        self.show_size=[show_x,show_y]
         self.setScaledContents(1)
         self.fps = fps
         self.cap = cv2.VideoCapture(capture)
@@ -530,6 +594,10 @@ class CameraUI(QLabel):
             ret,frame = self.cap.read()
             try:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                ##############处理旋转#####################################
+                # rows,cols,count = frame.shape
+                # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 270, 1)
+                # frame = cv2.warpAffine(frame, M, (cols, rows))
                 img = QImage(frame.data, frame.shape[1], frame.shape[0], frame.shape[1] * 3, QImage.Format_RGB888)
                 self.setPixmap(QPixmap.fromImage(img,Qt.AutoColor))
             except Exception as e:
@@ -551,6 +619,7 @@ class CameraUI(QLabel):
         self.timer.stop()
         self.cap.release()
         super(CameraUI, self).deleteLater()
+
 
 # 文档打印功能
 class Printer(object):
