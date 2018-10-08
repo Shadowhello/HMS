@@ -7,6 +7,7 @@ from report.report_track_thread import *
 from widgets.cwidget import *
 from .report_track_ui import ReportTrackUI
 from utils import api_file_down,cur_datetime
+import webbrowser
 
 # 报告追踪
 class ReportTrack(ReportTrackUI):
@@ -28,6 +29,7 @@ class ReportTrack(ReportTrackUI):
         self.btn_receive.clicked.connect(self.on_btn_receive_click)         # 结果接收
         self.btn_myself.clicked.connect(self.on_btn_myself_click)           # 查看我自己的领取任务
         self.btn_djd.clicked.connect(self.on_btn_djd_click)
+        self.btn_send.menu_clicked.connect(self.on_btn_send_click)                 # 发送任务：发到审核、发到审阅
         # 功能栏
         self.btn_item.clicked.connect(self.on_btn_item_click)
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
@@ -75,7 +77,9 @@ class ReportTrack(ReportTrackUI):
             where_str = " TJ_TJDAB.XM ='%s' " % p2_str
         results = self.session.execute(get_quick_search_sql(where_str)).fetchall()
         self.table_track.load(results)
+        self.gp_middle.setTitle('追踪列表（%s）' %self.table_track.rowCount() )
         mes_about(self,'共检索出 %s 条数据！' %self.table_track.rowCount())
+
 
     # 右键功能
     def onTableMenu(self,pos):
@@ -93,10 +97,16 @@ class ReportTrack(ReportTrackUI):
             item5 = menu.addAction(Icon("体检收单"), "纸质导检单")
             item6 = menu.addAction(Icon("取消"), "取消到达")
             item7 = menu.addAction(Icon("编辑"), "修改备注")
+            item8 = menu.addAction(Icon("报告中心"), "浏览HTML报告")
+            item9 = menu.addAction(Icon("报告中心"), "浏览PDF报告")
+            item10 = menu.addAction(Icon("发送"), "发送医生总检")
+            item11 = menu.addAction(Icon("发送"), "发送护理审阅")
             action = menu.exec_(self.table_track.mapToGlobal(pos))
             # 获取变量
             tjbh = self.table_track.getCurItemValueOfKey('tjbh')
             sjhm = self.table_track.getCurItemValueOfKey('sjhm')
+            tjzt = self.table_track.getCurItemValueOfKey('tjzt')
+            zzzt = self.table_track.getCurItemValueOfKey('zzzt')
             if action == item1:
                 if self.table_track.getCurItemValueOfKey('lqry'):
                     button = mes_warn(self,'您确认自己追踪本报告吗？')
@@ -199,7 +209,73 @@ class ReportTrack(ReportTrackUI):
                     except Exception as e:
                         self.session.rollback()
                         mes_about(self, '执行发生错误：%s' % e)
+            elif action == item8:
+                if tjzt in ['已审核','已审阅'] or zzzt in ['审阅退回','审核退回']:
+                    try:
+                        webbrowser.open(gol.get_value('api_report_preview') % ('html', tjbh))
+                    except Exception as e:
+                        mes_about(self, '打开出错，错误信息：%s' % e)
+                        return
+                else:
+                    mes_about(self,'该顾客报告还未被审核！')
+                    return
 
+            elif action == item9:
+                if tjzt=='已审阅' or zzzt in ['审阅退回','审核退回']:
+                    # 优先打开 新系统生成的
+                    result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
+                    if result:
+                        filename = os.path.join(result.bglj, '%s.pdf' % tjbh).replace('D:/activefile/', '')
+                        url = gol.get_value('api_pdf_new_show') % filename
+                        webbrowser.open(url)
+                    else:
+                        try:
+                            self.cxk_session = gol.get_value('cxk_session')
+                            result = self.cxk_session.query(MT_TJ_PDFRUL).filter(
+                                MT_TJ_PDFRUL.TJBH == tjbh).scalar()
+                            if result:
+                                url = gol.get_value('api_pdf_old_show') % result.PDFURL
+                                webbrowser.open(url)
+                            else:
+                                mes_about(self, '未找到该顾客体检报告！')
+                        except Exception as e:
+                            mes_about(self, '查询出错，错误信息：%s' % e)
+                            return
+                else:
+                    mes_about(self,'该顾客报告还未被审阅过，不能查看！')
+                    return
+
+            elif action == item10:
+                if zzzt in ['审核退回','审阅退回']:
+                    # 取消审核退回
+                    sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
+                    sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
+                    try:
+                        self.session.execute(sql1)
+                        self.session.ececute(sql2)
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self,'处理失败，错误信息：%s' %e)
+
+                else:
+                    mes_about(self, "只有审阅退回/审核退回的报告才能使用此功能！")
+
+            elif action == item11:
+                if zzzt in ['审核退回', '审阅退回']:
+                    # 取消审阅
+                    sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
+                    sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
+                    try:
+                        self.session.execute(sql1)
+                        self.session.ececute(sql2)
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self, '处理失败，错误信息：%s' % e)
+
+                else:
+                    mes_about(self, "只有审阅退回/审核退回的报告才能使用此功能！")
 
     # 手动接收结果
     def on_btn_receive_click(self):
@@ -215,6 +291,27 @@ class ReportTrack(ReportTrackUI):
         tstart, tend = self.lt_where_search.date_range  # 日期
         results = self.session.execute(get_report_track_myself_sql(tstart, tend,self.login_id)).fetchall()
         self.table_track.load(results)
+
+    # 发送任务
+    def on_btn_send_click(self,is_doctor=True):
+        zzzt = self.table_track.getCurItemValueOfKey('zzzt')
+        tjbh = self.table_track.getCurItemValueOfKey('tjbh')
+        if zzzt in ['审核退回','审阅退回']:
+            if is_doctor:
+                sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
+            else:
+                sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
+            sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
+            try:
+                self.session.execute(sql1)
+                self.session.ececute(sql2)
+                self.session.commit()
+            except Exception as e:
+                self.session.rollback()
+                mes_about(self, '处理失败，错误信息：%s' % e)
+        else:
+            mes_about(self,"只有审阅退回/审核退回的报告才能使用此功能！")
+
 
     # 查看导检单
     def on_btn_djd_click(self):
@@ -290,20 +387,24 @@ class ReportTrack(ReportTrackUI):
         if where_dwmc:
             sql = sql + where_dwmc
 
-        # 追踪类型
-        if not self.cb_track_type.text():
-            if self.lt_where_search.where_bgzt_text == '待追踪':
-                # 所有
-                sql = sql + ''' UNION ALL ''' +get_report_bgth_sql()
-                sql = sql + ''' ORDER BY XMZQ,QDRQ,DWMC  '''
-            else:
-                sql = sql
-        elif self.cb_track_type.text() == '未结束':
-            sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC  '''
-        elif self.cb_track_type.text() == '审核退回':
-            sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '0' '''
+        # # 待总检的特殊处理下
+        if self.lt_where_search.where_bgzt_text == '待总检':
+             sql = sql + ''' LEFT JOIN TJ_BGGL ON T1.TJBH =TJ_BGGL.TJBH '''
         else:
-            sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '1' '''
+        # # 追踪类型 待总检不做此筛选
+            if not self.cb_track_type.text():
+                if self.lt_where_search.where_bgzt_text == '待追踪':
+                    # 所有
+                    sql = sql + ''' UNION ALL ''' +get_report_bgth_sql()
+                    sql = sql + ''' ORDER BY XMZQ,QDRQ,DWMC  '''
+                else:
+                    sql = sql
+            elif self.cb_track_type.text() == '未结束':
+                sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC  '''
+            elif self.cb_track_type.text() == '审核退回':
+                sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '0' '''
+            else:
+                sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '1' '''
 
 
         # print(sql)
@@ -316,23 +417,20 @@ class ReportTrack(ReportTrackUI):
     # 设置快速检索文本
     def on_table_set(self,tableWidgetItem):
         row = tableWidgetItem.row()
-        tjbh = self.table_track.item(row, 7).text()
-        xm = self.table_track.item(row, 8).text()
-        sfzh = self.table_track.item(row, 11).text()
-        sjhm = self.table_track.item(row, 12).text()
+        tjbh = self.table_track.getItemValueOfKey(row,'tjbh')
+        xm = self.table_track.getItemValueOfKey(row,'xm')
+        sfzh = self.table_track.getItemValueOfKey(row,'sfzh')
+        sjhm = self.table_track.getItemValueOfKey(row,'sjhm')
         self.gp_quick_search.setText(tjbh,xm,sjhm,sfzh)
         self.cur_tjbh = tjbh
 
     #体检系统项目查看
     def on_btn_item_click(self):
-        if not self.cur_tjbh:
-            mes_about(self,'请先选择一个人！')
-            return
-        else:
-            if not self.item_ui:
-                self.item_ui = ItemsStateUI(self)
+        if not self.item_ui:
+            self.item_ui = ItemsStateUI(self)
+        if self.cur_tjbh:
             self.item_ui.returnPressed.emit(self.cur_tjbh)
-            self.item_ui.show()
+        self.item_ui.show()
 
     # 电话记录
     def on_btn_phone_click(self):

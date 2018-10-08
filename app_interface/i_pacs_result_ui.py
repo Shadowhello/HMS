@@ -26,6 +26,7 @@ class PacsResultUI(PacsDialog):
         gp_middle = QGroupBox('检查列表')
         self.inspect_cols = OrderedDict([
             ('CBGZT', '报告状态'),
+            ('CJCZT', '检查状态'),
             ('SYSTYPE', '系统类别'),
             ('CMODALITY', '检查类别'),
             ('XMMC','项目名称'),
@@ -38,7 +39,6 @@ class PacsResultUI(PacsDialog):
             ('SHSJ', '审核时间'),
             ('XMJG', '项目结果'),
             ('XMZD', '项目诊断'),
-            ('CJCZT', '检查状态'),
             ('DDJSJ', '登记时间'),
             ('DCHECKDATE', '检查时间'),
             ('BGYSGH', '报告医生工号'),

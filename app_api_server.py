@@ -9,7 +9,7 @@ from utils import gol
 from app_api.dbconn import *
 import multiprocessing
 from multiprocessing import Process, Queue
-from report_build_start import report_run
+from report_build_start import report_run_api
 import ujson
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()
     # 全局进程队列
     gol_process_queue = Queue()
-    report_process = Process(target=report_run, args=(gol_process_queue,))
+    report_process = Process(target=report_run_api, args=(gol_process_queue,))
     # 启动报告服务
     report_process.start()
     # 初始化

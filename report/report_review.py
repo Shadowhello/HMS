@@ -139,6 +139,8 @@ class ReportReview(ReportReviewUI):
             menu = QMenu()
             item1 = menu.addAction(Icon("报告中心"), "浏览器中打开HTML报告")
             item2 = menu.addAction(Icon("报告中心"), "浏览器中打开PDF报告")
+            item3 = menu.addAction(Icon("报告中心"), "重新生成待审阅报告")
+            item4 = menu.addAction(Icon("报告中心"), "重新生成审阅报告")
             action = menu.exec_(self.table_report_review.mapToGlobal(pos))
             tjbh = self.table_report_review.getCurItemValueOfKey('tjbh')
             bgzt = self.table_report_review.getCurItemValueOfKey('bgzt')
@@ -171,6 +173,23 @@ class ReportReview(ReportReviewUI):
                             except Exception as e:
                                 mes_about(self, '查询出错，错误信息：%s' % e)
                                 return
+
+                elif action == item3:
+                    if request_create_report(tjbh, 'html'):
+                        mes_about(self,"重新生成HTML报告成功！")
+                    else:
+                        mes_about(self,"重新生成HTML报告失败！")
+
+                elif action == item4:
+                    if bgzt=='已审核':
+                        mes_about(self,'当前报告还未审阅，不能生成！')
+                        return
+                    if request_create_report(tjbh, 'pdf'):
+                        mes_about(self,"重新生成PDF报告成功！")
+                    else:
+                        mes_about(self,"重新生成PDF报告失败！")
+
+
             else:
                 mes_about(self, '未找到该顾客体检报告！')
 

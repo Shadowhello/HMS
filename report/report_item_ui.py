@@ -18,6 +18,27 @@ class ItemsStateUI(Dialog):
         self.le_tjbh.returnPressed.connect(self.on_le_tjbh_press)
         self.btn_query.clicked.connect(self.on_le_tjbh_press)
         self.table_item.itemClicked.connect(self.on_table_item_click)
+        # 右键
+        self.table_item.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
+        self.table_item.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
+
+    # 右键功能
+    def onTableMenu(self,pos):
+        row_num = -1
+        indexs=self.table_item.selectionModel().selection().indexes()
+        if indexs:
+            for i in indexs:
+                row_num = i.row()
+            menu = QMenu()
+            item1 = menu.addAction(Icon(""), "手工小结")
+            action = menu.exec_(self.table_item.mapToGlobal(pos))
+            xmbh = self.table_item.getCurItemValueOfKey('xmbh')
+            tjbh = self.gp_user.get_tjbh
+            if action == item1:
+                if xmbh in ['1122','1931','0903','501732','501933','501934']:
+                    pass
+                else:
+                    mes_about(self,'该项目不是手工单项目，不允许手工小结！')
 
     def initUI(self):
         self.item_cols = OrderedDict(
@@ -45,7 +66,7 @@ class ItemsStateUI(Dialog):
         lt_top.addStretch()
         gp_top.setLayout(lt_top)
         lt_middle = QHBoxLayout()
-        self.gp_middle = QGroupBox('项目状态')
+        self.gp_middle = QGroupBox('项目信息')
         # 用户基本信息
         self.gp_user = UserBaseGroup()
         self.table_item = ItemsStateTable(self.item_cols)

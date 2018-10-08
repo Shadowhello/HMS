@@ -73,7 +73,7 @@ def start_run():
     # 进入自助机模式
     else:
         from app_selfhelp import selfHelpManager,SelfHelpMachine
-        ui = selfHelpManager()
+        ui = SelfHelpMachine()
         main_ui(ui,app)
 
 if __name__=="__main__":

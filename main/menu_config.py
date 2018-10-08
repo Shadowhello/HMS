@@ -18,16 +18,16 @@ SYS_MENU_TREE = {   # 系统
             'tip':None,
             'state':True,
             'childs':OrderedDict([  # 菜单
-                ('用户管理',{'pid':100,'sid':1001,'title':'用户管理','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('角色权限',{'pid':100,'sid':1002,'title':'角色权限','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('密码修改',{'pid':100,'sid':1003,'title':'密码修改','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('系统日志',{'pid':100,'sid':1004,'title':'系统日志','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('系统参数',{'pid':100,'sid':1004,'title':'系统参数','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('代码字典',{'pid':100,'sid':1005,'title':'代码字典','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('版本控制',{'pid':100,'sid':1006,'title':'版本控制','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
+                ('用户管理',{'pid':100,'sid':1001,'title':'用户管理','tip':None,'state':True,'icon':'用户','is_tool':False,'shortcut':None}),
+                ('角色权限',{'pid':100,'sid':1002,'title':'角色权限','tip':None,'state':True,'icon':'权限','is_tool':False,'shortcut':None}),
+                ('密码修改',{'pid':100,'sid':1003,'title':'密码修改','tip':None,'state':True,'icon':'密码修改','is_tool':False,'shortcut':None}),
+                ('系统日志',{'pid':100,'sid':1004,'title':'系统日志','tip':None,'state':True,'icon':'日志','is_tool':False,'shortcut':None}),
+                ('系统参数',{'pid':100,'sid':1004,'title':'系统参数','tip':None,'state':True,'icon':'参数','is_tool':False,'shortcut':None}),
+                ('代码字典',{'pid':100,'sid':1005,'title':'代码字典','tip':None,'state':True,'icon':'字典','is_tool':False,'shortcut':None}),
+                ('版本控制',{'pid':100,'sid':1006,'title':'版本控制','tip':None,'state':True,'icon':'版本','is_tool':False,'shortcut':None}),
                 ('界面设计',{'pid':100,'sid':1007,'title':'界面设计','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('注    销',{'pid':100,'sid':1007,'title':' 注  销 ','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None}),
-                ('退    出',{'pid':100,'sid':1008,'title':' 退  出 ','tip':None,'state':True,'icon':'','is_tool':False,'shortcut':None})
+                ('注    销',{'pid':100,'sid':1007,'title':' 注  销 ','tip':None,'state':False,'icon':'注销','is_tool':False,'shortcut':None}),
+                ('退    出',{'pid':100,'sid':1008,'title':' 退  出 ','tip':None,'state':True,'icon':'退出','is_tool':False,'shortcut':None})
             ])
          }),
         # 基础资料维护

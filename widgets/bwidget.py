@@ -55,6 +55,31 @@ class Icon(QIcon):
         super(Icon,self).__init__()
         self.addPixmap(QPixmap(file_ico(name)),QIcon.Normal,QIcon.On)
 
+class MessageBox(QMessageBox):
+
+    def __init__(self, *args, count=10, **kwargs):
+        super(MessageBox, self).__init__(*args, **kwargs)
+        self.setWindowTitle('明州体检')
+        self.setWindowIcon(Icon('mztj'))
+        self.count = count
+        self.setStandardButtons(self.Close)  # 关闭按钮
+        self.closeBtn = self.button(self.Close)  # 获取关闭按钮
+        self.closeBtn.setText('关闭(%s)' % count)
+        self._timer = QTimer(self, timeout=self.doCountDown)
+        self._timer.start(1000)
+
+    def doCountDown(self):
+        self.closeBtn.setText('关闭(%s)' % self.count)
+        self.count -= 1
+        if self.count <= 0:
+            self._timer.stop()
+            self.accept()
+            self.close()
+
+def mes_about(parent,message):
+    MessageBox(parent, text=message).exec_()
+    # QMessageBox.about(parent, '明州体检', message)
+
 def mes_warn(parent,message):
     button = QMessageBox.warning(parent,"明州体检", message,QMessageBox.Yes | QMessageBox.No)
     return button
@@ -62,7 +87,6 @@ def mes_warn(parent,message):
 # def mes_about(parent,message):
 #     MessageBox(self, text=mes).exec_()
 #     QMessageBox.about(parent, '明州体检', message)
-
 
 # 自带检索按钮、清除按钮
 class SearchLineEdit(QLineEdit):

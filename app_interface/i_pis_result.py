@@ -57,44 +57,48 @@ class PisResult(PisResultUI):
                 result = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.xmbh == xmbh).scalar()
                 if result:
                     if result.item_state=='已拒检':
-                        mes_about(self,'体检系统中该项目已被拒检！')
-                    # -- 2018-09-13 zhufd 取消此代码 原因：适应于医生退回护士追踪，B超等结果重新接收一次
-                    # elif result.item_state=='已小结':
-                    #     mes_about(self,'体检系统中该项目已被小结，请勿重复接收！')
-                    else:
-                        try:
-                            # 组合和子项 均写入 jcrq，jcys，zxpb，jsbz
-                            self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == xmbh).update({
-                                MT_TJ_TJJLMXB.jcys:self.shys.text(),
-                                MT_TJ_TJJLMXB.jcrq:self.shsj.text(),
-                                MT_TJ_TJJLMXB.zxpb: '1',
-                                MT_TJ_TJJLMXB.jsbz: '1',
-                                MT_TJ_TJJLMXB.ycbz: '1'
-                            },synchronize_session=False)
-                            # 子项目 写入结果、诊断
-                            self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == xmbh,MT_TJ_TJJLMXB.sfzh=='1').update({
-                                MT_TJ_TJJLMXB.jg: self.pis_jg.toPlainText(),
-                                MT_TJ_TJJLMXB.zd:self.pis_zd.text()
-                            },synchronize_session=False)
-                            # 写入TJ_PACS_PIC
-                            pic_obj = {
-                                'tjbh':tjbh,'zhbh':xmbh,'picpath':path,'picname':path,'path':path,
-                                'pk':content,'ftp_bz':'0','ksbm':'0026'
-                            }
-                            self.session.bulk_insert_mappings(MT_TJ_PACS_PIC, [pic_obj])
-                            # 写入 TJ_CZJLB
-                            jlnr = '''检查医生：%s；检查日期：%s；结果：%s；诊断：%s''' % (
-                            self.shys.text(), self.shsj.text(), self.pis_jg.toPlainText(), self.pis_zd.text())
-                            data_obj = {'jllx': '0102', 'jlmc': '结果强制接收', 'tjbh':tjbh, 'mxbh': xmbh,
-                                             'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                                             'jlnr': jlnr, 'bz': None}
-                            self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
-                            self.session.commit()
-                            mes_about(self,'结果接收成功！')
+                        button = mes_warn(self, '体检系统中该项目已被拒检，您确定重新接收结果？')
+                        if button != QMessageBox.Yes:
+                            return
+                        # -- 2018-09-13 zhufd 取消此代码 原因：适应于医生退回护士追踪，B超等结果重新接收一次
+                    elif result.item_state=='已小结':
+                        button = mes_warn(self,'体检系统中该项目已被小结，您确定重新接收结果？')
+                        if button != QMessageBox.Yes:
+                            return
+                    try:
+                        # 组合和子项 均写入 jcrq，jcys，zxpb，jsbz
+                        self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == xmbh).update({
+                            MT_TJ_TJJLMXB.jcys:self.shys.text(),
+                            MT_TJ_TJJLMXB.jcrq:self.shsj.text(),
+                            MT_TJ_TJJLMXB.zxpb: '1',
+                            MT_TJ_TJJLMXB.jsbz: '1',
+                            MT_TJ_TJJLMXB.ycbz: '1',
+                            MT_TJ_TJJLMXB.qzjs: None
+                        },synchronize_session=False)
+                        # 子项目 写入结果、诊断
+                        self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,MT_TJ_TJJLMXB.zhbh == xmbh,MT_TJ_TJJLMXB.sfzh=='0').update({
+                            MT_TJ_TJJLMXB.jg: self.pis_jg.toPlainText(),
+                            MT_TJ_TJJLMXB.zd:self.pis_zd.text()
+                        },synchronize_session=False)
+                        # 写入TJ_PACS_PIC
+                        pic_obj = {
+                            'tjbh':tjbh,'zhbh':xmbh,'picpath':path,'picname':path,'path':path,
+                            'pk':content,'ftp_bz':'0','ksbm':'0026'
+                        }
+                        self.session.bulk_insert_mappings(MT_TJ_PACS_PIC, [pic_obj])
+                        # 写入 TJ_CZJLB
+                        jlnr = '''检查医生：%s；检查日期：%s；结果：%s；诊断：%s''' % (
+                        self.shys.text(), self.shsj.text(), self.pis_jg.toPlainText(), self.pis_zd.text())
+                        data_obj = {'jllx': '0102', 'jlmc': '结果强制接收', 'tjbh':tjbh, 'mxbh': xmbh,
+                                         'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                         'jlnr': jlnr, 'bz': None}
+                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                        self.session.commit()
+                        mes_about(self,'结果接收成功！')
 
-                        except Exception as e:
-                            self.session.rollback()
-                            mes_about(self,'更新数据库MT_TJ_TJJLMXB 出错！错误信息：%s' %e)
+                    except Exception as e:
+                        self.session.rollback()
+                        mes_about(self,'更新数据库MT_TJ_TJJLMXB 出错！错误信息：%s' %e)
                 else:
                     mes_about(self, '体检系统中不存在该项目')
             else:

@@ -30,8 +30,16 @@ from app_reportserver import *
 from jinja2 import Template
 from mako.template import Template as Template2
 from pprint import pprint
-from report import MT_TJ_BGGL
+from PyPDF2.pdf import PdfFileReader
 from wand.image import Image
+from utils.bmodel import *
+import gc
+
+def report_run_api(queue):
+    try:
+        report_run(queue)
+    except Exception as e:
+        print("报告服务运行出错，错误信息：%s" %e)
 
 def report_run(queue):
     #######################初始化 全局参数######################################
@@ -53,10 +61,15 @@ def report_run(queue):
     cachet = {'zjys':None,'shys':None,'warn':None,'syys':None}                  # 公章、总检、审核医生签名
     footer_user = pdf_options['footer-left']
     html_path =gol.get_value('report_html_resource')
+    gc_count = 0
     ####################### 数据准备：图片、首页、html ###########################
     while True:
         if not queue.empty():                                                           # 循环
             mes_obj = queue.get_nowait()                                                 # 获取进程队列消息,非阻塞模式
+            gc_count = gc_count + 1
+            # 显式释放内存
+            if gc_count==100:
+                gc.collect()
             # print('%s 从进程队列中获得消息：%s' %(cur_datetime(),ujson.dumps(mes_obj)))
             log.info('从进程队列中获得消息：%s' %ujson.dumps(mes_obj))
             tjbh = mes_obj['tjbh']                                                      # 获取体检编号
@@ -145,7 +158,6 @@ def report_run(queue):
                 log.info("%s: %s PDF报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end2 - time_start))
                 pdf_data_obj.set_bglj(pdf_data_obj.get_pdf)
             ############################## 更新数据库 ########################################
-
             pdf_data_obj.update_user_report()
         else:
             time.sleep(1)
@@ -300,6 +312,12 @@ class PdfData(object):
     def set_bglj(self,filename):
         if filename.endswith('.pdf'):
             self.user_data['bgms'] = '1'
+            # 获取PDF 页码
+            try:
+                pdf_read_obj = PdfFileReader(filename)
+                self.user_data['bgym'] = pdf_read_obj.getNumPages()
+            except Exception as e:
+                print("获取报告页码出错，错误信息：%s" %e)
         else:
             self.user_data['bgms'] = '0'
         self.user_data['bglj'] = self.cur_dir
@@ -375,6 +393,7 @@ class PdfData(object):
         if not os.path.exists(cur_path):
             os.makedirs(cur_path)
         self.cur_dir = cur_path
+        # print("体检编号:%s 报告路径：%s" %(self.tjbh,self.cur_dir))
 
     # 获得封面 名称
     @property
@@ -550,8 +569,24 @@ class PdfData(object):
                     if flag:
                         self.pic[result.xmbh] = file_local.replace(self.html_path, '')
                     else:
-                        self.pic[result.xmbh]= file_local
-                    # self.pic[result.xmbh] = file_local
+                        self.pic[result.xmbh] = file_local
+                        # self.pic[result.xmbh] = file_local
+                else:
+                    # 如果心电图PDF不存在，则从DCP_FIELS 读取
+                    if zhbh == '0806':
+                        result = self.session_tjk.query(MT_DCP_files).filter(MT_DCP_files.cusn == self.tjbh).scalar()
+                        if result:
+                            tmp_file = "%s_08.pdf" % self.tjbh
+                            with open(tmp_file, "wb") as f:
+                                f.write(result.filecontent)
+                            pdf2pic(tmp_file, file_local)
+                            os.remove(tmp_file)
+
+                    # 添加
+                    if flag:
+                        self.pic['0806'] = file_local.replace(self.html_path, '')
+                    else:
+                        self.pic['0806'] = file_local
             # 本地测试
             # if result:
                 # if flag:
@@ -563,10 +598,10 @@ class PdfData(object):
                 # is_done, error = hander_pacs.down(file_remote, file_local)
                 # if is_done:
                     # 添加
-                    if flag:
-                        self.pic[result.xmbh] = file_local.replace(self.html_path, '')
-                    else:
-                        self.pic[result.xmbh] = file_local
+                    # if flag:
+                    #     self.pic[result.xmbh] = file_local.replace(self.html_path, '')
+                    # else:
+                    #     self.pic[result.xmbh] = file_local
                     # self.pic[result.xmbh] = file_local
 
             else:
@@ -660,14 +695,35 @@ class PdfData(object):
                         MT_TJ_BGGL.zjxm: self.user_data['zjxm'],
                         MT_TJ_BGGL.shrq: self.user_data['shrq'],
                         MT_TJ_BGGL.shgh: self.user_data['shgh'],
-                        MT_TJ_BGGL.shxm: self.user_data['shxm']
+                        MT_TJ_BGGL.shxm: self.user_data['shxm'],
+                        MT_TJ_BGGL.bglj: self.user_data['bglj']
+                    })
+                    self.session_tjk.commit()
+                except Exception as e:
+                    self.session_tjk.rollback()
+                    print('插入 MT_TJ_BGGL 记录失败！错误代码：%s' % e)
+            # 已经审核状态
+            elif result.bgzt == '1':
+                try:
+                    self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.tjbh).update({
+                        MT_TJ_BGGL.sybz: self.user_data['sybz'],
+                        MT_TJ_BGGL.bglj: self.user_data['bglj']
                     })
                     self.session_tjk.commit()
                 except Exception as e:
                     self.session_tjk.rollback()
                     print('插入 MT_TJ_BGGL 记录失败！错误代码：%s' % e)
             else:
-                pass
+                # 已审阅 更新下PDF 页码
+                try:
+                    self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.tjbh).update({
+                        MT_TJ_BGGL.sybz: self.user_data['sybz'],
+                        MT_TJ_BGGL.bgym: self.user_data.get('bgym',0),
+                    })
+                    self.session_tjk.commit()
+                except Exception as e:
+                    self.session_tjk.rollback()
+                    print('插入 MT_TJ_BGGL 记录失败！错误代码：%s' % e)
         else:
             try:
                 self.session_tjk.bulk_insert_mappings(MT_TJ_BGGL, [self.user_data])
@@ -704,6 +760,64 @@ def report_file_rename(path,tjbh,action):
     if os.path.exists(filename):
         fileRename(filename)
 
+class MT_TJ_BGGL(BaseModel):
+
+    __tablename__ = 'TJ_BGGL'
+
+    tjbh = Column(String(16), primary_key=True,nullable=True)           # 体检编号
+    bgzt = Column(CHAR(1), nullable=True)                               # 报告状态 默认：追踪(0) 审核完成待审阅(1) 审阅完成待打印(2) 打印完成待整理(3) 4 整理  5 领取
+    djrq = Column(DateTime, nullable=True)                              # 登记日期
+    djgh = Column(String(16), nullable=False)                           # 登记工号
+    djxm = Column(String(16), nullable=False)                           # 登记姓名
+    qdrq = Column(DateTime, nullable=True)                              # 签到日期
+    qdgh = Column(String(16), nullable=False)                           # 签到工号
+    qdxm = Column(String(16), nullable=False)                           # 签到姓名
+    sdrq = Column(DateTime, nullable=False)                             # 收单日期
+    sdgh = Column(String(16), nullable=False)                           # 收单工号
+    sdxm = Column(String(16), nullable=False)                           # 收单姓名
+    zzrq = Column(DateTime, nullable=False,)                            # 追踪日期
+    zzgh = Column(String(16), nullable=False)                           # 追踪工号
+    zzxm = Column(String(16), nullable=False)                           # 追踪姓名
+    zzbz = Column(Text, nullable=False)                                 # 追踪备注    记录电话等沟通信息，强制接收等信息
+    zjrq = Column(DateTime, nullable=False)                             # 总检日期
+    zjgh = Column(String(16), nullable=False)                           # 总检工号
+    zjxm = Column(String(16), nullable=False)                           # 总检姓名
+    zjbz = Column(Text, nullable=False)                                 # 总检备注
+    shrq = Column(DateTime, nullable=False)                             # 审核日期
+    shgh = Column(String(16), nullable=False)                           # 审核工号
+    shxm = Column(String(16), nullable=False)                           # 审核姓名
+    shbz = Column(Text, nullable=False)                                 # 审核备注    记录退回原因
+    syrq = Column(DateTime, nullable=False)                             # 审阅日期
+    sygh = Column(String(16), nullable=False)                           # 审阅工号
+    syxm = Column(String(16), nullable=False)                           # 审阅姓名
+    sybz = Column(Text, nullable=False)                                 # 审阅备注    记录退回原因
+    sysc = Column(Integer, nullable=False, default=0)                   # 当次审阅时长 默认 0
+    dyrq = Column(DateTime, nullable=False)                             # 打印日期
+    dygh = Column(String(16), nullable=False)                           # 打印工号
+    dyxm = Column(String(16), nullable=False)                           # 打印姓名
+    dyfs = Column(CHAR(1), nullable=False)                              # 打印方式 默认 0 租赁打印  1 本地打印  2 自助打印
+    dycs = Column(Integer, nullable=True, default=0)                    # 打印次数 默认 0
+    zlrq = Column(DateTime, nullable=False)                             # 整理日期
+    zlgh = Column(String(16), nullable=False)                           # 整理工号
+    zlxm = Column(String(16), nullable=False)                           # 整理姓名
+    zlhm = Column(String(16), nullable=False)                           # 整理货号
+    lqrq = Column(DateTime, nullable=False)                             # 领取日期
+    lqgh = Column(String(16), nullable=False)                           # 领取工号
+    lqxm = Column(String(16), nullable=False)                           # 领取姓名
+    lqfs = Column(String(16), nullable=False)                           # 领取方式
+    lqbz = Column(Text, nullable=False)                                 # 领取备注    记录领取信息
+    bgym = Column(Integer, nullable=True, default=0)                    # 报告页码，默认0页
+    bglj = Column(String(250), nullable=False)                          # 报告路径 只存储对应PDF、HTML根路径
+    bgms = Column(CHAR(1), nullable=False,default='0')                  # 报告模式 默认HTML 1 PDF
+    last_item_done = Column(DateTime, nullable=False)                   # 最后一个项目完成时间
+    jpdyrq = Column(DateTime, nullable=False)                           # 胶片打印日期
+    jpdygh = Column(String(16), nullable=False)                         # 胶片打印工号
+    jpdyxm = Column(String(16), nullable=False)                         # 胶片打印姓名
+    jpsl = Column(String(16), nullable=False)                           # 胶片数量
+    jpjjjl = Column(String(250), nullable=False)                        # 胶片交接记录
+    bgth = Column(CHAR(1), nullable=True)                               # 报告退回          0 审核退回  1审阅退回
+    gcbz = Column(Text, nullable=False)                                 # 过程备注    记录领取信息
+
 if __name__ =='__main__':
     # import cgitb
     # # 非pycharm编辑器可用输出错误
@@ -727,11 +841,12 @@ if __name__ =='__main__':
     # 处理PDF 生成的
     # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
     #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
-    # results = session.execute(sql).fetchall()
-    # for result in results:
-    #     q.put({'tjbh': result[0], 'action': 'html'})
-    # results = session.execute(sql2).fetchall()
-    # for result in results:
-    #     q.put({'tjbh': result[0], 'action': 'html'})
-    sql = "SELECT  "
+    results = session.execute(sql).fetchall()
+    for result in results:
+        q.put({'tjbh': result[0], 'action': 'html'})
+    results = session.execute(sql2).fetchall()
+    for result in results:
+        q.put({'tjbh': result[0], 'action': 'html'})
+    # sql = "SELECT  "
+    # q.put({'tjbh': '165583081', 'action': 'html'})
     report_run(q)

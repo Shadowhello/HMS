@@ -165,7 +165,7 @@ class ReportReviewUser(QGroupBox):
         self.review_item = QPlainTextEdit()
         self.review_item.setStyleSheet('''font: 75 10pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
         self.review_item.setDisabled(True)
-        self.review_item.setPlaceholderText("外送备注")
+        self.review_item.setPlaceholderText("手工单备注")
         # 外出项目
         self.review_film = QPlainTextEdit()
         self.review_film.setStyleSheet('''font: 75 10pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
@@ -209,13 +209,17 @@ class ReportReviewUser(QGroupBox):
             self.lb_review_bz.show2(False)
             self.btn_review.start()
         else:
-            self.lb_review_bz.show2()
-            self.btn_review.setText('取消审阅')
+            if all([data['syxm'],data['syrq']]):
+                self.lb_review_bz.show2()
+                self.btn_review.setText('取消审阅')
+            else:
+                self.lb_review_bz.show2(False)
+                self.btn_review.start()
         self.review_user.setText(data['syxm'])
         self.review_time.setText(data['syrq'])
         self.review_comment.setPlainText(data['sybz'])
 
-    # 显示是否有外送项目，2018-09-27 新增，个人感觉价值不大，故不合并setData
+    # 显示是否有手动单项目，2018-09-27 新增，个人感觉价值不大，故不合并setData
     def setData2(self,item_name):
         self.review_item.setPlainText(item_name)
 
@@ -381,9 +385,9 @@ class ReportReviewFullScreen(Dialog):
         self.wv_report_equip.load(url)
         # 刷新界面
         self.gp_review_user.setData({'sybz':sybz,'syrq':syrq,'syxm':syxm,'syzt':bgzt})
-        results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == self.cur_tjbh,MT_TJ_TJJLMXB.xmbh.in_(('1122','1931'))).all()
+        results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == self.cur_tjbh,MT_TJ_TJJLMXB.xmbh.in_(('1122','1931','0903','501732','501933','501934'))).all()
         if results:
-            self.gp_review_user.setData2(",".join([result.xmmc for result in results]))
+            self.gp_review_user.setData2(",".join([str2(result.xmmc) for result in results]))
 
     def initUI(self):
         lt_main = QVBoxLayout()

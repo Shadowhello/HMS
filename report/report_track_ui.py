@@ -20,7 +20,8 @@ class ReportTrackUI(Widget):
         self.btn_query = ToolButton(Icon('query'),'查询')
         self.btn_task = ToolButton(Icon('任务'), '领取')
         self.btn_myself = ToolButton(Icon('user'),'我的')
-        self.btn_export = ToolButton(Icon('导出'), '导出')
+        # self.btn_send = ToolButton(Icon('发送'), '发送')
+        self.btn_send = SendButton()
         self.btn_receive = ToolButton(Icon('接收'),'结果接收')
         # 追踪类型
         self.cb_track_type = TrackTypeGroup()
@@ -43,9 +44,8 @@ class ReportTrackUI(Widget):
         self.lt_where_search.addWidget(self.btn_query, 0, 9, 2, 2)
         self.lt_where_search.addWidget(self.btn_task, 0, 11, 2, 2)
         self.lt_where_search.addWidget(self.btn_myself, 0, 13, 2, 2)
-
-        self.lt_where_search.addWidget(self.btn_receive, 0, 15, 2, 2)
-        self.lt_where_search.addWidget(self.btn_export, 0, 17, 2, 2)
+        self.lt_where_search.addWidget(self.btn_send, 0, 15, 2, 2)
+        self.lt_where_search.addWidget(self.btn_receive, 0, 17, 2, 2)
         gp_search.setLayout(self.lt_where_search)
 
         # 快速检索
@@ -90,6 +90,7 @@ class ReportTrackUI(Widget):
         self.btn_sms = QPushButton(Icon('短信'),'短信记录')         # 查看短信记录
         self.btn_sd = QPushButton(Icon('体检收单'),'导检收单')      # 导检收单
         self.btn_djd = QPushButton(Icon('体检收单'),'纸质导检单')   # 有拒检项目查看电子导检单
+        self.btn_export = QPushButton(Icon('导出'), '数据导出')     # 数据导出
         lt_bottom.addWidget(self.btn_item)
         lt_bottom.addWidget(self.btn_lis)
         lt_bottom.addWidget(self.btn_pacs)
@@ -99,6 +100,7 @@ class ReportTrackUI(Widget):
         lt_bottom.addWidget(self.btn_sms)
         # lt_bottom.addWidget(self.btn_sd)
         lt_bottom.addWidget(self.btn_djd)
+        lt_bottom.addWidget(self.btn_export)
         gp_bottom.setLayout(lt_bottom)
         # 整体布局
         lt_main.addLayout(lt_top)
@@ -107,3 +109,28 @@ class ReportTrackUI(Widget):
 
         self.setLayout(lt_main)
 
+class SendButton(QToolButton):
+
+    menu_clicked =pyqtSignal(bool)
+
+    def __init__(self,parent=None):
+        super(SendButton,self).__init__(parent)
+        self.setIcon(Icon("发送"))
+        self.setText("发送")
+        self.setIconSize(QSize(32, 32))
+        self.setAutoRaise(True)
+        #self.setPopupMode(QToolButton.MenuButtonPopup)
+        self.setPopupMode(QToolButton.InstantPopup)
+        self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        menu=QMenu()
+        menu.addAction(Icon("医生"),"->审核医生",self.on_btn_send_doctor)
+        menu.addAction(Icon("护士"),"->审阅护士",self.on_btn_send_nurse)
+        self.setMenu(menu)
+
+    def on_btn_send_doctor(self):
+        self.menu_clicked.emit(True)
+
+    def on_btn_send_nurse(self):
+        self.menu_clicked.emit(False)
+
+    # def on_self_click(self):

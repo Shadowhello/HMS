@@ -4,31 +4,6 @@ from utils.base import str2,get_key
 from functools import partial
 from utils.readcard import IdCard
 
-class MessageBox(QMessageBox):
-
-    def __init__(self, *args, count=10, **kwargs):
-        super(MessageBox, self).__init__(*args, **kwargs)
-        self.setWindowTitle('明州体检')
-        self.setWindowIcon(Icon('mztj'))
-        self.count = count
-        self.setStandardButtons(self.Close)  # 关闭按钮
-        self.closeBtn = self.button(self.Close)  # 获取关闭按钮
-        self.closeBtn.setText('关闭(%s)' % count)
-        self._timer = QTimer(self, timeout=self.doCountDown)
-        self._timer.start(1000)
-
-    def doCountDown(self):
-        self.closeBtn.setText('关闭(%s)' % self.count)
-        self.count -= 1
-        if self.count <= 0:
-            self._timer.stop()
-            self.accept()
-            self.close()
-
-def mes_about(parent,message):
-    MessageBox(parent, text=message).exec_()
-    # QMessageBox.about(parent, '明州体检', message)
-
 def mes_about2(parent,message):
     # MessageBox(parent, text=message).exec_()
     QMessageBox.about(parent, '明州体检', message)
@@ -1384,7 +1359,8 @@ class ReportStateGroup(QHBoxLayout):
             '未打印': '2',
             '已整理': '4',
             '已领取': '5',
-            '老未打/新未审':0
+            '老未打/新未审': 0,
+            '老未打/新未打': 0
         }
 
     def initUI(self):
@@ -1428,9 +1404,9 @@ class ReportStateGroup(QHBoxLayout):
         if self.is_check.isChecked():
             value = self.bgzt.get(self.cb_report_state.currentText(),False)
             if isinstance(value,list):
-                return ''' AND TJ_BGGL.BGZT IN %s ''' %str(tuple(value))
+                return ''' AND (TJ_TJDJB.dybj='1' OR TJ_BGGL.BGZT IN %s ) ''' %str(tuple(value))
             elif isinstance(value, str):
-                return ''' AND TJ_BGGL.BGZT = %s ''' % value
+                return ''' AND (TJ_TJDJB.dybj='' OR TJ_TJDJB.dybj IS NULL)  AND TJ_BGGL.BGZT = %s  ''' % value
             else:
                 return False
         return False
@@ -2290,6 +2266,8 @@ class UserBaseGroup(QVBoxLayout):
         lt_user = QHBoxLayout()
         gp_inspect = QGroupBox('检查信息')
         lt_inspect = QHBoxLayout()
+        gp_report = QGroupBox('报告信息')
+        lt_report = QHBoxLayout()
         ########################控件区#####################################
         self.lb_user_id   = Lable()          # 体检编号
         self.lb_user_name = Lable()          # 姓名
@@ -2374,6 +2352,10 @@ class UserBaseGroup(QVBoxLayout):
         self.lb_shrq.setText('')
         self.lb_yzjys.setText('')
         self.lb_yshys.setText('')
+
+    @property
+    def get_tjbh(self):
+        return self.lb_user_id.text()
 
 class EquipTypeLayout(QHBoxLayout):
 

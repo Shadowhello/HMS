@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         #self.viewfinder.setBrightness(0)
 
         timestamp = time.strftime("%d-%b-%Y-%H_%M_%S")
-        self.capture.capture(os.path.join(self.save_path, "%s-%04d-%s.jpg" % (
+        self.capture.capture(os.path.join("d:/", "%s-%04d-%s.jpg" % (
             self.current_camera_name,
             self.save_seq,
             timestamp

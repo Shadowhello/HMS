@@ -405,13 +405,20 @@ class MV_RYXX(BaseModel):
                 "sfzh": getattr(self, "sfzh", ''),
                 "sjhm": sjhm,
                 "depart": str2(getattr(self, "depart", '')),
-                "dwmc": str2(getattr(self, "dwmc", '')),
+                "dwmc": self.get_dwmc,
                 "qdrq": str(getattr(self, "qdrq", ''))[0:10],
                 "djrq": str(getattr(self, "djrq", '')),
                 'zjys': getattr(self, "zjys"),
                 'shys': getattr(self, "shys"),
                 'syys': getattr(self, "sygh")
                 }
+
+    @property
+    def get_dwmc(self):
+        if str2(getattr(self, "depart")):
+            return "%s(%s)" %(str2(getattr(self, "dwmc", '')),str2(getattr(self, "depart")))
+        else:
+            return str2(getattr(self, "dwmc", ''))
 
 class MT_TJ_PHOTO(BaseModel):
 

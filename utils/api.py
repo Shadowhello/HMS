@@ -174,13 +174,14 @@ class APIRquest(object):
 
 def request_create_report(tjbh,filetype='html'):
     url = gol.get_value('api_report_create') %(filetype,tjbh,'BSSA')
-    print(url)
     response = requests.post(url)
     if response.status_code == 200:
         print('API：%s 上传请求成功！' % url)
         return response.json()
     else:
         print('API：%s 上传请求失败！' % url)
+        return False
+
 
 
 

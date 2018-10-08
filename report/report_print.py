@@ -1,8 +1,9 @@
 from .report_print_ui import *
 from .model import *
-from utils import request_get,print_pdf_gsprint,cur_datetime,api_print
+from utils import request_get,print_pdf_gsprint,cur_datetime,api_print,request_create_report
 from widgets.bweb import WebView
 import webbrowser
+from .common import get_pdf_url
 
 printers = {
     '77号打印机':'77',
@@ -27,7 +28,7 @@ class ReportPrint(ReportPrintUI):
         self.table_print.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_print.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
         self.table_print.itemClicked.connect(self.on_table_set)
-        self.table_print.itemDoubleClicked.connect(self.on_btn_item_click)
+        # self.table_print.itemDoubleClicked.connect(self.on_btn_item_click)
         # 快速减速
         self.gp_quick_search.returnPressed.connect(self.on_quick_search)    # 快速检索
         # 特殊变量
@@ -159,7 +160,7 @@ class ReportPrint(ReportPrintUI):
         if self.lt_where_search.where_dwbh=='00000':
             mes_about(self,'不存在该单位，请重新选择！')
             return
-        sql = get_report_print2_sql()
+        sql = get_report_print_sql()
         t_start,t_end = self.lt_where_search.date_range
         if self.lt_where_search.get_date_text() == '签到日期':
             sql = sql + ''' AND TJ_TJDJB.QDRQ>= '%s' AND TJ_TJDJB.QDRQ< '%s' ''' %(t_start,t_end)
@@ -188,6 +189,7 @@ class ReportPrint(ReportPrintUI):
             sql = sql + self.lt_where_search.where_tjqy2
 
         sql = sql + ''' INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH=TJ_TJDAB.DABH ;'''
+        print(sql)
         try:
             results = self.session.execute(sql).fetchall()
             self.table_print.load(results)
@@ -336,23 +338,20 @@ class ReportPrint(ReportPrintUI):
             item2 = menu.addAction(Icon("报告中心"), "浏览器中打开HTML报告")
             item3 = menu.addAction(Icon("取消"), "取消整理")
             item4 = menu.addAction(Icon("取消"), "取消领取")
-            # item5 = menu.addAction(Icon("报告中心"), "打开PDF报告")
+            item5 = menu.addAction(Icon("报告中心"), "重新生成PDF报告")
             action = menu.exec_(self.table_print.mapToGlobal(pos))
             tjbh = self.table_print.getCurItemValueOfKey('tjbh')
             zlxm = self.table_print.getCurItemValueOfKey('zlxm')
             lqxm = self.table_print.getCurItemValueOfKey('lqxm')
+            bgzt = self.table_print.getCurItemValueOfKey('bgzt')
+            tjzt = self.table_print.getCurItemValueOfKey('tjzt')
             if action==item1:
-                try:
-                    self.cxk_session = gol.get_value('cxk_session')
-                    result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).scalar()
-                    if result:
-                        url = gol.get_value('api_pdf_old_show') % result.PDFURL
-                        webbrowser.open(url)
-                    else:
-                        mes_about(self, '未找到该顾客体检报告！')
-                except Exception as e:
-                    mes_about(self, '查询出错，错误信息：%s' % e)
-                    return
+                url = get_pdf_url(self.session,tjbh)
+                if url:
+                    webbrowser.open(url)
+                else:
+                    mes_about(self, '未查询到该报告！')
+
             elif action == item2:
                 try:
                     webbrowser.open(gol.get_value('api_report_preview') % ('html', tjbh))
@@ -427,7 +426,15 @@ class ReportPrint(ReportPrintUI):
                     self.table_print.setCurItemValueOfKey('lqfs', '')
                     self.table_print.setCurItemValueOfKey('bgzt', '已打印')
             # 取消领取
-            # elif action == item5:
+            elif action == item5:
+                if tjzt=='已审阅':
+                    if request_create_report(tjbh, 'pdf'):
+                        mes_about(self,"重新生成PDF报告成功！")
+                    else:
+                        mes_about(self,"重新生成PDF报告失败！")
+                else:
+                    mes_about(self, '当前报告还未审阅，不能生成！')
+                    return
                 # filename = r'C:\Users\Administrator\Desktop\pdf测试\168160026.pdf'
                 # local_open_pdf(filename)
                 # title = "%s - Adobe Reader" %os.path.basename(filename)

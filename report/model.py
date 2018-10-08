@@ -16,7 +16,7 @@ class MT_TJ_BGGL(BaseModel):
 
     __tablename__ = 'TJ_BGGL'
 
-    tjbh = Column(String(16), primary_key=True,nullable=True)                         # 体检编号
+    tjbh = Column(String(16), primary_key=True,nullable=True)           # 体检编号
     bgzt = Column(CHAR(1), nullable=True)                               # 报告状态 默认：追踪(0) 审核完成待审阅(1) 审阅完成待打印(2) 打印完成待整理(3) 4 整理  5 领取
     djrq = Column(DateTime, nullable=True)                              # 登记日期
     djgh = Column(String(16), nullable=False)                           # 登记工号
@@ -73,7 +73,7 @@ class MT_TJ_BGGL(BaseModel):
 
 def get_report_tracked_sql(tstart, tend):
     sql = '''
-    WITH T1 AS (
+        WITH T1 AS (
                 SELECT 
                     (CASE TJZT
                         WHEN '0' THEN '取消登记'
@@ -116,16 +116,40 @@ def get_report_tracked_sql(tstart, tend):
 
                 AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
 
-                AND TJ_TJDJB.QD='1'
+                AND TJ_TJDJB.QD='1' AND SUMOVER='0'
 
-                AND (TJ_TJDJB.QDRQ>= '$tstart' and TJ_TJDJB.QDRQ< '$tend')
+				AND (TJ_TJDJB.QDRQ>= '$tstart' and TJ_TJDJB.QDRQ< '$tend')
             )
-
-    SELECT 0 AS XMZQ,'' AS zzjd, '追踪完成' AS zzzt,TJ_BGGL.ZZXM,T1.*, '' as wjxm FROM T1 
-
-	INNER  JOIN TJ_BGGL ON T1.TJBH = TJ_BGGL.TJBH AND TJ_BGGL.BGZT<>'0' AND BGTH IS NULL AND ZZXM IS NOT NULL
-
-
+            ,T2 AS (
+                SELECT T1.TJBH,XMMC,(SELECT BGCJZQ FROM TJ_XMDM WHERE XMBH = TJ_TJJLMXB.XMBH) AS XMZQ,
+                (CASE WHEN shrq IS NULL THEN jcrq ELSE shrq END) AS XMRQ,jsbz
+                FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1'
+            )
+            , T4 AS
+            (
+                SELECT T2.TJBH,MAX(T2.XMZQ) AS XMZQ,MAX(T2.XMRQ) AS XMRQ,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 WHERE jsbz='1' GROUP BY T2.TJBH 
+            ) 
+            , T5 AS (
+            
+             SELECT TJBH FROM (
+            
+            SELECT DISTINCT TJ_TJJLMXB.TJBH,TJ_TJJLMXB.jsbz FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1'
+            
+            ) TMP GROUP BY TJBH HAVING COUNT(TJBH)=1 
+            )
+            
+            SELECT 
+                (SELECT XMZQ FROM T4 WHERE T4.TJBH = T1.TJBH) AS XMZQ,
+                DATEDIFF(DAY, T1.QDRQ,(SELECT XMRQ FROM T4 WHERE T4.TJBH = T1.TJBH)) AS zzjd,
+                    (CASE 
+                                WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT<>'0' THEN '追踪完成' 
+                                WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN '审核退回' 
+                                WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '1' THEN '审阅退回' 
+                                ELSE '' END
+                            ) AS zzzt,
+                    TJ_BGGL.ZZXM AS lqry,
+                    T1.*,'' AS wjxm 
+            FROM T1 INNER JOIN T5 ON T1.TJBH=T5.TJBH  
     '''
 
     return Template(sql).safe_substitute({'tstart': tstart, 'tend': tend})
@@ -309,31 +333,53 @@ def get_quick_search_sql(where_str):
                     ,substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) AS QDRQ,TJ_TJDJB.bz
                 FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
 
-                AND TJ_TJDJB.QD='1' AND %s
+                AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
+
+                AND TJ_TJDJB.QD='1'
+
+				AND %s
             )
             ,T2 AS (
                 SELECT T1.TJBH,XMMC,(SELECT BGCJZQ FROM TJ_XMDM WHERE XMBH = TJ_TJJLMXB.XMBH) AS XMZQ,
-                (CASE WHEN shrq IS NULL THEN jcrq ELSE shrq END) AS XMRQ
+                (CASE WHEN shrq IS NULL THEN jcrq ELSE shrq END) AS XMRQ,jsbz
                 FROM TJ_TJJLMXB INNER JOIN T1 ON TJ_TJJLMXB.TJBH = T1.TJBH AND TJ_TJJLMXB.SFZH='1'
             )
             , T3 AS
             (
-                SELECT T2.TJBH,MAX(T2.XMZQ) AS XMZQ,MAX(T2.XMRQ) AS XMRQ,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 GROUP BY T2.TJBH 
+                SELECT T2.TJBH,MAX(T2.XMZQ) AS XMZQ,MAX(T2.XMRQ) AS XMRQ,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH AND C.jsbz<>'1'  FOR XML PATH('')  ) AS wjxm from T2 WHERE jsbz<>'1' GROUP BY T2.TJBH 
             ) 
-
+            , T4 AS
+            (
+                SELECT T2.TJBH,MAX(T2.XMZQ) AS XMZQ,MAX(T2.XMRQ) AS XMRQ,(SELECT XMMC+' ; ' FROM T2 AS C WHERE C.TJBH=T2.TJBH  FOR XML PATH('')  ) AS wjxm from T2 WHERE jsbz='1' GROUP BY T2.TJBH 
+            ) 
         SELECT 
-            (SELECT XMZQ FROM T3 WHERE T3.TJBH = T1.TJBH) AS XMZQ,
+
+            ( CASE
+               WHEN  T1.TJZT IN('已总检','已审核','已审阅') THEN (SELECT XMZQ FROM T4 WHERE T4.TJBH = T1.TJBH)
+                 ELSE (SELECT XMZQ FROM T3 WHERE T3.TJBH = T1.TJBH) END
+            )AS XMZQ,
+            ( CASE
+               WHEN  T1.TJZT IN('已总检','已审核','已审阅') THEN DATEDIFF(DAY, T1.QDRQ,(SELECT XMRQ FROM T4 WHERE T4.TJBH = T1.TJBH))
+                 ELSE (SELECT XMZQ FROM T3 WHERE T3.TJBH=T1.TJBH)-DATEDIFF(DAY, T1.QDRQ, GETDATE()) END
+            )AS zzjd,
             (CASE 
-                WHEN T1.TJZT IN ('已总检','已审核','已审阅') THEN DATEDIFF(DAY, T1.QDRQ,(SELECT XMRQ FROM T3 WHERE T3.TJBH = T1.TJBH))
-                ELSE (SELECT XMZQ FROM T3 WHERE T3.TJBH = T1.TJBH)-DATEDIFF(DAY, T1.QDRQ, GETDATE()) END
-            ) AS zzjd,
-            (CASE WHEN (SELECT 1 FROM TJ_BGGL WHERE TJBH =T1.TJBH AND ZZXM IS NOT NULL) =1 THEN '追踪完成' ELSE '' END) AS zzzt,
-            (SELECT ZZXM FROM TJ_BGGL WHERE TJBH =T1.TJBH) AS lqry,
+                WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT<>'0' THEN '追踪完成' 
+                WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN '审核退回' 
+                WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '1' THEN '审阅退回' 
+		        WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH IS NULL AND (SELECT wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) IS NOT NULL THEN '追踪中' 
+                WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH IS NULL AND (SELECT wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) IS NULL THEN '追踪完成' 
+                ELSE '' END
+				) AS zzzt,
+            TJ_BGGL.ZZXM AS lqry,
             T1.*,
-            (CASE WHEN T1.TJZT IN ('已总检','已审核','已审阅') THEN ''
-                ELSE (SELECT wjxm FROM T3 WHERE T3.TJBH = T1.TJBH) END
-            ) AS wjxm 
-        FROM T1  
+				(CASE
+					WHEN TJ_BGGL.BGZT<>'0' THEN '' 
+					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN (SELECT TOP 1 JLNR FROM TJ_CZJLB WHERE TJBH = T1.TJBH AND JLLX='0103')
+					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '1' THEN TJ_BGGL.GCBZ
+					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH IS NULL THEN (SELECT T3.wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) 
+					ELSE (SELECT T3.wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) END
+				) AS wjxm 
+				FROM T1 LEFT JOIN TJ_BGGL ON T1.TJBH =TJ_BGGL.TJBH
     ''' %where_str
 
 def get_quick_search2_sql(where_str):
@@ -435,13 +481,13 @@ def has_pis_sql(tjbh):
 def get_pacs_sql(tjbh):
     return '''
      SELECT 
-        CBGZT,SYSTYPE,CMODALITY,CBZ AS XMMC,CNAME,CSEX,CAGE,
+        CBGZT,CJCZT,SYSTYPE,CMODALITY,CBZ AS XMMC,CNAME,CSEX,CAGE,
 				RIS_BG_CBGYSXM AS BGYS,RIS_BG_DBGSJ AS BGSJ,
         RIS_BG_CSHYSXM AS SHYS,RIS_BG_DSHSJ AS SHSJ
-				,RIS_BG_CBGSJ_HL7 AS XMJG,RIS_BG_CBGZD AS XMZD,CJCZT,
+				,RIS_BG_CBGSJ_HL7 AS XMJG,RIS_BG_CBGZD AS XMZD,
         DDJSJ,DCHECKDATE,RIS_BG_CBGYS AS BGYSGH,
 				RIS_BG_CSHYS AS SHYSGH,CACCNO,CBLKH,HISORDER_IID
-     FROM V_RIS2HIS_ALL WHERE CBLKH = '%s'
+     FROM V_RIS2HIS_ALL WHERE CBLKH = '%s' AND HISORDER_CEXAM_ITEM_NO!='15130'
     ''' %tjbh
 
 def has_pacs_sql(tjbh):
@@ -535,6 +581,8 @@ def get_report_print_sql():
                             WHEN '8' THEN '明州'
                             ELSE '' END
                     ) AS TJQY, 
+                    TJ_TJDJB.YSJE,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
                     TJ_TJDJB.TJBH,
                     TJ_TJDAB.XM,
                     (CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
@@ -542,23 +590,23 @@ def get_report_print_sql():
                     TJ_TJDAB.SFZH,
                     TJ_TJDAB.SJHM,
                     substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) as QDRQ,
-                    substring(convert(char,(CASE WHEN TJ_BGGL.DYRQ IS NULL THEN TJ_TJDJB.BGRQ ELSE TJ_BGGL.DYRQ END ),120),1,10) AS DYRQ,
+                    substring(convert(char,(CASE WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN TJ_TJDJB.BGRQ ELSE TJ_BGGL.DYRQ END ),120),1,10) AS DYRQ,
                     (CASE 
-                        WHEN TJ_BGGL.DYXM IS NULL THEN (select ygxm from tj_ygdm where yggh=TJ_TJDJB.CPAINTER ) 
+                        WHEN TJ_BGGL.DYXM IS NULL AND dybj='1' THEN (select ygxm from tj_ygdm where yggh=TJ_TJDJB.CPAINTER ) 
                         ELSE TJ_BGGL.DYXM END
                     ) AS DYXM,
                     (CASE 
-                        WHEN TJ_BGGL.DYCS IS NULL AND dybj='1' THEN '1' 
-                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
-                        WHEN TJ_BGGL.DYCS = 0 THEN ''
-                        ELSE CAST(TJ_BGGL.DYCS AS VARCHAR) END
+                        WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN '1' 
+                        WHEN TJ_BGGL.DYRQ IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL THEN CAST(TJ_BGGL.DYCS AS VARCHAR)
+						ELSE '' END
                     ) AS DYCS,
                     (CASE 
-                        WHEN TJ_BGGL.DYFS IS NULL AND dybj='1' THEN '租赁打印' 
-                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
-                        WHEN TJ_BGGL.DYCS = 0 THEN '租赁打印'
-                        WHEN TJ_BGGL.DYCS = 1 THEN '本地打印'
-                        WHEN TJ_BGGL.DYCS = 2 THEN '自助打印'
+                        WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN '租赁打印(老)' 
+                        WHEN TJ_BGGL.DYRQ IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL AND TJ_BGGL.DYFS = 0 THEN '租赁打印'
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL AND TJ_BGGL.DYFS = 1 THEN '本地打印'
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL AND TJ_BGGL.DYFS = 2 THEN '自助打印'
                         ELSE '' END
                     ) AS DYFS,
                     TJ_BGGL.ZLXM,
@@ -568,13 +616,13 @@ def get_report_print_sql():
                     TJ_BGGL.LQRQ,
                     TJ_BGGL.LQFS,
                     '' AS JPDY,
-                    TJ_TJDJB.DWBH,
-                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC
+                    TJ_TJDJB.DWBH
+                    
                 FROM 
                 TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_TJDJB.TJBH=TJ_BGGL.TJBH  
                     AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
                     AND TJ_TJDJB.QD='1' 
-                    AND TJ_TJDJB.SUMOVER='1' 
+                    AND TJ_TJDJB.SUMOVER='1'
         '''
 
 # 根据审阅日期检索
@@ -625,6 +673,7 @@ def get_report_print2_sql():
                             ELSE '' END
                     ) AS TJQY, 
                     TJ_TJDJB.YSJE,
+                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,
                     TJ_TJDJB.TJBH,
                     TJ_TJDAB.XM,
                     (CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,
@@ -632,23 +681,23 @@ def get_report_print2_sql():
                     TJ_TJDAB.SFZH,
                     TJ_TJDAB.SJHM,
                     substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) as QDRQ,
-                    substring(convert(char,(CASE WHEN TJ_BGGL.DYRQ IS NULL THEN TJ_TJDJB.BGRQ ELSE TJ_BGGL.DYRQ END ),120),1,10) AS DYRQ,
+                    substring(convert(char,(CASE WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN TJ_TJDJB.BGRQ ELSE TJ_BGGL.DYRQ END ),120),1,10) AS DYRQ,
                     (CASE 
-                        WHEN TJ_BGGL.DYXM IS NULL THEN (select ygxm from tj_ygdm where yggh=TJ_TJDJB.CPAINTER ) 
+                        WHEN TJ_BGGL.DYXM IS NULL AND dybj='1' THEN (select ygxm from tj_ygdm where yggh=TJ_TJDJB.CPAINTER ) 
                         ELSE TJ_BGGL.DYXM END
                     ) AS DYXM,
                     (CASE 
-                        WHEN TJ_BGGL.DYCS IS NULL AND dybj='1' THEN '1' 
-                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
-                        WHEN TJ_BGGL.DYCS = 0 THEN ''
-                        ELSE CAST(TJ_BGGL.DYCS AS VARCHAR) END
+                        WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN '1' 
+                        WHEN TJ_BGGL.DYRQ IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL THEN CAST(TJ_BGGL.DYCS AS VARCHAR)
+						ELSE '' END
                     ) AS DYCS,
                     (CASE 
-                        WHEN TJ_BGGL.DYFS IS NULL AND dybj='1' THEN '租赁打印' 
-                        WHEN TJ_BGGL.DYCS IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
-                        WHEN TJ_BGGL.DYCS = 0 THEN '租赁打印'
-                        WHEN TJ_BGGL.DYCS = 1 THEN '本地打印'
-                        WHEN TJ_BGGL.DYCS = 2 THEN '自助打印'
+                        WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN '租赁打印(老)' 
+                        WHEN TJ_BGGL.DYRQ IS NULL AND (dybj='0' OR dybj IS NULL) THEN '' 
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL AND TJ_BGGL.DYFS = 0 THEN '租赁打印'
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL AND TJ_BGGL.DYFS = 1 THEN '本地打印'
+                        WHEN TJ_BGGL.DYRQ IS NOT NULL AND TJ_BGGL.DYFS = 2 THEN '自助打印'
                         ELSE '' END
                     ) AS DYFS,
                     TJ_BGGL.ZLXM,
@@ -658,10 +707,10 @@ def get_report_print2_sql():
                     TJ_BGGL.LQRQ,
                     TJ_BGGL.LQFS,
                     '' AS JPDY,
-                    TJ_TJDJB.DWBH,
-                    (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC
+                    TJ_TJDJB.DWBH
+                    
                 FROM 
-                TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_TJDJB.TJBH=TJ_BGGL.TJBH  
+                TJ_TJDJB LEFT JOIN TJ_BGGL ON TJ_TJDJB.TJBH=TJ_BGGL.TJBH  
                     AND (TJ_TJDJB.del <> '1' or TJ_TJDJB.del is null) 
                     AND TJ_TJDJB.QD='1' 
                     AND TJ_TJDJB.SUMOVER='1' 
@@ -676,6 +725,8 @@ def get_report_review_sql(t_start,t_end):
                         WHEN '1' THEN '已审核'
                         WHEN '2' THEN '已审阅'
                         WHEN '3' THEN '已打印'
+                        WHEN '4' THEN '已整理'
+                        WHEN '5' THEN '已领取'
                         ELSE '' END 
                 ) AS BGZT,                  
                 (CASE 
@@ -756,7 +807,7 @@ def get_report_bgth_sql():
 		) AS TJQY,e.TJBH,e.XM,(CASE e.XB WHEN '1' THEN '男' ELSE '女' END) AS XB,e.nl,e.SFZH,e.SJHM,
                     (select MC from TJ_DWDMB where DWBH=e.DWBH) AS DWMC,substring(convert(char,e.QDRQ,120),1,10) AS QDRQ,e.bz,
                     (CASE 
-                        WHEN TJ_BGGL.BGZT='0' AND TJ_BGGL.BGTH='0' THEN (SELECT TOP 1 bz FROM TJ_CZJLB WHERE TJBH=e.TJBH AND JLLX='0103')
+                        WHEN TJ_BGGL.BGZT='0' AND TJ_BGGL.BGTH='0' THEN (SELECT TOP 1 JLNR FROM TJ_CZJLB WHERE TJBH=TJ_BGGL.TJBH AND JLLX='0103')
                         WHEN TJ_BGGL.BGZT='0' AND TJ_BGGL.BGTH='1' THEN TJ_BGGL.GCBZ
                         ELSE '' END
                     )AS wjxm
@@ -858,7 +909,7 @@ def get_report_track_myself_sql(tstart,tend,yggh):
         T1.*,
 				(CASE
 					WHEN TJ_BGGL.BGZT<>'0' THEN '' 
-					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN '审核退回'
+					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN (SELECT TOP 1 JLNR FROM TJ_CZJLB WHERE TJBH = T1.TJBH AND JLLX='0103')
 					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '1' THEN TJ_BGGL.GCBZ
 					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH IS NULL THEN (SELECT T3.wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) 
 					ELSE '' END
