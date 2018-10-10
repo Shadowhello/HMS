@@ -18,6 +18,7 @@ class ReportReview(ReportReviewUI):
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
         self.btn_review_mode.clicked.connect(partial(self.on_btn_review_mode_click,True))
         self.btn_review_mode2.clicked.connect(partial(self.on_btn_review_mode_click,False))
+        self.btn_review_batch.clicked.connect(self.on_btn_review_batch_click)
         self.gp_review_user.btnCancle.connect(self.on_btn_cancle_click)
         # 设置快速获取的变量
         self.cur_tjbh = None
@@ -61,6 +62,13 @@ class ReportReview(ReportReviewUI):
                 ui.showMaximized()
         else:
             mes_about(self,"请先筛选需要审阅的报告，再全屏操作！")
+
+    # 批量审阅
+    def on_btn_review_batch_click(self):
+        rows = self.table_report_review.isSelectRows()
+        for row in rows:
+            if self.table_report_review.getItemValueOfKey(row,'tjlx')!='招工':
+                mes_about(self,'非招工报告不允许批量审阅！')
 
     def on_btn_query_click(self):
         if self.gp_where_search.where_dwbh=='00000':

@@ -709,9 +709,15 @@ class ItemsStateTable(TableWidget):
                     elif col_value == '已登记':
                         item.setBackground(QColor("#b0c4de"))
 
-                elif col_index == 9:
+                elif col_index == len(self.heads) - 1:
                     if str2(row_data[0])=='已小结':
-                        item = QTableWidgetItem('')
+                        if row_data[col_index]==1:
+                            item = QTableWidgetItem('图像接收')
+                            item.setFont(get_font())
+                            item.setBackground(QColor(218, 218, 218))
+                            item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+                        else:
+                            item = QTableWidgetItem('')
                     elif str2(row_data[0])=='核实':
                         item = QTableWidgetItem('拒检')
                         item.setFont(get_font())
@@ -743,6 +749,32 @@ class ItemsStateTable(TableWidget):
         self.setColumnWidth(7, 60)
         self.setColumnWidth(8, 80)
 
+# 报告审阅列表
+class ReportEquipTable(TableWidget):
+
+    tjqy = None  # 体检区域
+    tjlx = None  # 体检类型
+
+    def __init__(self, heads, parent=None):
+        super(ReportEquipTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # 字典载入
+        for row_index, row_data in enumerate(datas):
+            self.insertRow(row_index)  # 插入一行
+            for col_index, col_name in enumerate(heads.keys()):
+                item = QTableWidgetItem(row_data[col_name])
+                item.setTextAlignment(Qt.AlignCenter)
+                self.setItem(row_index, col_index, item)
+        # 布局
+        self.setColumnWidth(0, 70)  # 设备名称
+        self.setColumnWidth(1, 70)  # 体检编号
+        self.setColumnWidth(2, 50)  # 姓名
+        self.setColumnWidth(3, 80)  # 检查日期
+        self.setColumnWidth(4, 70)  # 检查姓名
+        self.setColumnWidth(5, 100)  # 检查区域
+        self.horizontalHeader().setStretchLastSection(True)
 
 # 报告打印列表
 class ReportTrackTable(TableWidget):
@@ -1176,7 +1208,7 @@ class ReciveSetupGroup(QGroupBox):
         self.cb_is_check.setChecked(True)
         self.cb_receive_mode = QComboBox()
         self.cb_is_repeat = QCheckBox('可重复领取')
-        self.cb_receive_mode.addItems(['本人领取','单位领取','电子报告','网上查询'])
+        self.cb_receive_mode.addItems(['本人领取','单位领取','电子报告','网上查询','快递领取','检后代领','他人代领'])
         lt_main.addWidget(self.cb_is_check)
         lt_main.addWidget(self.cb_is_repeat)
         # lt_main.addWidget(QLabel('领取方式：'))

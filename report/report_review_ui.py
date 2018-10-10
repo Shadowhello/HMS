@@ -25,8 +25,10 @@ class ReportReviewUI(Widget):
         lt_main = QHBoxLayout()
         lt_left = QVBoxLayout()
         self.btn_query = ToolButton(Icon('query'), '查询')
+        self.btn_review_batch = ToolButton(Icon('批量'), '批量审阅')
         self.btn_review_mode = ToolButton(Icon('全屏'), '全屏审阅')
         self.btn_review_mode2 = ToolButton(Icon('全屏'), '大屏审阅')
+
         self.gp_where_search = BaseCondiSearchGroup(1)
         self.gp_where_search.setText('审核日期')
         self.gp_where_search.setNoChoice()
@@ -49,6 +51,7 @@ class ReportReviewUI(Widget):
         self.gp_where_search.addWidget(self.btn_query, 0, 7, 2, 2)
         self.gp_quick_search = QuickSearchGroup(1)
         lt_1.addWidget(self.gp_quick_search)
+        lt_1.addWidget(self.btn_review_batch)
         lt_1.addWidget(self.btn_review_mode)
         lt_1.addWidget(self.btn_review_mode2)
 
@@ -292,6 +295,7 @@ class ReportReviewFullScreen(Dialog):
 
     def __init__(self,parent=None):
         super(ReportReviewFullScreen,self).__init__(parent)
+        self.setWindowTitle('报告审阅')
         self.initUI()
         self.datas = None   # 结果集
         self.cur_index = 0  # 当前索引
@@ -300,9 +304,11 @@ class ReportReviewFullScreen(Dialog):
         self.btn_next.clicked.connect(self.on_btn_next_click)
         self.btn_fullscreen.clicked.connect(self.on_btn_fullscreen_click)
         self.btn_item.clicked.connect(self.on_btn_item_click)
+        self.btn_pic.clicked.connect(self.on_btn_pic_click)
         # 审阅
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
         self.gp_review_user.btnCancle.connect(self.on_btn_cancle_click)
+
         # 特殊变量 用于快速获取 复用
         self.cur_tjbh = None
         self.cur_data = None
@@ -365,6 +371,11 @@ class ReportReviewFullScreen(Dialog):
         self.open_page(datas[self.cur_index])
         # self.cur_index = self.cur_index + 1
 
+    # 放射检查项目接收
+    def on_btn_pic_click(self):
+        pass
+
+    # 打开页面
     def open_page(self,data):
         self.cur_data = data
         bgzt = data[0]
@@ -398,8 +409,15 @@ class ReportReviewFullScreen(Dialog):
         self.btn_fullscreen = QPushButton(Icon('全屏'),'退出全屏')
         self.btn_next = QPushButton(Icon('向右'),'下一个')
         self.btn_item = QPushButton(Icon('项目'), '项目查看')
-        self.btn_sms_auto = QCheckBox('审阅后自动发送短信')
-        self.btn_sms_auto.setChecked(False)
+        self.btn_pic = QPushButton(Icon('图片'), '图像接收')
+        lable = QLabel('审阅完成：')
+        lable.setStyleSheet('''font: 75 14pt '微软雅黑';color: rgb(255,0,0);height:16px;''')
+        self.btn_auto_next = QCheckBox('自动下一份')
+        self.btn_auto_next.setChecked(False)
+        self.btn_auto_print = QCheckBox('自动打印报告')
+        self.btn_auto_print.setChecked(False)
+        self.btn_auto_sms = QCheckBox('自动发送短信')
+        self.btn_auto_sms.setChecked(False)
         lt_middle.addStretch()
         lt_middle.addWidget(self.btn_previous)
         lt_middle.addSpacing(20)
@@ -408,8 +426,13 @@ class ReportReviewFullScreen(Dialog):
         lt_middle.addWidget(self.btn_next)
         lt_middle.addSpacing(20)
         lt_middle.addWidget(self.btn_item)
+        lt_middle.addSpacing(20)
+        lt_middle.addWidget(self.btn_pic)
         lt_middle.addStretch()
-        lt_middle.addWidget(self.btn_sms_auto)
+        lt_middle.addWidget(lable)
+        lt_middle.addWidget(self.btn_auto_next)
+        lt_middle.addWidget(self.btn_auto_print)
+        lt_middle.addWidget(self.btn_auto_sms)
         # 报告预览
         self.wv_report_equip = WebView()
         lt_bottom = QHBoxLayout()

@@ -447,7 +447,6 @@ class MT_TJ_XMDM(BaseModel):
 def get_item_state_sql(tjbh):
     return '''
             SELECT 
-
                 (CASE 
                     WHEN qzjs ='1' THEN '已拒检'
                     WHEN jsbz ='1' THEN '已小结'
@@ -466,7 +465,7 @@ def get_item_state_sql(tjbh):
                 (SELECT YGXM FROM TJ_YGDM WHERE YGGH=TJ_TJJLMXB.JCYS) AS JCYS,
                 substring(convert(char,shrq,120),1,10) AS SHRQ,
                 (SELECT YGXM FROM TJ_YGDM WHERE YGGH=TJ_TJJLMXB.shys) AS SHYS,
-                TMBH1,'' AS btn_name
+                TMBH1,(CASE WHEN KSBM IN ('0020','0024') THEN 1 ELSE 0 END ) AS btn_name
             FROM TJ_TJJLMXB 
                 WHERE TJBH='%s' AND SFZH='1' 
                 AND XMBH NOT IN (SELECT XMBH FROM TJ_KSKZXM  WHERE KSBM='0028')

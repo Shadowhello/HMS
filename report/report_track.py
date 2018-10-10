@@ -1,9 +1,7 @@
 # 系统接口
-from app_interface import PacsResult, PisResult,LisResult,SmsPostUI
-from app_interface.i_phone_ui import PhoneUI
-from app_interface.i_sms_ui import SmsUI
-from report.report_item_ui import ItemsStateUI
-from report.report_track_thread import *
+from app_interface import *
+from .report_item_ui import ItemsStateUI
+from .report_track_thread import *
 from widgets.cwidget import *
 from .report_track_ui import ReportTrackUI
 from utils import api_file_down,cur_datetime
@@ -35,6 +33,7 @@ class ReportTrack(ReportTrackUI):
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
         self.btn_pacs.clicked.connect(self.on_btn_pacs_click)
         self.btn_lis.clicked.connect(self.on_btn_lis_click)
+        self.btn_equip.clicked.connect(self.on_btn_equip_click)
         self.btn_phone.clicked.connect(self.on_btn_phone_click)
         self.btn_sms.clicked.connect(self.on_btn_sms_click)
         ##############线程########################################################
@@ -48,6 +47,7 @@ class ReportTrack(ReportTrackUI):
         self.pis_ui = None        # 病理对话框
         self.lis_ui = None        # 检验对话框
         self.pacs_ui = None       # 检查对话框
+        self.equip_ui = None      # 设备对话框
         self.phone_ui = None      # 电话记录对话框
         self.sms_ui = None        # 短信记录对话框
         self.pic_ui = None        # 采血照片对话框
@@ -252,7 +252,7 @@ class ReportTrack(ReportTrackUI):
                     sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
                     try:
                         self.session.execute(sql1)
-                        self.session.ececute(sql2)
+                        self.session.execute(sql2)
                         self.session.commit()
                     except Exception as e:
                         self.session.rollback()
@@ -268,7 +268,7 @@ class ReportTrack(ReportTrackUI):
                     sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
                     try:
                         self.session.execute(sql1)
-                        self.session.ececute(sql2)
+                        self.session.execute(sql2)
                         self.session.commit()
                     except Exception as e:
                         self.session.rollback()
@@ -304,7 +304,7 @@ class ReportTrack(ReportTrackUI):
             sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
             try:
                 self.session.execute(sql1)
-                self.session.ececute(sql2)
+                self.session.execute(sql2)
                 self.session.commit()
             except Exception as e:
                 self.session.rollback()
@@ -432,6 +432,14 @@ class ReportTrack(ReportTrackUI):
             self.item_ui.returnPressed.emit(self.cur_tjbh)
         self.item_ui.show()
 
+    #体检系统项目查看
+    def on_btn_equip_click(self):
+        if not self.equip_ui:
+            self.equip_ui = EquipUI(self)
+        if self.cur_tjbh:
+            self.equip_ui.returnPressed.emit(self.cur_tjbh)
+        self.equip_ui.show()
+
     # 电话记录
     def on_btn_phone_click(self):
         sjhm = self.table_track.getCurItemValueOfKey('sjhm')
@@ -550,8 +558,10 @@ class ReportTrack(ReportTrackUI):
     # 追踪任务领取
     def on_btn_task_click(self):
         tmp = []
-
         rows = self.table_track.isSelectRows()
+        button = mes_warn(self, "您确认领取当前选择的 %s 份体检报告？" %len(rows))
+        if button != QMessageBox.Yes:
+            return
         for row in rows:
             if not self.table_track.getItemValueOfKey(row,'lqry'):
                 data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': '', 'mxbh': '',

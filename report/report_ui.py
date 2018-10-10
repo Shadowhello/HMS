@@ -5,7 +5,7 @@ class Report_UI(DirTabWidget):
 
     def __init__(self,title):
         # '报告发布' '报告领取' '报告整理' '报告进度'
-        self.nodes = ['报告追踪', '报告审阅', '报告打印', '报告整理','设备报告','报告进度']
+        self.nodes = ['报告追踪', '报告审阅', '报告打印','设备报告','报告进度']
         super(Report_UI,self).__init__(title,self.nodes)
         default_menu_name = gol.get_value('menu_child_name','')
         if default_menu_name in self.nodes:

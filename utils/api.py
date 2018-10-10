@@ -202,10 +202,12 @@ if __name__=="__main__":
     # results = session.execute(sql).fetchall()
     # print(str2(results[0][0]))
     # raise
-    # results = session.execute(sql).fetchall()
-    # for result in results:
-    #     request_create_report(result[0], 'html')
-    #     #request_create_report(result[0], 'pdf')
+    # 招工自动审阅完成 生成PDF
+    sql = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' AND TJ_TJDJB.TJLX='1'; "
+    results = session.execute(sql).fetchall()
+    for result in results:
+        #request_create_report(result[0], 'html')
+        request_create_report(result[0], 'pdf')
     # print(get_barcode_wx('测试5','330227199902040663','13736093866'))
-    request_create_report('122740117','html')
+    #request_create_report('131071173','pdf')
     # request_post_wx()

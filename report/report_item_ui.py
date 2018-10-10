@@ -1,5 +1,6 @@
 from widgets.cwidget import *
 from report.model import *
+import zeep,json,base64,os
 
 # 查看项目状态
 class ItemsStateUI(Dialog):
@@ -21,6 +22,7 @@ class ItemsStateUI(Dialog):
         # 右键
         self.table_item.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_item.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
+        self.tmp_path = gol.get_value('path_tmp')
 
     # 右键功能
     def onTableMenu(self,pos):
@@ -133,6 +135,22 @@ class ItemsStateUI(Dialog):
                     return
                 # 刷新界面
                 self.table_item.setItemValueOfKey(row,'state','已拒检',QColor("#008000"))
+
+            elif btn_name == '图像接收':
+                results = self.session.query(MT_TJ_PACS_PIC).filter(MT_TJ_PACS_PIC.tjbh==tjbh,MT_TJ_PACS_PIC.zhbh==xmbh).all()
+                if results:
+                    button = mes_warn(self,"您是否确认从检查系统接收图像？")
+                    if button != QMessageBox.Yes:
+                        return
+                # 读取
+                filenames = get_pacs_pic(tjbh,xmbh,self.tmp_path)
+                if filenames:
+                    # 上传 http请求替代smb协议
+                    pass
+                else:
+                    mes_about(self,'检查系统中未发现顾客(%s)%s项目的图像！' %(tjbh,xmmc))
+                # 上传
+                # 更新或者删除
             else:
                 mes_about(self,'功能未定义，请联系管理员！')
 
@@ -159,6 +177,28 @@ class ItemsStateUI(Dialog):
         results = self.session.execute(get_item_state_sql(tjbh=self.le_tjbh.text())).fetchall()
         self.table_item.load(results)
         self.gp_middle.setTitle('项目状态 (%s)' %self.table_item.rowCount())
+
+
+# 胶片打印服务
+def get_pacs_pic(tjbh, xmbh, path):
+    url = "http://10.8.200.220:7059/WebGetFileView.asmx?WSDL"
+    client = zeep.Client(url)
+    try:
+        result = json.loads(client.service.f_GetUISFilesByTJ_IID(tjbh + xmbh))
+        filenames = []
+        if result['IsSuccess'] == 'true':
+            pic_datas = result['Datas']
+            count = 0
+            for pic_data in pic_datas:
+                count = count + 1
+                filename = os.path.join(path, '%s_%s_%s.jpg' % (tjbh, xmbh, count))
+                with open(filename, "wb") as f:
+                    f.write(base64.b64decode(pic_data))
+                filenames.append(filename)
+        return filenames
+
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__':
     import sys

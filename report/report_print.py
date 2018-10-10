@@ -68,6 +68,9 @@ class ReportPrint(ReportPrintUI):
     def on_btn_print_click(self):
         rows = self.table_print.isSelectRows()
         is_remote,printer = self.gp_print_setup.get_printer()
+        button = mes_warn(self, "您确认用打印机：%s，打印当前选择的 %s 份体检报告？" %(printer,len(rows)))
+        if button != QMessageBox.Yes:
+            return
         if rows:
             for row in rows:
                 tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
@@ -201,6 +204,9 @@ class ReportPrint(ReportPrintUI):
     # 下载
     def on_btn_down_click(self):
         rows = self.table_print.isSelectRows()
+        button = mes_warn(self, "您确认下载当前选择的 %s 份体检报告？" %len(rows))
+        if button != QMessageBox.Yes:
+            return
         if rows:
             for row in rows:
                 tjbh = self.table_print.getItemValueOfKey(row,'tjbh')
@@ -228,6 +234,9 @@ class ReportPrint(ReportPrintUI):
                 print(e)
         else:
             rows = self.table_print.isSelectRows()
+            button = mes_warn(self, "您确认领取当前选择的 %s 份体检报告？" % len(rows))
+            if button != QMessageBox.Yes:
+                return
             if rows:
                 for row in rows:
                     tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
@@ -269,6 +278,9 @@ class ReportPrint(ReportPrintUI):
     # 整理
     def on_btn_order_click(self):
         rows = self.table_print.isSelectRows()
+        button = mes_warn(self, "您确认整理当前选择的 %s 份体检报告？" %len(rows))
+        if button != QMessageBox.Yes:
+            return
         if rows:
             for row in rows:
                 tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')

@@ -543,7 +543,7 @@ class PdfData(object):
 
         # 4、骨密度、心电图、人体成分
         results = self.session_tjk.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == self.tjbh,MT_TJ_TJJLMXB.sfzh == '1').all()
-        for zhbh in list(set([result.zhbh for result in results])&set(list(('501576','0806','5402')))):
+        for zhbh in list(set([result.zhbh for result in results])&set(list(('501576','0806','5402','1000074')))):
             result = self.session_tjk.query(MT_TJ_EQUIP).filter(MT_TJ_EQUIP.tjbh == self.tjbh,MT_TJ_EQUIP.xmbh == zhbh).scalar()
             # 服务端
             if result:
@@ -649,7 +649,7 @@ class PdfData(object):
     @property
     def get_equip_pic(self):
         tmp = []
-        for key in ['0806', '501576', '5402']:
+        for key in ['0806', '501576', '5402','1000074']:
             if self.pic.get(key,''):
                 tmp.append(self.pic[key])
 
@@ -689,7 +689,7 @@ class PdfData(object):
                 try:
                     self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.tjbh).update({
                         MT_TJ_BGGL.sybz: self.user_data['sybz'],
-                        MT_TJ_BGGL.bgzt: '1',
+                        MT_TJ_BGGL.bgzt: self.user_data['bgzt'],
                         MT_TJ_BGGL.zjrq: self.user_data['zjrq'],
                         MT_TJ_BGGL.zjgh: self.user_data['zjgh'],
                         MT_TJ_BGGL.zjxm: self.user_data['zjxm'],
@@ -707,7 +707,8 @@ class PdfData(object):
                 try:
                     self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.tjbh).update({
                         MT_TJ_BGGL.sybz: self.user_data['sybz'],
-                        MT_TJ_BGGL.bglj: self.user_data['bglj']
+                        MT_TJ_BGGL.bglj: self.user_data['bglj'],
+                        MT_TJ_BGGL.bgzt: self.user_data['bgzt'],
                     })
                     self.session_tjk.commit()
                 except Exception as e:
@@ -718,6 +719,7 @@ class PdfData(object):
                 try:
                     self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.tjbh).update({
                         MT_TJ_BGGL.sybz: self.user_data['sybz'],
+                        MT_TJ_BGGL.bgzt: self.user_data['bgzt'],
                         MT_TJ_BGGL.bgym: self.user_data.get('bgym',0),
                     })
                     self.session_tjk.commit()
@@ -847,6 +849,11 @@ if __name__ =='__main__':
     results = session.execute(sql2).fetchall()
     for result in results:
         q.put({'tjbh': result[0], 'action': 'html'})
-    # sql = "SELECT  "
-    # q.put({'tjbh': '165583081', 'action': 'html'})
+    # # 招工自动审阅完成 生成PDF
+    sql3 = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' " \
+          "AND TJ_TJDJB.TJLX='1' AND TJ_TJDJB.SHRQ>='2018-08-01'; "
+    results = session.execute(sql3).fetchall()
+    for result in results:
+        q.put({'tjbh': result[0], 'action': 'pdf'})
+
     report_run(q)

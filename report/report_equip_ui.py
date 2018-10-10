@@ -64,33 +64,6 @@ class ReportEquipUI(Widget):
 
         self.setLayout(lt_main)
 
-# 报告审阅列表
-class ReportEquipTable(TableWidget):
-
-    tjqy = None  # 体检区域
-    tjlx = None  # 体检类型
-
-    def __init__(self, heads, parent=None):
-        super(ReportEquipTable, self).__init__(heads, parent)
-
-    # 具体载入逻辑实现
-    def load_set(self, datas, heads=None):
-        # 字典载入
-        for row_index, row_data in enumerate(datas):
-            self.insertRow(row_index)                # 插入一行
-            for col_index, col_name in enumerate(heads.keys()):
-                item = QTableWidgetItem(row_data[col_name])
-                item.setTextAlignment(Qt.AlignCenter)
-                self.setItem(row_index, col_index, item)
-        # 布局
-        self.setColumnWidth(0, 70)  # 设备名称
-        self.setColumnWidth(1, 70)  # 体检编号
-        self.setColumnWidth(2, 50)  # 姓名
-        self.setColumnWidth(3, 80)  # 检查日期
-        self.setColumnWidth(4, 70)  # 检查姓名
-        self.setColumnWidth(5, 100) # 检查区域
-        self.horizontalHeader().setStretchLastSection(True)
-
 class ReportEquipUser(QGroupBox):
 
     # 自定义 信号，封装对外使用

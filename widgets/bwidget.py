@@ -183,6 +183,7 @@ class TableWidget(QTableWidget):
 
     # 公共实现，载入数据
     def load(self,datas:list,heads=None):
+        self.setSortingEnabled(False) #查询前，关闭排序，避免显示空白，BUG
         if not heads:
             heads = self.heads
             # 保留原来的行，清空内容
@@ -197,7 +198,7 @@ class TableWidget(QTableWidget):
         # 具体实现逻辑
         self.load_set(datas,heads)
         # 恢复公共设置
-        self.setSortingEnabled(False)  # 避免点击排序造成BUG
+        self.setSortingEnabled(True)  # 查询后设置True，开启排序
         # self.resizeColumnsToContents()  # 设置列适应大小    按需加，不要
 
     # 子控件 继承具体实现
