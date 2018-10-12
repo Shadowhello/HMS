@@ -152,17 +152,17 @@ class Doubtful(Widget):
         self.table = SlowHealthTable(self.cols)
         self.table.setContextMenuPolicy(Qt.CustomContextMenu)              ######允许右键产生子菜单
         self.table.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
-
+        self.gp_bottom = QGroupBox('疑似列表(0)')
 
         lt_bottom.addWidget(self.table)
-
+        self.gp_bottom.setLayout(lt_bottom)
         lt_top.addWidget(search_group)
         lt_top.addWidget(self.gp_quick_search)
         # lt_top.addStretch()
 
         main_layout.addLayout(lt_top)
         #main_layout.addStretch()
-        main_layout.addLayout(lt_bottom)
+        main_layout.addWidget(self.gp_bottom)
         self.setLayout(main_layout)
 
     def onCheckState(self,p_str,is_check:int):
@@ -190,12 +190,10 @@ class Doubtful(Widget):
         # print(sql)
         # return
         results = self.session.execute(sql).fetchall()
-        if results:
-            new_results = [dict(zip(cols,result)) for result in results]
-            self.table.load(new_results)
-            mes_about(self, '检索出 %s 条数据！' %self.table.rowCount())
-        else:
-            mes_about(self,'检索出 0 条数据！')
+        new_results = [dict(zip(cols,result)) for result in results]
+        self.table.load(new_results)
+        self.gp_bottom.setTitle('疑似列表(%s)' %self.table.rowCount())
+        mes_about(self, '检索出 %s 条数据！' %self.table.rowCount())
 
         # results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.qdrq == '2018-06-30').all()
         # tmp = [result.to_dict for result in results]

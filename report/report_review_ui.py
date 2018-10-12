@@ -51,8 +51,8 @@ class ReportReviewUI(Widget):
         self.gp_where_search.addWidget(self.btn_query, 0, 7, 2, 2)
         self.gp_quick_search = QuickSearchGroup(1)
         lt_1.addWidget(self.gp_quick_search)
-        lt_1.addWidget(self.btn_review_batch)
-        lt_1.addWidget(self.btn_review_mode)
+        # lt_1.addWidget(self.btn_review_batch)
+        # lt_1.addWidget(self.btn_review_mode)
         lt_1.addWidget(self.btn_review_mode2)
 
         self.table_report_review_cols = OrderedDict([
@@ -220,6 +220,7 @@ class ReportReviewUser(QGroupBox):
                 self.btn_review.start()
         self.review_user.setText(data['syxm'])
         self.review_time.setText(data['syrq'])
+        self.review_time.setToolTip(data['syrq'])
         self.review_comment.setPlainText(data['sybz'])
 
     # 显示是否有手动单项目，2018-09-27 新增，个人感觉价值不大，故不合并setData
@@ -267,8 +268,10 @@ class ReviewLabel(QLabel):
 
     def __init__(self,p_str=None,parent=None):
         super(ReviewLabel,self).__init__(p_str,parent)
-        self.setStyleSheet('''border: 1px solid;font: 75 12pt \"微软雅黑\";''')
+        self.setStyleSheet('''border: 1px solid;''')
+        #self.setStyleSheet('''border: 1px solid;font: 75 9pt \"微软雅黑\";''')
         self.setMinimumWidth(80)
+        self.setCursor(QCursor(Qt.PointingHandCursor))
 
 class StateLable(QLabel):
 
@@ -426,12 +429,12 @@ class ReportReviewFullScreen(Dialog):
         lt_middle.addWidget(self.btn_next)
         lt_middle.addSpacing(20)
         lt_middle.addWidget(self.btn_item)
-        lt_middle.addSpacing(20)
-        lt_middle.addWidget(self.btn_pic)
+        # lt_middle.addSpacing(20)
+        # lt_middle.addWidget(self.btn_pic)
         lt_middle.addStretch()
         lt_middle.addWidget(lable)
         lt_middle.addWidget(self.btn_auto_next)
-        lt_middle.addWidget(self.btn_auto_print)
+        # lt_middle.addWidget(self.btn_auto_print)
         lt_middle.addWidget(self.btn_auto_sms)
         # 报告预览
         self.wv_report_equip = WebView()
@@ -500,7 +503,7 @@ class ReportReviewFullScreen(Dialog):
             request_create_report(self.cur_tjbh, 'html')
             # 生成PDF 报告请求
             request_create_report(self.cur_tjbh, 'pdf')
-            # 发送短信
+            # 是否发送短信
             if self.btn_sms_auto.isChecked():
                 try:
                     result = self.session.query(MV_RYXX).filter(MV_RYXX.tjbh == self.cur_tjbh).scalar()
@@ -508,7 +511,9 @@ class ReportReviewFullScreen(Dialog):
                         sms_api(result.sjhm,report_sms_content)
                 except Exception as e:
                     mes_about(self,"短信发送失败！错误信息：%s" %e)
-
+            # 是否下一个
+            if self.btn_auto_next.isChecked():
+                self.on_btn_next_click()
         # 取消审阅
         else:
             if not self.gp_review_user.get_sybz():

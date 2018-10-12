@@ -93,7 +93,7 @@ QToolBar QToolButton:on {
 }
 
 QStatusBar{
-    fon-size:10px;
+    font-size:10px;
     font-color:rgb(255, 255, 255);
     height:20px;
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #9fc6df, stop:0.5 #256894 stop:1 #77c5cb);

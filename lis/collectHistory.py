@@ -11,6 +11,7 @@ class CollectHistory(CollectHistory_UI):
         self.btn_query.clicked.connect(self.on_btn_query_click)
         self.gp_quick_search.returnPressed.connect(self.on_quick_search)         # 快速检索
         self.table_history.itemClicked.connect(self.on_table_history_show)
+        self.btn_export.clicked.connect(self.on_btn_export_click)  # 导出
         # 查看采血图片 UI
         self.pic_ui = None
 
@@ -20,6 +21,9 @@ class CollectHistory(CollectHistory_UI):
         else:
             self.show_url = 'http://10.8.200.201:4000/app_api/file/down/%s/%s'
 
+    # 导出功能
+    def on_btn_export_click(self):
+        self.table_history.export()
 
             # 查询
     def on_btn_query_click(self):
@@ -46,14 +50,26 @@ class CollectHistory(CollectHistory_UI):
     def on_quick_search(self,p1_str,p2_str):
         if p1_str == 'tjbh':
             results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')), MT_TJ_CZJLB.tjbh==p2_str).all()
-            self.table_history.load((result.to_dict for result in results))
-        # elif p1_str == 'sjhm':
-        #     where_str = " TJ_TJDAB.SJHM = '%s' " % p2_str
-        # elif p1_str == 'sfzh':
-        #     where_str = " TJ_TJDAB.SFZH = '%s' " % p2_str
-        # else:
-        #     where_str = " TJ_TJDAB.XM ='%s' " % p2_str
 
+        elif p1_str == 'sjhm':
+            sql = "SELECT TJBH FROM TJ_TJDJB WHERE DABH IN (SELECT DABH FROM TJ_TJDAB WHERE SJHM='%s'); " %p2_str
+            results = self.session.execute(sql).fetchall()
+            tjbhs = [result[0] for result in results]
+            results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                             MT_TJ_CZJLB.tjbh.in_(tuple(tjbhs))).all()
+        elif p1_str == 'sfzh':
+            sql = "SELECT TJBH FROM TJ_TJDJB WHERE DABH IN (SELECT DABH FROM TJ_TJDAB WHERE SFZH='%s'); " %p2_str
+            results = self.session.execute(sql).fetchall()
+            tjbhs = [result[0] for result in results]
+            results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                             MT_TJ_CZJLB.tjbh.in_(tuple(tjbhs))).all()
+        else:
+            sql = "SELECT TJBH FROM TJ_TJDJB WHERE DABH IN (SELECT DABH FROM TJ_TJDAB WHERE XM='%s'); " %p2_str
+            results = self.session.execute(sql).fetchall()
+            tjbhs = [result[0] for result in results]
+            results = self.session.query(MT_TJ_CZJLB).filter(MT_TJ_CZJLB.jllx.in_(('0010', '0011')),
+                                                             MT_TJ_CZJLB.tjbh.in_(tuple(tjbhs))).all()
+        self.table_history.load((result.to_dict for result in results))
         mes_about(self,'共检索出 %s 条数据！' %self.table_history.rowCount())
 
     # 设置文本 和查看 照片

@@ -46,7 +46,9 @@ def get_ocr(picname):
 
 # 从微信端获取二维码图片 字节流
 def get_barcode_wx(xm,sfzh,sjhm,email='',address=''):
-    url = 'http://app.nbmzyy.com/tjadmin/pInfoSubmit'
+    #url = 'http://app.nbmzyy.com/tjadmin/pInfoSubmit'
+    # url = 'http://10.7.200.60:80/tjadmin/pInfoSubmit'
+    url = 'http://10.7.200.27:8089/tjadmin/pInfoSubmit'
     head = {}
     head['realName'] = urllib.parse.quote(xm)
     head['idCardNum'] = sfzh
@@ -190,24 +192,24 @@ if __name__=="__main__":
     from utils import str2
     #sql = "SELECT TJBH FROM TJ_TJDJB WHERE  (del <> '1' or del is null) and QD='1' and SHRQ>='2018-08-25' AND SHRQ<'2018-09-30' AND SUMOVER='1'; "
     # 处理遗漏的
-    sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND QD='1' AND (del <> '1' or del is null) AND TJBH NOT IN (SELECT TJBH FROM TJ_BGGL WHERE BGZT<>'0')"
-    # 处理PDF 生成的
-    # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
-    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
-    set_env()
-    # # 网络打印
-    #
-    session = gol.get_value('tjxt_session_local')
-    # sql = "select jy from tj_tjdjb where tjbh='%s';" % '165582991'
+    # sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND QD='1' AND (del <> '1' or del is null) AND TJBH NOT IN (SELECT TJBH FROM TJ_BGGL WHERE BGZT<>'0')"
+    # # 处理PDF 生成的
+    # # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
+    # #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
+    # set_env()
+    # # # 网络打印
+    # #
+    # session = gol.get_value('tjxt_session_local')
+    # # sql = "select jy from tj_tjdjb where tjbh='%s';" % '165582991'
+    # # results = session.execute(sql).fetchall()
+    # # print(str2(results[0][0]))
+    # # raise
+    # # 招工自动审阅完成 生成PDF
+    # sql = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' AND TJ_TJDJB.TJLX='1'; "
     # results = session.execute(sql).fetchall()
-    # print(str2(results[0][0]))
-    # raise
-    # 招工自动审阅完成 生成PDF
-    sql = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' AND TJ_TJDJB.TJLX='1'; "
-    results = session.execute(sql).fetchall()
-    for result in results:
-        #request_create_report(result[0], 'html')
-        request_create_report(result[0], 'pdf')
-    # print(get_barcode_wx('测试5','330227199902040663','13736093866'))
+    # for result in results:
+    #     #request_create_report(result[0], 'html')
+    #     request_create_report(result[0], 'pdf')
+    print(get_barcode_wx('测试5','330227199902040663','13736093866'))
     #request_create_report('131071173','pdf')
-    # request_post_wx()
+    #request_post_wx()

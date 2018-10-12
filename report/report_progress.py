@@ -27,58 +27,47 @@ class ReportProgress(Widget):
         for result in results:
             self.dwmc_bh[result.dwbh] = str2(result.mc)
             self.dwmc_py[result.pyjm.lower()] = str2(result.mc)
-
         ###################################################
 
     def on_table_detail(self,QTableWidgetItem):
         col = QTableWidgetItem.column()
-        if col==0:
-            sql = get_report_progress_sql(self.report_dwmc.where_dwbh,'0')
-        elif col==1:
-            sql = get_report_progress_sql(self.report_dwmc.where_dwbh,'1')
-        elif col==2:
-            sql = get_report_progress_sql(self.report_dwmc.where_dwbh,'3')
-        elif col==3:
-            sql = get_report_progress_sql(self.report_dwmc.where_dwbh,'4')
-        elif col==4:
-            sql = get_report_progress_sql(self.report_dwmc.where_dwbh,'6')
-        elif col==5:
-            sql = get_report_progress_sql(self.report_dwmc.where_dwbh,'7')
+        tjzt = list(self.table_report_progress_cols.keys())[col]
+        if tjzt=='sum':
+            sql = get_report_progress_sql2(self.report_dwmc.where_dwbh)
         else:
-            sql = get_report_progress_sql(self.report_dwmc.where_dwbh, '8')
-        if QTableWidgetItem.text()==0:
-            mes_about(self,'检索出 0 条数据！')
-        else:
-            results = self.session.execute(sql).fetchall()
-            self.table_report_detail.load(results)
-            self.gp_right_top.setTitle('详细列表（%s）' %self.table_report_detail.rowCount())
-            mes_about(self, '检索出 %s 条数据！' %self.table_report_detail.rowCount())
+            sql = get_report_progress_sql(self.report_dwmc.where_dwbh, tjzt)
+        results = self.session.execute(sql).fetchall()
+        self.table_report_detail.load(results)
+        col_name = list(self.table_report_progress_cols.values())[col]
+        self.gp_right_top.setTitle('%s（%s）' %(col_name,self.table_report_detail.rowCount()))
+        mes_about(self, '检索出 %s 条数据！' %self.table_report_detail.rowCount())
 
 
     def on_btn_query_click(self):
         if self.report_dwmc.where_dwbh:
-            tmp = {'tjqx':0,'tjdj':0,'tjqd':0,'tjzz':0,'tjzj':0,'tjsh':0,'tjsy':0,'tjdy':0}
+
             if self.report_dwmc.where_dwbh=='00000':
                 mes_about(self,'不存在该单位，请重新选择！')
                 return
-            sql = "SELECT TJZT,COUNT(*) FROM TJ_TJDJB WHERE DWBH ='%s' GROUP BY TJZT" %self.report_dwmc.where_dwbh
-            results = self.session.execute(sql).fetchall()
+            count = 0
+            tmp = {
+                'tjqx': 0,
+                'tjdj': 0,
+                'tjqd': 0,
+                'tjzz': 0,
+                'tjzj': 0,
+                'tjsh': 0,
+                'tjsy': 0,
+                'tjdy': 0,
+                'tjzl': 0,
+                'tjlq': 0,
+                'sum':0
+            }
+            results = self.session.execute(get_report_progress_sum_sql(self.report_dwmc.where_dwbh)).fetchall()
             for result in results:
-                if result[0] == '0':
-                    tmp['tjqx'] = result[1]
-                elif result[0] == '1':
-                    tmp['tjdj'] = result[1]
-                elif result[0] == '3':
-                    tmp['tjqd'] = result[1]
-                elif result[0] == '4':
-                    tmp['tjzz'] = result[1]
-                elif result[0] == '6':
-                    tmp['tjzj'] = result[1]
-                elif result[0] == '7':
-                    tmp['tjsh'] = result[1]
-                elif result[0] == '8':
-                    tmp['tjsy'] = result[1]
-
+                tmp[result[0]] = result[1]
+                count = count + result[1]
+            tmp['sum'] = count
             self.table_report_progress.load([tmp])
 
         else:
@@ -119,16 +108,19 @@ class ReportProgress(Widget):
         gp_left_top.setLayout(lt_left_top)
         ################## 指标栏 ######################
         lt_left_middle = QHBoxLayout()
-        self.gp_left_middle = QGroupBox('单位报告进度')
+        self.gp_left_middle = QGroupBox('单位体检进度')
         self.table_report_progress_cols = OrderedDict([
-            ('tjqx', '取消'),
-            ('tjdj', '登记'),
-            ('tjqd', '签到'),
-            ('tjzz', '追踪'),
-            ('tjzj', '总检'),
-            ('tjsh', '审核'),
-            ('tjsy', '审阅'),
-            ('tjdy', '打印'),
+            ('sum', '总数'),
+            ('tjqx', '已取消'),
+            ('tjdj', '已登记'),
+            ('tjqd', '已签到'),
+            ('tjzz', '追踪中'),
+            ('tjzj', '已总检'),
+            ('tjsh', '已审核'),
+            ('tjsy', '已审阅'),
+            ('tjdy', '已打印'),
+            ('tjzl', '已整理'),
+            ('tjlq', '已领取')
         ])
         self.table_report_progress = ReportProgressTable(self.table_report_progress_cols)
         # 添加布局
@@ -144,16 +136,20 @@ class ReportProgress(Widget):
         self.gp_right_top = QGroupBox('详细列表（0）')
         # 关注
         self.table_report_detail_cols = OrderedDict([
-            ('tjzt', '状态'),
             ('tjbh', '体检编号'),
-            ('qdrq', '登记日期'),
+            ('xm', '姓名'),
+            ('xb', '性别'),
+            ('nl', '年龄'),
+            ('ysje', '应收金额'),
+            ('djrq', '登记日期'),
             ('qdrq', '签到日期'),
-            ('sdrq', '收单日期'),
-            ('zzrq', '追踪日期'),
             ('zjrq', '总检日期'),
             ('shrq', '审核日期'),
             ('syrq', '三审日期'),
             ('dyrq', '打印日期'),
+            ('zlrq', '整理日期'),
+            ('lqrq', '领取日期'),
+            ('dwmc', '单位名称')
         ])
         self.table_report_detail = ReportDetailTable(self.table_report_detail_cols)
         lt_right_top.addWidget(self.table_report_detail)
@@ -186,14 +182,18 @@ class ReportProgressTable(TableWidget):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
 
-        # self.setColumnWidth(0, 40)
-        # self.setColumnWidth(1, 40)
-        # self.setColumnWidth(2, 40)
-        # self.setColumnWidth(3, 40)
-        # self.setColumnWidth(4, 40)
-        # self.setColumnWidth(5, 40)
-        # self.setColumnWidth(6, 40)
-        # self.setColumnWidth(7, 40)
+        self.setColumnWidth(0, 60)
+        self.setColumnWidth(1, 60)
+        self.setColumnWidth(2, 60)
+        self.setColumnWidth(3, 60)
+        self.setColumnWidth(4, 60)
+        self.setColumnWidth(5, 60)
+        self.setColumnWidth(6, 60)
+        self.setColumnWidth(7, 60)
+        self.setColumnWidth(8, 60)
+        self.setColumnWidth(9, 60)
+        self.setColumnWidth(10, 60)
+        self.setColumnWidth(11, 60)
 
 class ReportDetailTable(TableWidget):
 
@@ -207,18 +207,18 @@ class ReportDetailTable(TableWidget):
             # 插入一行
             self.insertRow(row_index)
             for col_index, col_value in enumerate(row_data):
-                if col_index==0:
+                if col_index in [1,2,3,4,len(self.heads)-1]:
                     item = QTableWidgetItem(str2(col_value))
                 else:
                     item = QTableWidgetItem(col_value)
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
 
-            self.setColumnWidth(0, 60)
-            self.setColumnWidth(1, 70)
-            self.setColumnWidth(2, 80)
-            self.setColumnWidth(3, 80)
-            self.setColumnWidth(4, 80)
+            self.setColumnWidth(0, 70)
+            self.setColumnWidth(1, 60)
+            self.setColumnWidth(2, 40)
+            self.setColumnWidth(3, 40)
+            self.setColumnWidth(4, 70)
             self.setColumnWidth(5, 80)
             self.horizontalHeader().setStretchLastSection(True)
 

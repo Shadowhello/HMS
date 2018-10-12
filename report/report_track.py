@@ -27,7 +27,7 @@ class ReportTrack(ReportTrackUI):
         self.btn_receive.clicked.connect(self.on_btn_receive_click)         # 结果接收
         self.btn_myself.clicked.connect(self.on_btn_myself_click)           # 查看我自己的领取任务
         self.btn_djd.clicked.connect(self.on_btn_djd_click)
-        self.btn_send.menu_clicked.connect(self.on_btn_send_click)                 # 发送任务：发到审核、发到审阅
+        self.btn_send.menu_clicked.connect(self.on_btn_send_click)          # 发送任务：发到审核、发到审阅
         # 功能栏
         self.btn_item.clicked.connect(self.on_btn_item_click)
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
@@ -301,11 +301,12 @@ class ReportTrack(ReportTrackUI):
                 sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
             else:
                 sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
-            sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
+            sql2 = "UPDATE TJ_BGGL SET BGZT='1',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
             try:
                 self.session.execute(sql1)
                 self.session.execute(sql2)
                 self.session.commit()
+                mes_about(self,'处理成功！')
             except Exception as e:
                 self.session.rollback()
                 mes_about(self, '处理失败，错误信息：%s' % e)
@@ -395,19 +396,19 @@ class ReportTrack(ReportTrackUI):
             if not self.cb_track_type.text():
                 if self.lt_where_search.where_bgzt_text == '待追踪':
                     # 所有
-                    sql = sql + ''' UNION ALL ''' +get_report_bgth_sql()
-                    sql = sql + ''' ORDER BY XMZQ,QDRQ,DWMC  '''
+                    sql = sql + ''' UNION ALL ''' + get_report_shth_sql()+ ''' UNION ALL ''' + get_report_syth_sql()
+                    sql = sql + ''' ORDER BY zzzt desc,XMZQ,QDRQ,DWMC  '''
                 else:
                     sql = sql
             elif self.cb_track_type.text() == '未结束':
                 sql = sql + ''' ORDER BY d.XMZQ,T1.QDRQ,T1.DWMC  '''
             elif self.cb_track_type.text() == '审核退回':
-                sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '0' '''
+                sql = get_report_shth_sql()
             else:
-                sql = get_report_bgth_sql() + ''' AND TJ_BGGL.bgth = '1' '''
+                sql = get_report_syth_sql()
 
 
-        # print(sql)
+        print(sql)
         # 执行查询
         self.execQuery(sql)
         # 进度条

@@ -98,8 +98,8 @@ class QXM(QLineEdit):
 
     def __init__(self, parent=None):
         super(QXM, self).__init__(parent)
-
-        self.setPlaceholderText("输姓名回车，支持模糊匹配")
+        self.setPlaceholderText("输姓名回车")
+        # self.setPlaceholderText("输姓名回车，支持模糊匹配")
         # regx = QRegExp("[0-9]+$")
         # validator = QRegExpValidator(regx, self)
         # self.setValidator(validator)  # 根据正则做限制，只能输入数字
@@ -1900,7 +1900,8 @@ class TUint(QLineEdit):
         super(TUint,self).__init__()
         self.dwmc_bh =  dwbhs
         self.dwmc_py = dwmcs
-        self.setPlaceholderText('\ 按编号检索  . 按拼音检索  中文直接检索')
+        #self.setPlaceholderText('\ 按编号检索  . 按拼音检索  中文直接检索')
+        self.setPlaceholderText('\ 按编号检索  . 按拼音检索')
         self.model = QStringListModel()          # 完成列表的model
         self.listView = QListView()              # 完成列表
         self.listView.setWindowFlags(Qt.ToolTip)

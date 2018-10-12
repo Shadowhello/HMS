@@ -26,7 +26,8 @@ def init_views(app,db,queue=None):
         print(' %s：客户端(%s)：微信二维码请求！参数 tjbh：%s，login_id：%s' % (cur_datetime(), request.remote_addr, tjbh, login_id))
         user = get_user_info(tjbh,db)
         if user:
-            url = 'http://10.7.200.60:80/tjadmin/pInfoSubmit'
+            #url = 'http://10.7.200.60:80/tjadmin/pInfoSubmit'
+            url = 'http://10.7.200.27:8089/tjadmin/pInfoSubmit'
             head = {}
             head['realName'] = urllib.parse.quote(user['xm'])
             head['idCardNum'] = user['sfzh']

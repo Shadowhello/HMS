@@ -8,7 +8,7 @@ class CollectHandover(CollectHandover_UI):
         super(CollectHandover,self).__init__()
         self.initParas()
         self.btn_query.clicked.connect(self.on_btn_query_click)
-        # self.gp_quick_search.returnPressed.connect(self.on_quick_search)         # 快速检索
+        self.gp_quick_search.returnPressed.connect(self.on_quick_search)         # 快速检索
         self.table_handover_master.itemClicked.connect(self.on_table_handover_master_clicked)
         self.btn_handover.clicked.connect(self.on_collect_handover)
         self.btn_receive.clicked.connect(self.on_collect_receive)
@@ -18,6 +18,17 @@ class CollectHandover(CollectHandover_UI):
 
     def initParas(self):
         pass
+
+    # #快速检索
+    def on_quick_search(self,p1_str,p2_str):
+        pass
+    #     if p1_str == 'tjbh':
+    #         where_str = " a.TJBH = '%s' " % p2_str
+    #     else:
+    #         where_str = " b.XM = '%s' " % p2_str
+    #     results = self.session.execute(get_report_review_sql2(where_str)).fetchall()
+    #     self.table_report_review.load(results)
+    #     mes_about(self,'共检索出 %s 条数据！' %self.table_report_review.rowCount())
 
     # 表格右键功能
     def onTableMenu(self,pos):
@@ -171,9 +182,9 @@ class CollectHandover(CollectHandover_UI):
         self.table_handover_master.load(results)
         rowcount = self.table_handover_master.rowCount()
         self.gp_bottom_left.setTitle('样本交接汇总 (%s)' %rowcount)
-        mes_about(self, '共检索出 %s 条数据！' % rowcount)
         v1, v2, v3 = self.table_handover_master.status()
         self.on_btn_query_detail(v1, v2, v3)
+        mes_about(self, '共检索出 %s 条数据！' % rowcount)
 
     # 查看详细
     def on_table_handover_master_clicked(self,QTableWidgetItem):
@@ -241,14 +252,14 @@ class CollectHandover(CollectHandover_UI):
             label = CollectLable(str(value))
             self.lt_sample_jj_sum.addWidget(btn)
             self.lt_sample_jj_sum.addWidget(label)
-        self.lt_sample_jj_sum.addStretch()
+        # self.lt_sample_jj_sum.addStretch()
 
         for key,value in data2.items():
             btn = QPushButton(Icon(key),key)
             label = CollectLable(str(value))
             self.lt_sample_qs_sum.addWidget(btn)
             self.lt_sample_qs_sum.addWidget(label)
-        self.lt_sample_qs_sum.addStretch()
+        # self.lt_sample_qs_sum.addStretch()
 
 
 class CollectLable(QLabel):

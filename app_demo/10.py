@@ -9,7 +9,6 @@ def webservice_film():
     #result = client.service.GetPrinters()
     # 根据检查号获取胶片
     result2 = client.service.GetFilmByAccessno(110016983684)
-
     #打印出结果
     print(result2)
 
@@ -32,6 +31,5 @@ def webservice_pacs(tjbh,xmbh,path):
 
     return filenames
 
-
 if __name__ == '__main__':
-    webservice_pacs('134250998','501258')
+    webservice_pacs('175150008','501722',"C:/")

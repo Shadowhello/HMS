@@ -52,7 +52,7 @@ class CollectHandover_UI(Widget):
 
         # 添加布局
         lt_top.addWidget(gp_where_search)
-        lt_top.addWidget(self.gp_quick_search)
+        # lt_top.addWidget(self.gp_quick_search)
         ############ 下布局 ########################
         self.collect_cols = OrderedDict([
                                 ("QSSJ", "开始时间"),
@@ -89,22 +89,33 @@ class CollectHandover_UI(Widget):
         lt_bottom_right.addWidget(self.table_handover_detail)
         self.gp_bottom_right.setLayout(lt_bottom_right)
         ################################################################
-        gp_sample_jj_sum = QGroupBox('样本待交接')
-        self.lt_sample_jj_sum = QHBoxLayout()
+        gp_sample_jj_sum = QGroupBox('样本待交接信息')
+        gp_sample_jj_sum.setStyleSheet('''QGroupBox:title{font: 75 14pt '微软雅黑';color: rgb(0,128,0);}''')
+        gp_sample_jj_sum.setMinimumHeight(50)
+        self.lt_sample_jj_sum = FlowLayout(gp_sample_jj_sum,10,5)
         gp_sample_jj_sum.setLayout(self.lt_sample_jj_sum)
-        gp_sample_qs_sum = QGroupBox('样本待签收')
-        self.lt_sample_qs_sum = QHBoxLayout()
+
+        gp_sample_qs_sum = QGroupBox('样本待签收信息')
+        gp_sample_qs_sum.setStyleSheet('''QGroupBox:title{font: 75 14pt '微软雅黑';color: rgb(0,128,0);}''')
+        gp_sample_qs_sum.setMinimumHeight(50)
+        self.lt_sample_qs_sum = FlowLayout()
         gp_sample_qs_sum.setLayout(self.lt_sample_qs_sum)
-        gp_sample_sum = QGroupBox('样本完成')
-        self.lt_sample_sum = QHBoxLayout()
+
+        gp_sample_sum = QGroupBox('样本完成信息')
+        gp_sample_sum.setStyleSheet('''QGroupBox:title{font: 75 14pt '微软雅黑';color: rgb(0,128,0);}''')
+        gp_sample_sum.setMinimumHeight(50)
+        self.lt_sample_sum = FlowLayout()
         gp_sample_sum.setLayout(self.lt_sample_sum)
         #self.table_history.verticalHeader().setVisible(False)  # 去掉行头
         # 设置列宽
         # self.table_handover.setColumnWidth(0, 40)
         # self.table_handover.setColumnWidth(5, 150)
+        lt_bottom_left.addSpacing(10)
         lt_bottom_left.addWidget(gp_sample_jj_sum)
+        lt_bottom_left.addSpacing(10)
         lt_bottom_left.addWidget(gp_sample_qs_sum)
-        lt_bottom_left.addWidget(gp_sample_jj_sum)
+        lt_bottom_left.addSpacing(10)
+        lt_bottom_left.addWidget(gp_sample_sum)
         self.gp_bottom_left.setLayout(lt_bottom_left)
 
         lt_bottom.addWidget(self.gp_bottom_left,3)
