@@ -11,7 +11,7 @@ class ItemsStateUI(Dialog):
     def __init__(self,parent=None):
         super(ItemsStateUI,self).__init__(parent)
         self.setWindowTitle('项目查看')
-        self.setMinimumHeight(500)
+        self.setMinimumHeight(600)
         self.setMinimumWidth(880)
         self.initUI()
         # 绑定信号槽
@@ -22,6 +22,7 @@ class ItemsStateUI(Dialog):
         # 右键
         self.table_item.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_item.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
+        self.table_item.itemDoubleClicked.connect(self.on_table_item_doubleclick)
         self.tmp_path = gol.get_value('path_tmp')
 
     # 右键功能
@@ -61,10 +62,12 @@ class ItemsStateUI(Dialog):
         lt_top = QHBoxLayout()
         self.le_tjbh = QTJBH()
         self.btn_query = QPushButton(Icon('query'),'查询')
+        self.btn_receive= QPushButton(Icon('接收'), '结果接收')
         gp_top = QGroupBox('检索条件')
         lt_top.addWidget(QLabel('体检编号：'))
         lt_top.addWidget(self.le_tjbh)
         lt_top.addWidget(self.btn_query)
+        lt_top.addWidget(self.btn_receive)
         lt_top.addStretch()
         gp_top.setLayout(lt_top)
         lt_middle = QHBoxLayout()
@@ -81,6 +84,10 @@ class ItemsStateUI(Dialog):
         lt_main.addLayout(self.gp_user)
         lt_main.addWidget(self.gp_middle)
         self.setLayout(lt_main)
+
+    # 双击查看明细结果
+    def on_table_item_doubleclick(self):
+        pass
 
     # 变更项目状态
     def on_table_item_click(self,QTableWidgetItem):
@@ -176,7 +183,7 @@ class ItemsStateUI(Dialog):
         #self.table_item.load([result.item_result for result in results])
         results = self.session.execute(get_item_state_sql(tjbh=self.le_tjbh.text())).fetchall()
         self.table_item.load(results)
-        self.gp_middle.setTitle('项目状态 (%s)' %self.table_item.rowCount())
+        self.gp_middle.setTitle('项目信息 (%s)' %self.table_item.rowCount())
 
 
 # 胶片打印服务
@@ -199,6 +206,126 @@ def get_pacs_pic(tjbh, xmbh, path):
 
     except Exception as e:
         print(e)
+
+# 查看操作记录
+class OperateUI(Dialog):
+
+    # 自定义 信号，封装对外使用
+    returnPressed = pyqtSignal(str)
+
+    def __init__(self,parent=None):
+        super(OperateUI,self).__init__(parent)
+        self.setWindowTitle('操作记录查询')
+        self.setMinimumHeight(500)
+        self.setMinimumWidth(700)
+        self.initUI()
+        # 信号槽
+        self.returnPressed.connect(self.setQuery)
+        self.btn_query.clicked.connect(self.on_btn_query_click)
+        self.le_tjbh.returnPressed.connect(self.on_le_tjbh_return)
+
+
+    def setQuery(self, tjbh):
+        self.le_tjbh.setText(tjbh)
+        self.on_le_tjbh_return()
+
+    def on_le_tjbh_return(self):
+        tjbh = self.le_tjbh.text()
+        if not tjbh:
+            mes_about(self, '请您输入体检编号')
+            return
+        else:
+            sql = get_operate_sql(tjbh)
+            results = self.session.execute(sql)
+            self.table_operate.load(results)
+            self.gp_middle.setTitle('操作记录(%s)' % self.table_operate.rowCount())
+            # mes_about(self, '共检索出数据 %s 条' % self.table_operate.rowCount())
+
+        self.le_tjbh.setText('')
+
+    def on_btn_query_click(self):
+        if self.le_tjbh.text():
+            self.on_le_tjbh_return()
+
+    def initUI(self):
+        self.operate_cols = OrderedDict(
+            [
+                ("jlmc", "记录名称"),
+                ("czsj", "操作时间"),
+                ("czxm", "操作人员"),
+                ("czqy", "操作区域"),
+                ("jnlr", "记录内容"),
+                ("bz", "备注")
+             ])
+        lt_main = QVBoxLayout()
+        # 搜索
+        lt_top = QHBoxLayout()
+        self.le_tjbh = QTJBH()
+        self.btn_query = QPushButton(Icon('query'),'查询')
+        gp_top = QGroupBox('检索条件')
+        lt_top.addWidget(QLabel('体检编号：'))
+        lt_top.addWidget(self.le_tjbh)
+        lt_top.addWidget(self.btn_query)
+        lt_top.addStretch()
+        gp_top.setLayout(lt_top)
+        lt_middle = QHBoxLayout()
+        self.gp_middle = QGroupBox('操作记录(0)')
+        # 用户基本信息
+        # self.gp_user = UserBaseGroup()
+        self.table_operate = OperateTable(self.operate_cols)
+        self.table_operate.setAlternatingRowColors(False)                       # 使用行交替颜色
+        self.table_operate.verticalHeader().setVisible(False)
+        lt_middle.addWidget(self.table_operate)
+        self.gp_middle.setLayout(lt_middle)
+
+        lt_main.addWidget(gp_top)
+        # lt_main.addLayout(self.gp_user)
+        lt_main.addWidget(self.gp_middle)
+        self.setLayout(lt_main)
+
+# 报告审阅列表
+class OperateTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(OperateTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # 字典载入
+        for row_index, row_data in enumerate(datas):
+            self.insertRow(row_index)  # 插入一行
+            for col_index, col_value in enumerate(row_data):
+                if col_index==1:
+                    item = QTableWidgetItem(str2(col_value))
+                    item.setTextAlignment(Qt.AlignCenter)
+                else:
+                    item = QTableWidgetItem(str2(col_value))
+                self.setItem(row_index, col_index, item)
+        # 布局
+        self.setColumnWidth(0, 75)      # 记录名称
+        self.setColumnWidth(1, 80)      # 操作时间
+        self.setColumnWidth(2, 60)      # 操作人员
+        self.setColumnWidth(3, 80)      # 操作区域
+        self.setColumnWidth(4, 200)  # 操作区域
+        self.horizontalHeader().setStretchLastSection(True)
+
+# 获取操作记录SQL
+def get_operate_sql(tjbh):
+    return '''
+    (SELECT 
+        '信息修改' AS JLMC,substring(convert(char,zhxgsj,120),1,19) AS CZSJ,
+        (SELECT YGXM FROM TJ_YGDM WHERE YGGH=log_jbxx.zhxgr ) AS CZXM,
+        '' AS CZQY,
+        xgnr AS JLNR,
+        '' AS BZ 
+    FROM log_jbxx WHERE tjbh='%s')
+    
+    UNION ALL
+    
+    (SELECT JLMC,substring(convert(char,CZSJ,120),1,19) AS CZSJ,CZXM,CZQY,JLNR,BZ FROM TJ_CZJLB WHERE tjbh='%s')
+    
+    ORDER BY czsj 
+    ''' %(tjbh,tjbh)
 
 if __name__ == '__main__':
     import sys

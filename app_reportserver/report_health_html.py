@@ -1,8 +1,7 @@
 # 保健处方
 
 pdf_html_health_page = '''
-<table class="table_health">
-<div class="page_health">
+<div class="new_page">
     <%
         health_title = health['title']
         health_stitle = health['stitle']
@@ -19,5 +18,4 @@ pdf_html_health_page = '''
         % endfor
     </div>
 </div>
-</table>
 '''

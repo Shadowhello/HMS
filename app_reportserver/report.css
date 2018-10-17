@@ -11,7 +11,7 @@ body{
     color:#000000;
     font-size:12px;
     margin-top:5px;
-    font-family:"SimSun","微软雅黑","Arial Narrow";
+    font-family:"SimSun","宋体","Arial Narrow";
 }
 ul,ol{
     list-style-type:none;
@@ -65,7 +65,7 @@ select,input,img,select{
     left:0px;
     top:0px;
     width:1240px;
-    height:1800px;
+    height:1600;
     border: red solid 0px;
 }
 
@@ -92,7 +92,7 @@ select,input,img,select{
     border:0px solid #000;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -108,7 +108,7 @@ select,input,img,select{
     border:0px solid #000;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -120,7 +120,7 @@ select,input,img,select{
 .user_td_label{
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     text-align:right;
     valign:middle;
@@ -129,7 +129,7 @@ select,input,img,select{
 /*用户标签 对应的值*/
 .user_td_value{
     font-size: 28px;          /*文字大小*/
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     width:180px;
     height:60px;
@@ -140,7 +140,7 @@ select,input,img,select{
 /*用户标签 对应的值*/
 .user_td_value2{
     font-size: 28px;          /*文字大小*/
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     height:auto;
     valign:middle;
@@ -197,7 +197,7 @@ select,input,img,select{
 .user_td{
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     align:center;
     valign:middle;
@@ -205,20 +205,60 @@ select,input,img,select{
 
 .page_2{
     position:relative;
-    top:10px;
+    top:20px;
     text-align:left;
     left:0px;
     width:1240px;
     height:auto;
 }
 
+.page_cachet{
+    position:relative;
+    top:10px;
+    text-align:left;
+    left:0px;
+    width:1240px;
+    height:auto;
+    page-break-inside:avoid;
+}
+.new_page{
+    position:relative;
+    top:20px;
+    text-align:left;
+    left:0px;
+    width:1240px;
+    height:auto;
+    page-break-before:left;
+}
+
+
+.page_equip{
+    position:relative;
+    top:10px;
+    text-align:left;
+    left:0px;
+    width:1240px;
+    height:auto;
+    page-break-before:left;
+}
+
 .page_1{
-    top:30px;
+    top:20px;
     text-align:left;
     left:0px;
     width:1240px;
     height:auto;
 }
+
+.page_2{
+    position:relative;
+    top:20px;
+    text-align:left;
+    left:0px;
+    width:1240px;
+    height:auto;
+}
+
 
 .tj_pb{
     color:#000000;
@@ -229,19 +269,19 @@ select,input,img,select{
     height:auto;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
 .tj_xj{
     position:relative;
-    top:50px;
+    top:0px;
     left:0px;
     width:auto;
     height:auto;
     font-size: 16px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -252,25 +292,25 @@ select,input,img,select{
 .tj_xj_content{
      position:relative;
      left:0px;
-     top:50px;
+     top:0px;
      height:auto;
      width:auto;
      font-size: 28px;          /*文字大小*/
      font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-     font-family:微软雅黑;    /*文本的字体*/
+     font-family:宋体;    /*文本的字体*/
      font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
 .tj_jy_content{
      position:relative;
      left:0px;
-     top:50px;
+     top:0px;
      height:auto;
      width:auto;
      line-height:1.5;
      font-size: 28px;          /*文字大小*/
      font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-     font-family:微软雅黑;    /*文本的字体*/
+     font-family:宋体;    /*文本的字体*/
      font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -284,9 +324,9 @@ table{
     width:100%;
     font-size: 24px;          /*文字大小*/
     font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
-    border-top:5px solid #000;
+    border-top:3px solid #000;
     border-collapse:collapse;
     padding:3px;
 }
@@ -296,7 +336,7 @@ caption{
     text-align:left;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -313,7 +353,7 @@ tbody{
     align:left;
     font-size: 24px;          /*文字大小*/
     font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -352,7 +392,7 @@ td{
     align:left;
     font-size: 26px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -363,10 +403,10 @@ td{
 .cachet{
     background-image:url('F:/HMS/app_reportserver/cachet.png');
     background-repeat:no-repeat;
-    background-position:right;
-    background-size:400px 300px;
+    background-position:top right;
+    background-size:300px 225px;
     border-top:0px solid #000;
-    right:30px;
+    right:10px;
 }
 
 .no_cachet{
@@ -400,32 +440,32 @@ p{
     left:0px;
     width:1240px;
     height:auto;
-    page-break-inside:avoid;
+    page-break-before:left;
 }
 
 .tj_health_title{
     position:relative;
-    top:50px;
+    top:0px;
     left:0px;
     width:auto;
     height:auto;
     font-size: 16px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:微软雅黑;    /*文本的字体*/
+    font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
 .tj_health_content{
      position:relative;
      left:0px;
-     top:50px;
+     top:0px;
      margin-top:15px;
      line-height:1.8;
      height:auto;
      width:auto;
      font-size: 24px;          /*文字大小*/
      font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-     font-family:微软雅黑;    /*文本的字体*/
+     font-family:宋体;    /*文本的字体*/
      font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 .table_health{

@@ -138,3 +138,55 @@ def get_lis_match_pes_sql():
                 NEWLISBH IS NOT NULL AND
              ( ( TJ_XMLB.XMLX = '2' ) and (flag =0 ) ) 
     '''
+
+
+def get_equip_sql(tjbh):
+    return '''
+    SELECT 
+        a.TJBH,
+        (CASE 
+            WHEN a.qzjs='1' THEN '已拒检'
+            WHEN (a.qzjs<>'1' OR a.qzjs IS NULL) AND a.jsbz='1' THEN '已小结'
+            WHEN (a.qzjs<>'1' OR a.qzjs IS NULL) AND a.jsbz<>'1' AND a.zxpb='3'  THEN '已检查'
+            ELSE '核实' END
+        ) AS XMZT,
+        b.EQUIP_NAME AS EQUIP,
+        (CASE 
+            WHEN b.OPERATE_TIME IS NOT NULL THEN b.OPERATE_TIME
+            ELSE a.JCRQ  END 
+        ) AS JCRQ,
+        (CASE 
+            WHEN b.OPERATOR2 IS NOT NULL THEN b.OPERATOR2
+            ELSE (SELECT YGXM FROM TJ_YGDM where yggh=a.JCYS ) END 
+        ) AS JCYS,
+        (CASE 
+            WHEN a.ZHBH IN ('0806','501576') THEN JCRQ 
+            ELSE '' END
+        ) AS SHRQ,
+        (CASE 
+            WHEN a.ZHBH IN ('0806','501576') THEN (SELECT YGXM FROM TJ_YGDM where yggh=a.JCYS ) 
+            ELSE '' END
+        ) AS SHYS,
+        ( CASE
+            WHEN a.zhbh ='501576' THEN a.JG
+          WHEN a.zhbh ='0310' THEN b.EQUIP_JG1
+          ELSE '' END
+        ) AS XMJG,
+        ( CASE
+            WHEN a.zhbh ='501576' THEN a.ZD
+          WHEN a.zhbh ='0310' THEN b.EQUIP_JG2
+            WHEN a.zhbh ='0806' THEN a.JG
+          ELSE '' END
+        ) AS XMZD,
+        b.FILE_PATH AS FILENAME
+         
+    FROM 
+    
+    (SELECT * FROM TJ_TJJLMXB WHERE TJBH ='%s' AND ZHBH IN ('0806','5402','501576','1000074','0310') AND SFZH='0') AS a
+    
+    INNER JOIN (SELECT * FROM TJ_EQUIP WHERE TJBH ='%s' ) AS b
+    
+    ON a.TJBH=b.TJBH AND a.ZHBH=b.XMBH
+    
+    ''' %(tjbh,tjbh)
+

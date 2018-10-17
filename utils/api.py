@@ -46,9 +46,9 @@ def get_ocr(picname):
 
 # 从微信端获取二维码图片 字节流
 def get_barcode_wx(xm,sfzh,sjhm,email='',address=''):
-    #url = 'http://app.nbmzyy.com/tjadmin/pInfoSubmit'
+    url = 'http://app.nbmzyy.com/tjadmin/pInfoSubmit'
     # url = 'http://10.7.200.60:80/tjadmin/pInfoSubmit'
-    url = 'http://10.7.200.27:8089/tjadmin/pInfoSubmit'
+    #url = 'http://10.7.200.27:8089/tjadmin/pInfoSubmit'
     head = {}
     head['realName'] = urllib.parse.quote(xm)
     head['idCardNum'] = sfzh

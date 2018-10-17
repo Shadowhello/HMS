@@ -92,7 +92,6 @@ class ReportEquip(ReportEquipUI):
     def on_table_report_equip_click(self,QModelIndex):
         fpath = self.table_report_equip.item(QModelIndex.row(),6).text()
         url = gol.get_value('api_equip_show','')
-        print(url %fpath)
         if url:
             self.wv_report_equip.load(url %fpath)
 

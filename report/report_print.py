@@ -129,7 +129,7 @@ class ReportPrint(ReportPrintUI):
                                 self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
                                     {
                                         MT_TJ_BGGL.dyrq: cur_datetime(),
-                                        MT_TJ_BGGL.dyfs: '1',
+                                        MT_TJ_BGGL.dyfs: '2',
                                         MT_TJ_BGGL.dygh: self.login_id,
                                         MT_TJ_BGGL.dyxm: self.login_name,
                                         MT_TJ_BGGL.dycs: MT_TJ_BGGL.dycs + 1,

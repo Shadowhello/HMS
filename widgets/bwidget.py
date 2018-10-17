@@ -180,8 +180,9 @@ class TableWidget(QTableWidget):
         self.setHorizontalHeaderLabels(heads.values())
         # self.horizontalHeader().setStyleSheet("QHeaderView::section{background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0.5 #054874 stop:1 #377277);}")  #设置表头背景色
         self.heads = heads
+        self.setStyleSheet("QTableCornerButton::section{background-color:white;}")
 
-    # 公共实现，载入数据
+        # 公共实现，载入数据
     def load(self,datas:list,heads=None):
         self.setSortingEnabled(False) #查询前，关闭排序，避免显示空白，BUG
         if not heads:
@@ -802,7 +803,7 @@ class QueueObject(QObject):
 
 
 
-class SearchLineEdit(QLineEdit):
+class SearchLineEdit2(QLineEdit):
     """创建一个可自定义图片的输入框。"""
 
     style = '''
@@ -825,7 +826,7 @@ class SearchLineEdit(QLineEdit):
     '''
 
     def __init__(self, parent=None):
-        super(SearchLineEdit, self).__init__(parent)
+        super(SearchLineEdit2, self).__init__(parent)
         self.setMinimumSize(218, 20)
         # with open('QSS/searchLine.qss', 'r') as f:
         self.setStyleSheet(self.style)
@@ -982,6 +983,40 @@ class FlowLayout(QLayout):
 
         return y + lineHeight - rect.y()
 
+# 右下角弹出框 剥离业务
+class PopWidget(QDialog):
+
+    def __init__(self,parent=None,size=(300,400)):
+        super(PopWidget, self).__init__(parent)
+        self.setWindowIcon(Icon('mztj'))
+        # 移动整体位置
+        desktop = QDesktopWidget()
+        self.setFixedHeight(size[0])
+        self.setFixedWidth(size[1])
+        self.move((desktop.availableGeometry().width()-self.width()-20),
+                  desktop.availableGeometry().height()-self.height()-60)  # 初始化位置到右下角
+        # #定时器
+        # self.ptimer = QTimer(self)
+
+    def on_time_start(self,title,times=10):
+        # self.times=times
+        # self.title = title
+        # 设置标题
+        self.setWindowTitle('%s' % title)
+        # self.ptimer.start(1000)
+        # self.ptimer.timeout.connect(self.on_time_show)
+
+    # def on_time_show(self):
+    #     self.times = self.times - 1
+    #     if self.times > 0:
+    #         self.setWindowTitle('%s (%s秒后关闭)' %(self.title,self.times))
+    #         return
+    #     # 清除Timer和信号槽
+    #     self.ptimer.stop()
+    #     self.ptimer.timeout.disconnect(self.on_time_show)
+    #     # self.ptimer.deleteLater()
+    #     # self.ptimer = None
+    #     self.close()
 
 if __name__ == "__main__":
     import sys

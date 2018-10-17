@@ -101,6 +101,15 @@ class MT_TJ_TJJLMXB(BaseModel):
         }
 
     @property
+    def item_result2(self):
+        return {
+            'xmmc':str2(getattr(self, "xmmc", '')),
+            'xmbh': getattr(self, "xmbh", ''),
+            'state': self.item_state,
+            'btn':''                                     # 状态修改
+        }
+
+    @property
     def get_shys(self):
         if getattr(self, "shys", ''):
             return getattr(self, "shys", '')
@@ -346,7 +355,7 @@ class MV_RYXX(BaseModel):
     sygh = Column(String(20), nullable=False)
     io_jkcf = Column(CHAR(1), nullable=False)
     bz = Column(Text, nullable=False)
-    tjzt = Column(CHAR(1), nullable=False)
+    tjzt = Column(String(10), nullable=False)
 
     @property
     def to_dict(self):
@@ -367,29 +376,8 @@ class MV_RYXX(BaseModel):
             'shys': str2(getattr(self, "shxm")),
             'yzjys': str2(getattr(self, "yzjxm")),
             'yshys': str2(getattr(self, "yshxm")),
-            'tjzt': self.get_tjzt
+            'tjzt': getattr(self, "tjzt")
         }
-
-    @property
-    def get_tjzt(self):
-        if getattr(self, "tjzt")=='0':
-            return '已取消'
-        elif getattr(self, "tjzt")=='1':
-            return '已登记'
-        if getattr(self, "tjzt")=='2':
-            return '已预约'
-        elif getattr(self, "tjzt")=='3':
-            return '已签到'
-        if getattr(self, "tjzt")=='4':
-            return '已收单'
-        elif getattr(self, "tjzt")=='6':
-            return '已总检'
-        if getattr(self, "tjzt")=='7':
-            return '已审核'
-        elif getattr(self, "tjzt")=='8':
-            return '已审阅'
-        else:
-            return '未定义'
 
     @property
     def pdf_dict(self):

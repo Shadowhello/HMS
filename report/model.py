@@ -1,5 +1,6 @@
 from utils.bmodel import *
 from string import Template
+from .report_track_sql import  *
 # 主表 信息只记录最后一次，过程记录是 TJ_CZJLB
 # 流程
 # 正流程：体检登记 -> 体检预约 -> 体检签到(检查) -> 体检收单 -> (体检追踪) -> 总检 -> 审核 -> 审阅 -> 打印 -> 整理 -> 领取(下载)  取消登记(体检)0
@@ -376,10 +377,11 @@ def get_quick_search_sql(where_str):
             TJ_BGGL.ZZXM AS lqry,
             T1.*,
 				(CASE
-					WHEN TJ_BGGL.BGZT<>'0' THEN '' 
-					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN (SELECT TOP 1 JLNR FROM TJ_CZJLB WHERE TJBH = T1.TJBH AND JLLX='0103')
-					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '1' THEN TJ_BGGL.GCBZ
+					WHEN T1.TJZT='审核退回' THEN (SELECT TOP 1 '退回时间('+substring(convert(char,CZSJ,120),1,19)+')，退回人('+CZXM+')，退回原因：'+CAST(JLNR AS VARCHAR) FROM TJ_CZJLB WHERE TJBH = T1.TJBH AND JLLX='0103')
+					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN (SELECT TOP 1 '退回时间('+substring(convert(char,CZSJ,120),1,19)+')，退回人('+CZXM+')，退回原因：'+CAST(BZ AS VARCHAR) FROM TJ_CZJLB WHERE TJBH = T1.TJBH  AND JLLX='0103' ORDER BY ID DESC)
+					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '1' THEN (SELECT TOP 1 '退回时间('+substring(convert(char,CZSJ,120),1,19)+')，退回人('+CZXM+')，退回原因：'+CAST(BZ AS VARCHAR) FROM TJ_CZJLB WHERE TJBH = T1.TJBH  AND JLLX='0033' ORDER BY ID DESC)
 					WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH IS NULL THEN (SELECT T3.wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) 
+					WHEN TJ_BGGL.BGZT<>'0' THEN '' 
 					ELSE (SELECT T3.wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) END
 				) AS wjxm 
 				FROM T1 LEFT JOIN TJ_BGGL ON T1.TJBH =TJ_BGGL.TJBH
@@ -828,7 +830,7 @@ def get_report_shth_sql():
 				ELSE '' END
 		) AS TJQY,TJBH,XM,(CASE XB WHEN '1' THEN '男' ELSE '女' END) AS XB,nl,TJ_TJDAB.SFZH,TJ_TJDAB.SJHM,
                     (select MC from TJ_DWDMB where DWBH=TJ_TJDJB.DWBH) AS DWMC,substring(convert(char,QDRQ,120),1,10) AS QDRQ,TJ_TJDJB.bz,
-                   (SELECT TOP 1 JLNR FROM TJ_CZJLB WHERE TJBH=TJ_TJDJB.TJBH AND JLLX='0103') AS wjxm
+                   (SELECT TOP 1 '退回时间('+substring(convert(char,CZSJ,120),1,19)+')，退回人('+CZXM+')，退回原因：'+CAST(JLNR AS VARCHAR) FROM TJ_CZJLB WHERE TJBH = TJ_TJDJB.TJBH AND JLLX='0103') AS wjxm
 
 FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH 
             
@@ -845,7 +847,7 @@ def get_report_syth_sql():
 				WHEN '2' THEN '已预约'
 				WHEN '3' THEN '已签到'
 				WHEN '4' THEN '已收单'
-				WHEN '5' THEN '已追踪'
+				WHEN '5' THEN '审核退回'
 				WHEN '6' THEN '已总检'
 				WHEN '7' THEN '已审核'
 				WHEN '8' THEN '已审阅'
@@ -874,8 +876,8 @@ def get_report_syth_sql():
 		) AS TJQY,e.TJBH,e.XM,(CASE e.XB WHEN '1' THEN '男' ELSE '女' END) AS XB,e.nl,e.SFZH,e.SJHM,
                     (select MC from TJ_DWDMB where DWBH=e.DWBH) AS DWMC,substring(convert(char,e.QDRQ,120),1,10) AS QDRQ,e.bz,
                     (CASE 
-                        WHEN TJ_BGGL.BGZT='0' AND TJ_BGGL.BGTH='0' THEN (SELECT TOP 1 JLNR FROM TJ_CZJLB WHERE TJBH=TJ_BGGL.TJBH AND JLLX='0103')
-                        WHEN TJ_BGGL.BGZT='0' AND TJ_BGGL.BGTH='1' THEN TJ_BGGL.GCBZ
+					    WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '0' THEN (SELECT TOP 1 '退回时间('+substring(convert(char,CZSJ,120),1,19)+')，退回人('+CZXM+')，退回原因：'+CAST(BZ AS VARCHAR) FROM TJ_CZJLB WHERE TJBH = e.TJBH  AND JLLX='0103' ORDER BY ID DESC)
+					    WHEN TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH = '1' THEN (SELECT TOP 1 '退回时间('+substring(convert(char,CZSJ,120),1,19)+')，退回人('+CZXM+')，退回原因：'+CAST(BZ AS VARCHAR) FROM TJ_CZJLB WHERE TJBH = e.TJBH  AND JLLX='0033' ORDER BY ID DESC)
                         ELSE '' END
                     )AS wjxm
 

@@ -68,6 +68,7 @@ class TJ_Main_UI(QMainWindow):
         self.update_auto = gol.get_value('update_auto',True)
         self.update_timer = gol.get_value('update_timer',360)
         self.user_menu_sid = gol.get_value('menu_sid',5001)
+        self.login_id = gol.get_value('login_user_id')
 
     def initStatusBar(self):
         self.setStatusBar(StatusBar())
@@ -81,6 +82,9 @@ class TJ_Main_UI(QMainWindow):
         class_name = action.cls_name   # 必须在上一句后面，因为才赋值
         #print(module,class_name)
         if module and class_name:
+            if class_name=='DN_MeritPay' and self.login_id=='BSSA':
+                mes_about(self,"对不起，您没有该功能权限，请联系管理员！")
+                return
             if not hasattr(self, class_name):
                 module_class = getattr(module, class_name)
                 setattr(self, class_name, module_class())

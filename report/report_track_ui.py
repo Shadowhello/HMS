@@ -18,9 +18,11 @@ class ReportTrackUI(Widget):
         gp_search = QGroupBox('条件检索')
 
         self.btn_query = ToolButton(Icon('query'),'查询')
-        self.btn_task = ToolButton(Icon('任务'), '领取')
-        self.btn_myself = ToolButton(Icon('user'),'我的')
+        # self.btn_task = ToolButton(Icon('任务'), '领取')
+        self.btn_task = TaskButton()
+        # self.btn_myself = ToolButton(Icon('user'),'我的')
         # self.btn_send = ToolButton(Icon('发送'), '发送')
+        self.btn_myself = MyselfButton()
         self.btn_send = SendButton()
         self.btn_receive = ToolButton(Icon('接收'),'结果接收')
         # 追踪类型
@@ -82,6 +84,7 @@ class ReportTrackUI(Widget):
 
         # 按钮功能区
         self.btn_item = QPushButton(Icon('项目'), '项目查看')         # 查看 LIS 结果
+        self.btn_czjl = QPushButton(Icon('操作'), '操作记录')         # 查看体检记录
         self.btn_lis = QPushButton(Icon('lis'),'检验系统')            # 查看 LIS 结果
         self.btn_pacs = QPushButton(Icon('pacs'),'检查系统')          # 查看 PACS 结果
         self.btn_pis = QPushButton(Icon('pis'),'病理系统')            # 查看 病理结果
@@ -92,10 +95,11 @@ class ReportTrackUI(Widget):
         self.btn_djd = QPushButton(Icon('体检收单'),'纸质导检单')   # 有拒检项目查看电子导检单
         self.btn_export = QPushButton(Icon('导出'), '数据导出')     # 数据导出
         lt_bottom.addWidget(self.btn_item)
+        lt_bottom.addWidget(self.btn_czjl)
         lt_bottom.addWidget(self.btn_lis)
         lt_bottom.addWidget(self.btn_pacs)
         lt_bottom.addWidget(self.btn_pis)
-        # lt_bottom.addWidget(self.btn_equip)
+        lt_bottom.addWidget(self.btn_equip)
         lt_bottom.addWidget(self.btn_phone)
         lt_bottom.addWidget(self.btn_sms)
         # lt_bottom.addWidget(self.btn_sd)
@@ -133,4 +137,50 @@ class SendButton(QToolButton):
     def on_btn_send_nurse(self):
         self.menu_clicked.emit(False)
 
-    # def on_self_click(self):
+class TaskButton(QToolButton):
+
+    menu_clicked =pyqtSignal(bool)
+
+    def __init__(self,parent=None):
+        super(TaskButton,self).__init__(parent)
+        self.setIcon(Icon("任务"))
+        self.setText("领取")
+        self.setIconSize(QSize(32, 32))
+        self.setAutoRaise(True)
+        #self.setPopupMode(QToolButton.MenuButtonPopup)
+        self.setPopupMode(QToolButton.InstantPopup)
+        self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        menu=QMenu()
+        menu.addAction(Icon("双人"),"->双人领取",self.on_btn_task_two)
+        menu.addAction(Icon("单人"),"->单人领取",self.on_btn_task_one)
+        self.setMenu(menu)
+
+    def on_btn_task_two(self):
+        self.menu_clicked.emit(True)
+
+    def on_btn_task_one(self):
+        self.menu_clicked.emit(False)
+
+class MyselfButton(QToolButton):
+
+    menu_clicked =pyqtSignal(bool)
+
+    def __init__(self,parent=None):
+        super(MyselfButton,self).__init__(parent)
+        self.setIcon(Icon("user"))
+        self.setText("我的")
+        self.setIconSize(QSize(32, 32))
+        self.setAutoRaise(True)
+        #self.setPopupMode(QToolButton.MenuButtonPopup)
+        self.setPopupMode(QToolButton.InstantPopup)
+        self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        menu=QMenu()
+        menu.addAction(Icon("未完成"),"->追踪中",self.on_btn_no_finish)
+        menu.addAction(Icon("完成"),"->追踪完成",self.on_btn_is_finish)
+        self.setMenu(menu)
+
+    def on_btn_no_finish(self):
+        self.menu_clicked.emit(False)
+
+    def on_btn_is_finish(self):
+        self.menu_clicked.emit(True)

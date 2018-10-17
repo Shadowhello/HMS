@@ -2,7 +2,7 @@
 pdf_html_summary_page = '''
 <div class="page_2">
     <div class="tj_xj">
-        <h1>体检小结(Summary)</h1>
+        <h1>体检小结</h1>
         <hr />
     </div>
     <div class="tj_xj_content">
@@ -21,13 +21,14 @@ pdf_html_summary_page = '''
 pdf_html_suggest_page = '''
 <div class="page_2">
     <div class="tj_xj">
-        <h1>体检建议(Suggestions)</h1>
+        <h1>体检建议</h1>
         <hr />
     </div>
     <div class="tj_jy_content">
         <ul>
-            {% for suggestion in suggestions %}
-             <li class="tj_xj_li">{{loop.index|string+"、"+suggestion}}</li>
+            {% for summary,suggestion in suggestions %}
+             <b><li class="tj_xj_li">{{loop.index|string+"、"+summary}}</li></b>
+             <p style="text-indent:2em">{{suggestion}}</p>
         {% endfor %}
         </ul>
         <br />
@@ -37,23 +38,22 @@ pdf_html_suggest_page = '''
 
 # 总检审核签字、电子章
 pdf_html_cachet_page ='''
-<div class="page_2">
+<div class="page_cachet">
     <%
         zjys = cachet['zjys'] 
         shys = cachet['shys'] 
         syys = cachet['syys'] 
         warn = cachet['warn'] 
     %>
-    <br>
     <table class="cachet">
         <tr>
             <td></td>
         </tr>
         <tr align="right">
-            <td>总检医生：<img src=${zjys} height="50" width="100" /></td>
-        </tr>
-        <tr align="right">
-            <td>审核医生：<img src=${shys} height="50" width="100" /></td>
+            <td>
+            总检医生：<img src=${zjys} height="50" width="100" />&nbsp;&nbsp;
+            审核医生：<img src=${shys} height="50" width="100" />&nbsp;&nbsp;
+            </td>
         </tr>
         <tr align="left">
             <td>${warn}</td>
@@ -77,13 +77,10 @@ pdf_html_cachet_page2 ='''
             <td></td>
         </tr>
         <tr align="right">
-            <td>总检医生：<img src=${zjys} height="50" width="100" /></td>
-        </tr>
-        <tr align="right">
-            <td>审核医生：<img src=${shys} height="50" width="100" /></td>
-        </tr>
-        <tr align="right">
-            <td>三审护士：<img src=${syys} height="50" width="100" /></td>
+            <td>
+            总检医生：<img src=${zjys} height="50" width="100" />&nbsp;&nbsp;
+            审核医生：<img src=${shys} height="50" width="100" />&nbsp;&nbsp;
+            三审护士：<img src=${syys} height="50" width="100" />&nbsp;&nbsp;
         </tr>
         <tr align="left">
             <td>${warn}</td>

@@ -9,6 +9,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
 
+# 在matplotlib中，整个图像为一个Figure对象。
+# 在Figure对象中可以包含一个或者多个Axes对象。
+# 每个Axes(ax)对象都是一个拥有自己坐标系统的绘图区域。
 
 class MyMplCanvas(FigureCanvas):
     """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
@@ -92,9 +95,9 @@ class ApplicationWindow(QMainWindow):
 
         l = QVBoxLayout(self.main_widget)
         sc = MyStaticMplCanvas(self.main_widget, width=5, height=4, dpi=100, title='Title 1')
-        dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100, title='Title 2')
+        # dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100, title='Title 2')
         l.addWidget(sc)
-        l.addWidget(dc)
+        # l.addWidget(dc)
 
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)

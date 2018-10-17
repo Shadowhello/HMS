@@ -1425,7 +1425,7 @@ class ReportStateGroup(QHBoxLayout):
             elif isinstance(value, str):
                 return ''' AND BGZT = %s ''' % value
             elif isinstance(value, int):
-                return ''' AND a.dybj IS NULL '''
+                return ''' AND a.dybj IS NULL AND BGZT='1' '''
             else:
                 return False
         return False
@@ -2297,30 +2297,20 @@ class UserBaseGroup(QVBoxLayout):
         super(UserBaseGroup,self).__init__()
         gp_user = QGroupBox('人员信息')
         lt_user = QHBoxLayout()
-        gp_inspect = QGroupBox('检查信息')
+        gp_inspect = QGroupBox('体检信息')
         lt_inspect = QHBoxLayout()
+        gp_suggest = QGroupBox('总检信息')
+        lt_suggest = QHBoxLayout()
         gp_report = QGroupBox('报告信息')
         lt_report = QHBoxLayout()
-        ########################控件区#####################################
+        ########################人员信息#####################################
         self.lb_user_id   = Lable()          # 体检编号
         self.lb_user_name = Lable()          # 姓名
         self.lb_user_sex =  Lable()          # 性别
         self.lb_user_age =  Lable()          # 年龄->自动转换出生年月
         self.lb_sjhm   =    Lable()          #手机号码
         self.lb_sfzh    =   Lable()          #身份证号
-        ##################################################################
-        self.lb_zjrq = Lable()        # 总检日期
-        self.lb_zjrq.setMinimumWidth(80)
-        self.lb_zjys = Lable()          # 总检医生
-        self.lb_zjys.setMinimumWidth(50)
-        self.lb_shrq =  Lable()         # 审核日期
-        self.lb_shrq.setMinimumWidth(80)
-        self.lb_shys =  Lable()         # 审核医生
-        self.lb_shys.setMinimumWidth(50)
-        self.lb_yzjys = Lable()         # 责任总检医生
-        self.lb_yzjys.setMinimumWidth(50)
-        self.lb_yshys = Lable()         # 责任审核医生
-        self.lb_yshys.setMinimumWidth(50)
+        # 添加布局
         lt_user.addWidget(QLabel('体检编号：'))
         lt_user.addWidget(self.lb_user_id)
         lt_user.addWidget(QLabel('姓名：'))
@@ -2335,25 +2325,69 @@ class UserBaseGroup(QVBoxLayout):
         # lt_main.addWidget(self.lb_sfzh)
         lt_user.addStretch()                  #设置列宽，添加空白项的
         gp_user.setLayout(lt_user)
-        #######################################################
-        lt_inspect.addWidget(QLabel('总检医生：'))
-        lt_inspect.addWidget(self.lb_zjys)
-        lt_inspect.addWidget(QLabel('总检日期：'))
-        lt_inspect.addWidget(self.lb_zjrq)
-        lt_inspect.addWidget(QLabel('审核医生：'))
-        lt_inspect.addWidget(self.lb_shys)
-        lt_inspect.addWidget(QLabel('审核日期：'))
-        lt_inspect.addWidget(self.lb_shrq)
-        lt_inspect.addWidget(QLabel('责任总检：'))
-        lt_inspect.addWidget(self.lb_yzjys)
-        lt_inspect.addWidget(QLabel('责任审核：'))
-        lt_inspect.addWidget(self.lb_yshys)
-        # lt_main.addWidget(QLabel('身份证号：'))
-        # lt_main.addWidget(self.lb_sfzh)
-        lt_inspect.addStretch()                  #设置列宽，添加空白项的
-        gp_inspect.setLayout(lt_inspect)
+        ########################体检信息#####################################
+        self.lb_djrq   = Lable()          # 体检编号
+        self.lb_qdrq = Lable()          # 姓名
+        self.lb_sdrq =  Lable()          # 性别
+        self.lb_user_age =  Lable()          # 年龄->自动转换出生年月
+        self.lb_sjhm   =    Lable()          #手机号码
+        self.lb_sfzh    =   Lable()          #身份证号
+        #######################总检信息##################################
+        self.lb_sjzj = Lable()        # 总检日期
+        self.lb_sjzj.setMinimumWidth(80)
+        self.lb_zjys = Lable()          # 总检医生
+        self.lb_zjys.setMinimumWidth(50)
+        self.lb_sjsh =  Lable()         # 审核日期
+        self.lb_sjsh.setMinimumWidth(80)
+        self.lb_shys =  Lable()         # 审核医生
+        self.lb_shys.setMinimumWidth(50)
+        self.lb_yzjys = Lable()         # 责任总检医生
+        self.lb_yzjys.setMinimumWidth(50)
+        self.lb_yshys = Lable()         # 责任审核医生
+        self.lb_yshys.setMinimumWidth(50)
+        self.btn_xjjy = QPushButton(Icon('小结建议'),'小结建议')
+        self.btn_zdbl = QPushButton(Icon('病历'), '重点病历')
+        # 添加布局
+        lt_suggest.addWidget(QLabel('实际总检：'))
+        lt_suggest.addWidget(self.lb_sjzj)
+        lt_suggest.addWidget(QLabel('实际审核：'))
+        lt_suggest.addWidget(self.lb_sjsh)
+        # lt_suggest.addWidget(QLabel('审核医生：'))
+        # lt_suggest.addWidget(self.lb_shys)
+        # lt_suggest.addWidget(QLabel('审核日期：'))
+        # lt_suggest.addWidget(self.lb_shrq)
+        lt_suggest.addWidget(QLabel('责任总检：'))
+        lt_suggest.addWidget(self.lb_yzjys)
+        lt_suggest.addWidget(QLabel('责任审核：'))
+        lt_suggest.addWidget(self.lb_yshys)
+        lt_suggest.addWidget(self.btn_xjjy)
+        lt_suggest.addWidget(self.btn_zdbl)
+        # lt_inspect.addStretch()                  #设置列宽，添加空白项的
+        gp_suggest.setLayout(lt_suggest)
+        ########################报告信息#####################################
+        self.lb_bgzz = Lable()          # 追踪
+        self.lb_bgsy = Lable()          # 审阅
+        self.lb_bgdy = Lable()          # 打印
+        self.lb_bgzl = Lable()          # 整理
+        self.btn_browse = QPushButton(Icon('报告'),'报告浏览')          # 查看
+        self.btn_down = QPushButton(Icon('报告'),'报告下载')          # 下载
+        # 添加布局
+        lt_report.addWidget(QLabel('报告追踪：'))
+        lt_report.addWidget(self.lb_bgzz)
+        lt_report.addWidget(QLabel('报告审阅：'))
+        lt_report.addWidget(self.lb_bgsy)
+        lt_report.addWidget(QLabel('报告打印：'))
+        lt_report.addWidget(self.lb_bgdy)
+        lt_report.addWidget(QLabel('报告整理：'))
+        lt_report.addWidget(self.lb_bgzl)
+        lt_report.addSpacing(20)
+        lt_report.addWidget(self.btn_browse)
+        lt_report.addWidget(self.btn_down)
+        gp_report.setLayout(lt_report)
         self.addWidget(gp_user)
         self.addWidget(gp_inspect)
+        self.addWidget(gp_suggest)
+        self.addWidget(gp_report)
 
     # 赋值
     def setData(self,data:dict):
@@ -2364,10 +2398,20 @@ class UserBaseGroup(QVBoxLayout):
         self.lb_user_age.setText(data.get('nl','未获取到'))
         self.lb_sjhm.setText(data.get('sjhm','未获取到'))
         # self.lb_sfzh.setText(data.get('sfzh','未获取到'))
-        self.lb_zjys.setText(data.get('zjys',''))
-        self.lb_zjrq.setText(data.get('zjrq', ''))
-        self.lb_shys.setText(data.get('shys', ''))
-        self.lb_shrq.setText(data.get('shrq', ''))
+        zjys = data.get('zjys','')
+        if zjys:
+            self.lb_sjzj.setText("%s,%s" %(zjys,data.get('zjrq', '')))
+        else:
+            self.lb_sjzj.setText('')
+        shys = data.get('shys','')
+        if shys:
+            self.lb_sjsh.setText("%s,%s" %(shys,data.get('shrq', '')))
+        else:
+            self.lb_sjsh.setText('')
+        # self.lb_zjys.setText(data.get('zjys', ''))
+        # self.lb_zjrq.setText(data.get('zjrq', ''))
+        # self.lb_shys.setText(data.get('shys', ''))
+        # self.lb_shrq.setText(data.get('shrq', ''))
         self.lb_yzjys.setText(data.get('yzjys', ''))
         self.lb_yshys.setText(data.get('yshys', ''))
 
@@ -2378,11 +2422,13 @@ class UserBaseGroup(QVBoxLayout):
         self.lb_user_sex.setText('')
         self.lb_user_age.setText('')
         self.lb_sjhm.setText('')
+        self.lb_sjzj.setText('')
+        self.lb_sjsh.setText('')
         # self.lb_sfzh.setText('')
-        self.lb_zjys.setText('')
-        self.lb_zjrq.setText('')
-        self.lb_shys.setText('')
-        self.lb_shrq.setText('')
+        # self.lb_zjys.setText('')
+        # self.lb_zjrq.setText('')
+        # self.lb_shys.setText('')
+        # self.lb_shrq.setText('')
         self.lb_yzjys.setText('')
         self.lb_yshys.setText('')
 

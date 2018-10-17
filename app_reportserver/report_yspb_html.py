@@ -13,7 +13,7 @@ pdf_html_yspb_page ='''
     <div class="page_1">
         <div style="text-align:center;">
             <div class="tj_pb">
-                <br>国际保健中心开通VIP专家门诊，预约电话:0574-83009619。
+                <br>国际保健中心开通VIP专家门诊  预约电话:0574-8300-9006
                 <% datas = pbxx %>
                 % for data in datas:
                     <br>${data}

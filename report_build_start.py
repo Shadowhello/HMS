@@ -114,7 +114,7 @@ def report_run(queue):
             ######################## 写入小结、建议信息 ########################
             summarys, suggestions = pdf_data_obj.get_user_xjjy
             pdf_build_obj.write_xj(summarys)
-            pdf_build_obj.write_jy(suggestions)
+            pdf_build_obj.write_jy(summarys,suggestions)
             ######################## 写入总检、审核医生签名及公章 ########################
             cachet['zjys'] = os.path.join(sign_img,'%s.png' %i_user['zjys'])
             cachet['shys'] = os.path.join(sign_img,'%s.png' %i_user['shys'])
@@ -142,7 +142,7 @@ def report_run(queue):
             # print('HTML头文件：%s' % pdf_data_obj.get_head_html)
             # print('HTML主文件：%s' % pdf_data_obj.get_body_html)
             if action == 'pdf':
-                pdf_options['footer-left'] =footer_user  % (i_user['tjbh'], i_user['xm'], i_user['xb'], i_user['nl'])
+                pdf_options['footer-left'] =footer_user  %i_user['tjbh']
                 # pprint(pdf_options)
                 ######################### 生成 PDF #######################
                 pdfkit.from_file(
@@ -199,9 +199,9 @@ class buildBodyHtml(object):
         self.html_obj.write(Template(pdf_html_summary_page).render(summarys=summarys))
 
     # 写入体检建议
-    def write_jy(self,suggestions):
+    def write_jy(self,summarys,suggestions):
         if suggestions:
-            self.html_obj.write(Template(pdf_html_suggest_page).render(suggestions=suggestions))
+            self.html_obj.write(Template(pdf_html_suggest_page).render(suggestions=zip(summarys,suggestions)))
 
     # 写入体检注意事项及公章
     def write_cachet(self,cachet):
@@ -564,7 +564,21 @@ class PdfData(object):
                         if os.path.exists(result.file_path):
                             pdf2pic(result.file_path,file_local)
                         else:
-                            pass
+                            # 如果心电图PDF不存在，则从DCP_FIELS 读取
+                            if zhbh == '0806':
+                                result = self.session_tjk.query(MT_DCP_files).filter(MT_DCP_files.cusn == self.tjbh).scalar()
+                                if result:
+                                    tmp_file = "%s_08.pdf" % self.tjbh
+                                    with open(tmp_file, "wb") as f:
+                                        f.write(result.filecontent)
+                                    pdf2pic(tmp_file, file_local)
+                                    os.remove(tmp_file)
+                                    # 添加
+                                    if flag:
+                                        self.pic['0806'] = file_local.replace(self.html_path, '')
+                                    else:
+                                        self.pic['0806'] = file_local
+                                    return
                     # 添加
                     if flag:
                         self.pic[result.xmbh] = file_local.replace(self.html_path, '')
@@ -605,9 +619,29 @@ class PdfData(object):
                     # self.pic[result.xmbh] = file_local
 
             else:
-                # 缺图
-                print('%s (%s)设备接口：项目（%s）不存在图片！' %(cur_datetime(),self.tjbh,zhbh))
-                self.user_data['sybz'].append('设备接口：项目（%s）不存在图片；' % zhbh)
+                # 如果心电图未插入到接口  即TJ_EQUIP中不存在，则从DCP_FIELS 读取
+                if zhbh == '0806':
+                    if flag:
+                        file_local = os.path.join(self.get_html_img_dir, '%s_%s.png' % (self.tjbh, '0806'))
+                    else:
+                        file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (self.tjbh, '0806'))
+                    result = self.session_tjk.query(MT_DCP_files).filter(MT_DCP_files.cusn == self.tjbh).scalar()
+                    if result:
+                        tmp_file = "%s_08.pdf" % self.tjbh
+                        with open(tmp_file, "wb") as f:
+                            f.write(result.filecontent)
+                        pdf2pic(tmp_file, file_local)
+                        os.remove(tmp_file)
+
+                        # 添加
+                        if flag:
+                            self.pic['0806'] = file_local.replace(self.html_path, '')
+                        else:
+                            self.pic['0806'] = file_local
+                else:
+                    # 缺图
+                    print('%s (%s)设备接口：项目（%s）不存在图片！' %(cur_datetime(),self.tjbh,zhbh))
+                    self.user_data['sybz'].append('设备接口：项目（%s）不存在图片；' % zhbh)
 
     # 获取医生排班信息
     @property
@@ -821,10 +855,10 @@ class MT_TJ_BGGL(BaseModel):
     gcbz = Column(Text, nullable=False)                                 # 过程备注    记录领取信息
 
 if __name__ =='__main__':
-    # import cgitb
-    # # 非pycharm编辑器可用输出错误
-    # #sys.excepthook = cgitb.Hook(1, None, 5, sys.stderr, 'text')
-    # cgitb.enable(logdir="./error/",format="text")
+    import cgitb
+    # 非pycharm编辑器可用输出错误
+    #sys.excepthook = cgitb.Hook(1, None, 5, sys.stderr, 'text')
+    cgitb.enable(logdir="./error/",format="text")
     from utils.dbconn import get_tjxt_session
     from queue import Queue
     session = get_tjxt_session(
@@ -835,25 +869,24 @@ if __name__ =='__main__':
         port=1433
     )
     q = Queue()
-    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE  (del <> '1' or del is null) and QD='1' and SHRQ>='2018-08-25' AND SHRQ<'2018-09-30' AND SUMOVER='1'; "
-    # 处理遗漏的
-    sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND QD='1' AND (del <> '1' or del is null) AND TJBH NOT IN (SELECT TJBH FROM TJ_BGGL WHERE BGZT<>'0')"
-    # 处理没有报告路径的
-    sql2 = "SELECT TJBH FROM TJ_BGGL WHERE bgzt='1' AND BGLJ IS NULL"
-    # 处理PDF 生成的
-    # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
-    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
-    results = session.execute(sql).fetchall()
-    for result in results:
-        q.put({'tjbh': result[0], 'action': 'html'})
-    results = session.execute(sql2).fetchall()
-    for result in results:
-        q.put({'tjbh': result[0], 'action': 'html'})
-    # # 招工自动审阅完成 生成PDF
-    sql3 = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' " \
-          "AND TJ_TJDJB.TJLX='1' AND TJ_TJDJB.SHRQ>='2018-08-01'; "
-    results = session.execute(sql3).fetchall()
-    for result in results:
-        q.put({'tjbh': result[0], 'action': 'pdf'})
-
+    # # 处理遗漏的
+    # sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND QD='1' AND (del <> '1' or del is null) AND TJBH NOT IN (SELECT TJBH FROM TJ_BGGL WHERE BGZT<>'0')"
+    # # 处理没有报告路径的
+    # sql2 = "SELECT TJBH FROM TJ_BGGL WHERE bgzt='1' AND BGLJ IS NULL"
+    # # 处理PDF 生成的
+    # # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
+    # #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
+    # results = session.execute(sql).fetchall()
+    # for result in results:
+    #     q.put({'tjbh': result[0], 'action': 'html'})
+    # results = session.execute(sql2).fetchall()
+    # for result in results:
+    #     q.put({'tjbh': result[0], 'action': 'html'})
+    # # # 招工自动审阅完成 生成PDF
+    # sql3 = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' " \
+    #       "AND TJ_TJDJB.TJLX='1' AND TJ_TJDJB.SHRQ>='2018-08-01'; "
+    # results = session.execute(sql3).fetchall()
+    # for result in results:
+    #     q.put({'tjbh': result[0], 'action': 'pdf'})
+    q.put({'tjbh': '175940015', 'action': 'pdf'})
     report_run(q)

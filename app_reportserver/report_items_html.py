@@ -1,6 +1,6 @@
 # 项目结果
 pdf_html_item_page = '''
-<div class="page_2">
+<div class="new_page">
     <div class="tj_xj">
         <h1>体检项目结果</h1>
         <hr />
@@ -37,14 +37,14 @@ pdf_html_item_page = '''
                     % for mxxm in mxxms[zhxms[item]]:
                        % if mxxm['ycbz']=='1':
                         %   if mxxm['ycts']:
-                                <tr height=35px bgcolor="#fafad2">
+                                <tr height=35px>
                                     <td>${mxxm['xmmc']}</td>
                                     <td class="table_td">${mxxm['jg']+'&nbsp;&nbsp;&nbsp;'+mxxm['ycts']}</td>
                                     <td>${mxxm['xmdw']}</td>
                                     <td>${mxxm['ckfw']}</td>              
                                 </tr>
                            % else:
-                                <tr height=35px bgcolor="#fafad2">
+                                <tr height=35px>
                                     <td>${mxxm['xmmc']}</td>
                                     <td class="table_td">${mxxm['jg']}</td>
                                     <td>${mxxm['xmdw']}</td>
@@ -91,7 +91,7 @@ pdf_html_item_page = '''
                     % for i,mxxm in enumerate(mxxms[zhxms[item]]):
                         % if i % 2 ==0:
                             % if mxxm['ycbz']=='1':
-                                <tr height=35px bgcolor="#fafad2">
+                                <tr height=35px>
                                     <td>${mxxm['xmmc']}</td>
                                     <td class="table_td">${mxxm['jg']}</td>
                             % else:

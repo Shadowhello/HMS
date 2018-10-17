@@ -1,6 +1,6 @@
 # 系统接口
 from app_interface import *
-from .report_item_ui import ItemsStateUI
+from .report_item_ui import ItemsStateUI,OperateUI
 from .report_track_thread import *
 from widgets.cwidget import *
 from .report_track_ui import ReportTrackUI
@@ -23,13 +23,16 @@ class ReportTrack(ReportTrackUI):
         self.gp_quick_search.returnPressed.connect(self.on_quick_search)    # 快速检索
         self.btn_export.clicked.connect(self.on_btn_export_click)           # 导出
         self.btn_query.clicked.connect(self.on_btn_query_click)             # 查询
-        self.btn_task.clicked.connect(self.on_btn_task_click)               # 任务领取
+        #self.btn_task.clicked.connect(self.on_btn_task_click)               # 任务领取
         self.btn_receive.clicked.connect(self.on_btn_receive_click)         # 结果接收
-        self.btn_myself.clicked.connect(self.on_btn_myself_click)           # 查看我自己的领取任务
+        #self.btn_myself.clicked.connect(self.on_btn_myself_click)           # 查看我自己的领取任务
         self.btn_djd.clicked.connect(self.on_btn_djd_click)
+        self.btn_myself.menu_clicked.connect(self.on_btn_myself_click)
         self.btn_send.menu_clicked.connect(self.on_btn_send_click)          # 发送任务：发到审核、发到审阅
+        self.btn_task.menu_clicked.connect(self.on_btn_task_click)          # 任务领取
         # 功能栏
         self.btn_item.clicked.connect(self.on_btn_item_click)
+        self.btn_czjl.clicked.connect(self.on_btn_czjl_click)
         self.btn_pis.clicked.connect(self.on_btn_pis_click)
         self.btn_pacs.clicked.connect(self.on_btn_pacs_click)
         self.btn_lis.clicked.connect(self.on_btn_lis_click)
@@ -44,6 +47,7 @@ class ReportTrack(ReportTrackUI):
         self.query_thread = None     # SQL 查询线程
         ############### 系统对话框 #######################################
         self.item_ui = None       # 项目查看
+        self.operatr_ui = None    # 操作记录界面
         self.pis_ui = None        # 病理对话框
         self.lis_ui = None        # 检验对话框
         self.pacs_ui = None       # 检查对话框
@@ -54,6 +58,7 @@ class ReportTrack(ReportTrackUI):
         self.pd_ui = None         # 进度条
         self.pd_ui_num = 0        # 进度条计数，用于处理线程->UI静态变量 弹窗造成的BUG
         self.zyd_ui = None        # 指引单对话框
+        self.pop_ui =None          # 特殊信息提示 胶片、手工单、未结束项目
 
     def initParas(self):
         self.dwmc_bh = OrderedDict()
@@ -176,7 +181,7 @@ class ReportTrack(ReportTrackUI):
                 button = mes_warn(self, '您确认取消到达吗？')
                 if button == QMessageBox.Yes:
                     tjbh = self.table_track.getCurItemValueOfKey('tjbh')
-                    sql = " UPDATE TJ_TJDJB SET del='1' WHERE TJBH='%s';"%tjbh
+                    sql = " UPDATE TJ_TJDJB SET QD=NULL,QDRQ=NULL,TJZT='1' WHERE TJBH='%s';"%tjbh
                     # 插入记录
                     data_obj = {'jllx': '0007', 'jlmc': '取消签到', 'tjbh': tjbh, 'mxbh': '',
                                 'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
@@ -287,10 +292,13 @@ class ReportTrack(ReportTrackUI):
         receive_ui.exec_()
 
     # 查询我自己追踪的任务
-    def on_btn_myself_click(self):
-        tstart, tend = self.lt_where_search.date_range  # 日期
-        results = self.session.execute(get_report_track_myself_sql(tstart, tend,self.login_id)).fetchall()
-        self.table_track.load(results)
+    def on_btn_myself_click(self,is_finish=False):
+        if is_finish:
+            tstart, tend = self.lt_where_search.date_range  # 日期
+            results = self.session.execute(get_report_track_myself_sql(tstart, tend,self.login_id)).fetchall()
+            self.table_track.load(results)
+        else:
+            pass
 
     # 发送任务
     def on_btn_send_click(self,is_doctor=True):
@@ -299,12 +307,21 @@ class ReportTrack(ReportTrackUI):
         if zzzt in ['审核退回','审阅退回']:
             if is_doctor:
                 sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
+                data_obj = {'jllx': '0123', 'jlmc': '报告退回处理', 'tjbh': tjbh, 'mxbh': '',
+                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                            'jlnr': '%s -> %s，%s：已处理 -> 医生审核' %(zzzt,cur_datetime(),self.login_name)
+                            }
             else:
                 sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
+                data_obj = {'jllx': '0123', 'jlmc': '报告退回处理', 'tjbh': tjbh, 'mxbh': '',
+                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                            'jlnr': '%s -> %s，%s：已处理 -> 护理审阅' %(zzzt,cur_datetime(),self.login_name)
+                            }
             sql2 = "UPDATE TJ_BGGL SET BGZT='1',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
             try:
                 self.session.execute(sql1)
                 self.session.execute(sql2)
+                self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
                 self.session.commit()
                 mes_about(self,'处理成功！')
             except Exception as e:
@@ -408,7 +425,7 @@ class ReportTrack(ReportTrackUI):
                 sql = get_report_syth_sql()
 
 
-        print(sql)
+        # print(sql)
         # 执行查询
         self.execQuery(sql)
         # 进度条
@@ -418,28 +435,49 @@ class ReportTrack(ReportTrackUI):
     # 设置快速检索文本
     def on_table_set(self,tableWidgetItem):
         row = tableWidgetItem.row()
+        zzzt = self.table_track.getItemValueOfKey(row, 'zzzt')
         tjbh = self.table_track.getItemValueOfKey(row,'tjbh')
         xm = self.table_track.getItemValueOfKey(row,'xm')
         sfzh = self.table_track.getItemValueOfKey(row,'sfzh')
         sjhm = self.table_track.getItemValueOfKey(row,'sjhm')
         self.gp_quick_search.setText(tjbh,xm,sjhm,sfzh)
         self.cur_tjbh = tjbh
+        if not self.pop_ui:
+            self.pop_ui = ReportPopWidget(self)
+        self.pop_ui.show()
+        if zzzt in ['审阅退回','审核退回']:
+            reason = self.table_track.getItemValueOfKey(row, 'wjxm')
+        else:
+            reason = ''
+        # 传递数据
+        self.pop_ui.inited.emit("体检编号：%s  姓名：%s" %(tjbh,xm),self.cur_tjbh,reason)
+
 
     #体检系统项目查看
     def on_btn_item_click(self):
         if not self.item_ui:
             self.item_ui = ItemsStateUI(self)
+        self.item_ui.show()
         if self.cur_tjbh:
             self.item_ui.returnPressed.emit(self.cur_tjbh)
-        self.item_ui.show()
+
+
+    #体检系统项目查看
+    def on_btn_czjl_click(self):
+        if not self.operatr_ui:
+            self.operatr_ui = OperateUI(self)
+        self.operatr_ui.show()
+        if self.cur_tjbh:
+            self.operatr_ui.returnPressed.emit(self.cur_tjbh)
+
 
     #体检系统项目查看
     def on_btn_equip_click(self):
         if not self.equip_ui:
             self.equip_ui = EquipUI(self)
+        self.equip_ui.show()
         if self.cur_tjbh:
             self.equip_ui.returnPressed.emit(self.cur_tjbh)
-        self.equip_ui.show()
 
     # 电话记录
     def on_btn_phone_click(self):
@@ -450,8 +488,8 @@ class ReportTrack(ReportTrackUI):
         else:
             if not self.phone_ui:
                 self.phone_ui = PhoneUI(self)
-            self.phone_ui.returnPressed.emit(self.cur_tjbh,sjhm)
             self.phone_ui.show()
+            self.phone_ui.returnPressed.emit(self.cur_tjbh, sjhm)
 
     # 短信记录
     def on_btn_sms_click(self):
@@ -462,8 +500,9 @@ class ReportTrack(ReportTrackUI):
             sjhm = self.table_track.getCurItemValueOfKey('sjhm')
             if not self.sms_ui:
                 self.sms_ui = SmsUI(self)
-            self.sms_ui.returnPressed.emit(self.cur_tjbh,sjhm)
             self.sms_ui.show()
+            self.sms_ui.returnPressed.emit(self.cur_tjbh,sjhm)
+
 
     # 进入PIS
     def on_btn_pis_click(self):
@@ -541,65 +580,71 @@ class ReportTrack(ReportTrackUI):
         if sys_name =='PIS':
             if not self.pis_ui:
                 self.pis_ui = PisResult(self)
-            self.pis_ui.setData(results)
             self.pis_ui.show()
+            self.pis_ui.setData(results)
+
         elif sys_name =='LIS':
             if not self.lis_ui:
                 self.lis_ui = LisResult(self)
-            self.lis_ui.setData(results)
             self.lis_ui.show()
+            self.lis_ui.setData(results)
+
         elif sys_name =='PACS':
             if not self.pacs_ui:
                 self.pacs_ui = PacsResult(self)
-            self.pacs_ui.setData(results)
             self.pacs_ui.show()
+            self.pacs_ui.setData(results)
+
         else:
             pass
 
     # 追踪任务领取
-    def on_btn_task_click(self):
+    def on_btn_task_click(self,is_two=True):
         tmp = []
         rows = self.table_track.isSelectRows()
         button = mes_warn(self, "您确认领取当前选择的 %s 份体检报告？" %len(rows))
         if button != QMessageBox.Yes:
             return
-        for row in rows:
-            if not self.table_track.getItemValueOfKey(row,'lqry'):
-                data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': '', 'mxbh': '',
-                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': None,
-                            'bz': None}
-                tjbh = self.table_track.getItemValueOfKey(row,'tjbh')
-                jlnr = self.table_track.getItemValueOfKey(row,'wjxm')
-                data_obj['tjbh'] = tjbh
-                data_obj['jlnr'] = jlnr
-                tmp.append(data_obj)
-                self.table_track.item(row, 2).setText('追踪中')
-                self.table_track.item(row, 3).setText(self.login_name)
+        if is_two:
+            pass
+        else:
+            for row in rows:
+                if not self.table_track.getItemValueOfKey(row,'lqry'):
+                    data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': '', 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': None,
+                                'bz': None}
+                    tjbh = self.table_track.getItemValueOfKey(row,'tjbh')
+                    jlnr = self.table_track.getItemValueOfKey(row,'wjxm')
+                    data_obj['tjbh'] = tjbh
+                    data_obj['jlnr'] = jlnr
+                    tmp.append(data_obj)
+                    self.table_track.item(row, 2).setText('追踪中')
+                    self.table_track.item(row, 3).setText(self.login_name)
 
-                result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
-                if result:
-                    self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
-                        {
-                            MT_TJ_BGGL.zzxm: self.login_name,
-                            MT_TJ_BGGL.zzgh: self.login_id,
-                            MT_TJ_BGGL.zzrq: cur_datetime(),
-                            MT_TJ_BGGL.bgzt: '0',
-                        }
-                    )
-                else:self.session.bulk_insert_mappings(MT_TJ_BGGL, [{'tjbh':tjbh,'bgzt':'0','zzxm':self.login_name,'zzgh':self.login_id,'zzrq':cur_datetime()}])
-                self.session.commit()
+                    result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
+                    if result:
+                        self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                            {
+                                MT_TJ_BGGL.zzxm: self.login_name,
+                                MT_TJ_BGGL.zzgh: self.login_id,
+                                MT_TJ_BGGL.zzrq: cur_datetime(),
+                                MT_TJ_BGGL.bgzt: '0',
+                            }
+                        )
+                    else:self.session.bulk_insert_mappings(MT_TJ_BGGL, [{'tjbh':tjbh,'bgzt':'0','zzxm':self.login_name,'zzgh':self.login_id,'zzrq':cur_datetime()}])
+                    self.session.commit()
 
-                if len(rows)==1:
-                    mes_about(self, '领取成功！')
-        if tmp:
-            try:
-                self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
-                self.session.commit()
-                if len(rows)>1:
-                    mes_about(self, '领取成功！')
-            except Exception as e:
-                self.session.rollback()
-                mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
+                    if len(rows)==1:
+                        mes_about(self, '领取成功！')
+            if tmp:
+                try:
+                    self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
+                    self.session.commit()
+                    if len(rows)>1:
+                        mes_about(self, '领取成功！')
+                except Exception as e:
+                    self.session.rollback()
+                    mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
 
     def closeEvent(self, *args, **kwargs):
         super(ReportTrack, self).closeEvent(*args, **kwargs)
@@ -976,3 +1021,188 @@ class ProcessLable(QLabel):
         super(ProcessLable,self).__init__()
         self.setMinimumWidth(50)
         self.setStyleSheet('''font: 75 14pt \"微软雅黑\";color: rgb(0, 85, 255);''')
+
+
+# 弹出框
+class ReportPopWidget(Dialog):
+
+    inited = pyqtSignal(str,str,str)    # 人员信息、体检编号、退回原因
+
+    def __init__(self,parent=None):
+        super(ReportPopWidget, self).__init__(parent)
+        self.initUI()
+        self.inited.connect(self.on_search)
+
+    # 传递体检编号
+    def on_search(self,ryxx,tjbh,reason):
+        # 刷新标题
+        self.setWindowTitle(ryxx)
+        # 手工报告单 # xmbh in ['1122', '1931', '0903', '501732', '501933', '501934']:
+        results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,
+                                                           MT_TJ_TJJLMXB.sfzh == '1',
+                                                           MT_TJ_TJJLMXB.zhbh.in_(['1122', '1931', '0903', '501732', '501933', '501934'])).all()
+        self.lb_manual.setText("  ".join([str2(result.xmmc) for result in results]))
+        self.gp_top.setTitle('手工单报告(%s)' %str(len(results)))
+
+        # 胶片数据
+        film = {}
+        results = self.session.execute(get_film_num(tjbh))
+        for result in results:
+            film[result[0]] = result[1]
+        # 更新
+        self.init_film(film)
+        # 获取未结束项目
+        results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh==tjbh,MT_TJ_TJJLMXB.sfzh=='1',MT_TJ_TJJLMXB.jsbz!='1').all()
+        self.table_no_finish.load([result.item_result2 for result in results])
+        self.gp_bottom.setTitle('未结束项目（%s）' %self.table_no_finish.rowCount())
+        # 报告退回 处理信息
+        if reason:
+            # 剔除未完成项目布局
+            self.lb_reason.setText(reason)
+            # try:
+            #     self.layout().removeWidget(self.gp_bottom)
+            #     self.layout().addWidget(self.gp_bottom2)
+            # except Exception as e:
+            #     print(e,111111)
+        else:
+            self.lb_reason.setText('')
+            # try:
+            #     self.layout().removeWidget(self.gp_bottom2)
+            #     self.layout().addWidget(self.gp_bottom)
+            # except Exception as e:
+            #     print(e,22222222)
+
+    def initUI(self):
+        lt_main = QVBoxLayout()
+        self.gp_top = QGroupBox('手工单报告(0)')
+        self.lt_top = QHBoxLayout()
+        self.lb_manual = QLabel()
+        self.lb_manual.setWordWrap(True)
+        self.lb_manual.setStyleSheet('''color: rgb(0, 85, 255);''')
+        self.lt_top.addWidget(self.lb_manual)
+        self.gp_top.setLayout(self.lt_top)
+        ######################胶片数量###################################
+        self.gp_middle = QGroupBox('胶片数量(0)')
+        lt_middle = QHBoxLayout()
+        self.lb_count_dr = FilmLable()
+        self.lb_count_ct = FilmLable()
+        self.lb_count_mri = FilmLable()
+        lt_middle.addWidget(QLabel('DR：'))
+        lt_middle.addWidget(self.lb_count_dr)
+        lt_middle.addSpacing(10)
+        lt_middle.addWidget(QLabel('CT：'))
+        lt_middle.addWidget(self.lb_count_ct)
+        lt_middle.addSpacing(10)
+        lt_middle.addWidget(QLabel('MRI：'))
+        lt_middle.addWidget(self.lb_count_mri)
+        lt_middle.addSpacing(10)
+        lt_middle.addStretch()
+        self.gp_middle.setLayout(lt_middle)
+        ######################未结束项目###################################
+        self.gp_bottom = QGroupBox('未结束项目')
+        lt_bottom  = QHBoxLayout()
+        self.gp_bottom.setLayout(lt_bottom)
+        self.table_no_finish_cols = OrderedDict(
+            [
+                ("state", "状态"),
+                ("xmbh", "编号"),
+                ("xmmc", "项目名称"),
+                ("btn", "")
+             ])
+        self.table_no_finish = ItemTable(self.table_no_finish_cols)
+        lt_bottom.addWidget(self.table_no_finish)
+        self.gp_bottom.setLayout(lt_bottom)
+        ######################退回原因###################################
+        self.gp_bottom2 = QGroupBox('退回原因')
+        lt_bottom2 = QHBoxLayout()
+        self.lb_reason = QLabel()
+        self.lb_reason.setStyleSheet('''color:#FF0000;''')
+        self.lb_reason.setWordWrap(True)
+        lt_bottom2.addWidget(self.lb_reason)
+        self.gp_bottom2.setLayout(lt_bottom2)
+        # 添加布局
+        lt_main.addWidget(self.gp_top)
+        lt_main.addWidget(self.gp_middle)
+        lt_main.addWidget(self.gp_bottom)
+        lt_main.addWidget(self.gp_bottom2)
+        # lt_main.addStretch()
+        self.setLayout(lt_main)
+
+        self.setWindowIcon(Icon('mztj'))
+        # 移动整体位置
+        desktop = QDesktopWidget()
+        self.setFixedHeight(500)
+        self.setFixedWidth(400)
+        self.move((desktop.availableGeometry().width()-self.width()-20),
+                  desktop.availableGeometry().height()-self.height()-120)  # 初始化位置到右下角
+
+    # 初始化胶片信息
+    def init_film(self,film:dict):
+        self.lb_count_dr.setText(str(film.get('DR','')))
+        self.lb_count_ct.setText(str(film.get('CT', '')))
+        self.lb_count_mri.setText(str(film.get('MRI', '')))
+        self.gp_middle.setTitle('胶片数量(%s)' %str(film.get('DR',0)+film.get('CT',0)+film.get('MRI',0)))
+
+class FilmLable(QLabel):
+
+    def __init__(self):
+        super(FilmLable,self).__init__()
+        self.setMinimumWidth(50)
+        self.setStyleSheet('''font: 75 14pt \"微软雅黑\";color: rgb(0, 85, 255);''')
+
+
+# 报告审阅列表
+class ItemTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(ItemTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # 字典载入
+        tmp = None  #获取第一列的值
+        for row_index, row_data in enumerate(datas):
+            self.insertRow(row_index)  # 插入一行
+            for col_index, col_name in enumerate(self.heads):
+                col_value = row_data[col_name]
+                if col_index==0:
+                    item = QTableWidgetItem(col_value)
+                    tmp = col_value
+                    if col_value in ['已检查','已抽血','已留样']:
+                        item.setBackground(QColor("#f0e68c"))
+                    elif col_value in ['核实','未定义']:
+                        item.setBackground(QColor("#FF0000"))
+                    elif col_value == '已拒检':
+                        item.setBackground(QColor("#008000"))
+                    elif col_value == '已接收':
+                        item.setBackground(QColor("#b0c4de"))
+                    elif col_value == '已回写':
+                        item.setBackground(QColor("#1e90ff"))
+                    elif col_value == '已登记':
+                        item.setBackground(QColor("#b0c4de"))
+                    else:
+                        pass
+                    item.setTextAlignment(Qt.AlignCenter)
+                elif col_index == len(self.heads)-1:
+                    if tmp=='已小结':
+                        item = QTableWidgetItem('')
+                    elif tmp=='核实':
+                        item = QTableWidgetItem('拒检')
+                        item.setFont(get_font())
+                        item.setBackground(QColor(218, 218, 218))
+                        item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+                    else:
+                        item = QTableWidgetItem('核实')
+                        item.setFont(get_font())
+                        item.setBackground(QColor(218, 218, 218))
+                        item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+                else:
+                    item = QTableWidgetItem(row_data[col_name])
+                    item.setTextAlignment(Qt.AlignCenter)
+
+                self.setItem(row_index, col_index, item)
+        # 布局
+        self.setColumnWidth(0, 50)
+        self.setColumnWidth(1, 60)
+        self.setColumnWidth(2, 180)
+        self.setColumnWidth(3, 50)

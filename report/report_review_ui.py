@@ -308,6 +308,8 @@ class ReportReviewFullScreen(Dialog):
         self.btn_fullscreen.clicked.connect(self.on_btn_fullscreen_click)
         self.btn_item.clicked.connect(self.on_btn_item_click)
         self.btn_pic.clicked.connect(self.on_btn_pic_click)
+        self.btn_reload.clicked.connect(self.on_btn_reload_click)
+        self.btn_rebuild.clicked.connect(self.on_btn_rebuild_click)
         # 审阅
         self.gp_review_user.btnClick.connect(self.on_btn_review_click)
         self.gp_review_user.btnCancle.connect(self.on_btn_cancle_click)
@@ -378,6 +380,15 @@ class ReportReviewFullScreen(Dialog):
     def on_btn_pic_click(self):
         pass
 
+    def on_btn_reload_click(self):
+        self.wv_report_equip.reload()
+
+    def on_btn_rebuild_click(self):
+        if request_create_report(self.cur_tjbh, 'html'):
+            mes_about(self, "重新生成HTML报告成功！")
+        else:
+            mes_about(self, "重新生成HTML报告失败！")
+
     # 打开页面
     def open_page(self,data):
         self.cur_data = data
@@ -413,6 +424,8 @@ class ReportReviewFullScreen(Dialog):
         self.btn_next = QPushButton(Icon('向右'),'下一个')
         self.btn_item = QPushButton(Icon('项目'), '项目查看')
         self.btn_pic = QPushButton(Icon('图片'), '图像接收')
+        self.btn_reload = QPushButton(Icon('刷新'), '刷新报告')
+        self.btn_rebuild = QPushButton(Icon('刷新'), '重新生成')
         lable = QLabel('审阅完成：')
         lable.setStyleSheet('''font: 75 14pt '微软雅黑';color: rgb(255,0,0);height:16px;''')
         self.btn_auto_next = QCheckBox('自动下一份')
@@ -429,6 +442,10 @@ class ReportReviewFullScreen(Dialog):
         lt_middle.addWidget(self.btn_next)
         lt_middle.addSpacing(20)
         lt_middle.addWidget(self.btn_item)
+        lt_middle.addSpacing(20)
+        lt_middle.addWidget(self.btn_reload)
+        lt_middle.addSpacing(20)
+        lt_middle.addWidget(self.btn_rebuild)
         # lt_middle.addSpacing(20)
         # lt_middle.addWidget(self.btn_pic)
         lt_middle.addStretch()
