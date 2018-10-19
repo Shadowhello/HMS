@@ -11,6 +11,7 @@ class MT_TJ_YSPB(BaseModel):
     PBKSSJ = Column(VARCHAR(6), nullable=False)
     PBJSSJ = Column(VARCHAR(6), nullable=False)
     YSXX = Column(VARCHAR(60), nullable=False)
+    KSXX = Column(VARCHAR(60), nullable=False)
     ZFBZ = Column(Numeric(1), nullable=False)
     ZHXGR = Column(VARCHAR(30), nullable=False)
     ZHXGSJ = Column(Date, nullable=False)

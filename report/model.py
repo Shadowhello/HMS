@@ -31,6 +31,8 @@ class MT_TJ_BGGL(BaseModel):
     zzrq = Column(DateTime, nullable=False,)                            # 追踪日期
     zzgh = Column(String(16), nullable=False)                           # 追踪工号
     zzxm = Column(String(16), nullable=False)                           # 追踪姓名
+    zzgh2 = Column(String(16), nullable=False)                          # 追踪工号2   用于双人追踪
+    zzxm2 = Column(String(16), nullable=False)                          # 追踪姓名2
     zzbz = Column(Text, nullable=False)                                 # 追踪备注    记录电话等沟通信息，强制接收等信息
     zjrq = Column(DateTime, nullable=False)                             # 总检日期
     zjgh = Column(String(16), nullable=False)                           # 总检工号
@@ -66,11 +68,13 @@ class MT_TJ_BGGL(BaseModel):
     jpdyrq = Column(DateTime, nullable=False)                           # 胶片打印日期
     jpdygh = Column(String(16), nullable=False)                         # 胶片打印工号
     jpdyxm = Column(String(16), nullable=False)                         # 胶片打印姓名
-    jpsl = Column(String(16), nullable=False)                           # 胶片数量
+    jpsl = Column(INTEGER, nullable=False)                              # 胶片应打印数量
+    jpdysl = Column(INTEGER, nullable=False)                            # 胶片实际打印数量
     jpjjjl = Column(String(250), nullable=False)                        # 胶片交接记录
     bgth = Column(CHAR(1), nullable=True)                               # 报告退回          0 审核退回  1审阅退回
     gcbz = Column(Text, nullable=False)                                 # 过程备注    记录领取信息
-
+    dyzt = Column(Text, nullable=False)                                 # 打印状态    记录打印状态，默认未打印，发送任务 ：打印中(1) 打印完成（2）
+    sgd = Column(CHAR(1), nullable=False)
 
 def get_report_tracked_sql(tstart, tend):
     sql = '''

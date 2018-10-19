@@ -338,6 +338,16 @@ class ArrowButton2(QPushButton):
         self.setStyleSheet("background: #E8E8E8; border: none; padding: 0px;")
         self.setObjectName(name)
 
+class BrowserWidget(QWidget):
+    status = False  # 是否被打开
+
+    def __init__(self,parent=None):
+        super(BrowserWidget,self).__init__(parent)
+
+    def closeEvent(self, *args, **kwargs):
+        self.status = True
+        super(BrowserWidget, self).closeEvent(*args, **kwargs)
+
 class UI(QSplitter):
 
     status = False          #是否被打开

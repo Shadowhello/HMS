@@ -19,6 +19,8 @@ from vip import VipManager
 from statistics import DN_MeritPay
 # 体检登记
 from register import RegisterManager
+# OA
+from app_interface import OaUI
 
 WindowsTitle="明州体检"
 WindowsIcon="mztj"
@@ -90,18 +92,31 @@ class TJ_Main_UI(QMainWindow):
                 setattr(self, class_name, module_class())
                 self.mdiArea.addSubWindow(getattr(self, class_name))
                 getattr(self, class_name).showMaximized()
+                if class_name == 'OaUI':
+                    getattr(self, class_name).load()
             elif getattr(getattr(self, class_name), 'status'): # 窗口被关闭了
                 module_class = getattr(module, class_name)
                 setattr(self, class_name, module_class())
                 self.mdiArea.addSubWindow(getattr(self, class_name))
                 getattr(self, class_name).showMaximized()
+                if class_name == 'OaUI':
+                    getattr(self, class_name).load()
             # # 未关闭
             getattr(self, class_name).setFocus()
         else:
             print(44444444444)
 
-    def openWinEquip(self):
-        pass
+    # #打开OA，临时解决 无法最大化的问题
+    # def open_oa(self):
+    #     if not hasattr(self, "widget1"):
+    #         self.widget1 = OaUI('OA办公')
+    #         self.mdiArea.addSubWindow(self.widget1)
+    #         self.widget1.showMaximized()
+    #     elif self.widget1.status:   #窗口被关闭了
+    #         self.widget1 = Detail_UI(ToolButton1)
+    #         self.mdiArea.addSubWindow(self.widget1)
+    #         self.widget1.showMaximized()
+    #     self.widget1.setFocus()
 
     # 注销
     def login_out(self):

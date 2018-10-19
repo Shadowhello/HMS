@@ -1816,7 +1816,7 @@ class MoneyGroup(QHBoxLayout):
     def __init__(self,parent=None):
         super(MoneyGroup,self).__init__(parent)
 
-        self.is_check = QCheckBox('体检金额：')
+        self.is_check = QCheckBox('体检金额')
         self.je_min = QSpinBox()
         self.je_min.setMinimum(0)
         self.je_min.setMaximum(999999)
@@ -2071,9 +2071,9 @@ class WhereSearchGroup(QGridLayout):
         self.addItem(self.s_date, 0, 0, 1, 3)
 
         ###################基本信息  第二行##################################
-        self.addItem(self.s_dwbh, 1, 0, 1, 5)
-        self.addItem(self.s_report_state, 1, 5, 1, 2)
-        self.addItem(self.s_area, 1,7, 1, 2)
+        self.addItem(self.s_dwbh, 1, 0, 1, 3)
+        self.addItem(self.s_report_state, 1, 3, 1, 2)
+        self.addItem(self.s_area, 1,5, 1, 2)
 
         self.setHorizontalSpacing(10)  # 设置水平间距
         self.setVerticalSpacing(10)  # 设置垂直间距
@@ -2757,7 +2757,9 @@ class ZYDDialog(QDialog):
         self.setWindowTitle('纸质导检单查看')
         lt_main = QHBoxLayout()
         self.lb_pic = ZydLable()
-
+        lt_middle = QHBoxLayout()
+        self.btn_scale = QPushButton(Icon('放大'), '放大')
+        self.btn_scale = QPushButton(Icon('缩小'), '缩小')
         lt_main.addWidget(self.lb_pic)
         self.setLayout(lt_main)
 

@@ -41,7 +41,7 @@ class ReportEquipUI(Widget):
         ])
         # 待审阅列表
         self.table_report_equip = ReportEquipTable(self.table_report_equip_cols)
-        self.gp_table = QGroupBox('检查完成列表（0）')
+        self.gp_table = QGroupBox('报告列表（0）')
         lt_table = QHBoxLayout()
         lt_table.addWidget(self.table_report_equip)
         self.gp_table.setLayout(lt_table)
@@ -51,7 +51,7 @@ class ReportEquipUI(Widget):
         lt_left.addWidget(self.gp_where_search,1)
         lt_left.addWidget(self.gp_quick_search,1)
         lt_left.addWidget(self.gp_table,7)
-        # lt_left.addWidget(self.gp_review_user,1)
+        lt_left.addWidget(self.gp_review_user,1)
 
         ####################右侧布局#####################
         self.wv_report_equip = WebView()
@@ -77,21 +77,21 @@ class ReportEquipUser(QGroupBox):
     def initUI(self):
         self.setTitle('审核信息')
         lt_main = QGridLayout()
-        self.al_audit_user = AuditLabel()
-        self.al_audit_time = AuditLabel()
-        self.al_audit_content = QPlainTextEdit()
-        self.al_audit_content.setStyleSheet('''font: 75 12pt '微软雅黑';color: rgb(255,0,0);height:20px;''')
+        self.lb_audit_user = AuditLabel()
+        self.lb_audit_time = AuditLabel()
+        self.lb_audit_content = QPlainTextEdit()
+        self.lb_audit_content.setStyleSheet('''font: 75 12pt '微软雅黑';height:20px;''')
         self.btn_audit = ToolButton(Icon('样本签收'),'取消审核')
         ###################基本信息  第一行##################################
-        lt_main.addWidget(QLabel('审核者：'), 0, 0, 1, 1)
-        lt_main.addWidget(self.al_audit_user, 0, 1, 1, 1)
+        lt_main.addWidget(QLabel('审核医生：'), 0, 0, 1, 1)
+        lt_main.addWidget(self.lb__audit_user, 0, 1, 1, 1)
         lt_main.addWidget(QLabel('审核时间：'), 1, 0, 1, 1)
-        lt_main.addWidget(self.al_audit_time, 1, 1, 1, 1)
+        lt_main.addWidget(self.lb_audit_time, 1, 1, 1, 1)
         # 按钮
         lt_main.addWidget(self.btn_audit, 0, 9, 2, 2)
         ###################基本信息  第二行##################################
         # lt_main.addWidget(QLabel('审阅备注：'), 0, 2, 2, 2)
-        lt_main.addWidget(self.al_audit_content, 0, 2, 2, 7)
+        lt_main.addWidget(self.lb_audit_content, 0, 2, 2, 7)
 
         lt_main.setHorizontalSpacing(10)            #设置水平间距
         lt_main.setVerticalSpacing(10)              #设置垂直间距
@@ -102,39 +102,35 @@ class ReportEquipUser(QGroupBox):
         self.lb_audit_bz = StateLable(self)
         self.lb_audit_bz.show()
 
-
     # 清空数据
     def clearData(self):
-        self.al_audit_user.setText('')
-        self.al_audit_time.setText('')
-        self.al_audit_content.setPlainText('')
+        self.lb_audit_user.setText('')
+        self.lb_audit_time.setText('')
+        self.lb_audit_content.setPlainText('')
         self.lb_audit_bz.show2(False)
 
     # 设置数据
     def setData(self,data:dict):
-        self.btn_review.stop()
-        if data['shzt']=='已审核':
+        if data['xmzt']=='已小结':
             self.lb_audit_bz.show2(False)
-            self.btn_audit.start()
         else:
             self.lb_audit_bz.show2()
-            self.btn_audit.setText('取消审阅')
-        self.al_audit_user.setText(data['shxm'])
-        self.al_audit_time.setText(data['shrq'])
-        self.al_audit_content.setPlainText(data['jg'])
+            self.btn_audit.setText('取消审核')
+        self.lb_audit_user.setText(data['shxm'])
+        self.lb_audit_time.setText(data['shrq'])
+        self.lb_audit_content.setPlainText(data['xmzd'])
 
     # 状态变更
     def statechange(self):
         # 从完成审阅 -> 取消审阅
-        if '完成' in self.btn_review.text():
-            self.btn_audit.stop()
-            self.btn_audit.setText('取消审阅')
+        if '完成' in self.btn_audit.text():
+            self.btn_audit.setText('取消审核')
         else:
             pass
 
     # 获取审阅备注信息
     def get_sybz(self):
-        return self.al_audit_content.toPlainText()
+        return self.lb_audit_content.toPlainText()
 
     # 按钮点击
     def on_btn_audit_click(self):

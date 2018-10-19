@@ -94,6 +94,8 @@ def report_run(queue):
                 sign_img = pdf_sign_img
                 # 传输 图片
                 pdf_data_obj.transfer_pic()
+                if i_user['film']:
+                    i_user['film'] = os.path.join(sign_img, 'tick.png')
                 # 单独生成封面
                 write_home_html(pdf_data_obj.get_head_html,i_user)
                 ######################## PDF 报告主体 从内容页开始写入 #######################
@@ -105,6 +107,8 @@ def report_run(queue):
                 sign_img = html_sign_img
                 pdf_data_obj.transfer_pic(True)
                 # HTML 报告
+                if i_user['film']:
+                    i_user['film'] = os.path.join(sign_img, 'tick.png')
                 ######################## PDF 报告主体 从首页开始写入 #######################
                 pdf_build_obj = buildBodyHtml(pdf_data_obj.get_html, pdf_css,False)
                 pdf_data_obj.set_bglj(pdf_data_obj.get_html)
@@ -317,6 +321,7 @@ class PdfData(object):
                 pdf_read_obj = PdfFileReader(filename)
                 self.user_data['bgym'] = pdf_read_obj.getNumPages()
             except Exception as e:
+                self.user_data['bgym'] = 0
                 print("获取报告页码出错，错误信息：%s" %e)
         else:
             self.user_data['bgms'] = '0'
@@ -345,6 +350,13 @@ class PdfData(object):
             if result.io_jkcf=='1':
                 self.io_jkcf = True
             i_user = result.pdf_dict
+            # 是否存在胶片
+            results = self.session_tjk.execute(get_film_num(self.tjbh)).fetchall()
+            if results:
+                i_user['film'] = True
+            else:
+                i_user['film'] = False
+            # 获取条形码
             if self.action=='pdf':
                 i_user['tm'] = os.path.join(self.get_img_dir, '%s.png' % self.tjbh)
             else:
@@ -603,20 +615,20 @@ class PdfData(object):
                         self.pic['0806'] = file_local
             # 本地测试
             # if result:
-                # if flag:
-                #     file_local = os.path.join(self.get_html_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
-                # else:
-                #     file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
-                # # file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
-                # file_remote = '10.7.200.101/d$/%s' % result.file_path.replace('D:/', '').replace('.pdf', '.png')
-                # is_done, error = hander_pacs.down(file_remote, file_local)
-                # if is_done:
-                    # 添加
-                    # if flag:
-                    #     self.pic[result.xmbh] = file_local.replace(self.html_path, '')
-                    # else:
-                    #     self.pic[result.xmbh] = file_local
-                    # self.pic[result.xmbh] = file_local
+            #     if flag:
+            #         file_local = os.path.join(self.get_html_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+            #     else:
+            #         file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+            #     # file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
+            #     file_remote = '10.7.200.101/d$/%s' % result.file_path.replace('D:/', '').replace('.pdf', '.png')
+            #     is_done, error = hander_pacs.down(file_remote, file_local)
+            #     if is_done:
+            #         #添加
+            #         if flag:
+            #             self.pic[result.xmbh] = file_local.replace(self.html_path, '')
+            #         else:
+            #             self.pic[result.xmbh] = file_local
+            #         self.pic[result.xmbh] = file_local
 
             else:
                 # 如果心电图未插入到接口  即TJ_EQUIP中不存在，则从DCP_FIELS 读取
@@ -665,17 +677,22 @@ class PdfData(object):
         results = self.session_cxk.query(MT_TJ_YSPB).filter(MT_TJ_YSPB.ZFBZ == '0').order_by(MT_TJ_YSPB.PBXQ,MT_TJ_YSPB.PBID).all()
         if results:
             for result in results:
+                tmp = {'pbsj':None,'pbks':None,'pbys':None}
                 # 示例
                 # 周一下午:14:00-16:00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;呼吸内科主任：纪成
-                datas.append(pbxq_match.get(result.PBXQ) +
-                             pbxw_match.get(result.PBSXW) +
-                             '：' +
-                             result.PBKSSJ +
-                             '-' +
-                             result.PBJSSJ +
-                             space_str +
-                             result.YSXX
-                             )
+                tmp['pbsj'] = pbxq_match.get(result.PBXQ,'') +pbxw_match.get(result.PBSXW,'') +'：' +result.PBKSSJ +'-' +result.PBJSSJ +space_str
+                tmp['pbys'] = result.YSXX
+                tmp['pbks'] = result.KSXX
+                datas.append(tmp)
+                # datas.append(pbxq_match.get(result.PBXQ,'') +
+                #              pbxw_match.get(result.PBSXW,'') +
+                #              '：' +
+                #              result.PBKSSJ +
+                #              '-' +
+                #              result.PBJSSJ +
+                #              space_str +
+                #              result.YSXX
+                #              )
 
         return datas
 
@@ -854,6 +871,28 @@ class MT_TJ_BGGL(BaseModel):
     bgth = Column(CHAR(1), nullable=True)                               # 报告退回          0 审核退回  1审阅退回
     gcbz = Column(Text, nullable=False)                                 # 过程备注    记录领取信息
 
+
+# 获取胶片数数量
+def get_film_num(tjbh):
+    return '''
+        SELECT 
+
+        (CASE 
+        WHEN LBBM IN ('51','61') THEN 'MRI'
+        WHEN LBBM = '28' THEN 'CT'
+        WHEN LBBM = '49' THEN 'DR'
+        ELSE '' END) AS JPMC,
+        (CASE 
+        WHEN LBBM IN ('51','61') THEN JPSL
+        WHEN LBBM = '28' THEN JPSL
+        WHEN LBBM = '49' THEN JPSL
+        ELSE 0 END) AS JPSL
+
+        FROM (SELECT XMBH FROM TJ_TJJLMXB  WHERE tjbh='%s' AND SFZH='1' ) AS A
+
+        INNER JOIN (SELECT XMBH,JPSL,LBBM FROM TJ_XMDM WHERE jpsl is NOT NULL) AS B ON A.XMBH=B.XMBH
+    ''' % tjbh
+
 if __name__ =='__main__':
     import cgitb
     # 非pycharm编辑器可用输出错误
@@ -888,5 +927,5 @@ if __name__ =='__main__':
     # results = session.execute(sql3).fetchall()
     # for result in results:
     #     q.put({'tjbh': result[0], 'action': 'pdf'})
-    q.put({'tjbh': '175940015', 'action': 'pdf'})
+    q.put({'tjbh': '141440021', 'action': 'pdf'})
     report_run(q)

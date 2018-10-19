@@ -330,7 +330,6 @@ class ReportTrack(ReportTrackUI):
         else:
             mes_about(self,"只有审阅退回/审核退回的报告才能使用此功能！")
 
-
     # 查看导检单
     def on_btn_djd_click(self):
         result = self.session.query(MT_TJ_PHOTO_ZYD).filter(MT_TJ_PHOTO_ZYD.tjbh == self.cur_tjbh).scalar()
@@ -1198,11 +1197,11 @@ class ItemTable(TableWidget):
                         item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
                 else:
                     item = QTableWidgetItem(row_data[col_name])
-                    item.setTextAlignment(Qt.AlignCenter)
+                    # item.setTextAlignment(Qt.AlignCenter)
 
                 self.setItem(row_index, col_index, item)
         # 布局
         self.setColumnWidth(0, 50)
         self.setColumnWidth(1, 60)
         self.setColumnWidth(2, 180)
-        self.setColumnWidth(3, 50)
+        self.horizontalHeader().setStretchLastSection(True)

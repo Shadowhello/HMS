@@ -11,7 +11,7 @@ body{
     color:#000000;
     font-size:12px;
     margin-top:5px;
-    font-family:"SimSun","宋体","Arial Narrow";
+    font-family:宋体;
 }
 ul,ol{
     list-style-type:none;
@@ -128,7 +128,7 @@ select,input,img,select{
 }
 /*用户标签 对应的值*/
 .user_td_value{
-    font-size: 28px;          /*文字大小*/
+    font-size: 24px;          /*文字大小*/
     font-family:宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     width:180px;
@@ -359,8 +359,9 @@ tbody{
 
 /*表格 页脚 */
 tfoot{
+    top:2px;
     text-align:right;
-    border-top:3px solid #000;
+    border-top:2px solid #000;
     page-break-inside: avoid !important;
 }
 /*  解决 表格的一行被切成了两部分方案

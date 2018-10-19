@@ -195,7 +195,6 @@ def init_views(app,db,queue=None):
                 request_get(url,filename)
         if os.path.exists(filename):
             result= print_pdf_gsprint(filename,printer)
-            print(result)
             if result==0:
                 return ujson.dumps({'code': 1, 'mes': '报告打印成功！', 'data': ''})
             else:
@@ -283,9 +282,9 @@ def init_views(app,db,queue=None):
             abort(404)
 
     # 程序更新
-    @app.route('/api/version/<float:version>', methods=['GET'])
-    def update_version(version):
-        print(' %s：客户端(%s)：版本更新请求！当前版本号：%s' % (cur_datetime(), request.remote_addr, str(version)))
+    @app.route('/api/version/<string:platform>/<float:version>', methods=['GET'])
+    def update_version(platform,version):
+        print(' %s：(%s)客户端(%s)：版本更新请求！当前版本号：%s' % (cur_datetime(),platform,request.remote_addr, str(version)))
         result = db.session.query(MT_TJ_UPDATE).filter(MT_TJ_UPDATE.version >version).scalar()
         if result:
             response = make_response(send_file(result.ufile, as_attachment=True))

@@ -28,7 +28,7 @@ class ReportPrint(ReportPrintUI):
         self.table_print.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_print.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
         self.table_print.itemClicked.connect(self.on_table_set)
-        # self.table_print.itemDoubleClicked.connect(self.on_btn_item_click)
+        self.table_print.itemDoubleClicked.connect(self.on_btn_item_click)
         # 快速减速
         self.gp_quick_search.returnPressed.connect(self.on_quick_search)    # 快速检索
         # 特殊变量

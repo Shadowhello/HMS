@@ -1,4 +1,6 @@
 from PyQt5.QtCore import PYQT_VERSION_STR,QCoreApplication,Qt
+
+
 # 判断版本号
 if int(PYQT_VERSION_STR.replace('.',''))>=560:
     from PyQt5.QtWebEngineWidgets import *
@@ -30,10 +32,15 @@ def equip_ui(ui,app):
 
 def start_run():
     from main import Login_UI
+    from widgets import CefApplication
+    from cefpython3 import cefpython as cef
     from PyQt5.QtWidgets import QApplication
     import sys
     ##########################################
-    app = QApplication(sys.argv)
+    #app = QApplication(sys.argv)
+    sys.excepthook = cef.ExceptHook
+    cef.Initialize()
+    app = CefApplication(sys.argv)
     # 是否通过用户密码验证登陆
     if gol.get_value('system_is_login',1) == 1:
         login_ui = Login_UI()
@@ -75,6 +82,8 @@ def start_run():
         from app_selfhelp import selfHelpManager,SelfHelpMachine
         ui = SelfHelpMachine()
         main_ui(ui,app)
+
+    cef.Shutdown()
 
 if __name__=="__main__":
     import cgitb

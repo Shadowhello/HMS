@@ -38,16 +38,16 @@ class ReportTrackUI(Widget):
         self.lt_where_search = WhereSearchGroup()
         self.lt_where_search.addStates(['待追踪','追踪中','待总检','待审核','待审阅','待打印'],True)
         self.lt_where_search.addWidget(QLabel(), 0, 4, 1, 1)
-        self.lt_where_search.addItem(self.cb_track_type, 0, 5, 1, 2)
-        self.lt_where_search.addItem(self.cb_report_type, 0, 7, 1, 2)
+        self.lt_where_search.addItem(self.cb_track_type, 0, 3, 1, 2)
+        self.lt_where_search.addItem(self.cb_report_type, 0, 5, 1, 2)
         # self.lt_where_search.addItem(self.cb_report_track_person, 0, 9, 1, 2)
         # self.lt_where_search.addItem(self.cb_report_track_timerout, 1, 9, 1, 2)
         # 按钮
-        self.lt_where_search.addWidget(self.btn_query, 0, 9, 2, 2)
-        self.lt_where_search.addWidget(self.btn_task, 0, 11, 2, 2)
-        self.lt_where_search.addWidget(self.btn_myself, 0, 13, 2, 2)
-        self.lt_where_search.addWidget(self.btn_send, 0, 15, 2, 2)
-        self.lt_where_search.addWidget(self.btn_receive, 0, 17, 2, 2)
+        self.lt_where_search.addWidget(self.btn_query, 0, 7, 2, 2)
+        self.lt_where_search.addWidget(self.btn_task, 0, 9, 2, 2)
+        self.lt_where_search.addWidget(self.btn_myself, 0, 11, 2, 2)
+        self.lt_where_search.addWidget(self.btn_send, 0, 13, 2, 2)
+        self.lt_where_search.addWidget(self.btn_receive, 0, 15, 2, 2)
         gp_search.setLayout(self.lt_where_search)
 
         # 快速检索

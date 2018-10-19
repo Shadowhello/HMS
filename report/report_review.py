@@ -1,4 +1,6 @@
 from report.report_review_ui import *
+from widgets import QBrowser,CefWidget
+
 import webbrowser
 
 # 报告追踪
@@ -23,6 +25,7 @@ class ReportReview(ReportReviewUI):
         # 设置快速获取的变量
         self.cur_tjbh = None
         self.cur_row = None
+        self.browser = None
 
     # 退回
     def on_btn_cancle_click(self,p_str):
@@ -145,8 +148,8 @@ class ReportReview(ReportReviewUI):
             for i in indexs:
                 row_num = i.row()
             menu = QMenu()
-            item1 = menu.addAction(Icon("报告中心"), "浏览器中打开HTML报告")
-            item2 = menu.addAction(Icon("报告中心"), "浏览器中打开PDF报告")
+            item1 = menu.addAction(Icon("报告中心"), "浏览HTML报告")
+            item2 = menu.addAction(Icon("报告中心"), "浏览PDF报告")
             item3 = menu.addAction(Icon("报告中心"), "重新生成待审阅报告")
             item4 = menu.addAction(Icon("报告中心"), "重新生成审阅报告")
             action = menu.exec_(self.table_report_review.mapToGlobal(pos))
@@ -155,7 +158,10 @@ class ReportReview(ReportReviewUI):
             if tjbh:
                 if action == item1:
                     try:
-                        webbrowser.open(gol.get_value('api_report_preview') % ('html', tjbh))
+                        url = gol.get_value('api_report_preview') % ('html', tjbh)
+                        url_title = "体检编号：%s" %tjbh
+                        self.open_url(url,url_title)
+                        #webbrowser.open(url)
                     except Exception as e:
                         mes_about(self, '打开出错，错误信息：%s' % e)
                         return
@@ -168,14 +174,18 @@ class ReportReview(ReportReviewUI):
                         if result:
                             filename = os.path.join(result.bglj,'%s.pdf' %tjbh).replace('D:/activefile/','')
                             url = gol.get_value('api_pdf_new_show') % filename
-                            webbrowser.open(url)
+                            url_title = "体检编号：%s" % tjbh
+                            self.open_url(url, url_title)
+                            #webbrowser.open(url)
                         else:
                             try:
                                 self.cxk_session = gol.get_value('cxk_session')
                                 result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).scalar()
                                 if result:
                                     url = gol.get_value('api_pdf_old_show') % result.PDFURL
-                                    webbrowser.open(url)
+                                    url_title = "体检编号：%s" % tjbh
+                                    self.open_url(url, url_title)
+                                    #webbrowser.open(url)
                                 else:
                                     mes_about(self, '未找到该顾客体检报告！')
                             except Exception as e:
@@ -290,6 +300,13 @@ class ReportReview(ReportReviewUI):
             self.table_report_review.setItemValueOfKey(self.cur_row, 'syrq', '')                           # 审阅日期
             self.table_report_review.setItemValueOfKey(self.cur_row, 'sybz','')                            # 审阅备注
             self.gp_review_user.clearData()                                                                 # 清空数据
+
+    # 在窗口中打开报告，取消在浏览器中打开，主要用于外部查询中使用，避免地址外泄
+    def open_url(self,url,title):
+        if not self.browser:
+            self.browser = QBrowser(self)
+        self.browser.open_url.emit(title,url)
+        self.browser.show()
 
     # 自动缩放 无效
     # def resizeEvent(self, event):#由于没有使用布局，这里当父窗口大小改变时自动改变webview的大小

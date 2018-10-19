@@ -156,6 +156,17 @@ SYS_MENU_TREE = {   # 系统
         #      'childs': OrderedDict([
         #          ('检查结果',{'pid': 800, 'sid': 8001, 'title': '检查结果', 'tip': None, 'state': True, 'icon': '', 'is_tool': False,'shortcut':None})
         #     ])})
+        # 信息科 科室功能管理
+        ('信息科',
+         {
+             'pid': 1,
+             'sid': 900,
+             'title': '信息科',
+             'tip': None,
+             'state': True,
+             'childs': OrderedDict([
+                 ('OA办公',{'pid': 900, 'sid': 9001, 'title': 'OA办公', 'tip': None, 'state': True, 'icon': 'oa办公', 'is_tool': True,'shortcut':None})
+            ])})
     ])
 }
 # 系统菜单模块对象
@@ -224,5 +235,6 @@ SYS_MENU_MODULE_CLASS = {
     8005: {'module': None, 'class': None, 'enabled': False},
     8006: {'module': None, 'class': None, 'enabled': False},
     8007: {'module': None, 'class': None, 'enabled': False},
-    8008: {'module': None, 'class': None, 'enabled': False}
+    8008: {'module': None, 'class': None, 'enabled': False},
+    9001: {'module': 'app_interface', 'class': 'OaUI', 'enabled': True}
 }

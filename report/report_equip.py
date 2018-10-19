@@ -100,6 +100,8 @@ class ReportEquip(ReportEquipUI):
         else:
             mes_about(self,'未配置：api_equip_show 参数！')
 
+
+
     # 快速检索
     def on_quick_search(self, p1_str, p2_str):
         if p1_str == 'tjbh':

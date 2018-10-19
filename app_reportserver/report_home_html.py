@@ -34,7 +34,7 @@ pdf_html_home_page= '''
             </tr>
             <tr>
                 <td class="user_td_label">年龄：</td>
-                <td colspan="3" class="user_td_value">${user['nl']}</td>
+                <td class="user_td_value">${user['nl']}</td>
             </tr>
             <tr>
                 <td class="user_td_label">电话：</td>
@@ -43,14 +43,58 @@ pdf_html_home_page= '''
             <tr>
                 <td class="user_td_label">日期：</td>
                 <td class="user_td_value">${user['qdrq']}</td>
-            </tr>
-
+            </tr> 
+            % if user['film']:
+                <tr>
+                    <td class="user_td_label">胶片：</td>
+                    <td class="user_td_value"><img src=${user['film']} /></td>
+                </tr>   
+            % endif         
         </table>
     </div>
 </div>
 </body>
 </html>
 '''
+# 循环定义
+'''
+        <%
+            user_lable = OrderedDict([
+                                        ('姓名：','xm'),
+                                        ('ID号：','tjbh'),
+                                        ('单位：','dwmc'),
+                                        ('性别：','xb'),
+                                        ('年龄：','nl'),
+                                        ('电话：','sjhm'),
+                                        ('日期：','qdrq'),
+                                        ('胶片：','film')
+                                    ])
+            user = user
+        %>
+        % for user_key,user_value in user_lable.items():
+            % if user_value == 'tjbh':
+                <tr>
+                    <td class="user_td_label">user_key</td>
+                    <td class="user_td_value"><img src=${user[user_value]} /></td>
+                </tr>
+            % elif user_value == 'film':
+                % if user[user_value]:
+                   <tr>
+                        <td class="user_td_label">user_key</td>
+                        <td class="user_td_value"><img src=${user[user_value]} /></td>
+                    </tr>
+                % endif
+            % else:
+                <tr>
+                    <td class="user_td_label">user_key</td>
+                    <td class="user_td_value"><img src=${user[user_value]} /></td>
+                </tr>
+            % endif  
+        % endfor     
+'''
+# '''
+
+# '''
 
 # 首页信息：历史
 pdf_html_home_page2= '''
