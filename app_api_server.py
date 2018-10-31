@@ -28,6 +28,8 @@ def server_on_tornado_run(app,host,port):
 
 
 if __name__ == '__main__':
+    import cgitb
+    cgitb.enable(logdir="./error/",format="text")
     multiprocessing.freeze_support()
     # 全局进程队列
     gol_process_queue = Queue()

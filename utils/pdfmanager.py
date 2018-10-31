@@ -263,7 +263,17 @@ def txtparse(filename,file_type,regular=None,error_path='D:/'):
 
     elif file_type == '08':
         # 心电图
-        new_string = "".join(pdf2txt(filename))
+        pdfStrList = pdf2txt(filename)
+        new_string = "".join(pdfStrList)
+        print(new_string)
+        # print(new_string)
+        if not new_string:
+            # 文件名字改成体检编号，特殊处理
+            # tjbh = os.path.splitext(os.path.basename(filename))[0]
+            # info["tjbh"] = tjbh
+            # info["file"] = tjbh + "_08.pdf"
+            # return info
+            return {}
         re_tjbh = re.compile(gol.get_value('regular_tjbh'), re.DOTALL)
         re_xm = re.compile(gol.get_value('regular_xm'), re.DOTALL)
         re_jcrq = re.compile(gol.get_value('regular_jcrq'), re.DOTALL)
@@ -275,7 +285,12 @@ def txtparse(filename,file_type,regular=None,error_path='D:/'):
             info["tjbh"] = tjbh[0].strip()
             info["file"] = tjbh[0].strip() + "_08.pdf"
         else:
-            info["tjbh"] = ''
+            tjbh = pdfStrList[2][4:].strip()
+            if len(tjbh)==9 and tjbh.isdigit():
+                info["tjbh"] = tjbh
+                info["file"] = tjbh + "_08.pdf"
+            else:
+                return {}
         if xm:
             info["patient"] = xm[0].strip()
         else:
@@ -391,7 +406,10 @@ def pdfSplit(pdf_main,pdf_part):
 #https://blog.csdn.net/xingxtao/article/details/79056341
 
 if __name__=="__main__":
-    pdf2pic(r'E:\PDF-\03\document_8.pdf')
+    # 读取txt
+    print(pdf2txt(r'D:\PDF\create\176530032_08.pdf'))
+    # 转换图片
+    #pdf2pic(r'D:\PDF\create\388.pdf')
     # dir = r'E:\PDF-\04\create'
     # for filename,_ in fileiter(dir):
     #     print(txtparse(filename,'04'))

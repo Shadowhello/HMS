@@ -151,8 +151,9 @@ class TaskButton(QToolButton):
         self.setPopupMode(QToolButton.InstantPopup)
         self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         menu=QMenu()
-        menu.addAction(Icon("双人"),"->双人领取",self.on_btn_task_two)
-        menu.addAction(Icon("单人"),"->单人领取",self.on_btn_task_one)
+        # menu.addAction(Icon("三人"), "->三人领取", self.on_btn_task_three)
+        menu.addAction(Icon("双人"), "->双人领取", self.on_btn_task_two)
+        menu.addAction(Icon("单人"), "->单人领取", self.on_btn_task_one)
         self.setMenu(menu)
 
     def on_btn_task_two(self):
@@ -184,3 +185,5 @@ class MyselfButton(QToolButton):
 
     def on_btn_is_finish(self):
         self.menu_clicked.emit(True)
+
+

@@ -1174,6 +1174,25 @@ class TrackTypeGroup(QHBoxLayout):
         else:
             return False
 
+class OtherSetupGroup(QGroupBox):
+
+    def __init__(self):
+        super(OtherSetupGroup, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setTitle('其他选项')
+        self.cb_detail = QCheckBox('显示详细')
+        self.cb_detail.setChecked(True)
+        lt_main = QHBoxLayout()
+        lt_main.addWidget(self.cb_detail)
+        lt_main.addStretch()
+        self.setLayout(lt_main)
+
+    @property
+    def is_show_detail(self):
+        return self.cb_detail.isChecked()
+
 class OrderSetupGroup(QGroupBox):
 
     def __init__(self):
@@ -1278,10 +1297,29 @@ class PrintSetupGroup(QGroupBox):
 
     def __init__(self):
         super(PrintSetupGroup, self).__init__()
+        self.initParas()
         self.initUI()
         self.is_remote_print = True
         self.rb_local_check.clicked.connect(partial(self.on_btn_state_change,False))
         self.rb_remote_check.clicked.connect(partial(self.on_btn_state_change, True))
+
+    def initParas(self):
+        self.printers = {
+            '77号打印机': '77',
+            '78号打印机': '78',
+            '79号打印机': '79',
+            '江东打印机': 'jd'
+        }
+
+    def setParas(self,is_remote,printer):
+        if is_remote:
+            self.rb_remote_check.setChecked(True)
+            self.cb_remote_printer.setCurrentText(printer)
+            self.cb_remote_printer.setDisabled(False)
+        else:
+            self.rb_local_check.setChecked(True)
+            self.cb_local_printer.setCurrentText(printer)
+            self.cb_local_printer.setDisabled(False)
 
     def initUI(self):
         self.setTitle('打印选项')
@@ -1317,12 +1355,15 @@ class PrintSetupGroup(QGroupBox):
 
     def get_printer(self):
         if self.is_remote_print:
-            return self.is_remote_print,self.cb_remote_printer.currentText()
+            return self.is_remote_print,self.printers[self.cb_remote_printer.currentText()]
         else:
             return self.is_remote_print, self.cb_local_printer.currentText()
 
-
-
+    def get_print_text(self):
+        if self.is_remote_print:
+            return '0','租赁打印', self.cb_remote_printer.currentText()
+        else:
+            return '1','本地打印', self.cb_local_printer.currentText()
 
 
 
@@ -1389,6 +1430,8 @@ class ReportStateGroup(QHBoxLayout):
             '未审阅': '1',
             '已打印': ['3','4','5'],
             '未打印': '2',
+            '打印中': 1,
+            '打印失败': 2,
             '已整理': '4',
             '已领取': '5',
             '老未打/新未审': 0,
@@ -1432,13 +1475,17 @@ class ReportStateGroup(QHBoxLayout):
 
     @property
     def where_state2(self):
-        print(self.cb_report_state.currentText())
+        # print(self.cb_report_state.currentText())
         if self.is_check.isChecked():
             value = self.bgzt.get(self.cb_report_state.currentText(),False)
             if isinstance(value,list):
-                return ''' AND (TJ_TJDJB.dybj='1' OR TJ_BGGL.BGZT IN %s ) ''' %str(tuple(value))
+                return ''' AND (TJ_TJDJB.dybj='1' OR (TJ_BGGL.BGZT IN %s AND TJ_BGGL.DYZT IS NULL)) ''' %str(tuple(value))
             elif isinstance(value, str):
                 return ''' AND (TJ_TJDJB.dybj='' OR TJ_TJDJB.dybj IS NULL)  AND TJ_BGGL.BGZT = %s  ''' % value
+            elif value==1:
+                return ''' AND (TJ_TJDJB.dybj='' OR TJ_TJDJB.dybj IS NULL)  AND TJ_BGGL.BGZT = '3' AND TJ_BGGL.DYZT='0' '''
+            elif value==2:
+                return ''' AND (TJ_TJDJB.dybj='' OR TJ_TJDJB.dybj IS NULL)  AND TJ_BGGL.BGZT = '3' AND TJ_BGGL.DYZT='1' '''
             else:
                 return False
         return False
@@ -1898,10 +1945,11 @@ class TUint(QLineEdit):
         :param dwmcs:{'zhlgdx':'XXX单位',......,'zjyygz':'XXX单位'}
         '''
         super(TUint,self).__init__()
-        self.dwmc_bh =  dwbhs
+        self.dwmc_bh = dwbhs
         self.dwmc_py = dwmcs
-        #self.setPlaceholderText('\ 按编号检索  . 按拼音检索  中文直接检索')
-        self.setPlaceholderText('\ 按编号检索  . 按拼音检索')
+        self.dwmc_mc = OrderedDict([(v,v) for k,v in dwbhs.items()])
+        self.setPlaceholderText('支持中文搜索 . 按拼音检索    \ 按编号检索  ')
+        #self.setPlaceholderText('\ 按编号检索  . 按拼音检索')
         self.model = QStringListModel()          # 完成列表的model
         self.listView = QListView()              # 完成列表
         self.listView.setWindowFlags(Qt.ToolTip)
@@ -1926,9 +1974,18 @@ class TUint(QLineEdit):
         else:
             return False
 
+    # 获取单位名称
+    @property
+    def where_dwmc(self):
+        if self.text():
+            return get_key(self.dwmc_mc, self.text())
+        else:
+            return False
+
     # 设置编号列表
     def setBhs(self,dwbhs):
         self.dwmc_bh = dwbhs
+        self.dwmc_mc = OrderedDict([(v, v) for k, v in dwbhs.items()])
 
     # 设置拼音列表
     def setPys(self,dwmcs):
@@ -1953,7 +2010,9 @@ class TUint(QLineEdit):
                         self.dwmcs.append(self.dwmc_py[dwpy])
             else:
                 # 按中文检索
-                pass
+                for dwmc in self.dwmc_mc.keys():
+                    if p_str in dwmc:
+                        self.dwmcs.append(self.dwmc_mc[dwmc])
 
             self.model.setStringList(self.dwmcs)
             self.listView.setModel(self.model)
@@ -2290,6 +2349,13 @@ class DirTabWidget(QSplitter):
             self.button.setIcon(Icon("left"))
             self.lwidget.setVisible(True)
 
+    # def mouseMoveEvent(self,event):
+    #     globalPos = self.mapTpGlobal(event.pos())
+    #     self.text = """鼠标的位置为: 窗口坐标为: Qpoint({0},{1}),屏幕坐标为：屏幕坐标为：QPoint({2},{3})""".format(
+    #         event.pos().x(), event.pos().y(), globalPos.x(), globalPos.y())
+
+
+
 # 用户基础信息
 class UserBaseGroup(QVBoxLayout):
 
@@ -2326,12 +2392,12 @@ class UserBaseGroup(QVBoxLayout):
         lt_user.addStretch()                  #设置列宽，添加空白项的
         gp_user.setLayout(lt_user)
         ########################体检信息#####################################
-        self.lb_djrq   = Lable()          # 体检编号
-        self.lb_qdrq = Lable()          # 姓名
-        self.lb_sdrq =  Lable()          # 性别
-        self.lb_user_age =  Lable()          # 年龄->自动转换出生年月
-        self.lb_sjhm   =    Lable()          #手机号码
-        self.lb_sfzh    =   Lable()          #身份证号
+        # self.lb_djrq   = Lable()          # 体检编号
+        # self.lb_qdrq = Lable()          # 姓名
+        # self.lb_sdrq =  Lable()          # 性别
+        # self.lb_user_age =  Lable()          # 年龄->自动转换出生年月
+        # self.lb_sjhm   =    Lable()          #手机号码
+        # self.lb_sfzh    =   Lable()          #身份证号
         #######################总检信息##################################
         self.lb_sjzj = Lable()        # 总检日期
         self.lb_sjzj.setMinimumWidth(80)
@@ -2754,27 +2820,81 @@ class ZYDDialog(QDialog):
 
     def __init__(self, parent=None):
         super(ZYDDialog, self).__init__(parent)
-        self.setWindowTitle('纸质导检单查看')
-        lt_main = QHBoxLayout()
+        self.setWindowIcon(Icon('mztj'))
+        self.setWindowTitle('纸质导检单')
+        self.initUI()
+        self.initParas()
+        # 信号槽
+        self.btn_deflate.clicked.connect(self.on_btn_deflate_click)
+
+    def initParas(self):
+        #
+        self.scale = 1
+
+    def initUI(self):
+        lt_main = QVBoxLayout()
         self.lb_pic = ZydLable()
+
+        # 功能区域
         lt_middle = QHBoxLayout()
-        self.btn_scale = QPushButton(Icon('放大'), '放大')
-        self.btn_scale = QPushButton(Icon('缩小'), '缩小')
+        self.btn_zoomin = QPushButton()
+        self.btn_zoomin.setIcon(Icon('放大'))
+        self.btn_zoomin.setIconSize(QSize(32,32))
+        self.btn_deflate = QPushButton()
+        self.btn_deflate.setIcon(Icon('缩小'))
+        self.btn_deflate.setIconSize(QSize(32, 32))
+        self.btn_circumgyrate = QPushButton()
+        self.btn_circumgyrate.setIcon(Icon('旋转'))
+        self.btn_circumgyrate.setIconSize(QSize(32, 32))
+        self.btn_full = QPushButton()
+        self.btn_full.setIcon(Icon('全屏'))
+        self.btn_full.setIconSize(QSize(32, 32))
+        self.btn_close = QPushButton()
+        self.btn_close.setIcon(Icon('关闭2'))
+        self.btn_close.setIconSize(QSize(32, 32))
+        lt_middle.addStretch()
+        lt_middle.addWidget(self.btn_zoomin)
+        lt_middle.addWidget(self.btn_deflate)
+        lt_middle.addWidget(self.btn_circumgyrate)
+        lt_middle.addWidget(self.btn_full)
+
+        lt_middle.addStretch()
+        lt_middle.addWidget(self.btn_close)
+
         lt_main.addWidget(self.lb_pic)
+        lt_main.addLayout(lt_middle)
         self.setLayout(lt_main)
 
     # 设置二进制数据
     def setData(self, data):
+        f = open("1.png","wb")
+        f.write(data)
         self.lb_pic.show2(data)
+
+    def on_btn_deflate_click(self):
+        if self.scale > 0.1:
+            self.scale = self.scale - 0.1
+        # 创建图片实例
+        image_obj = QImage("176380131_501780_2.jpg")
+        new_width = int(image_obj.width() * self.scale)
+        new_height = int(image_obj.height() * self.scale)  # 缩放宽高尺寸
+        size = QSize(new_width, new_height)
+        print(size)
+        pixImg = QPixmap.fromImage(image_obj.scaled(size, Qt.IgnoreAspectRatio))  # 修改图片实例大小并从QImage实例中生成QPixmap实例以备放入QLabel控件中
+
+        self.lb_pic.resize(new_width, new_height)
+        self.lb_pic.setPixmap(pixImg)
+
 
 class ZydLable(QLabel):
     def __init__(self):
         super(ZydLable, self).__init__()
         self.setAlignment(Qt.AlignCenter)
-        self.setFixedWidth(600)
-        self.setFixedHeight(600)
+        # self.setFixedWidth(600)
+        # self.setFixedHeight(600)
         self.setFrameShape(QFrame.Box)
         self.setStyleSheet("border:None;")
+        self.setScaledContents(True)
         # self.setStyleSheet("border-width: 1px;border-style: solid;border-color: rgb(255, 170, 0);")
 
     def show2(self, datas):

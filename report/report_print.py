@@ -1,16 +1,10 @@
 from .report_print_ui import *
 from .model import *
-from utils import request_get,print_pdf_gsprint,cur_datetime,api_print,request_create_report
+from utils import request_get,print_pdf_gsprint,cur_datetime,request_create_report
 from widgets.bweb import WebView
 import webbrowser
-from .common import get_pdf_url
-
-printers = {
-    '77号打印机':'77',
-    '78号打印机':'78',
-    '79号打印机':'79',
-    '江东打印机':'jd'
-}
+from .common import *
+from widgets import QBrowser
 
 # 报告追踪
 class ReportPrint(ReportPrintUI):
@@ -34,9 +28,18 @@ class ReportPrint(ReportPrintUI):
         # 特殊变量
         self.cur_tjbh = None
         self.web_pdf_ui = None
+        # 网络打印进度
+        self.net_print_ui = None
+        self.browser = None
+        self.pop_ui = None
+        # 当次打印数据
+        self.print_datas = None
 
     # 初始化部分参数
     def initParas(self):
+        self.ini_is_remote = gol.get_value('print_network',1)
+        self.ini_printer = gol.get_value('print_printer', '79号打印机')
+        self.gp_print_setup.setParas(self.ini_is_remote,self.ini_printer)
         self.dwmc_bh = OrderedDict()
         self.dwmc_py = OrderedDict()
         results = self.session.query(MT_TJ_DW).all()
@@ -62,101 +65,155 @@ class ReportPrint(ReportPrintUI):
         results = self.session.execute(sql).fetchall()
         self.table_print.load(results)
         self.gp_middle.setTitle('打印列表（%s）' %self.table_print.rowCount())
+        self.lb_warn.show()
         mes_about(self,'共检索出 %s 条数据！' %self.table_print.rowCount())
+
+    # 打印更新UI
+    def on_print_refresh(self,tjbh,state):
+        dyfs,dyfs2,printer = self.gp_print_setup.get_print_text()
+        # 更新UI
+        row = self.print_datas[tjbh]
+        if state:
+            bgzt = self.table_print.getItemValueOfKey(row, 'bgzt')
+            # 获取实际应该更新的状态
+            bgzt_name, bgzt_value = get_bgzt(bgzt, '已打印')
+            self.table_print.setItemValueOfKey(row, 'dyrq', cur_datetime())
+            self.table_print.setItemValueOfKey(row, 'dyr', self.login_name)
+            self.table_print.setItemValueOfKey(row, 'dycs', '1')
+            self.table_print.setItemValueOfKey(row, 'dyfs', dyfs2)
+            self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name,QColor("#008000"))
+            # 更新数据库
+            try:
+                # 更新TJ_CZJLB TJ_BGGL
+                data_obj = {'jllx': '0034', 'jlmc': '报告打印', 'tjbh': tjbh, 'mxbh': '',
+                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                            'bz': '打印机：%s' % printer}
+                self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                    {
+                        MT_TJ_BGGL.dyrq: cur_datetime(),
+                        MT_TJ_BGGL.dyfs: dyfs,
+                        MT_TJ_BGGL.dygh: self.login_id,
+                        MT_TJ_BGGL.dyxm: self.login_name,
+                        MT_TJ_BGGL.dycs: MT_TJ_BGGL.dycs + 1,
+                        MT_TJ_BGGL.bgzt: bgzt_value,
+                        MT_TJ_BGGL.dyzt: None
+                    }
+                )
+                self.session.commit()
+            except Exception as e:
+                self.session.rollback()
+                mes_about(self, '更新数据库失败！错误信息：%s' % e)
+                return
+        else:
+            # 打印失败
+            self.table_print.setItemValueOfKey(row, 'bgzt', '打印失败', QColor("#FF0000"))
+            try:
+                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                    {
+                        MT_TJ_BGGL.dyzt: '1',
+                        MT_TJ_BGGL.bgzt: '3',
+                    }
+                )
+                self.session.commit()
+            except Exception as e:
+                self.session.rollback()
+                mes_about(self, '更新数据库失败！错误信息：%s' % e)
+                return
 
     # 打印
     def on_btn_print_click(self):
+        qdrq = self.table_print.getCurItemValueOfKey('qdrq')
+        bgzt = self.table_print.getCurItemValueOfKey('bgzt')
+        if date_compare(qdrq,'2018-10-01'):
+            if bgzt in ['','已审核']:
+                mes_about(self,'当前报告还未被审阅，不允许打印！')
+                return
         rows = self.table_print.isSelectRows()
+        if not rows:
+            return
         is_remote,printer = self.gp_print_setup.get_printer()
+        self.printer = printer
         button = mes_warn(self, "您确认用打印机：%s，打印当前选择的 %s 份体检报告？" %(printer,len(rows)))
         if button != QMessageBox.Yes:
             return
-        if rows:
-            for row in rows:
-                tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
-                dyrq = self.table_print.getItemValueOfKey(row, 'dyrq')
-                dyr = self.table_print.getItemValueOfKey(row, 'dyr')
-                dycs = self.table_print.getItemValueOfKey(row, 'dycs')
-                bgzt = self.table_print.getItemValueOfKey(row, 'bgzt')
-                bgzt_name,bgzt_value = get_bgzt(bgzt,'已打印')
-                if is_remote:
-                    # 发送网络打印请求
-                    try:
-                        # 更新数据库 TJ_CZJLB TJ_BGGL
-                        data_obj = {'jllx': '0034', 'jlmc': '报告打印', 'tjbh': tjbh, 'mxbh': '',
-                                    'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                                    'bz': '网络打印：%s' %printer}
-                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
-                        self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
-                            {
-                                MT_TJ_BGGL.dyrq: cur_datetime(),
-                                MT_TJ_BGGL.dyfs: '1',
-                                MT_TJ_BGGL.dygh: self.login_id,
-                                MT_TJ_BGGL.dyxm: self.login_name,
-                                MT_TJ_BGGL.dycs: MT_TJ_BGGL.dycs + 1,
-                                MT_TJ_BGGL.bgzt: bgzt_value
-                            }
-                        )
-                        self.session.commit()
-                    except Exception as e:
-                        self.session.rollback()
-                        mes_about(self, '更新数据库失败！错误信息：%s' % e)
-                        return
-                    # 刷新界面
-                    self.table_print.setItemValueOfKey(row, 'dyrq', cur_datetime())
-                    self.table_print.setItemValueOfKey(row, 'dyr', self.login_name)
-                    self.table_print.setItemValueOfKey(row, 'dycs', '1')
-                    self.table_print.setItemValueOfKey(row, 'dyfs', '租赁打印')
-                    self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
-                    if api_print(tjbh,printers[printer]):
-                        if len(rows) == 1:
-                            mes_about(self, "打印成功！")
-                    else:
-                        mes_about(self, "打印失败！")
-                else:
-                    # 本地打印 需要下载
-                    url = gol.get_value('api_report_down') %tjbh
-                    filename = os.path.join(gol.get_value('path_tmp'),'%s.pdf' %tjbh)
-                    if request_get(url,filename):
-                        # 下载成功
-                        if print_pdf_gsprint(filename) == 0:
-                            try:
-                                # 更新数据库 TJ_CZJLB TJ_BGGL
-                                data_obj = {'jllx': '0034', 'jlmc': '报告打印', 'tjbh': tjbh, 'mxbh': '',
-                                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                                            'bz': '本地打印：%s' %printer}
-                                self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
-                                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
-                                    {
-                                        MT_TJ_BGGL.dyrq: cur_datetime(),
-                                        MT_TJ_BGGL.dyfs: '2',
-                                        MT_TJ_BGGL.dygh: self.login_id,
-                                        MT_TJ_BGGL.dyxm: self.login_name,
-                                        MT_TJ_BGGL.dycs: MT_TJ_BGGL.dycs + 1,
-                                        MT_TJ_BGGL.bgzt: bgzt_value
-                                    }
-                                )
-                                self.session.commit()
-                            except Exception as e:
-                                self.session.rollback()
-                                mes_about(self, '更新数据库失败！错误信息：%s' % e)
-                                return
-                            # 刷新界面
-                            self.table_print.setItemValueOfKey(row, 'dyrq',cur_datetime())
-                            self.table_print.setItemValueOfKey(row, 'dyr', self.login_name)
-                            self.table_print.setItemValueOfKey(row, 'dycs', '1')
-                            self.table_print.setItemValueOfKey(row, 'dyfs', '本地打印')
-                            self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
-                            if len(rows) == 1:
-                                mes_about(self, "打印成功！")
-                        else:
-                            mes_about(self, "打印失败！")
-                    else:
-                        mes_about(self,'未找到报告，无法打印！')
-            if len(rows) > 1:
-                mes_about(self, "打印成功！")
-        else:
-            mes_about(self,'请选择要打印的报告！')
+        net_print_ui = ReportPrintProgress(self)
+        # 并更新UI
+        self.print_datas = self.table_print.isSetRowsValue('tjbh','bgzt','打印中',QColor('#FFB90F'))
+        # 发送打印信号
+        net_print_ui.print_init.emit(list(self.print_datas.keys()),printer,is_remote)
+        # 更新数据库：打印中 方便其他客户端进行筛选，避免重复打印
+        try:
+            self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh.in_(tuple(list(self.print_datas.keys())))).update(
+                {
+                    MT_TJ_BGGL.dyzt: '0',
+                    MT_TJ_BGGL.bgzt: '3',
+                },synchronize_session=False
+            )
+            self.session.commit()
+        except Exception as e:
+            self.session.rollback()
+            mes_about(self, '更新数据库失败！错误信息：%s' % e)
+            return
+        # 打印接收信号
+        net_print_ui.printed.connect(self.on_print_refresh)
+        net_print_ui.exec_()
+
+        # 主线程打印 会卡主界面，放弃
+        # if rows:
+        #     for row in rows:
+        #         tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
+        #         dyrq = self.table_print.getItemValueOfKey(row, 'dyrq')
+        #         dyr = self.table_print.getItemValueOfKey(row, 'dyr')
+        #         dycs = self.table_print.getItemValueOfKey(row, 'dycs')
+        #         bgzt = self.table_print.getItemValueOfKey(row, 'bgzt')
+        #         bgzt_name,bgzt_value = get_bgzt(bgzt,'已打印')
+        #         if is_remote:
+        #             pass
+        #         else:
+        #             # 本地打印 需要下载
+        #             url = gol.get_value('api_report_down') %tjbh
+        #             filename = os.path.join(gol.get_value('path_tmp'),'%s.pdf' %tjbh)
+        #             if request_get(url,filename):
+        #                 # 下载成功
+        #                 if print_pdf_gsprint(filename) == 0:
+        #                     try:
+        #                         # 更新数据库 TJ_CZJLB TJ_BGGL
+        #                         data_obj = {'jllx': '0034', 'jlmc': '报告打印', 'tjbh': tjbh, 'mxbh': '',
+        #                                     'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+        #                                     'bz': '本地打印：%s' %printer}
+        #                         self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+        #                         self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+        #                             {
+        #                                 MT_TJ_BGGL.dyrq: cur_datetime(),
+        #                                 MT_TJ_BGGL.dyfs: '2',
+        #                                 MT_TJ_BGGL.dygh: self.login_id,
+        #                                 MT_TJ_BGGL.dyxm: self.login_name,
+        #                                 MT_TJ_BGGL.dycs: MT_TJ_BGGL.dycs + 1,
+        #                                 MT_TJ_BGGL.bgzt: bgzt_value
+        #                             }
+        #                         )
+        #                         self.session.commit()
+        #                     except Exception as e:
+        #                         self.session.rollback()
+        #                         mes_about(self, '更新数据库失败！错误信息：%s' % e)
+        #                         return
+        #                     # 刷新界面
+        #                     self.table_print.setItemValueOfKey(row, 'dyrq',cur_datetime())
+        #                     self.table_print.setItemValueOfKey(row, 'dyr', self.login_name)
+        #                     self.table_print.setItemValueOfKey(row, 'dycs', '1')
+        #                     self.table_print.setItemValueOfKey(row, 'dyfs', '本地打印')
+        #                     self.table_print.setItemValueOfKey(row, 'bgzt', bgzt_name)
+        #                     if len(rows) == 1:
+        #                         mes_about(self, "打印成功！")
+        #                 else:
+        #                     mes_about(self, "打印失败！")
+        #             else:
+        #                 mes_about(self,'未找到报告，无法打印！')
+        #     if len(rows) > 1:
+        #         mes_about(self, "打印成功！")
+        # else:
+        #     mes_about(self,'请选择要打印的报告！')
 
     # 查询
     def on_btn_query_click(self):
@@ -178,6 +235,15 @@ class ReportPrint(ReportPrintUI):
         elif self.lt_where_search.get_date_text() == '预约日期':
             sql = sql + ''' AND TJ_TJDJB.TJRQ>= '%s' AND TJ_TJDJB.TJRQ< '%s' ''' %(t_start,t_end)
 
+        # 是否有手工单
+        if self.cb_manual.isChecked():
+            sql = sql + ''' AND TJ_BGGL.SGD='1' '''
+        # 是否有胶片
+        if self.cb_film.isChecked():
+            sql = sql + ''' AND TJ_BGGL.JPSL>1 '''
+        # 体检金额
+        if self.lb_tjje.get_where_text():
+            sql = sql + self.lb_tjje.get_where_text()
         # 单位
         if self.lt_where_search.where_dwbh:
             sql = sql + ''' AND TJ_TJDJB.DWBH = '%s' ''' % self.lt_where_search.where_dwbh
@@ -197,12 +263,22 @@ class ReportPrint(ReportPrintUI):
             results = self.session.execute(sql).fetchall()
             self.table_print.load(results)
             self.gp_middle.setTitle('打印列表（%s）' %self.table_print.rowCount())
+            if results:
+                self.lb_warn.hide()
+            else:
+                self.lb_warn.show()
             mes_about(self, '检索出数据%s条' % self.table_print.rowCount())
         except Exception as e:
             mes_about(self,'执行查询%s出错，错误信息：%s' %(sql,e))
 
     # 下载
     def on_btn_down_click(self):
+        qdrq = self.table_print.getCurItemValueOfKey('qdrq')
+        bgzt = self.table_print.getCurItemValueOfKey('bgzt')
+        if date_compare(qdrq,'2018-10-01'):
+            if bgzt in ['','已审核']:
+                mes_about(self,'当前报告还未被审阅，不允许下载！')
+                return
         rows = self.table_print.isSelectRows()
         button = mes_warn(self, "您确认下载当前选择的 %s 份体检报告？" %len(rows))
         if button != QMessageBox.Yes:
@@ -346,8 +422,8 @@ class ReportPrint(ReportPrintUI):
             for i in indexs:
                 row_num = i.row()
             menu = QMenu()
-            item1 = menu.addAction(Icon("报告中心"), "浏览器中打开PDF报告")
-            item2 = menu.addAction(Icon("报告中心"), "浏览器中打开HTML报告")
+            item1 = menu.addAction(Icon("报告中心"), "查看PDF报告")
+            # item2 = menu.addAction(Icon("报告中心"), "浏览器中打开HTML报告")
             item3 = menu.addAction(Icon("取消"), "取消整理")
             item4 = menu.addAction(Icon("取消"), "取消领取")
             item5 = menu.addAction(Icon("报告中心"), "重新生成PDF报告")
@@ -358,20 +434,17 @@ class ReportPrint(ReportPrintUI):
             bgzt = self.table_print.getCurItemValueOfKey('bgzt')
             tjzt = self.table_print.getCurItemValueOfKey('tjzt')
             if action==item1:
-                url = get_pdf_url(self.session,tjbh)
-                if url:
-                    webbrowser.open(url)
-                else:
-                    mes_about(self, '未查询到该报告！')
-
-            elif action == item2:
-                try:
-                    webbrowser.open(gol.get_value('api_report_preview') % ('html', tjbh))
-                except Exception as e:
-                    mes_about(self, '打开出错，错误信息：%s' % e)
-                    return
+                self.cur_tjbh = tjbh
+                self.on_btn_item_click()
+            #
+            # elif action == item2:
+            #     try:
+            #         webbrowser.open(gol.get_value('api_report_preview') % ('html', tjbh))
+            #     except Exception as e:
+            #         mes_about(self, '打开出错，错误信息：%s' % e)
+            #         return
             # 取消整理
-            elif action == item3:
+            if action == item3:
                 if not zlxm:
                     mes_about(self,'还未进行报告整理！')
                 else:
@@ -468,6 +541,18 @@ class ReportPrint(ReportPrintUI):
         sjhm = self.table_print.getCurItemValueOfKey('sjhm')
         self.gp_quick_search.setText(tjbh,xm,sjhm,sfzh)
         self.cur_tjbh = tjbh
+        # 弹窗
+        if not self.pop_ui:
+            self.pop_ui = ReportPrintPopWidget(self)
+        # 是否弹窗
+        if self.gp_other_setup.is_show_detail:
+            self.pop_ui.show()
+            # 传递数据
+            title = "体检编号：%s  姓名：%s" %(tjbh,xm)
+            self.pop_ui.inited.emit(title,self.cur_tjbh)
+        else:
+            self.pop_ui.hide()
+
         if QTableWidgetItem.text()=='查看':
             sql = "SELECT PrintDevice,Modality,count(*) FROM t_film_back_print WHERE PatientID='%s' GROUP BY PrintDevice,Modality ; "  %self.cur_tjbh
             film_session = gol.get_value('film_session')
@@ -491,29 +576,60 @@ class ReportPrint(ReportPrintUI):
             mes_about(self,'请先选择一个人！')
             return
         else:
-            try:
-                self.cxk_session = gol.get_value('cxk_session')
-                result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == self.cur_tjbh).scalar()
-                if result:
-                    url = gol.get_value('api_pdf_old_show') %result.PDFURL
-                else:
-                    url = None
-            except Exception as e:
-                mes_about(self,'查询出错，错误信息：%s' %e)
-                return
-            if not url:
-                mes_about(self,'未找到该顾客体检报告！')
-                return
-            if not self.web_pdf_ui:
-                self.web_pdf_ui = PdfDialog(self)
-            self.web_pdf_ui.urlChange.emit(url)
-            self.web_pdf_ui.show()
+            xm = self.table_print.getCurItemValueOfKey('xm')
+            dwmc = self.table_print.getCurItemValueOfKey('dwmc')
+            url_title = "体检编号：%s   姓名：%s   单位名称：%s" %(self.cur_tjbh,xm,dwmc)
+            # 优先打开 新系统生成的
+            result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).scalar()
+            if result:
+                filename = os.path.join(result.bglj, '%s.pdf' % self.cur_tjbh).replace('D:/activefile/', '')
+                url = gol.get_value('api_pdf_new_show') % filename
+                self.open_url(url, url_title)
+                # webbrowser.open(url)
+            else:
+                try:
+                    self.cxk_session = gol.get_value('cxk_session')
+                    result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == self.cur_tjbh).scalar()
+                    if result:
+                        url = gol.get_value('api_pdf_old_show') % result.PDFURL
+                        self.open_url(url, url_title)
+                    else:
+                        mes_about(self, '未找到该顾客体检报告！')
+                except Exception as e:
+                    mes_about(self, '查询出错，错误信息：%s' % e)
+                    return
+            # try:
+            #     self.cxk_session = gol.get_value('cxk_session')
+            #     result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == self.cur_tjbh).scalar()
+            #     if result:
+            #         url = gol.get_value('api_pdf_old_show') %result.PDFURL
+            #     else:
+            #         url = None
+            # except Exception as e:
+            #     mes_about(self,'查询出错，错误信息：%s' %e)
+            #     return
+            # if not url:
+            #     mes_about(self,'未找到该顾客体检报告！')
+            #     return
+            # if not self.web_pdf_ui:
+            #     self.web_pdf_ui = PdfDialog(self)
+            # self.web_pdf_ui.urlChange.emit(url)
+            # self.web_pdf_ui.show()
+
+    # 在窗口中打开报告，取消在浏览器中打开，主要用于外部查询中使用，避免地址外泄
+    def open_url(self, url, title):
+        if not self.browser:
+            self.browser = QBrowser(self)
+        self.browser.open_url.emit(title, url)
+        self.browser.show()
 
     # def setSaveFileName(self):
     #     filepath = QFileDialog.getExistingDirectory(self, "保存路径",
     #                                               desktop(),
     #                                                QFileDialog.ShowDirsOnly|QFileDialog.DontResolveSymlinks)
     #     return filepath
+
+
 
 class PdfDialog(QDialog):
 
@@ -610,182 +726,326 @@ class PrintThread(QThread):
             self.num = self.num + 1
             self.stop()
 
-# 进度对话框，需要实现启动和停止，及数据初始化
-class ProcessDialog(Dialog):
+# # 通用进度对话框，需要实现启动和停止，及数据初始化
+# class ProcessDialog(Dialog):
+#
+#     started = pyqtSignal(list)
+#
+#     def __init__(self,parent=None):
+#         super(ProcessDialog,self).__init__(parent)
+#         self.setWindowTitle('明州体检')
+#         self.initUI()
+#         # 绑定信号
+#         self.started.connect(self.initDatas)
+#         self.btn_start.clicked.connect(self.on_btn_start_click)
+#         self.btn_stop.clicked.connect(self.on_btn_stop_click)
+#         # 特殊变量
+#         self.datas = None
+#         self.task_type = None
+#         self.thread = CustomThread()
+#
+#     def initUI(self):
+#         lt_main = QVBoxLayout()
+#         ###########################################################
+#         lt_top = QHBoxLayout()
+#         gp_top = QGroupBox('进度总览')
+#         # 待接收的总数
+#         self.lb_all = ProcessLable()
+#         # 已完成接收数
+#         self.lb_is_done = ProcessLable()
+#         # 未完成总数
+#         self.lb_no_done = ProcessLable()
+#         # 错误数
+#         self.lb_error = ProcessLable()
+#         # 添加布局
+#         lt_top.addWidget(QLabel('总数：'))
+#         lt_top.addWidget(self.lb_all)
+#         lt_top.addWidget(QLabel('完成数：'))
+#         lt_top.addWidget(self.lb_is_done)
+#         lt_top.addWidget(QLabel('未完成数：'))
+#         lt_top.addWidget(self.lb_no_done)
+#         lt_top.addWidget(QLabel('错误数：'))
+#         lt_top.addWidget(self.lb_error)
+#         gp_top.setLayout(lt_top)
+#         ###########################################################
+#         lt_middle = QHBoxLayout()
+#         gp_middle = QGroupBox('处理详情')
+#         ###########################################################
+#         lt_bottom = QHBoxLayout()
+#         gp_bottom = QGroupBox('进度')
+#         self.pb_progress=QProgressBar()
+#         self.pb_progress.setMinimum(0)
+#         self.pb_progress.setValue(0)
+#         lt_bottom.addWidget(self.pb_progress)
+#         gp_bottom.setLayout(lt_bottom)
+#         #########增加按钮组########################################
+#         lt_1 = QHBoxLayout()
+#         self.lb_timer = TimerLabel2()
+#         self.btn_start = QPushButton(Icon("启动"),"启动")
+#         self.btn_stop = QPushButton(Icon("停止"),"停止")
+#         lt_1.addWidget(self.lb_timer)
+#         lt_1.addStretch()
+#         lt_1.addWidget(self.btn_start)
+#         lt_1.addWidget(self.btn_stop)
+#         # 布局
+#         lt_main.addWidget(gp_top)
+#         lt_main.addWidget(gp_middle)
+#         lt_main.addWidget(gp_bottom)
+#         lt_main.addLayout(lt_1)
+#         self.setLayout(lt_main)
+#
+#     def on_progress_change(self,is_done,no_done,error):
+#         self.sb_is_done.setText(str(is_done))
+#         self.sb_no_done.setText(str(no_done))
+#         self.sb_error.setText(str(error))
+#         self.pb_progress.setValue(is_done)
+#         dProgress = (self.pb_progress.value() - self.pb_progress.minimum()) * 100.0 / (self.pb_progress.maximum() - self.pb_progress.minimum())
+#         #self.progress.setFormat("当前进度为：%s%" %dProgress)
+#         self.pb_progress.setAlignment(Qt.AlignRight | Qt.AlignVCenter) #对齐方式
+#
+#     # 启动
+#     def on_btn_start_click(self):
+#         # 刷新界面控件
+#         self.btn_start.setDisabled(True)
+#         self.btn_stop.setDisabled(False)
+#         self.lb_timer.start()
+#         self.sb_all.setText(str(len(self.datas)))
+#         self.pb_progress.setMaximum(len(self.datas))
+#         self.thread.setTakType(self.task_type)
+#         self.thread.setTask(self.datas)
+#         self.thread.signalCur.connect(self.on_mes_show, type=Qt.QueuedConnection)
+#         self.thread.signalDone.connect(self.on_progress_change, type=Qt.QueuedConnection)
+#         self.thread.signalExit.connect(self.on_thread_exit, type=Qt.QueuedConnection)
+#         self.thread.start()
+#
+#     # 停止接收数据
+#     def on_btn_stop_click(self):
+#         # 刷新界面控件
+#         self.btn_start.setDisabled(False)
+#         self.btn_stop.setDisabled(True)
+#         self.lb_timer.stop()
+#
+#     # 初始化数据
+#     def initDatas(self,datas:list,task_type=1):
+#         self.datas = datas
+#         self.task_type = task_type
+#         self.on_btn_start_click()
+#
+#     # 消息展示
+#     def on_mes_show(self,tjbh:str,mes:str):
+#         pass
+#
+#     def on_thread_exit(self,status:bool,error:str):
+#         self.on_btn_stop_click()
+#         mes_about(self,error)
+#
+#     def closeEvent(self, QCloseEvent):
+#         try:
+#             if self.thread:
+#                 # button = mes_warn(self,"项目结果接收正在运行中，您是否确定立刻退出？")
+#                 # if button == QMessageBox.Yes:
+#                 self.thread.stop()
+#                 self.thread = None
+#         except Exception as e:
+#             print(e)
+#         super(ProcessDialog, self).closeEvent(QCloseEvent)
 
-    started = pyqtSignal(list)
+# 运行线程处理耗时任务：打印、下载、领取、整理
+# class CustomThread(QThread):
+#
+#     # 定义信号,定义参数为str类型
+#     signalCur = pyqtSignal(str,str)     # 处理过程：成功/失败，错误消息，
+#     signalDone = pyqtSignal(int, int, int)   # 处理完成：成功/失败，错误消息，
+#     signalExit = pyqtSignal(bool,str)   # 处理结束：成功/失败，是否异常退出
+#
+#     def __init__(self):
+#         super(CustomThread,self).__init__()
+#         self.runing = False
+#         self.initParas()
+#         # 特殊变量
+#         self.num_all = 0            # 总数
+#         self.num_is_done = 0        # 已完成
+#         self.num_no_done = 0        # 未完成
+#         self.num_error = 0          # 错误
+#
+#     # 完成参数初始化
+#     def setParas(self,session):
+#         self.session = session
+#         self.num = 1
+#
+#     def stop(self):
+#         self.runing = False
+#
+#     # 启动任务
+#     def setTask(self,tjbhs:list):
+#         self.tjbhs =tjbhs
+#         self.num_all = len(tjbhs)
+#         self.runing = True
+#
+#     def setTakType(self,taktype = 1):
+#         self.taktype = taktype
+#
+#     def print_obj(self,tjbh):
+#         pass
+#
+#     def run(self):
+#         while self.runing:
+#             for tjbh in self.tjbhs:
+#                 if self.runing:
+#                     if api_print(tjbh,printers[printer]):
+#                         if len(rows) == 1:
+#                             mes_about(self, "打印成功！")
+#                     else:
+#                         mes_about(self, "打印失败！")
+#                 self.num_done = self.num_done + 1
+#                 self.num_undone = self.num_all - self.num_done
+#                 self.signalDone.emit(self.num_done,self.num_undone,self.num_error)
+#             self.signalExit.emit(True, "处理完成！")
+#             self.stop()
+
+
+
+
+# 报告打印弹出框
+class ReportPrintPopWidget(Dialog):
+
+    inited = pyqtSignal(str,str)    # 人员信息、体检编号
 
     def __init__(self,parent=None):
-        super(ProcessDialog,self).__init__(parent)
-        self.setWindowTitle('明州体检')
+        super(ReportPrintPopWidget, self).__init__(parent)
         self.initUI()
-        # 绑定信号
-        self.started.connect(self.initDatas)
-        self.btn_start.clicked.connect(self.on_btn_start_click)
-        self.btn_stop.clicked.connect(self.on_btn_stop_click)
-        # 特殊变量
-        self.datas = None
-        self.task_type = None
-        self.thread = CustomThread()
+        self.inited.connect(self.on_search)
+        self.states = {'0':'追踪中','1':'已审核','2':'已审阅','3':'已打印','4':'已整理','5':'已领取'}
 
     def initUI(self):
         lt_main = QVBoxLayout()
-        ###########################################################
-        lt_top = QHBoxLayout()
-        gp_top = QGroupBox('进度总览')
-        # 待接收的总数
-        self.lb_all = ProcessLable()
-        # 已完成接收数
-        self.lb_is_done = ProcessLable()
-        # 未完成总数
-        self.lb_no_done = ProcessLable()
-        # 错误数
-        self.lb_error = ProcessLable()
-        # 添加布局
-        lt_top.addWidget(QLabel('总数：'))
-        lt_top.addWidget(self.lb_all)
-        lt_top.addWidget(QLabel('完成数：'))
-        lt_top.addWidget(self.lb_is_done)
-        lt_top.addWidget(QLabel('未完成数：'))
-        lt_top.addWidget(self.lb_no_done)
-        lt_top.addWidget(QLabel('错误数：'))
-        lt_top.addWidget(self.lb_error)
-        gp_top.setLayout(lt_top)
-        ###########################################################
+        ###################### 手工单 ###################################
+        self.gp_top = QGroupBox('手工单(0)')
+        self.lt_top = QHBoxLayout()
+        self.lb_manual = QLabel()
+        self.lb_manual.setWordWrap(True)
+        self.lb_manual.setStyleSheet('''color: rgb(0, 85, 255);''')
+        self.lt_top.addWidget(self.lb_manual)
+        self.gp_top.setLayout(self.lt_top)
+        ######################胶片数量###################################
+        self.gp_middle = QGroupBox('胶片数量(0)')
         lt_middle = QHBoxLayout()
-        gp_middle = QGroupBox('处理详情')
-        ###########################################################
-        lt_bottom = QHBoxLayout()
-        gp_bottom = QGroupBox('进度')
-        self.pb_progress=QProgressBar()
-        self.pb_progress.setMinimum(0)
-        self.pb_progress.setValue(0)
-        lt_bottom.addWidget(self.pb_progress)
+        self.lb_count_dr = FilmLable()
+        self.lb_count_ct = FilmLable()
+        self.lb_count_mri = FilmLable()
+        self.lb_count_rx = FilmLable()
+        lt_middle.addWidget(QLabel('DR：'))
+        lt_middle.addWidget(self.lb_count_dr)
+        lt_middle.addSpacing(10)
+        lt_middle.addWidget(QLabel('CT：'))
+        lt_middle.addWidget(self.lb_count_ct)
+        lt_middle.addSpacing(10)
+        lt_middle.addWidget(QLabel('MRI：'))
+        lt_middle.addWidget(self.lb_count_mri)
+        lt_middle.addSpacing(10)
+        lt_middle.addWidget(QLabel('钼靶：'))
+        lt_middle.addWidget(self.lb_count_rx)
+
+        lt_middle.addStretch()
+        self.gp_middle.setLayout(lt_middle)
+        ######################报告信息###################################
+        gp_bottom = QGroupBox('报告信息')
+        lt_bottom = QFormLayout()
+        lt_bottom.setLabelAlignment(Qt.AlignRight)
+        lt_bottom.setFormAlignment(Qt.AlignHCenter|Qt.AlignVCenter)
+        self.lb_bgzz = FilmLable()
+        self.lb_bgzj = FilmLable()
+        self.lb_bgsh = FilmLable()
+        self.lb_bgsy = FilmLable()
+        self.lb_bgdy = FilmLable()
+        self.lb_bgzl = FilmLable()
+        self.lb_bglq = FilmLable()
+        lt_bottom.addRow(QLabel("追踪："), self.lb_bgzz)
+        lt_bottom.addRow(QLabel("总检："), self.lb_bgzj)
+        lt_bottom.addRow(QLabel("审核："), self.lb_bgsh)
+        lt_bottom.addRow(QLabel("审阅："), self.lb_bgsy)
+        lt_bottom.addRow(QLabel("打印："), self.lb_bgdy)
+        lt_bottom.addRow(QLabel("整理："), self.lb_bgzl)
+        lt_bottom.addRow(QLabel("领取："), self.lb_bglq)
+        lt_bottom.setHorizontalSpacing(10)
         gp_bottom.setLayout(lt_bottom)
-        #########增加按钮组########################################
-        lt_1 = QHBoxLayout()
-        self.lb_timer = TimerLabel2()
-        self.btn_start = QPushButton(Icon("启动"),"启动")
-        self.btn_stop = QPushButton(Icon("停止"),"停止")
-        lt_1.addWidget(self.lb_timer)
-        lt_1.addStretch()
-        lt_1.addWidget(self.btn_start)
-        lt_1.addWidget(self.btn_stop)
-        # 布局
-        lt_main.addWidget(gp_top)
-        lt_main.addWidget(gp_middle)
+        #################报告状态###########################
+        lt_state = QHBoxLayout()
+        self.lb_state = ReportStateLable()
+        self.lb_state.show()
+        lt_state.addWidget(self.lb_state)
+        lt_1= QVBoxLayout()
+        # 添加布局
+        lt_1.addWidget(self.gp_top)
+        lt_1.addWidget(self.gp_middle)
+        lt_2 = QHBoxLayout()
+        lt_2.addLayout(lt_1)
+        lt_2.addLayout(lt_state)
+        # lt_2.addStretch()
+        lt_main.addLayout(lt_2)
         lt_main.addWidget(gp_bottom)
-        lt_main.addLayout(lt_1)
+        # lt_main.addWidget(self.gp_bottom2)
+        lt_main.addStretch()
         self.setLayout(lt_main)
 
-    def on_progress_change(self,is_done,no_done,error):
-        self.sb_is_done.setText(str(is_done))
-        self.sb_no_done.setText(str(no_done))
-        self.sb_error.setText(str(error))
-        self.pb_progress.setValue(is_done)
-        dProgress = (self.pb_progress.value() - self.pb_progress.minimum()) * 100.0 / (self.pb_progress.maximum() - self.pb_progress.minimum())
-        #self.progress.setFormat("当前进度为：%s%" %dProgress)
-        self.pb_progress.setAlignment(Qt.AlignRight | Qt.AlignVCenter) #对齐方式
+        self.setWindowIcon(Icon('mztj'))
+        # 移动整体位置
+        desktop = QDesktopWidget()
+        self.setFixedHeight(400)
+        self.setFixedWidth(400)
+        self.move((desktop.availableGeometry().width()-self.width()-20),
+                  desktop.availableGeometry().height()-self.height()-50)  # 初始化位置到右下角
 
-    # 启动
-    def on_btn_start_click(self):
-        # 刷新界面控件
-        self.btn_start.setDisabled(True)
-        self.btn_stop.setDisabled(False)
-        self.lb_timer.start()
-        self.sb_all.setText(str(len(self.datas)))
-        self.pb_progress.setMaximum(len(self.datas))
-        self.thread.setTakType(self.task_type)
-        self.thread.setTask(self.datas)
-        self.thread.signalCur.connect(self.on_mes_show, type=Qt.QueuedConnection)
-        self.thread.signalDone.connect(self.on_progress_change, type=Qt.QueuedConnection)
-        self.thread.signalExit.connect(self.on_thread_exit, type=Qt.QueuedConnection)
-        self.thread.start()
+    # 传递体检编号
+    def on_search(self,ryxx,tjbh):
+        # 刷新标题
+        self.setWindowTitle(ryxx)
+        # 手工报告单 # xmbh in ['1122', '1931', '0903', '501732', '501933', '501934']:
+        results = self.session.query(MT_TJ_TJJLMXB).filter(MT_TJ_TJJLMXB.tjbh == tjbh,
+                                                           MT_TJ_TJJLMXB.sfzh == '1',
+                                                           MT_TJ_TJJLMXB.zhbh.in_(['1122', '1931', '0903', '501732', '501933', '501934'])).all()
+        self.lb_manual.setText("  ".join([str2(result.xmmc) for result in results]))
+        self.gp_top.setTitle('手工单报告(%s)' %str(len(results)))
+        # 胶片数据
+        film = {}
+        results = self.session.execute(get_film_num(tjbh))
+        for result in results:
+            if result[0] in list(film.keys()):
+                film[result[0]] = film[result[0]] + result[1]
+            else:
+                film[result[0]] = result[1]
+        # 更新
+        self.init_film(film)
+        # 获取报告状态
+        result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh==tjbh).scalar()
+        if result:
+            self.lb_bgzz.setText("%s，%s" % (str2(result.zzxm), str2(result.zzrq)))
+            self.lb_bgzj.setText("%s，%s" % (str2(result.zjxm), str2(result.zjrq)))
+            self.lb_bgsh.setText("%s，%s" % (str2(result.shxm), str2(result.shrq)))
+            self.lb_bgsy.setText("%s，%s" % (str2(result.syxm), str2(result.syrq)))
+            self.lb_bgdy.setText("%s，%s" % (str2(result.dyxm), str2(result.dyrq)))
+            self.lb_bgzl.setText("%s，%s" % (str2(result.zlxm), str2(result.zlrq)))
+            self.lb_bglq.setText("%s，%s" % (str2(result.lqxm), str2(result.lqrq)))
+            self.lb_state.show2(self.states.get(result.bgzt,''),True)
 
-    # 停止接收数据
-    def on_btn_stop_click(self):
-        # 刷新界面控件
-        self.btn_start.setDisabled(False)
-        self.btn_stop.setDisabled(True)
-        self.lb_timer.stop()
 
-    # 初始化数据
-    def initDatas(self,datas:list,task_type=1):
-        self.datas = datas
-        self.task_type = task_type
-        self.on_btn_start_click()
+    # 初始化胶片信息
+    def init_film(self,film:dict):
+        self.lb_count_dr.setText(str(film.get('DR','')))
+        self.lb_count_ct.setText(str(film.get('CT', '')))
+        self.lb_count_mri.setText(str(film.get('MRI', '')))
+        self.lb_count_rx.setText(str(film.get('RX', '')))
+        self.gp_middle.setTitle('胶片数量(%s)' %str(film.get('DR',0)+film.get('CT',0)+film.get('MRI',0)+film.get('RX',0)))
 
-    # 消息展示
-    def on_mes_show(self,tjbh:str,mes:str):
-        pass
 
-    def on_thread_exit(self,status:bool,error:str):
-        self.on_btn_stop_click()
-        mes_about(self,error)
-
-    def closeEvent(self, QCloseEvent):
-        try:
-            if self.thread:
-                # button = mes_warn(self,"项目结果接收正在运行中，您是否确定立刻退出？")
-                # if button == QMessageBox.Yes:
-                self.thread.stop()
-                self.thread = None
-        except Exception as e:
-            print(e)
-        super(ProcessDialog, self).closeEvent(QCloseEvent)
-
-# 运行线程处理耗时任务：打印、下载、领取、整理
-class CustomThread(QThread):
-
-    # 定义信号,定义参数为str类型
-    signalCur = pyqtSignal(str,str)     # 处理过程：成功/失败，错误消息，
-    signalDone = pyqtSignal(int, int, int)   # 处理完成：成功/失败，错误消息，
-    signalExit = pyqtSignal(bool,str)   # 处理结束：成功/失败，是否异常退出
+class FilmLable(QLabel):
 
     def __init__(self):
-        super(CustomThread,self).__init__()
-        self.runing = False
-        self.initParas()
-        # 特殊变量
-        self.num_all = 0            # 总数
-        self.num_is_done = 0        # 已完成
-        self.num_no_done = 0        # 未完成
-        self.num_error = 0          # 错误
-
-    # 完成参数初始化
-    def setParas(self,session):
-        self.session = session
-        self.num = 1
-
-    def stop(self):
-        self.runing = False
-
-    # 启动任务
-    def setTask(self,tjbhs:list):
-        self.tjbhs =tjbhs
-        self.num_all = len(tjbhs)
-        self.runing = True
-
-    def setTakType(self,taktype = 1):
-        self.taktype = taktype
-
-    def print_obj(self,tjbh):
-        pass
-
-    def run(self):
-        while self.runing:
-            for tjbh in self.tjbhs:
-                if self.runing:
-                    pass
-                self.num_done = self.num_done + 1
-                self.num_undone = self.num_all - self.num_done
-                self.signalDone.emit(self.num_done,self.num_undone,self.num_error)
-            self.signalExit.emit(True, "处理完成！")
-            self.stop()
-
-class ProcessLable(QLabel):
-
-    def __init__(self):
-        super(ProcessLable,self).__init__()
-        self.setMinimumWidth(50)
+        super(FilmLable,self).__init__()
+        # self.setMinimumWidth(50)
         self.setStyleSheet('''font: 75 14pt \"微软雅黑\";color: rgb(0, 85, 255);''')
+
+def date_compare(date1:str,date2:str):
+    s_time = time.mktime(time.strptime(date1,'%Y-%m-%d'))
+    t_time = time.mktime(time.strptime(date2,'%Y-%m-%d'))
+    return int(s_time) - int(t_time)

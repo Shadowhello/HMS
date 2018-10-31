@@ -1,6 +1,7 @@
 from widgets.cwidget import *
 from report.model import *
 import zeep,json,base64,os
+from utils import trans_pacs_pic
 
 # 查看项目状态
 class ItemsStateUI(Dialog):
@@ -99,6 +100,7 @@ class ItemsStateUI(Dialog):
         btn_name = self.table_item.getItemValueOfKey(row, "btn_name")
         xmbh = self.table_item.getItemValueOfKey(row, "xmbh")
         xmmc = self.table_item.getItemValueOfKey(row, "xmmc")
+        ksmc = self.table_item.getItemValueOfKey(row, "ksmc")
         if btn_name:
             if btn_name=='核实':
                 button = mes_warn(self, '您是否继续？')
@@ -144,22 +146,35 @@ class ItemsStateUI(Dialog):
                 self.table_item.setItemValueOfKey(row,'state','已拒检',QColor("#008000"))
 
             elif btn_name == '图像接收':
-                results = self.session.query(MT_TJ_PACS_PIC).filter(MT_TJ_PACS_PIC.tjbh==tjbh,MT_TJ_PACS_PIC.zhbh==xmbh).all()
-                if results:
-                    button = mes_warn(self,"您是否确认从检查系统接收图像？")
-                    if button != QMessageBox.Yes:
+                button = mes_warn(self,"您是否确认从检查系统重新接收图像？")
+                if button != QMessageBox.Yes:
                         return
-                # 读取
-                filenames = get_pacs_pic(tjbh,xmbh,self.tmp_path)
-                if filenames:
-                    # 上传 http请求替代smb协议
-                    pass
+                if '彩超' in ksmc:
+                    ksbm = '0020'
+                elif '病理' in ksmc:
+                    ksbm = '0026'
                 else:
-                    mes_about(self,'检查系统中未发现顾客(%s)%s项目的图像！' %(tjbh,xmmc))
-                # 上传
-                # 更新或者删除
-            else:
-                mes_about(self,'功能未定义，请联系管理员！')
+                    ksbm = '0024'
+                if trans_pacs_pic(tjbh,ksbm,xmbh):
+                    mes_about(self,'传输成功！')
+                else:
+                    mes_about(self,'传输失败！')
+            #     results = self.session.query(MT_TJ_PACS_PIC).filter(MT_TJ_PACS_PIC.tjbh==tjbh,MT_TJ_PACS_PIC.zhbh==xmbh).all()
+            #     if results:
+            #         button = mes_warn(self,"您是否确认从检查系统接收图像？")
+            #         if button != QMessageBox.Yes:
+            #             return
+            #     # 读取
+            #     filenames = get_pacs_pic(tjbh,xmbh,self.tmp_path)
+            #     if filenames:
+            #         # 上传 http请求替代smb协议
+            #         pass
+            #     else:
+            #         mes_about(self,'检查系统中未发现顾客(%s)%s项目的图像！' %(tjbh,xmmc))
+            #     # 上传
+            #     # 更新或者删除
+            # else:
+            #     mes_about(self,'功能未定义，请联系管理员！')
 
     # 初始化数据
     def setDatas(self,p_str):
@@ -186,7 +201,7 @@ class ItemsStateUI(Dialog):
         self.gp_middle.setTitle('项目信息 (%s)' %self.table_item.rowCount())
 
 
-# 胶片打印服务
+# 获取彩超、内镜图像
 def get_pacs_pic(tjbh, xmbh, path):
     url = "http://10.8.200.220:7059/WebGetFileView.asmx?WSDL"
     client = zeep.Client(url)

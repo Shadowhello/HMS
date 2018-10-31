@@ -305,28 +305,34 @@ class ReportTrack(ReportTrackUI):
         zzzt = self.table_track.getCurItemValueOfKey('zzzt')
         tjbh = self.table_track.getCurItemValueOfKey('tjbh')
         if zzzt in ['审核退回','审阅退回']:
-            if is_doctor:
-                sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
-                data_obj = {'jllx': '0123', 'jlmc': '报告退回处理', 'tjbh': tjbh, 'mxbh': '',
-                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                            'jlnr': '%s -> %s，%s：已处理 -> 医生审核' %(zzzt,cur_datetime(),self.login_name)
-                            }
+            text, ok = QInputDialog.getText(self, '明州体检', '处理意见：', QLineEdit.Normal, '')
+            if ok and text:
+                if is_doctor:
+                    sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
+                    data_obj = {'jllx': '0123', 'jlmc': '报告退回处理', 'tjbh': tjbh, 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                'jlnr': '%s -> %s，%s：已处理 -> 医生审核，处理意见：%s' %(zzzt,cur_datetime(),self.login_name,str(text))
+                                }
+                else:
+                    sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
+                    data_obj = {'jllx': '0123', 'jlmc': '报告退回处理', 'tjbh': tjbh, 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                'jlnr': '%s -> %s，%s：已处理 -> 护理审阅，处理意见：%s' %(zzzt,cur_datetime(),self.login_name,str(text))
+                                }
+                sql2 = "UPDATE TJ_BGGL SET BGZT='1',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
+                try:
+                    self.session.execute(sql1)
+                    self.session.execute(sql2)
+                    self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                    self.session.commit()
+                    mes_about(self,'处理成功！')
+                except Exception as e:
+                    self.session.rollback()
+                    mes_about(self, '处理失败，错误信息：%s' % e)
+            elif ok and not text:
+                mes_about(self, '请填写处理意见！')
             else:
-                sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
-                data_obj = {'jllx': '0123', 'jlmc': '报告退回处理', 'tjbh': tjbh, 'mxbh': '',
-                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                            'jlnr': '%s -> %s，%s：已处理 -> 护理审阅' %(zzzt,cur_datetime(),self.login_name)
-                            }
-            sql2 = "UPDATE TJ_BGGL SET BGZT='1',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
-            try:
-                self.session.execute(sql1)
-                self.session.execute(sql2)
-                self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
-                self.session.commit()
-                mes_about(self,'处理成功！')
-            except Exception as e:
-                self.session.rollback()
-                mes_about(self, '处理失败，错误信息：%s' % e)
+                pass
         else:
             mes_about(self,"只有审阅退回/审核退回的报告才能使用此功能！")
 
@@ -605,10 +611,69 @@ class ReportTrack(ReportTrackUI):
         if button != QMessageBox.Yes:
             return
         if is_two:
-            pass
+            text, ok = QInputDialog.getText(self, '明州体检', '请输入另一位同事工号：', QLineEdit.Normal, '')
+            if ok and text:
+                result = self.session.query(MT_TJ_YGDM).filter(MT_TJ_YGDM.yggh == str(text)).scalar()
+                if result:
+                    other_yggh = str(text)
+                    other_ygxm = str2(result.ygxm)
+                    # 双人领取
+                    for row in rows:
+                        if not self.table_track.getItemValueOfKey(row, 'lqry'):
+                            tjbh = self.table_track.getItemValueOfKey(row, 'tjbh')
+                            jlnr = self.table_track.getItemValueOfKey(row, 'wjxm')
+                            data_obj = {
+                                'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
+                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                'jlnr': jlnr,'bz': '双人追踪'
+                                }
+                            data_obj2 = {
+                                'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
+                                'czgh': str(text), 'czxm':other_ygxm , 'czqy': self.login_area,
+                                'jlnr': jlnr,'bz': '双人追踪'
+                                }
+                            tmp.append(data_obj)
+                            tmp.append(data_obj2)
+                            self.table_track.item(row, 2).setText('追踪中')
+                            self.table_track.item(row, 3).setText('%s,%s' %(self.login_name,other_ygxm))
+                            #
+                            result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
+                            if result:
+                                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                                    {
+                                        MT_TJ_BGGL.zzxm: self.login_name,
+                                        MT_TJ_BGGL.zzgh: self.login_id,
+                                        MT_TJ_BGGL.zzxm2: other_ygxm,
+                                        MT_TJ_BGGL.zzgh2: other_yggh,
+                                        MT_TJ_BGGL.zzrq: cur_datetime(),
+                                        MT_TJ_BGGL.bgzt: '0',
+                                    }
+                                )
+                            else:
+                                self.session.bulk_insert_mappings(MT_TJ_BGGL, [
+                                    {'tjbh': tjbh, 'bgzt': '0', 'zzxm': self.login_name, 'zzgh': self.login_id,'zzxm2': other_ygxm, 'zzgh2': other_yggh,'zzrq': cur_datetime()}
+                                ])
+                            self.session.commit()
+
+                            if len(rows) == 1:
+                                mes_about(self, '领取成功！')
+                    if tmp:
+                        try:
+                            self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
+                            self.session.commit()
+                            if len(rows) > 1:
+                                mes_about(self, '领取成功！')
+                        except Exception as e:
+                            self.session.rollback()
+                            mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
+                else:
+                    mes_about(self,'该工号不存在，请确认后重新输入！')
+            else:
+                pass
         else:
             for row in rows:
                 if not self.table_track.getItemValueOfKey(row,'lqry'):
+
                     data_obj = {'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': '', 'mxbh': '',
                                 'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area, 'jlnr': None,
                                 'bz': None}
@@ -630,7 +695,8 @@ class ReportTrack(ReportTrackUI):
                                 MT_TJ_BGGL.bgzt: '0',
                             }
                         )
-                    else:self.session.bulk_insert_mappings(MT_TJ_BGGL, [{'tjbh':tjbh,'bgzt':'0','zzxm':self.login_name,'zzgh':self.login_id,'zzrq':cur_datetime()}])
+                    else:
+                        self.session.bulk_insert_mappings(MT_TJ_BGGL, [{'tjbh':tjbh,'bgzt':'0','zzxm':self.login_name,'zzgh':self.login_id,'zzrq':cur_datetime()}])
                     self.session.commit()
 
                     if len(rows)==1:
@@ -1047,7 +1113,10 @@ class ReportPopWidget(Dialog):
         film = {}
         results = self.session.execute(get_film_num(tjbh))
         for result in results:
-            film[result[0]] = result[1]
+            if result[0] in list(film.keys()):
+                film[result[0]] = film[result[0]] + result[1]
+            else:
+                film[result[0]] = result[1]
         # 更新
         self.init_film(film)
         # 获取未结束项目
@@ -1086,6 +1155,7 @@ class ReportPopWidget(Dialog):
         self.lb_count_dr = FilmLable()
         self.lb_count_ct = FilmLable()
         self.lb_count_mri = FilmLable()
+        self.lb_count_rx = FilmLable()
         lt_middle.addWidget(QLabel('DR：'))
         lt_middle.addWidget(self.lb_count_dr)
         lt_middle.addSpacing(10)
@@ -1095,6 +1165,8 @@ class ReportPopWidget(Dialog):
         lt_middle.addWidget(QLabel('MRI：'))
         lt_middle.addWidget(self.lb_count_mri)
         lt_middle.addSpacing(10)
+        lt_middle.addWidget(QLabel('钼靶：'))
+        lt_middle.addWidget(self.lb_count_rx)
         lt_middle.addStretch()
         self.gp_middle.setLayout(lt_middle)
         ######################未结束项目###################################
@@ -1140,7 +1212,8 @@ class ReportPopWidget(Dialog):
         self.lb_count_dr.setText(str(film.get('DR','')))
         self.lb_count_ct.setText(str(film.get('CT', '')))
         self.lb_count_mri.setText(str(film.get('MRI', '')))
-        self.gp_middle.setTitle('胶片数量(%s)' %str(film.get('DR',0)+film.get('CT',0)+film.get('MRI',0)))
+        self.lb_count_rx.setText(str(film.get('RX', '')))
+        self.gp_middle.setTitle('胶片数量(%s)' %str(film.get('DR',0)+film.get('CT',0)+film.get('MRI',0)+film.get('RX',0)))
 
 class FilmLable(QLabel):
 
@@ -1205,3 +1278,4 @@ class ItemTable(TableWidget):
         self.setColumnWidth(1, 60)
         self.setColumnWidth(2, 180)
         self.horizontalHeader().setStretchLastSection(True)
+

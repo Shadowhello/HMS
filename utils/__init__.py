@@ -3,7 +3,7 @@ from .config_parse import *
 from .base import *
 from .envir_report import set_report_env
 from .buildbarcode import BarCodeBuild
-from .api import request_get,request_create_report,sms_api,api_file_down,api_print
+from .api import request_get,request_create_report,sms_api,api_file_down,api_print,trans_pacs_pic
 from .dbconn import get_wx_session
 from .printPdf import print_pdf_gsprint
 from .pdfmanager import pdfSplit

@@ -47,6 +47,20 @@ class CefWidget(QWidget):
         if self.browser:
             self.browser.LoadUrl(url)
 
+    def load(self,url):
+        # 已完成初始化
+        if self.browser:
+            if self.is_first:
+                self.load_new_url(url)
+            else:
+                self.embedBrowser(url)
+        else:
+            self.embedBrowser(url)
+
+    def reload(self):
+        if self.browser:
+            self.browser.Reload()
+
     def getHandle(self):
         if self.hidden_window:
             # PyQt5 on Linux

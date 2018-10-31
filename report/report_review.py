@@ -1,5 +1,5 @@
 from report.report_review_ui import *
-from widgets import QBrowser,CefWidget
+from widgets import QBrowser
 
 import webbrowser
 

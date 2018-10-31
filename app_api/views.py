@@ -1,7 +1,7 @@
 from flask import send_file,make_response,request,jsonify,abort,url_for
 from app_api.exception import *
 from app_api.model import *
-import os,ujson,time,urllib.parse,requests
+import zeep,json,base64,os,ujson,time,urllib.parse,requests
 import mimetypes,subprocess
 from utils import gol,str2
 from app_api.dbconn import *
@@ -18,6 +18,38 @@ def init_views(app,db,queue=None):
     @app.route("/")
     def static_create():
         return url_for('static', filename='/css/report.css')
+
+    # 获取彩超、内镜图像
+    @app.route('/api/pacs/pic/<string:tjbh>/<string:ksbm>/<string:xmbh>', methods=['POST'])
+    def get_pacs_pic(tjbh, ksbm,xmbh):
+        url = "http://10.8.200.220:7059/WebGetFileView.asmx?WSDL"
+        client = zeep.Client(url)
+        try:
+            result = json.loads(client.service.f_GetUISFilesByTJ_IID(tjbh + xmbh))
+            #filenames = []
+            if result['IsSuccess'] == 'true':
+                sql = "DELETE FROM TJ_PACS_PIC WHERE tjbh='%s' and zhbh ='%s';" % (tjbh, xmbh)
+                db.session.execute(sql)
+                pic_datas = result['Datas']
+                count = 0
+                for pic_data in pic_datas:
+                    count = count + 1
+                    pic_name = '%s_%s_%s.jpg' % (tjbh, xmbh, count)
+                    pic_pk = '%s%s' % (tjbh, xmbh)
+                    filename = os.path.join("D:\space\pic",pic_name )
+                    with open(filename, "wb") as f:
+                        f.write(base64.b64decode(pic_data))
+
+                    sql = "INSERT INTO TJ_PACS_PIC(TJBH,KSBM,PICPATH,PICNAME,ZHBH,PATH,PK)VALUES('%s','%s','%s','%s','%s','%s','%s')" %(
+                        tjbh,ksbm,pic_name,pic_name,xmbh,pic_name,pic_pk
+                    )
+                    db.session.execute(sql)
+                    # filenames.append(filename)
+                return ujson.dumps({'code': 1, 'mes': '图片传输成功', 'data': ''})
+            abort(404)
+        except Exception as e:
+            print(e)
+            abort(404)
 
     #二维码生成
     # @app.route('/api/qrcode/post?tjbh=<string:tjbh>&xm=<string:xm>&sfzh=<string:sfzh>&sjhm=<string:sjhm>&login_id=<string:login_id>', methods=['POST'])
@@ -142,6 +174,12 @@ def init_views(app,db,queue=None):
     @app.route('/api/report/down/pdf/<int:tjbh>', methods=['GET'])
     def report_down(tjbh):
         print(' %s：客户端(%s)：%s报告下载请求！' % (cur_datetime(), request.remote_addr,tjbh))
+        if len(str(tjbh)) == 8:
+            tjbh = '%09d' % tjbh
+        elif len(str(tjbh)) == 9:
+            tjbh = str(tjbh)
+        else:
+            abort(404)
         # 当前
         result = db.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
         if result:

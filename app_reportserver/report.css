@@ -11,7 +11,7 @@ body{
     color:#000000;
     font-size:12px;
     margin-top:5px;
-    font-family:宋体;
+    font-family:新宋体;
 }
 ul,ol{
     list-style-type:none;
@@ -92,7 +92,7 @@ select,input,img,select{
     border:0px solid #000;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -108,7 +108,7 @@ select,input,img,select{
     border:0px solid #000;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -120,7 +120,7 @@ select,input,img,select{
 .user_td_label{
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     text-align:right;
     valign:middle;
@@ -129,7 +129,7 @@ select,input,img,select{
 /*用户标签 对应的值*/
 .user_td_value{
     font-size: 24px;          /*文字大小*/
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     width:180px;
     height:60px;
@@ -140,7 +140,7 @@ select,input,img,select{
 /*用户标签 对应的值*/
 .user_td_value2{
     font-size: 28px;          /*文字大小*/
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     height:auto;
     valign:middle;
@@ -197,7 +197,7 @@ select,input,img,select{
 .user_td{
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     align:center;
     valign:middle;
@@ -260,6 +260,65 @@ select,input,img,select{
 }
 
 
+.table_pb {
+    border-radius:5px;
+    table-layout: fixed;
+    height:auto;
+    width:80%;
+    border:1px solid #000;
+    cellspacing:0px;
+}
+
+.tr_pb{
+    height:50px;
+    text-align:center;
+    border:1px solid #000;
+    font-size: 28px;          /*文字大小*/
+    font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+.tr_pb2{
+    height:50px;
+    text-align:center;
+    border:1px solid #000;
+    font-size: 28px;          /*文字大小*/
+    font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+.td_pb{
+    border:1px solid #000;
+    width: 100%;
+}
+
+.td_pb2{
+    border:1px solid #000;
+    width: 50%;
+}
+
+.w42{
+    letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+    margin-right:-2em; /*同上*/
+    position: relative;
+    left: 23px;
+}
+.w43{
+    letter-spacing:0.5em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-3）/(3-1)=0.5em */
+    margin-right:-0.5em; /*同上*/
+    position: relative;
+    left: 19px;
+}
+
+.w32{
+    letter-spacing:1em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（3-2）/(2-1)=1em */
+    margin-right:-1em; /*同上*/
+    position: relative;
+    left: 21px;
+}
+
 .tj_pb{
     color:#000000;
     position:relative;  /*absolute*/
@@ -268,8 +327,20 @@ select,input,img,select{
     left:0px;
     height:auto;
     font-size: 28px;          /*文字大小*/
+    font-family:微软雅黑;    /*文本的字体*/
+    font-style: normal;     /*normal:默认值  italic:斜体*/
+}
+
+.tj_pb2{
+    color:#000000;
+    position:relative;  /*absolute*/
+    display:inline-block;
+    text-align:left;
+    left:0px;
+    height:auto;
+    font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:KaiTi;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -279,9 +350,9 @@ select,input,img,select{
     left:0px;
     width:auto;
     height:auto;
-    font-size: 16px;          /*文字大小*/
-    font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-size: 24px;          /*文字大小*/
+    font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+    font-family:微软雅黑;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -295,9 +366,9 @@ select,input,img,select{
      top:0px;
      height:auto;
      width:auto;
-     font-size: 28px;          /*文字大小*/
+     font-size: 24px;          /*文字大小*/
      font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-     font-family:宋体;    /*文本的字体*/
+     font-family:微软雅黑;    /*文本的字体*/
      font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -308,14 +379,23 @@ select,input,img,select{
      height:auto;
      width:auto;
      line-height:1.5;
-     font-size: 28px;          /*文字大小*/
+     font-size: 24px;          /*文字大小*/
      font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-     font-family:宋体;    /*文本的字体*/
+     font-family:微软雅黑;    /*文本的字体*/
      font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
 .tj_xj_content2{
     height:35px;
+}
+
+/*温馨提示*/
+.table_td_wxts{
+     line-height:1.5;
+     font-size: 24px;          /*文字大小*/
+     font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
+     font-family:微软雅黑;    /*文本的字体*/
+     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
 table{
@@ -324,7 +404,7 @@ table{
     width:100%;
     font-size: 24px;          /*文字大小*/
     font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
     border-top:3px solid #000;
     border-collapse:collapse;
@@ -336,7 +416,7 @@ caption{
     text-align:left;
     font-size: 28px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -353,7 +433,7 @@ tbody{
     align:left;
     font-size: 24px;          /*文字大小*/
     font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -393,7 +473,7 @@ td{
     align:left;
     font-size: 26px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -402,6 +482,7 @@ td{
 }
 
 .cachet{
+    width:100%;
     background-image:url('F:/HMS/app_reportserver/cachet.png');
     background-repeat:no-repeat;
     background-position:top right;
@@ -452,7 +533,7 @@ p{
     height:auto;
     font-size: 16px;          /*文字大小*/
     font-weight: 700;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-    font-family:宋体;    /*文本的字体*/
+    font-family:新宋体;    /*文本的字体*/
     font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 
@@ -466,7 +547,7 @@ p{
      width:auto;
      font-size: 24px;          /*文字大小*/
      font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
-     font-family:宋体;    /*文本的字体*/
+     font-family:新宋体;    /*文本的字体*/
      font-style: normal;     /*normal:默认值  italic:斜体*/
 }
 .table_health{

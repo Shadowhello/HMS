@@ -84,7 +84,7 @@ class ReportEquipUser(QGroupBox):
         self.btn_audit = ToolButton(Icon('样本签收'),'取消审核')
         ###################基本信息  第一行##################################
         lt_main.addWidget(QLabel('审核医生：'), 0, 0, 1, 1)
-        lt_main.addWidget(self.lb__audit_user, 0, 1, 1, 1)
+        lt_main.addWidget(self.lb_audit_user, 0, 1, 1, 1)
         lt_main.addWidget(QLabel('审核时间：'), 1, 0, 1, 1)
         lt_main.addWidget(self.lb_audit_time, 1, 1, 1, 1)
         # 按钮

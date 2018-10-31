@@ -201,7 +201,7 @@ if __name__ =="__main__":
     engine = create_engine('mssql+pymssql://bsuser:admin2389@10.8.200.201:1433/tjxt', encoding='utf8', echo=False)
     session = sessionmaker(bind=engine)()
     #  '2018-01-10','2018-01-21'
-    results = session.execute(SQL_NCD %('2018-09-11','2018-10-12')).fetchall()
+    results = session.execute(SQL_NCD %('2018-10-20','2018-11-01')).fetchall()
     count = 0
     #ryxx = {'tjbh':'','xm':'','xb':'','nl':0,'sjhm':'','sfzh':'','dwbh':'','dwmc':'','addr':'','ysje':0.00,
     #       'djrq':'','tjrq':'','qdrq':'','zjrq':'','shrq':'','zjys':'','shys':''}

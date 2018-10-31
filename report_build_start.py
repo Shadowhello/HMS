@@ -36,10 +36,13 @@ from utils.bmodel import *
 import gc
 
 def report_run_api(queue):
-    try:
-        report_run(queue)
-    except Exception as e:
-        print("报告服务运行出错，错误信息：%s" %e)
+    import cgitb
+    cgitb.enable(logdir="./error/",format="text")
+    report_run(queue)
+    # try:
+    #     report_run(queue)
+    # except Exception as e:
+    #     print("报告服务运行出错，错误信息：%s" %e)
 
 def report_run(queue):
     #######################初始化 全局参数######################################
@@ -147,6 +150,7 @@ def report_run(queue):
             # print('HTML主文件：%s' % pdf_data_obj.get_body_html)
             if action == 'pdf':
                 pdf_options['footer-left'] =footer_user  %i_user['tjbh']
+                pdf_toc = {'dump-default-toc-xsl':'pdf_toc'}
                 # pprint(pdf_options)
                 ######################### 生成 PDF #######################
                 pdfkit.from_file(
@@ -156,6 +160,7 @@ def report_run(queue):
                     configuration=pdf_config,          # (optional) instance of pdfkit.configuration.Configuration()
                     cover=pdf_data_obj.get_head_html,  # (optional) string with url/filename with a cover html page
                     css=pdf_css                        # (optional) string with path to css file which will be added to a single input file
+
                 )
                 time_end2 = time.time()
                 print("%s: %s PDF报告生成成功！耗时：%s " %(cur_datetime(),tjbh,time_end2 - time_start))
@@ -343,9 +348,10 @@ class PdfData(object):
             self.user_data['zjgh'] = result.zjys
             self.user_data['zjxm'] = str2(result.zjxm)
             self.user_data['zjrq'] = str(result.zjrq)[0:19]
-            self.user_data['shgh'] = result.shys
-            self.user_data['shxm'] = str2(result.shxm)
-            self.user_data['shrq'] = str(result.shrq)[0:19]
+            if result.shys:
+                self.user_data['shgh'] = result.shys
+                self.user_data['shxm'] = str2(result.shxm)
+                self.user_data['shrq'] = str(result.shrq)[0:19]
             #########################################
             if result.io_jkcf=='1':
                 self.io_jkcf = True
@@ -613,7 +619,7 @@ class PdfData(object):
                         self.pic['0806'] = file_local.replace(self.html_path, '')
                     else:
                         self.pic['0806'] = file_local
-            # 本地测试
+            #本地测试
             # if result:
             #     if flag:
             #         file_local = os.path.join(self.get_html_img_dir, '%s_%s.png' % (result.tjbh, result.xmbh))
@@ -927,5 +933,6 @@ if __name__ =='__main__':
     # results = session.execute(sql3).fetchall()
     # for result in results:
     #     q.put({'tjbh': result[0], 'action': 'pdf'})
-    q.put({'tjbh': '141440021', 'action': 'pdf'})
+    # q.put({'tjbh': '166647427', 'action': 'pdf'})
+    q.put({'tjbh': '165574237', 'action': 'pdf'})
     report_run(q)

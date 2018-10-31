@@ -15,6 +15,25 @@ from utils import gol
 # print(response.content)         # 以字节流形式打印
 # print(response.json())          # 同json.loads(response.text)
 
+def trans_pacs_pic(tjbh,ksbm,xmbh):
+    url_default = "http://10.7.200.101:4009/api/pacs/pic/%s/%s/%s" %(tjbh,ksbm,xmbh)
+    url_config = gol.get_value('api_pacs_pic','')
+    if url_config:
+        url = url_config %(tjbh,ksbm,xmbh)
+    else:
+        url = url_default
+    try:
+        response = requests.post(url)
+        if response.status_code == 200:
+            if response.json()['code'] == 1:
+                return True
+            else:
+                return False
+    except Exception as e:
+        return False
+
+
+
 # 发送短信
 def sms_api(mobile,context):
     url = "http://10.8.200.103/MzyySoa/soa/sendSms"
@@ -196,7 +215,7 @@ if __name__=="__main__":
     # # 处理PDF 生成的
     # # sql = "SELECT TJBH FROM TJ_BGGL WHERE SYRQ>='2018-09-28'"
     # #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SUMOVER='1' AND SHRQ>='2018-09-01' AND dybj IS NULL AND (del <> '1' or del is null) AND tjqy IN ('1','2','3','4')  "
-    # set_env()
+    set_env()
     # # # 网络打印
     # #
     # session = gol.get_value('tjxt_session_local')
@@ -210,6 +229,6 @@ if __name__=="__main__":
     # for result in results:
     #     #request_create_report(result[0], 'html')
     #     request_create_report(result[0], 'pdf')
-    print(get_barcode_wx('测试5','330227199902040663','13736093866'))
-    #request_create_report('131071173','pdf')
+    #print(get_barcode_wx('测试5','330227199902040663','13736093866'))
+    request_create_report('166773821','pdf')
     #request_post_wx()

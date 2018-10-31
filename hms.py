@@ -1,6 +1,5 @@
+# Qt内嵌谷歌引擎BUG太多，实在是不好用->改用开源谷歌引擎  目前部分替换
 from PyQt5.QtCore import PYQT_VERSION_STR,QCoreApplication,Qt
-
-
 # 判断版本号
 if int(PYQT_VERSION_STR.replace('.',''))>=560:
     from PyQt5.QtWebEngineWidgets import *

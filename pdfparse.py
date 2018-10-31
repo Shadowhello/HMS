@@ -130,6 +130,9 @@ class MonitorHandler(FileSystemEventHandler):
                 else:
                     # 解析PDF
                     pdfinfo=txtparse(filename,self.equip_type)
+                    if not pdfinfo:
+                        self.log.info("文件：%s 解析失败！" % filename)
+                        return
                     cost = time.time() - s0
                     self.log.info("文件：%s -> %s 解析完成！耗时：%s秒" %(filename,pdfinfo['file'],str(round(cost,2))))
                     # 合并解析信息

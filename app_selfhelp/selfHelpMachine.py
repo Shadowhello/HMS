@@ -161,12 +161,10 @@ class SelfHelpMachine(Widget):
         # 不存在 则新建
         if not self.gp_keyboard:
             self.gp_keyboard = QGroupBox(self)
-
             rect=self.le_tjbh.geometry()
             width = rect.width()
             bottom = rect.bottom()
             left = rect.left()
-
             # 数字 字母 中文
             btn_names = ['1','2','3','4','5','6','7','8','9','','0','X','ESC','<- 退回','搜索']
             # 一行几个按钮
@@ -178,13 +176,6 @@ class SelfHelpMachine(Widget):
                 # 获取坐标
                 btn_pos_x = i // size
                 btn_pos_y = i % size
-                # # 初始化按钮
-                # if btn_name=='<-':
-                #     btn_obj = QPushButton(Icon("删除128"),'')
-                #     if height//4 >132:
-                #         btn_obj.setIconSize(QSize(128, 128))
-                #     else:
-                #         btn_obj.setIconSize(QSize(64, 64))
                 btn_obj = QPushButton(btn_name)
                 btn_obj.setMinimumWidth(width//10)
                 btn_obj.setFixedHeight(height//4)
@@ -192,7 +183,6 @@ class SelfHelpMachine(Widget):
                 # 添加布局
                 btn_obj.clicked.connect(partial(self.on_btn_obj_click,btn_name))
                 lt_keyboard.addWidget(btn_obj, btn_pos_x, btn_pos_y, 1, 1)
-
 
             lt_keyboard.setHorizontalSpacing(10)               # 设置水平间距
             lt_keyboard.setVerticalSpacing(10)                 # 设置垂直间距

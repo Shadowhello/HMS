@@ -383,7 +383,12 @@ class MV_RYXX(BaseModel):
     def pdf_dict(self):
         sjhm = getattr(self, "sjhm", '')
         if not sjhm:
-            sjhm='&nbsp;'
+            sjhm ='&nbsp;'
+        else:
+            if len(sjhm)>=11:
+                sjhm =  sjhm[0:3]+'-'+sjhm[3:7]+'-'+sjhm[-4:]
+            else:
+                sjhm = sjhm
         return {
                 "tjbh": getattr(self, "tjbh", ''),
                 "xm": str2(getattr(self, "xm", '')),
@@ -403,10 +408,13 @@ class MV_RYXX(BaseModel):
 
     @property
     def get_dwmc(self):
-        if str2(getattr(self, "depart")):
-            return "%s(%s)" %(str2(getattr(self, "dwmc", '')),str2(getattr(self, "depart")))
+        if str2(getattr(self, "bz")):
+            return str2(getattr(self, "bz"))
         else:
-            return str2(getattr(self, "dwmc", ''))
+            if str2(getattr(self, "depart")):
+                return "%s(%s)" %(str2(getattr(self, "dwmc", '')),str2(getattr(self, "depart")))
+            else:
+                return str2(getattr(self, "dwmc", ''))
 
 class MT_TJ_PHOTO(BaseModel):
 
