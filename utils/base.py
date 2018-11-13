@@ -87,12 +87,6 @@ def str2(para):
         if isinstance(para,str):
             if para.isdigit():           # 是否都是数字
                 return para
-            # elif para.isdecimal():       #
-            #     return para
-            # elif para.isalnum():         #是否都是字母或数字
-            #     return para
-            # elif para.isalpha():         #是否否是字母
-            #     return para
             else:
                 try:
                     return para.encode('latin-1').decode('gbk')

@@ -139,7 +139,7 @@ def get_handover_sql(t_start,t_end,area,some_where):
     return '''
         SELECT '%s' AS QSSJ,'%s' AS JSSJ,CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
 
-        JJXM,JJSJ,SJFS,JSXM,JSSJ
+        JJXM,JJSJ,JSXM,JSSJ
     
         FROM TJ_CZJLB 
         
@@ -151,7 +151,7 @@ def get_handover_sql(t_start,t_end,area,some_where):
         
         %s
         
-        GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+        GROUP BY CZQY,CAST(BZ AS VARCHAR),JJXM,JJSJ,JSXM,JSSJ
         
         ORDER BY CZQY,count(*) DESC ;
         
@@ -163,7 +163,7 @@ def get_handover2_sql(t_start, t_end, area, some_where):
     return '''
         SELECT '%s' AS QSSJ,'%s' AS JSSJ,LEFT(CZQY,2) as CZQY,CAST(BZ AS VARCHAR) AS SGYS,count(*) as SGSL,
 
-        JJXM,JJSJ,SJFS,JSXM,JSSJ
+        JJXM,JJSJ,JSXM,JSSJ
 
         FROM TJ_CZJLB 
 
@@ -175,7 +175,7 @@ def get_handover2_sql(t_start, t_end, area, some_where):
         
         %s
 
-        GROUP BY LEFT(CZQY,2),CAST(BZ AS VARCHAR),JJXM,JJSJ,SJFS,JSXM,JSSJ
+        GROUP BY LEFT(CZQY,2),CAST(BZ AS VARCHAR),JJXM,JJSJ,JSXM,JSSJ
 
         ORDER BY count(*) DESC ;
 

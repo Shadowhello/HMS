@@ -48,7 +48,7 @@ if __name__ =="__main__":
     # 泌尿科
     engine = create_engine('mssql+pymssql://bsuser:admin2389@10.8.200.201:1433/tjxt', encoding='utf8', echo=False)
     session = sessionmaker(bind=engine)()
-    results = session.execute(SQL_CDC %('2018-10-01','2018-10-29')).fetchall()
+    results = session.execute(SQL_CDC %('2018-11-04','2018-11-12')).fetchall()
 
     datas = []
     cols = ['tjbh', 'xm', 'xb', 'nl', 'sjhm', 'sfzh', 'addr', 'dwmc', 'ysje', 'qdrq', 'xmmc', 'xmjg', 'xmzd', 'jy']
@@ -81,6 +81,6 @@ if __name__ =="__main__":
 
             datas.append(ryxx)
 
-    filename ='C:/Users/Administrator/Desktop/三门核电/1.xlsx'
+    filename ='C:/Users/Administrator/Desktop/三门核电/陈怡-泌尿.xlsx'
     df = pd.DataFrame(data=datas)
     df.to_excel(filename, columns=cols, index=False)

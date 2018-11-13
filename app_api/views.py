@@ -9,7 +9,7 @@ import win32api
 import win32print
 
 # 初始化视图
-def init_views(app,db,queue=None):
+def init_views(app,db,print_queue=None,report_queue=None):
 
     '''
     :param app:         应用程序本身
@@ -96,9 +96,11 @@ def init_views(app,db,queue=None):
         else:
             abort(404)
         mes_obj = {'tjbh':tjbh,'action':filetype}
-        if queue:
+        if report_queue:
             # print('%s 队列插入消息：%s' %(cur_datetime(),ujson.dumps(mes_obj)))
-            queue.put(mes_obj)
+            report_queue.put(mes_obj)
+        else:
+            abort(404)
         if filetype=='html':
             return ujson.dumps({'code': 1, 'mes': 'HTML报告生成', 'data': ''})
         elif filetype=='pdf':
@@ -220,23 +222,36 @@ def init_views(app,db,queue=None):
             abort(404)
         result = db.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
         if result:
-            filename = os.path.join(result.bglj,"%s.pdf" %tjbh)
-        else:
+            if result.bglj:
+                filename = os.path.join(result.bglj,"%s.pdf" %tjbh)
+                if os.path.exists(filename):
+                    mes_obj = {'filename': filename, 'action': 'print', 'printer': printer}
+                    if print_queue:
+                        print_queue.put(mes_obj)
+                        return ujson.dumps({'code': 1, 'mes': '报告打印成功！', 'data': ''})
+
+        # else:
             # 历史
-            session = gol.get_value('tj_cxk')
-            result = session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).order_by(MT_TJ_PDFRUL.CREATETIME.desc()).scalar()
-            if result:
-                filename = os.path.join('D:/pdf/',result.PDFURL)
-            else:
-                filename = os.path.join('D:/tmp/','%s.pdf' %tjbh)
-                url = "http://10.8.200.201:4000/api/file/down/%s/%s" % (tjbh, 'report')
-                request_get(url,filename)
+        session = gol.get_value('tj_cxk')
+        result = session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).order_by(MT_TJ_PDFRUL.CREATETIME.desc()).scalar()
+        if result:
+            filename = os.path.join('D:/pdf/',result.PDFURL)
+        else:
+            filename = os.path.join('D:/tmp/','%s.pdf' %tjbh)
+            url = "http://10.8.200.201:4000/api/file/down/%s/%s" % (tjbh, 'report')
+            request_get(url,filename)
         if os.path.exists(filename):
-            result= print_pdf_gsprint(filename,printer)
-            if result==0:
+            mes_obj = {'filename': filename, 'action': 'print','printer':printer}
+            if print_queue:
+                print_queue.put(mes_obj)
                 return ujson.dumps({'code': 1, 'mes': '报告打印成功！', 'data': ''})
             else:
-                return ujson.dumps({'code': 0, 'mes': '报告打印失败！', 'data': ''})
+                abort(404)
+            # result= print_pdf_gsprint(filename,printer)
+            # if result==0:
+            #     return ujson.dumps({'code': 1, 'mes': '报告打印成功！', 'data': ''})
+            # else:
+            #     return ujson.dumps({'code': 0, 'mes': '报告打印失败！', 'data': ''})
         else:
             abort(404)
 
@@ -320,15 +335,34 @@ def init_views(app,db,queue=None):
             abort(404)
 
     # 程序更新
-    @app.route('/api/version/<string:platform>/<float:version>', methods=['GET'])
-    def update_version(platform,version):
-        print(' %s：(%s)客户端(%s)：版本更新请求！当前版本号：%s' % (cur_datetime(),platform,request.remote_addr, str(version)))
-        result = db.session.query(MT_TJ_UPDATE).filter(MT_TJ_UPDATE.version >version).scalar()
+    @app.route('/api/version_file/<string:platform>/<float:version>', methods=['GET'])
+    def update_file(platform,version):
+        print(' %s：(%s)客户端(%s)：版本文件下载请求！当前版本号：%s' % (cur_datetime(),platform,request.remote_addr, str(version)))
+        if platform=='win7':
+            platform_name ='1'
+        else:
+            platform_name = '0'
+        result = db.session.query(MT_TJ_UPDATE).filter(MT_TJ_UPDATE.version >version,MT_TJ_UPDATE.platform==platform_name).scalar()
         if result:
             response = make_response(send_file(result.ufile, as_attachment=True))
             response.headers['Content-Type'] = mimetypes.guess_type(result.ufile)[0]
             response.headers['Content-Disposition'] = 'attachment; filename={}'.format(result.ufile)
             return response
+        else:
+            abort(404)
+
+    # 程序更新
+    @app.route('/api/version/<string:platform>/<float:version>', methods=['GET'])
+    def update_version(platform, version):
+        print(' %s：(%s)客户端(%s)：版本更新请求！当前版本号：%s' % (cur_datetime(), platform, request.remote_addr, str(version)))
+        if platform == 'win7':
+            platform_name = '1'
+        else:
+            platform_name = '0'
+        result = db.session.query(MT_TJ_UPDATE).filter(MT_TJ_UPDATE.version > version,
+                                                       MT_TJ_UPDATE.platform == platform_name).scalar()
+        if result:
+            return ujson.dumps({'version': result.version, 'describe': str2(result.describe)})
         else:
             abort(404)
 

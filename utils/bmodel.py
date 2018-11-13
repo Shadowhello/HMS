@@ -331,6 +331,8 @@ class MV_RYXX(BaseModel):
     __tablename__ = 'V_RYXX'
 
     tjbh = Column(VARCHAR(20), primary_key=True)
+    tjlx = Column(VARCHAR(10), nullable=False)
+    tjqy = Column(VARCHAR(10), nullable=False)
     xm = Column(VARCHAR(20),nullable=False)
     xb = Column(VARCHAR(20),nullable=False)
     nl = Column(Integer, nullable=False)
@@ -380,15 +382,33 @@ class MV_RYXX(BaseModel):
         }
 
     @property
+    def get_bgjl(self):
+        return {
+            'tjbh':getattr(self, "tjbh"),
+            'bgzt': '1',
+            'djrq': getattr(self, "djrq"),
+            'djgh': getattr(self, "djgh"),
+            'djxm': str2(getattr(self, "djxm")),
+            'qdrq': getattr(self, "qdrq"),
+            'zjrq': getattr(self, "zjrq"),
+            'zjgh': getattr(self, "zjys"),
+            'zjxm': str2(getattr(self, "zjxm")),
+            'shrq': getattr(self, "shrq"),
+            'shgh': getattr(self, "shrq"),
+            'shxm': str2(getattr(self, "shys"))
+        }
+
+    @property
     def pdf_dict(self):
         sjhm = getattr(self, "sjhm", '')
         if not sjhm:
             sjhm ='&nbsp;'
         else:
-            if len(sjhm)>=11:
-                sjhm =  sjhm[0:3]+'-'+sjhm[3:7]+'-'+sjhm[-4:]
-            else:
-                sjhm = sjhm
+            sjhm = sjhm
+            # if len(sjhm)>=11:
+            #     sjhm =  sjhm[0:3]+'-'+sjhm[3:7]+'-'+sjhm[-4:]
+            # else:
+            #     sjhm = sjhm
         return {
                 "tjbh": getattr(self, "tjbh", ''),
                 "xm": str2(getattr(self, "xm", '')),

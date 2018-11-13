@@ -1,4 +1,5 @@
 from widgets.cwidget import *
+from .model import *
 
 # 报告追踪
 class ReportTrackUI(Widget):
@@ -139,7 +140,7 @@ class SendButton(QToolButton):
 
 class TaskButton(QToolButton):
 
-    menu_clicked =pyqtSignal(bool)
+    menu_clicked =pyqtSignal(bool,dict)
 
     def __init__(self,parent=None):
         super(TaskButton,self).__init__(parent)
@@ -151,16 +152,22 @@ class TaskButton(QToolButton):
         self.setPopupMode(QToolButton.InstantPopup)
         self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         menu=QMenu()
-        # menu.addAction(Icon("三人"), "->三人领取", self.on_btn_task_three)
-        menu.addAction(Icon("双人"), "->双人领取", self.on_btn_task_two)
-        menu.addAction(Icon("单人"), "->单人领取", self.on_btn_task_one)
+        menu.addAction(Icon("双人"), "->三人领取", partial(self.on_btn_task_click,3))
+        menu.addAction(Icon("双人"), "->双人领取", partial(self.on_btn_task_click,2))
+        menu.addAction(Icon("单人"), "->单人领取", partial(self.on_btn_task_click,1))
         self.setMenu(menu)
 
-    def on_btn_task_two(self):
-        self.menu_clicked.emit(True)
+    def on_btn_task_click(self,flag:int):
+        if flag>1:
+            dialog = YGGH_Dialog()
+            dialog.user_count = flag
+            dialog.sendData.connect(self.setData)
+            dialog.exec_()
+        else:
+            self.menu_clicked.emit(False,{})
 
-    def on_btn_task_one(self):
-        self.menu_clicked.emit(False)
+    def setData(self,flag:int,ygxx:dict):
+        self.menu_clicked.emit(True,ygxx)
 
 class MyselfButton(QToolButton):
 
@@ -185,5 +192,96 @@ class MyselfButton(QToolButton):
 
     def on_btn_is_finish(self):
         self.menu_clicked.emit(True)
+
+# 获取员工工号
+class YGGH_Dialog(Dialog):
+
+    user_count = 0
+
+    sendData = pyqtSignal(int,dict)
+
+    def __init__(self,parent=None):
+        super(YGGH_Dialog,self).__init__(parent)
+        self.initUI()
+        self.setWindowIcon(Icon('mztj'))
+        self.setWindowTitle('报告追踪')
+        # 定义信号
+        self.buttonBox.accepted.connect(self.on_btn_sure_click)
+        self.buttonBox.rejected.connect(self.reject)
+
+    def on_btn_sure_click(self):
+        if self.user_count==2:
+            if self.lb_user_id_2.text():
+                result = self.session.query(MT_TJ_YGDM).filter(MT_TJ_YGDM.yggh == self.lb_user_id_2.text()).scalar()
+                if result:
+                    self.lb_user_name_2.setText(str2(result.ygxm))
+                else:
+                    self.lb_user_id_2.setText('')
+                    mes_about(self,'工号有误，请重新输入！')
+                    return
+            else:
+                mes_about(self,'请员工的工号')
+                return
+            self.sendData.emit(2,{self.lb_user_id_2.text():self.lb_user_name_2.text()})
+            self.accept()
+        else:
+            if self.lb_user_id_2.text() and self.lb_user_id_3.text():
+                result = self.session.query(MT_TJ_YGDM).filter(MT_TJ_YGDM.yggh == self.lb_user_id_2.text()).scalar()
+                if result:
+                    self.lb_user_name_2.setText(str2(result.ygxm))
+                else:
+                    self.lb_user_id_2.setText('')
+                    mes_about(self, '工号有误，请重新输入！')
+                    return
+                result = self.session.query(MT_TJ_YGDM).filter(MT_TJ_YGDM.yggh == self.lb_user_id_3.text()).scalar()
+                if result:
+                    self.lb_user_name_3.setText(str2(result.ygxm))
+                else:
+                    self.lb_user_id_3.setText('')
+                    mes_about(self, '工号有误，请重新输入！')
+                    return
+                self.sendData.emit(3, {
+                    self.lb_user_id_2.text(): self.lb_user_name_2.text(),
+                    self.lb_user_id_3.text(): self.lb_user_name_3.text(),
+                })
+                self.accept()
+            else:
+                mes_about(self,'请输入员工的工号')
+                return
+
+    def initUI(self):
+        lt_main = QVBoxLayout()
+        lt_main.setAlignment(Qt.AlignCenter)
+        gp_user = QGroupBox('追踪护士->选择')
+        lt_user = QFormLayout()
+        lt_user.setLabelAlignment(Qt.AlignRight)
+        lt_user.setFormAlignment(Qt.AlignHCenter|Qt.AlignVCenter)
+        self.lb_user_id_1 = QLineEdit()
+        self.lb_user_id_1.setText(self.login_id)
+        self.lb_user_id_1.setDisabled(True)
+        self.lb_user_name_1 = QLabel(self.login_name)
+        self.lb_user_id_2 = QLineEdit()
+        self.lb_user_id_2.setPlaceholderText("输工号2回车")
+        self.lb_user_name_2 = QLabel()
+        self.lb_user_id_3 = QLineEdit()
+        self.lb_user_id_3.setPlaceholderText("输工号2回车")
+        self.lb_user_name_3 = QLabel()
+        # 添加子布局
+        lt_user.addRow(self.lb_user_id_1, self.lb_user_name_1)
+        lt_user.addRow(self.lb_user_id_2, self.lb_user_name_2)
+        lt_user.addRow(self.lb_user_id_3, self.lb_user_name_3)
+        gp_user.setLayout(lt_user)
+        # 按钮组
+        self.buttonBox=QDialogButtonBox()
+        self.buttonBox.addButton("确定",QDialogButtonBox.YesRole)
+        self.buttonBox.addButton("取消", QDialogButtonBox.NoRole)
+        self.buttonBox.setCenterButtons(True)
+
+        lt_main.addSpacing(20)
+        lt_main.addWidget(gp_user)
+        lt_main.addSpacing(20)
+        lt_main.addWidget(self.buttonBox)
+        self.setLayout(lt_main)
+
 
 

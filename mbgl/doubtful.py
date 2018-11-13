@@ -64,9 +64,8 @@ class Doubtful(Widget):
         self.table.export()
 
     def initUI(self):
-        main_layout = QVBoxLayout()
+        lt_main = QVBoxLayout()
         lt_top = QHBoxLayout()
-        lt_bottom = QHBoxLayout()
         search_group = QGroupBox('条件检索')
         search_layout = QGridLayout()
 
@@ -85,21 +84,19 @@ class Doubtful(Widget):
         self.tj_dw = TUintGroup(self.dwmc_bh,self.dwmc_py)       # 体检单位
 
         self.btn_query = ToolButton(Icon('query'),'查询')
-        self.btn_export = ToolButton(Icon('导出'), '导出')
 
         self.btn_query.setFixedWidth(64)
         self.btn_query.setFixedHeight(64)
         self.btn_query.setAutoRaise(False)
-        self.btn_export.setFixedWidth(64)
-        self.btn_export.setFixedHeight(64)
-        self.btn_export.setAutoRaise(False)
+        # self.btn_export.setFixedWidth(64)
+        # self.btn_export.setFixedHeight(64)
+        # self.btn_export.setAutoRaise(False)
 
         # 第一列
         search_layout.addWidget(self.cb_is_gxy, 0, 0, 1, 1)
         search_layout.addItem(self.tj_dw, 1, 0, 1, 5)
         # 第二列
         search_layout.addWidget(self.cb_is_gxt, 0, 1, 1, 1)
-
         # 第三列
         search_layout.addWidget(self.cb_is_jzx, 0, 2, 1, 1)
         # 第四列
@@ -109,11 +106,7 @@ class Doubtful(Widget):
         # 第六列
         search_layout.addItem(self.dg_rq, 0, 5, 1, 4)
         search_layout.addItem(self.mg_je, 1, 5, 1, 4)
-
-
         search_layout.addWidget(self.btn_query, 0, 9, 2, 2)
-
-        search_layout.addWidget(self.btn_export, 0, 11, 2, 2)
 
         search_layout.setHorizontalSpacing(10)            #设置水平间距
         search_layout.setVerticalSpacing(10)              #设置垂直间距
@@ -124,6 +117,10 @@ class Doubtful(Widget):
 
 
         self.gp_quick_search = QuickSearchGroup()
+        
+        lt_top.addWidget(search_group)
+        lt_top.addWidget(self.gp_quick_search)
+        # lt_top.addStretch()
 
         self.cols = OrderedDict([('tjbh','体检编号'),
                                  ('xm','姓名'),
@@ -149,21 +146,40 @@ class Doubtful(Widget):
                                  ('lbp', '舒张压'),
                                  ('dwmc', '单位名称')
                                  ])
+        #### 刷选表格 ###########################################
         self.table = SlowHealthTable(self.cols)
         self.table.setContextMenuPolicy(Qt.CustomContextMenu)              ######允许右键产生子菜单
         self.table.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
-        self.gp_bottom = QGroupBox('疑似列表(0)')
+        self.gp_middle = QGroupBox('疑似列表(0)')
+        lt_middle = QHBoxLayout()
+        lt_middle.addWidget(self.table)
+        self.gp_middle.setLayout(lt_middle)
+        ########### 功能区 #################
+        lt_bottom = QHBoxLayout()
+        gp_bottom = QGroupBox()
+        # 按钮功能区
+        self.btn_item = QPushButton(Icon('项目'), '项目查看')         # 查看 LIS 结果
+        self.btn_czjl = QPushButton(Icon('操作'), '操作记录')         # 查看体检记录
+        self.btn_his_visit = QPushButton(Icon('就诊'), '历史就诊')      # 查看历史就诊
+        self.btn_cur_visit = QPushButton(Icon('就诊'), '预约就诊')      # 查看体检记录
+        self.btn_phone = QPushButton(Icon('电话'),'电话记录')         # 查看电话记录
+        self.btn_sms = QPushButton(Icon('短信'),'短信记录')           # 查看短信记录
+        self.btn_export = QPushButton(Icon('导出'), '数据导出')       # 数据导出
 
-        lt_bottom.addWidget(self.table)
-        self.gp_bottom.setLayout(lt_bottom)
-        lt_top.addWidget(search_group)
-        lt_top.addWidget(self.gp_quick_search)
-        # lt_top.addStretch()
-
-        main_layout.addLayout(lt_top)
-        #main_layout.addStretch()
-        main_layout.addWidget(self.gp_bottom)
-        self.setLayout(main_layout)
+        lt_bottom.addWidget(self.btn_item)
+        lt_bottom.addWidget(self.btn_czjl)
+        lt_bottom.addWidget(self.btn_his_visit)
+        lt_bottom.addWidget(self.btn_cur_visit)
+        lt_bottom.addWidget(self.btn_phone)
+        lt_bottom.addWidget(self.btn_sms)
+        lt_bottom.addWidget(self.btn_export)
+        gp_bottom.setLayout(lt_bottom)
+        # 添加布局
+        lt_main.addLayout(lt_top)
+        #lt_main.addStretch()
+        lt_main.addWidget(self.gp_middle)
+        lt_main.addWidget(gp_bottom)
+        self.setLayout(lt_main)
 
     def onCheckState(self,p_str,is_check:int):
         if is_check == 2:
@@ -192,7 +208,7 @@ class Doubtful(Widget):
         results = self.session.execute(sql).fetchall()
         new_results = [dict(zip(cols,result)) for result in results]
         self.table.load(new_results)
-        self.gp_bottom.setTitle('疑似列表(%s)' %self.table.rowCount())
+        self.gp_middle.setTitle('疑似列表(%s)' %self.table.rowCount())
         mes_about(self, '检索出 %s 条数据！' %self.table.rowCount())
 
         # results = self.session.query(MT_MB_YSKH).filter(MT_MB_YSKH.qdrq == '2018-06-30').all()

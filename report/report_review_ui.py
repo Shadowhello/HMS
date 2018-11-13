@@ -50,7 +50,7 @@ class ReportReviewUI(Widget):
         self.gp_where_search.addWidget(self.btn_query, 0, 7, 2, 2)
         self.gp_quick_search = QuickSearchGroup(1)
         lt_1.addWidget(self.gp_quick_search)
-        # lt_1.addWidget(self.btn_review_batch)
+        lt_1.addWidget(self.btn_review_batch)
         # lt_1.addWidget(self.btn_review_mode)
         lt_1.addWidget(self.btn_review_mode2)
 
@@ -82,8 +82,8 @@ class ReportReviewUI(Widget):
         lt_left.addWidget(self.gp_review_user,1)
 
         ####################右侧布局#####################
-        self.wv_report_equip = WebView()
-        #self.wv_report_equip = QBrowser(self)
+        #self.wv_report_equip = WebView()
+        self.wv_report_equip = CefWidget(self)
         # self.wv_report_page = self.wv_report_equip.page().mainFrame()
         # self.wv_report_page.setScrollBarPolicy(Qt.Vertical, Qt.ScrollBarAlwaysOff)#去掉滑动条
         # self.wv_report_page.setScrollBarPolicy(Qt.Horizontal, Qt.ScrollBarAlwaysOff)

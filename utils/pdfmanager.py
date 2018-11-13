@@ -406,12 +406,13 @@ def pdfSplit(pdf_main,pdf_part):
 #https://blog.csdn.net/xingxtao/article/details/79056341
 
 if __name__=="__main__":
+    pdf2pic(r"E:/165574224_04.pdf")
     # 读取txt
-    print(pdf2txt(r'D:\PDF\create\176530032_08.pdf'))
-    # 转换图片
-    #pdf2pic(r'D:\PDF\create\388.pdf')
-    # dir = r'E:\PDF-\04\create'
-    # for filename,_ in fileiter(dir):
-    #     print(txtparse(filename,'04'))
-            # if i.isdigit():
-            #     print(i)
+    # print(pdf2txt(r'D:\PDF\create\176530032_08.pdf'))
+    # # 转换图片
+    # #pdf2pic(r'D:\PDF\create\388.pdf')
+    # # dir = r'E:\PDF-\04\create'
+    # # for filename,_ in fileiter(dir):
+    # #     print(txtparse(filename,'04'))
+    #         # if i.isdigit():
+    #         #     print(i)

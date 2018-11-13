@@ -25,7 +25,11 @@ pdf_html_item_page = '''
             % if kslx=='2' or (kslx=='1' and ksbm in['0001','0038']):
                 <table>
                 <caption>${item}</caption>
-                  <thead>
+                  % if item=='CA125':
+                    <thead class="thead2">
+                  % else:
+                    <thead>
+                  % endif
                     <tr height=35px>
                     <th>项目名称</th>
                     <th>检查结果</th>
@@ -226,3 +230,10 @@ pdf_html_item_page = '''
     </div>
 </div>
 '''
+
+# % if item == 'CA125':
+#     < table
+#     style = "page-break-inside:avoid;" >
+# % else:
+# < table >
+# % endif

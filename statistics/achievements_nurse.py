@@ -14,6 +14,7 @@ class AchievementsNurse(Widget):
         self.btn_query.clicked.connect(self.on_btn_query_click)
         self.table_achieve_sum.itemClicked.connect(self.on_table_achieve_sum_click)
         self.table_achieve_group.itemClicked.connect(self.on_table_achieve_group_click)
+        self.btn_export.clicked.connect(self.on_btn_export_click)
         # 特殊变量 ，用于快速获取
         self.cur_start_time =None       # 当前选择开始时间
         self.cur_end_time = None        # 当前选择结束时间
@@ -95,6 +96,9 @@ class AchievementsNurse(Widget):
         lt_main.addLayout(lt_top)
         lt_main.addLayout(lt_middle)
         self.setLayout(lt_main)
+
+    def on_btn_export_click(self):
+        self.table_achieve_sum.export()
 
     def on_btn_query_click(self):
         self.cur_start_time = self.de_start.text()

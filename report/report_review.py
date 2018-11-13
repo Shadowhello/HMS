@@ -56,6 +56,11 @@ class ReportReview(ReportReviewUI):
 
     # 全屏操作
     def on_btn_review_mode_click(self,is_full):
+        sql = "SELECT 1 FROM GY_DMZD WHERE DMLB='1222' AND SRDM='%s';" %self.login_id
+        result = self.session.execute(sql).fetchall()
+        if not result:
+            mes_about(self,"您没有审阅权限！")
+            return
         if self.table_report_review.rowCount():
             ui = ReportReviewFullScreen(self)
             ui.opened.emit(self.table_report_review.cur_data_set,self.table_report_review.currentIndex().row())
@@ -69,9 +74,26 @@ class ReportReview(ReportReviewUI):
     # 批量审阅
     def on_btn_review_batch_click(self):
         rows = self.table_report_review.isSelectRows()
+        button = mes_warn(self, "温馨提示：批量审阅只适用于招工类型的报告！\n 您确认自动审阅当前选择的 %s 份体检报告？" %len(rows))
+        if button != QMessageBox.Yes:
+            return
+        count = 0
         for row in rows:
-            if self.table_report_review.getItemValueOfKey(row,'tjlx')!='招工':
-                mes_about(self,'非招工报告不允许批量审阅！')
+            tjbh = self.table_report_review.getItemValueOfKey(row,'tjbh')
+            tjlx = self.table_report_review.getItemValueOfKey(row,'tjlx')
+            if tjlx in ['招工','从业'] :
+                if request_create_report(tjbh, 'pdf'):
+                    count = count + 1
+
+        mes_about(self, '审阅结果：报告总数：%s，自动审阅：%s' % (len(rows), count))
+        # 更新状态 生成PDF报告是耗时任务，需再服务端更新状态
+        # sql = "UPDATE TJ_BGGL SET SYRQ=SHRQ WHERE BGZT='2' AND SYRQ IS NULL"
+        # try:
+        #     self.session.execute(sql)
+        #     mes_about(self, '审阅结果：报告总数：%s，自动审阅：%s' % (len(rows), count))
+        # except Exception as e:
+        #     mes_about(self,'自动审阅更新数据库状态出错，错误信息：%s' %e)
+
 
     def on_btn_query_click(self):
         if self.gp_where_search.where_dwbh=='00000':
@@ -152,6 +174,7 @@ class ReportReview(ReportReviewUI):
             item2 = menu.addAction(Icon("报告中心"), "浏览PDF报告")
             item3 = menu.addAction(Icon("报告中心"), "重新生成待审阅报告")
             item4 = menu.addAction(Icon("报告中心"), "重新生成审阅报告")
+            item5 = menu.addAction(Icon("报告中心"), "生成审阅报告")
             action = menu.exec_(self.table_report_review.mapToGlobal(pos))
             tjbh = self.table_report_review.getCurItemValueOfKey('tjbh')
             bgzt = self.table_report_review.getCurItemValueOfKey('bgzt')
@@ -207,6 +230,15 @@ class ReportReview(ReportReviewUI):
                     else:
                         mes_about(self,"重新生成PDF报告失败！")
 
+                elif action == item5:
+                    if self.login_id!='BSSA':
+                        mes_about(self,'您不是管理员，不能使用该功能！')
+                        return
+                    if request_create_report(tjbh, 'pdf'):
+                        mes_about(self,"生成PDF报告成功！")
+                    else:
+                        mes_about(self,"生成PDF报告失败！")
+
 
             else:
                 mes_about(self, '未找到该顾客体检报告！')
@@ -219,11 +251,46 @@ class ReportReview(ReportReviewUI):
         else:
             where_str = " b.XM = '%s' " % p2_str
         results = self.session.execute(get_report_review_sql2(where_str)).fetchall()
-        self.table_report_review.load(results)
-        mes_about(self,'共检索出 %s 条数据！' %self.table_report_review.rowCount())
+        if results:
+            self.table_report_review.load(results)
+            mes_about(self,'共检索出 %s 条数据！' %self.table_report_review.rowCount())
+        else:
+            # 历史的报告或者追踪状态的 或者遗漏的报告
+            if p1_str == 'tjbh':
+                result = self.session.query(MV_RYXX).filter(MV_RYXX.tjbh == p2_str).scalar()
+                if not result:
+                    mes_about(self,'未找到体检编号(%s)相关信息，请确认是否输入正确！' %p2_str)
+                    return
+                if str2(result.tjzt)=='已审核':
+                    # 刷新UI
+                    data =[result.tjzt,result.tjlx,result.tjqy,result.tjbh,str2(result.xm),result.xb,result.nl,'','',str2(result.dwmc),'']
+                    self.table_report_review.load([data])
+                    # 更新数据库
+                    try:
+                        self.session.bulk_insert_mappings(MT_TJ_BGGL, [result.get_bgjl])
+                        self.session.commit()
+                    except Exception as e:
+                        self.session.rollback()
+                        print('插入 MT_TJ_BGGL 记录失败！错误代码：%s' % e)
+                    # 返回消息
+                    if request_create_report(p2_str, 'html'):
+                        mes_about(self,"生成HTML报告成功！")
+
+
+                elif str2(result.tjzt)=='已审阅':
+                    mes_about(self,"当前报告已审阅，不应该出现此选项！")
+                else:
+                    mes_about(self,'该顾客体检状态(%s)，只有医生审核后才能进行报告审阅！' %str2(result.tjzt))
+
+
 
     # 审阅/取消审阅
     def on_btn_review_click(self,syzt:bool,num:int):
+        sql = "SELECT 1 FROM GY_DMZD WHERE DMLB='1222' AND SRDM='%s';" %self.login_id
+        result = self.session.execute(sql).fetchall()
+        if not result:
+            mes_about(self,"您没有审阅权限！")
+            return
         # 未双击过查看过报告 不允许审核
         if not self.cur_tjbh:
             mes_about(self,'您还未打开报告，不允许审阅')

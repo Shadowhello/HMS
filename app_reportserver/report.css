@@ -1,4 +1,4 @@
-/* 初始化*/
+﻿/* 初始化*/
 
 body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div{
     margin:0;
@@ -428,6 +428,14 @@ thead{
     /* display: table-row-group;         /* 解决 表头重复和文字重叠的问题. */
 }
 
+thead2{
+    text-align:left;
+    page-break-inside: avoid !important;
+    /*display:table-header-group; */
+    border-bottom:3px solid #000;
+    display: table-row-group;         /* 解决 表头重复和文字重叠的问题. */
+}
+
 /*表格 数据行 */
 tbody{
     align:left;
@@ -549,6 +557,8 @@ p{
      font-weight: normal;        /*值从100-900，文字粗细,700约等于Bold，不推荐使用font-weight:bold; */
      font-family:新宋体;    /*文本的字体*/
      font-style: normal;     /*normal:默认值  italic:斜体*/
+     text-align: justify;
+     text-justify: inter-ideograph;/*IE*/
 }
 .table_health{
     page-break-inside:avoid;

@@ -6,14 +6,14 @@ def webservice_film():
     url = "http://10.8.200.24/FilmService/WebFilmService.asmx?WSDL"
     client = zeep.Client(url)
     # 获取打印机列表
-    #result = client.service.GetPrinters()
+    result = client.service.GetPrinters()
     # 根据检查号获取胶片
-    result2 = client.service.GetFilmByAccessno(110016983684)
+    #result2 = client.service.GetFilmByAccessno(110016983684)
     #打印出结果
-    print(result2)
+    print(result)
 
 
-# 胶片打印服务
+# PACS 图像服务
 def webservice_pacs(tjbh,xmbh,path):
     url = "http://10.8.200.220:7059/WebGetFileView.asmx?WSDL"
     client = zeep.Client(url)
@@ -32,4 +32,4 @@ def webservice_pacs(tjbh,xmbh,path):
     return filenames
 
 if __name__ == '__main__':
-    webservice_pacs('175150008','501722',"C:/")
+    webservice_film()

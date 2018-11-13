@@ -1,7 +1,8 @@
 from widgets.cwidget import *
 from report.model import *
 import zeep,json,base64,os
-from utils import trans_pacs_pic
+from utils import trans_pacs_pic,request_get,print_pdf_gsprint
+from widgets import QBrowser
 
 # 查看项目状态
 class ItemsStateUI(Dialog):
@@ -24,7 +25,90 @@ class ItemsStateUI(Dialog):
         self.table_item.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_item.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
         self.table_item.itemDoubleClicked.connect(self.on_table_item_doubleclick)
+        # 功能区
+        self.btn_report_suggest.clicked.connect(self.on_btn_report_suggest_click)
+        self.btn_report_zdbl.clicked.connect(self.on_btn_report_zdbl_click)
+        self.btn_report_browse.clicked.connect(self.on_btn_report_browse_click)
+        self.btn_report_print.clicked.connect(self.on_btn_report_print_click)
+        self.btn_report_down.clicked.connect(self.on_btn_report_down_click)
         self.tmp_path = gol.get_value('path_tmp')
+        # 特殊变量
+        self.browser = None
+
+    def on_btn_report_suggest_click(self):
+        pass
+
+    def on_btn_report_zdbl_click(self):
+        pass
+
+    def on_btn_report_browse_click(self):
+        tjbh = self.gp_user.get_tjbh
+        # 优先打开 新系统生成的
+        result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
+        if result:
+            filename = os.path.join(result.bglj, '%s.pdf' % tjbh).replace('D:/activefile/', '')
+            url = gol.get_value('api_pdf_new_show') % filename
+            url_title = "体检编号：%s" % tjbh
+            self.open_url(url, url_title)
+        else:
+            try:
+                self.cxk_session = gol.get_value('cxk_session')
+                result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == tjbh).scalar()
+                if result:
+                    url = gol.get_value('api_pdf_old_show') % result.PDFURL
+                    url_title = "体检编号：%s" % tjbh
+                    self.open_url(url, url_title)
+                    # webbrowser.open(url)
+                else:
+                    mes_about(self, '未找到该顾客体检报告！')
+            except Exception as e:
+                mes_about(self, '查询出错，错误信息：%s' % e)
+                return
+
+    # 在窗口中打开报告，取消在浏览器中打开，主要用于外部查询中使用，避免地址外泄
+    def open_url(self,url,title):
+        if not self.browser:
+            self.browser = QBrowser(self)
+        self.browser.open_url.emit(title,url)
+        self.browser.show()
+
+    def on_btn_report_print_click(self):
+        printerInfo = QPrinterInfo()
+        default_printer = printerInfo.defaultPrinterName()
+        button = mes_warn(self, "您确认用打印机：%s，打印当前选择的体检报告？" %default_printer)
+        if button != QMessageBox.Yes:
+            return
+        tjbh = self.gp_user.get_tjbh
+        # 本地打印 需要下载
+        url = gol.get_value('api_report_down') % tjbh
+        filename = os.path.join(gol.get_value('path_tmp'), '%s.pdf' % tjbh)
+        if request_get(url, filename):
+            # 打印成功
+            if print_pdf_gsprint(filename) == 0:
+                # 打印成功
+                mes_about(self, '打印成功！')
+            else:
+                # 打印失败
+                mes_about(self, '打印失败！')
+        else:
+            mes_about(self,'未找到可打印的报告！')
+
+    def on_btn_report_down_click(self):
+        filepath = QFileDialog.getExistingDirectory(self, "下载保存路径",desktop(),QFileDialog.ShowDirsOnly|QFileDialog.DontResolveSymlinks)
+        if not filepath:
+            return
+        button = mes_warn(self, "您确认下载当前选择的体检报告到路径：%s？" %filepath)
+        if button != QMessageBox.Yes:
+            return
+        tjbh = self.gp_user.get_tjbh
+        url = gol.get_value('api_report_down') %tjbh
+        filename = os.path.join(filepath, '%s.pdf' % tjbh)
+        if request_get(url,filename):
+            # 下载成功
+            mes_about(self,'下载成功！')
+        else:
+            mes_about(self,'未找到报告，无法下载！')
+
 
     # 右键功能
     def onTableMenu(self,pos):
@@ -80,10 +164,24 @@ class ItemsStateUI(Dialog):
         self.table_item.verticalHeader().setVisible(False)
         lt_middle.addWidget(self.table_item)
         self.gp_middle.setLayout(lt_middle)
-
+        lt_bottom = QHBoxLayout()
+        gp_bottom = QGroupBox()
+        self.btn_report_suggest = QPushButton(Icon('小结建议'),'小结建议')
+        self.btn_report_zdbl = QPushButton(Icon('病历'), '重点病历')
+        self.btn_report_browse = QPushButton(Icon('报告'),'报告浏览')          # 查看
+        self.btn_report_print = QPushButton(Icon('报告'), '报告打印')         # 打印
+        self.btn_report_down = QPushButton(Icon('报告'),'报告下载')          # 下载
+        lt_bottom.addWidget(self.btn_report_suggest)
+        lt_bottom.addWidget(self.btn_report_zdbl)
+        lt_bottom.addWidget(self.btn_report_browse)
+        lt_bottom.addWidget(self.btn_report_print)
+        lt_bottom.addWidget(self.btn_report_down)
+        gp_bottom.setLayout(lt_bottom)
+        # 添加布局
         lt_main.addWidget(gp_top)
         lt_main.addLayout(self.gp_user)
         lt_main.addWidget(self.gp_middle)
+        lt_main.addWidget(gp_bottom)
         self.setLayout(lt_main)
 
     # 双击查看明细结果

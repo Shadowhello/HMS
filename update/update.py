@@ -2,6 +2,7 @@ import zipfile,rarfile
 import os,glob,sys
 from utils import gol
 from utils.config_parse import config_write
+import subprocess
 
 def update_version():
     filename = os.path.join(gol.get_value('app_path'),'version.ini')
@@ -39,6 +40,26 @@ def extra_update_file():
             file_rar_obj.close()
             os.remove(file_rar)
 
+def main_end():
+    # 结束主进程
+    main_process_name = "hms.exe"
+    try:
+        os.system("taskkill /F /IM %s" %main_process_name)
+    except Exception as e:
+        print(e)
+
+def main_start():
+    # 启动主进程
+    main_process_name = "hms.exe"
+    try:
+        os.popen(main_process_name)
+    except Exception as e:
+        try:
+            os.popen(main_process_name)
+        except Exception as e:
+            print(e)
+
+
 def run():
     main_process_name = gol.get_value('main_process_name', 'hms.exe')
     main_process_path = gol.get_value('main_process_path', 'hms.exe')
@@ -74,5 +95,7 @@ def run():
         print(e)
 
 if __name__=="__main__":
-    run()
+    pass
+
+
 

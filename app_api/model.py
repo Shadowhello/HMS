@@ -33,6 +33,7 @@ class MT_TJ_UPDATE(db.Model):
     ufile = db.Column(db.Text)
     describe = db.Column(db.Text)
     uptime = db.Column(db.DateTime)
+    platform = db.Column(db.CHAR(1))
 
 class MT_TJ_BGGL(db.Model):
 

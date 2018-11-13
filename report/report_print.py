@@ -1,5 +1,6 @@
 from .report_print_ui import *
 from .model import *
+from .report_item_ui import ItemsStateUI
 from utils import request_get,print_pdf_gsprint,cur_datetime,request_create_report
 from widgets.bweb import WebView
 import webbrowser
@@ -18,6 +19,7 @@ class ReportPrint(ReportPrintUI):
         self.btn_print.clicked.connect(self.on_btn_print_click)
         self.btn_receive.clicked.connect(self.on_btn_receive_click)
         self.btn_order.clicked.connect(self.on_btn_order_click)
+        self.btn_rebuild.clicked.connect(self.on_btn_rebuild_click)
         # 右键、双击、单击
         self.table_print.setContextMenuPolicy(Qt.CustomContextMenu)  ######允许右键产生子菜单
         self.table_print.customContextMenuRequested.connect(self.onTableMenu)   ####右键菜单
@@ -34,6 +36,7 @@ class ReportPrint(ReportPrintUI):
         self.pop_ui = None
         # 当次打印数据
         self.print_datas = None
+        self.item_ui = None
 
     # 初始化部分参数
     def initParas(self):
@@ -121,11 +124,24 @@ class ReportPrint(ReportPrintUI):
                 mes_about(self, '更新数据库失败！错误信息：%s' % e)
                 return
 
+    def on_btn_rebuild_click(self):
+        rows = self.table_print.isSelectRows()
+        button = mes_warn(self, "温馨提示：\n您确认重新生成当前选择的 %s 份体检报告？" %len(rows))
+        if button != QMessageBox.Yes:
+            return
+        count = 0
+        for row in rows:
+            tjbh = self.table_print.getItemValueOfKey(row,'tjbh')
+            if request_create_report(tjbh, 'pdf'):
+                count = count + 1
+
+        mes_about(self, '报告总数：%s，重新生成：%s' % (len(rows), count))
+
     # 打印
     def on_btn_print_click(self):
         qdrq = self.table_print.getCurItemValueOfKey('qdrq')
         bgzt = self.table_print.getCurItemValueOfKey('bgzt')
-        if date_compare(qdrq,'2018-10-01'):
+        if not date_compare(qdrq,'2018-10-01'):
             if bgzt in ['','已审核']:
                 mes_about(self,'当前报告还未被审阅，不允许打印！')
                 return
@@ -258,7 +274,7 @@ class ReportPrint(ReportPrintUI):
             sql = sql + self.lt_where_search.where_tjqy2
 
         sql = sql + ''' INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH=TJ_TJDAB.DABH ;'''
-        print(sql)
+        # print(sql)
         try:
             results = self.session.execute(sql).fetchall()
             self.table_print.load(results)
@@ -275,7 +291,7 @@ class ReportPrint(ReportPrintUI):
     def on_btn_down_click(self):
         qdrq = self.table_print.getCurItemValueOfKey('qdrq')
         bgzt = self.table_print.getCurItemValueOfKey('bgzt')
-        if date_compare(qdrq,'2018-10-01'):
+        if not date_compare(qdrq,'2018-10-01'):
             if bgzt in ['','已审核']:
                 mes_about(self,'当前报告还未被审阅，不允许下载！')
                 return
@@ -427,6 +443,7 @@ class ReportPrint(ReportPrintUI):
             item3 = menu.addAction(Icon("取消"), "取消整理")
             item4 = menu.addAction(Icon("取消"), "取消领取")
             item5 = menu.addAction(Icon("报告中心"), "重新生成PDF报告")
+            item6 = menu.addAction(Icon("报告中心"), "生成江东格式报告")
             action = menu.exec_(self.table_print.mapToGlobal(pos))
             tjbh = self.table_print.getCurItemValueOfKey('tjbh')
             zlxm = self.table_print.getCurItemValueOfKey('zlxm')
@@ -532,6 +549,9 @@ class ReportPrint(ReportPrintUI):
                 # ui.click_opened.emit(hwnd)
                 # ui.show()
 
+            elif action==item6:
+                mes_about(self,'当前功能正在开发中，敬请期待！')
+
 
     # 设置快速检索文本
     def on_table_set(self,QTableWidgetItem):
@@ -569,9 +589,16 @@ class ReportPrint(ReportPrintUI):
             else:
                 mes_about(self,'胶片数据库连接失败！请检查配置！')
 
-
     #体检系统项目查看
     def on_btn_item_click(self):
+
+        # if not self.item_ui:
+        #     self.item_ui = ItemsStateUI(self)
+        # self.item_ui.show()
+        # if not self.cur_tjbh:
+        #     self.cur_tjbh = self.table_print.getCurItemValueOfKey('tjbh')
+        # self.item_ui.returnPressed.emit(self.cur_tjbh)
+        ##########双击查看 体检进度########
         if not self.cur_tjbh:
             mes_about(self,'请先选择一个人！')
             return
@@ -582,39 +609,26 @@ class ReportPrint(ReportPrintUI):
             # 优先打开 新系统生成的
             result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == self.cur_tjbh).scalar()
             if result:
-                filename = os.path.join(result.bglj, '%s.pdf' % self.cur_tjbh).replace('D:/activefile/', '')
-                url = gol.get_value('api_pdf_new_show') % filename
-                self.open_url(url, url_title)
-                # webbrowser.open(url)
-            else:
-                try:
-                    self.cxk_session = gol.get_value('cxk_session')
-                    result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == self.cur_tjbh).scalar()
-                    if result:
-                        url = gol.get_value('api_pdf_old_show') % result.PDFURL
-                        self.open_url(url, url_title)
-                    else:
-                        mes_about(self, '未找到该顾客体检报告！')
-                except Exception as e:
-                    mes_about(self, '查询出错，错误信息：%s' % e)
+                if result.bglj:
+                    filename = os.path.join(result.bglj, '%s.pdf' % self.cur_tjbh).replace('D:/activefile/', '')
+                    url = gol.get_value('api_pdf_new_show') % filename
+                    self.open_url(url, url_title)
+                    # webbrowser.open(url)
                     return
-            # try:
-            #     self.cxk_session = gol.get_value('cxk_session')
-            #     result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == self.cur_tjbh).scalar()
-            #     if result:
-            #         url = gol.get_value('api_pdf_old_show') %result.PDFURL
-            #     else:
-            #         url = None
-            # except Exception as e:
-            #     mes_about(self,'查询出错，错误信息：%s' %e)
-            #     return
-            # if not url:
-            #     mes_about(self,'未找到该顾客体检报告！')
-            #     return
-            # if not self.web_pdf_ui:
-            #     self.web_pdf_ui = PdfDialog(self)
-            # self.web_pdf_ui.urlChange.emit(url)
-            # self.web_pdf_ui.show()
+            # else:
+            try:
+                self.cxk_session = gol.get_value('cxk_session')
+                result = self.cxk_session.query(MT_TJ_PDFRUL).filter(MT_TJ_PDFRUL.TJBH == self.cur_tjbh).scalar()
+                if result:
+                    url = gol.get_value('api_pdf_old_show') % result.PDFURL
+                    self.open_url(url, url_title)
+                else:
+                    #result = self.session.query(MT_TJ_FILE_ACTIVE).filter(MT_TJ_FILE_ACTIVE.tjbh == self.cur_tjbh).order_by(MT_TJ_FILE_ACTIVE.filemtime.desc()).first()
+                    mes_about(self,'历史报告请进行下载功能！')
+                    # mes_about(self, '未找到该顾客体检报告！')
+            except Exception as e:
+                mes_about(self, '查询出错，错误信息：%s' % e)
+                return
 
     # 在窗口中打开报告，取消在浏览器中打开，主要用于外部查询中使用，避免地址外泄
     def open_url(self, url, title):
@@ -622,14 +636,6 @@ class ReportPrint(ReportPrintUI):
             self.browser = QBrowser(self)
         self.browser.open_url.emit(title, url)
         self.browser.show()
-
-    # def setSaveFileName(self):
-    #     filepath = QFileDialog.getExistingDirectory(self, "保存路径",
-    #                                               desktop(),
-    #                                                QFileDialog.ShowDirsOnly|QFileDialog.DontResolveSymlinks)
-    #     return filepath
-
-
 
 class PdfDialog(QDialog):
 

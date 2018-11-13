@@ -33,6 +33,7 @@ from pprint import pprint
 from PyPDF2.pdf import PdfFileReader
 from wand.image import Image
 from utils.bmodel import *
+import win32print,subprocess
 import gc
 
 def report_run_api(queue):
@@ -67,109 +68,131 @@ def report_run(queue):
     gc_count = 0
     ####################### 数据准备：图片、首页、html ###########################
     while True:
-        if not queue.empty():                                                           # 循环
-            mes_obj = queue.get_nowait()                                                 # 获取进程队列消息,非阻塞模式
-            gc_count = gc_count + 1
-            # 显式释放内存
-            if gc_count==100:
-                gc.collect()
-            # print('%s 从进程队列中获得消息：%s' %(cur_datetime(),ujson.dumps(mes_obj)))
-            log.info('从进程队列中获得消息：%s' %ujson.dumps(mes_obj))
-            tjbh = mes_obj['tjbh']                                                      # 获取体检编号
-            action = mes_obj['action']                                                  # 获取执行动作 ：生成HTML还是生成PDF
-            time_start = time.time()
-            # pdf 数据对象
-            pdf_data_obj = PdfData(session_tjxt,session_cxk,gol.get_value('report_path'),tjbh,action)
-            # 设置状态
-            pdf_data_obj.set_bgzt(action)
-            # 设置html 路径
-            pdf_data_obj.set_html_path(html_path)
-            # ######################## PDF 报告封面是否单独生成 #######################
-            i_user = pdf_data_obj.get_user_data
-            if not i_user:
-                log.info("未查询到顾客：%s 信息 " %tjbh)
-                return
-            if action=='pdf':
-                # 资源文件位置不一致
-                i_user['css'] = pdf_css
-                i_user['cover_css'] = pdf_cover_css
-                i_user['head_pic'] = pdf_bg_img
-                sign_img = pdf_sign_img
-                # 传输 图片
-                pdf_data_obj.transfer_pic()
-                if i_user['film']:
-                    i_user['film'] = os.path.join(sign_img, 'tick.png')
-                # 单独生成封面
-                write_home_html(pdf_data_obj.get_head_html,i_user)
-                ######################## PDF 报告主体 从内容页开始写入 #######################
-                pdf_build_obj = buildBodyHtml(pdf_data_obj.get_body_html,pdf_css)
-            else:
-                # 资源文件位置不一致
-                i_user['css'] = html_css
-                i_user['head_pic'] = html_bg_img
-                sign_img = html_sign_img
-                pdf_data_obj.transfer_pic(True)
-                # HTML 报告
-                if i_user['film']:
-                    i_user['film'] = os.path.join(sign_img, 'tick.png')
-                ######################## PDF 报告主体 从首页开始写入 #######################
-                pdf_build_obj = buildBodyHtml(pdf_data_obj.get_html, pdf_css,False)
-                pdf_data_obj.set_bglj(pdf_data_obj.get_html)
-                pdf_build_obj.write_home(i_user)
-            ######################## 写入排班信息 ########################
-            pdf_build_obj.write_yspb(pdf_data_obj.get_yspb)
-            ######################## 写入小结、建议信息 ########################
-            summarys, suggestions = pdf_data_obj.get_user_xjjy
-            pdf_build_obj.write_xj(summarys)
-            pdf_build_obj.write_jy(summarys,suggestions)
-            ######################## 写入总检、审核医生签名及公章 ########################
-            cachet['zjys'] = os.path.join(sign_img,'%s.png' %i_user['zjys'])
-            cachet['shys'] = os.path.join(sign_img,'%s.png' %i_user['shys'])
-            if i_user['syys']:
-                cachet['syys'] = os.path.join(sign_img,'%s.png' %i_user['syys'])
-            else:
-                cachet['syys'] = None
-            cachet['warn'] = warn
-            pdf_build_obj.write_cachet(cachet)
-            ######################## 写入项目结果 #######################
-            pdf_build_obj.write_items(pdf_data_obj.get_item_result)
-            ######################## 写入设备报告 #######################
-            equip_pic = pdf_data_obj.get_equip_pic
-            if equip_pic:
-                pdf_build_obj.write_equip(equip_pic)
-            ######################## 写入保健处方 #######################
-            health = pdf_data_obj.get_jkcf
-            if health:
-                pdf_build_obj.write_health_care(health)
-            # 关闭文件
-            pdf_build_obj.close()
-            time_end = time.time()
-            print("%s: %s HTML报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end - time_start))
-            log.info("%s: %s HTML报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end - time_start))
-            # print('HTML头文件：%s' % pdf_data_obj.get_head_html)
-            # print('HTML主文件：%s' % pdf_data_obj.get_body_html)
-            if action == 'pdf':
-                pdf_options['footer-left'] =footer_user  %i_user['tjbh']
-                pdf_toc = {'dump-default-toc-xsl':'pdf_toc'}
-                # pprint(pdf_options)
-                ######################### 生成 PDF #######################
-                pdfkit.from_file(
-                    input=pdf_data_obj.get_body_html,  # path to HTML file or list with paths or file-like object
-                    output_path=pdf_data_obj.get_pdf,  # path to output PDF file. False means file will be returned as string.
-                    options=pdf_options,               # (optional) dict with wkhtmltopdf options, with or w/o '--'
-                    configuration=pdf_config,          # (optional) instance of pdfkit.configuration.Configuration()
-                    cover=pdf_data_obj.get_head_html,  # (optional) string with url/filename with a cover html page
-                    css=pdf_css                        # (optional) string with path to css file which will be added to a single input file
+        if not queue.empty():                                                            # 循环
+            try:
+                mes_obj = queue.get_nowait()                                                 # 获取进程队列消息,非阻塞模式
+            except Exception as e:
+                print('%s 进程(ID：%s) 从队列中获得消息出错！' % (cur_datetime(), os.getpid()))
+                mes_obj = {}
+            if mes_obj:
+                gc_count = gc_count + 1
+                # 显式释放内存
+                if gc_count==100:
+                    gc.collect()
+                print('%s 进程(ID：%s) 从队列中获得消息：%s' %(cur_datetime(),os.getpid(),ujson.dumps(mes_obj)))
+                log.info('%s 进程(ID：%s) 从队列中获得消息：%s' % (cur_datetime(), os.getpid(), ujson.dumps(mes_obj)))
+                action = mes_obj['action']                                                  # 获取执行动作 ：生成HTML还是生成PDF还是打印
+                if action=='print':
+                    # 打印服务
+                    filename = mes_obj['filename']
+                    printer = mes_obj['printer']
+                    result = print_pdf_gsprint(filename, printer)
+                    if result == 0:
+                        print('%s 文件(%s)，通过打印机(%s) 打印成功！' % (cur_datetime(), filename,printer))
+                        log.info('%s 文件(%s)，通过打印机(%s) 打印成功！' % (cur_datetime(), filename,printer))
+                    else:
+                        print('%s 文件(%s)，通过打印机(%s) 打印失败！' % (cur_datetime(), filename,printer))
+                        log.info('%s 文件(%s)，通过打印机(%s) 打印失败！' % (cur_datetime(), filename,printer))
+                else:
+                    # 报告生成服务
+                    tjbh = mes_obj['tjbh']                                                      # 获取体检编号
+                    time_start = time.time()
+                    # pdf 数据对象
+                    pdf_data_obj = PdfData(session_tjxt,session_cxk,gol.get_value('report_path'),tjbh,action)
+                    # 设置报告生成状态
+                    pdf_data_obj.set_bgzt(action)
+                    # 设置html报告路径 用于网站展示 默认放置  static 目录下
+                    pdf_data_obj.set_html_path(html_path)
+                    # ######################## PDF 报告封面是否单独生成 #######################
+                    i_user = pdf_data_obj.get_user_data
+                    if not i_user:
+                        log.info("未查询到顾客：%s 信息 " %tjbh)
+                        return
+                    if action=='pdf':
+                        # 资源文件位置不一致
+                        i_user['css'] = pdf_css
+                        i_user['cover_css'] = pdf_cover_css
+                        i_user['head_pic'] = pdf_bg_img
+                        sign_img = pdf_sign_img
+                        # 传输 图片
+                        pdf_data_obj.transfer_pic()
+                        if i_user['film']:
+                            i_user['film'] = os.path.join(sign_img, 'tick.png')
+                        # 单独生成封面
+                        write_home_html(pdf_data_obj.get_head_html,i_user)
+                        ######################## PDF 报告主体 从内容页开始写入 #######################
+                        pdf_build_obj = buildBodyHtml(pdf_data_obj.get_body_html,pdf_css)
+                    else:
+                        # 资源文件位置不一致
+                        i_user['css'] = html_css
+                        i_user['head_pic'] = html_bg_img
+                        sign_img = html_sign_img
+                        pdf_data_obj.transfer_pic(True)
+                        # HTML 报告
+                        if i_user['film']:
+                            i_user['film'] = os.path.join(sign_img, 'tick.png')
+                        ######################## PDF 报告主体 从首页开始写入 #######################
+                        pdf_build_obj = buildBodyHtml(pdf_data_obj.get_html, pdf_css,False)
+                        pdf_data_obj.set_bglj(pdf_data_obj.get_html)
+                        pdf_build_obj.write_home(i_user)
+                    ######################## 写入排班信息 ########################
+                    pdf_build_obj.write_yspb(pdf_data_obj.get_yspb)
+                    ######################## 写入小结、建议信息 ########################
+                    summarys, suggestions = pdf_data_obj.get_user_xjjy
+                    pdf_build_obj.write_xj(summarys)
+                    pdf_build_obj.write_jy(summarys,suggestions)
+                    ######################## 写入总检、审核医生签名及公章 ########################
+                    cachet['zjys'] = os.path.join(sign_img,'%s.png' %i_user['zjys'])
+                    cachet['shys'] = os.path.join(sign_img,'%s.png' %i_user['shys'])
+                    if i_user['syys']:
+                        cachet['syys'] = os.path.join(sign_img,'%s.png' %i_user['syys'])
+                    else:
+                        cachet['syys'] = None
+                    cachet['warn'] = warn
+                    pdf_build_obj.write_cachet(cachet)
+                    ######################## 写入项目结果 #######################
+                    pdf_build_obj.write_items(pdf_data_obj.get_item_result)
+                    ######################## 写入设备报告 #######################
+                    equip_pic = pdf_data_obj.get_equip_pic
+                    if equip_pic:
+                        pdf_build_obj.write_equip(equip_pic)
+                    ######################## 写入保健处方 #######################
+                    health = pdf_data_obj.get_jkcf
+                    if health:
+                        pdf_build_obj.write_health_care(health)
+                    # 关闭文件
+                    pdf_build_obj.close()
+                    time_end = time.time()
+                    print("%s: %s HTML报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end - time_start))
+                    log.info("%s: %s HTML报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end - time_start))
+                    # print('HTML头文件：%s' % pdf_data_obj.get_head_html)
+                    # print('HTML主文件：%s' % pdf_data_obj.get_body_html)
+                    if action == 'pdf':
+                        pdf_options['footer-left'] =footer_user  %i_user['tjbh']
+                        pdf_toc = {'dump-default-toc-xsl':'pdf_toc'}
+                        # pprint(pdf_options)
+                        ######################### 生成 PDF #######################
+                        pdfkit.from_file(
+                            input=pdf_data_obj.get_body_html,  # path to HTML file or list with paths or file-like object
+                            output_path=pdf_data_obj.get_pdf,  # path to output PDF file. False means file will be returned as string.
+                            options=pdf_options,               # (optional) dict with wkhtmltopdf options, with or w/o '--'
+                            configuration=pdf_config,          # (optional) instance of pdfkit.configuration.Configuration()
+                            cover=pdf_data_obj.get_head_html,  # (optional) string with url/filename with a cover html page
+                            css=pdf_css                        # (optional) string with path to css file which will be added to a single input file
 
-                )
-                time_end2 = time.time()
-                print("%s: %s PDF报告生成成功！耗时：%s " %(cur_datetime(),tjbh,time_end2 - time_start))
-                log.info("%s: %s PDF报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end2 - time_start))
-                pdf_data_obj.set_bglj(pdf_data_obj.get_pdf)
-            ############################## 更新数据库 ########################################
-            pdf_data_obj.update_user_report()
+                        )
+                        time_end2 = time.time()
+                        print("%s: %s PDF报告生成成功！耗时：%s " %(cur_datetime(),tjbh,time_end2 - time_start))
+                        log.info("%s: %s PDF报告生成成功！耗时：%s " % (cur_datetime(),tjbh,time_end2 - time_start))
+                        pdf_data_obj.set_bglj(pdf_data_obj.get_pdf)
+                    ############################## 更新数据库 ########################################
+                    pdf_data_obj.update_user_report()
+                    # 删除数据对象
+                    del pdf_data_obj
+                    del pdf_build_obj
         else:
             time.sleep(1)
+
 
 def write_home_html(filename,user:dict):
     # 如果已存在，则删除
@@ -190,7 +213,10 @@ class buildBodyHtml(object):
         '''
         # 如果已存在，则删除
         if os.path.exists(filename):
-            os.remove(filename)
+            try:
+                os.remove(filename)
+            except Exception as e:
+                print(e)
         self.html_obj = open(filename, 'a', encoding="utf8")
         if is_single:
             self.html_obj.write(Template2(pdf_html_head).render(file_css=file_css))
@@ -399,10 +425,15 @@ class PdfData(object):
         result = self.session_tjk.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh==self.tjbh).scalar()
         if result:
             if result.bglj:
-                report_file_rename(result.bglj,self.tjbh,self.action)
-                self.cur_dir = result.bglj
-                # return result.bglj
+                try:
+                    report_file_rename(result.bglj,self.tjbh,self.action)
+                    self.cur_dir = result.bglj
+                except Exception as e:
+                    self.cur_dir = result.bglj+'new/'
+                    os.mkdir(self.cur_dir)
+
                 return
+
         # 如果不存在，则生成当日路径
         dday = time.strftime("%Y-%m-%d", time.localtime(int(time.time())))
         dyear = dday[0:4]
@@ -590,7 +621,10 @@ class PdfData(object):
                                     with open(tmp_file, "wb") as f:
                                         f.write(result.filecontent)
                                     pdf2pic(tmp_file, file_local)
-                                    os.remove(tmp_file)
+                                    try:
+                                        os.remove(tmp_file)
+                                    except Exception as e:
+                                        print("删除文件失败(%s)，错误信息：%s" %(tmp_file,e))
                                     # 添加
                                     if flag:
                                         self.pic['0806'] = file_local.replace(self.html_path, '')
@@ -612,7 +646,10 @@ class PdfData(object):
                             with open(tmp_file, "wb") as f:
                                 f.write(result.filecontent)
                             pdf2pic(tmp_file, file_local)
-                            os.remove(tmp_file)
+                            try:
+                                os.remove(tmp_file)
+                            except Exception as e:
+                                print("删除文件失败(%s)，错误信息：%s" % (tmp_file, e))
 
                     # 添加
                     if flag:
@@ -643,13 +680,21 @@ class PdfData(object):
                         file_local = os.path.join(self.get_html_img_dir, '%s_%s.png' % (self.tjbh, '0806'))
                     else:
                         file_local = os.path.join(self.get_img_dir, '%s_%s.png' % (self.tjbh, '0806'))
-                    result = self.session_tjk.query(MT_DCP_files).filter(MT_DCP_files.cusn == self.tjbh).scalar()
+                    try:
+                        # MT_DCP_files 存在重复多条记录
+                        result = self.session_tjk.query(MT_DCP_files).filter(MT_DCP_files.cusn == self.tjbh).scalar()
+                    except Exception as e:
+                        print("体检编号：%s 表DCP_files中心电图记录重复！" %self.tjbh)
+                        result = self.session_tjk.query(MT_DCP_files).filter(MT_DCP_files.cusn == self.tjbh).first()
                     if result:
                         tmp_file = "%s_08.pdf" % self.tjbh
                         with open(tmp_file, "wb") as f:
                             f.write(result.filecontent)
                         pdf2pic(tmp_file, file_local)
-                        os.remove(tmp_file)
+                        try:
+                            os.remove(tmp_file)
+                        except Exception as e:
+                            print(e)
 
                         # 添加
                         if flag:
@@ -818,6 +863,13 @@ def report_file_rename(path,tjbh,action):
     filename = os.path.join(path, '%s.%s' %(tjbh,action))
     if os.path.exists(filename):
         fileRename(filename)
+# 打印
+def print_pdf_gsprint(filename,printer=None):
+    if not printer:
+        printer = win32print.GetDefaultPrinter()
+    command =r'gsprint -color -printer "%s" %s' %(printer,filename)
+    result = subprocess.run(command, shell=True)
+    return result.returncode
 
 class MT_TJ_BGGL(BaseModel):
 
@@ -837,6 +889,10 @@ class MT_TJ_BGGL(BaseModel):
     zzrq = Column(DateTime, nullable=False,)                            # 追踪日期
     zzgh = Column(String(16), nullable=False)                           # 追踪工号
     zzxm = Column(String(16), nullable=False)                           # 追踪姓名
+    zzgh2 = Column(String(16), nullable=False)                          # 追踪工号2   用于双人追踪
+    zzxm2 = Column(String(16), nullable=False)                          # 追踪姓名2
+    zzgh3 = Column(String(16), nullable=False)                          # 追踪工号3   用于三人追踪
+    zzxm3 = Column(String(16), nullable=False)                          # 追踪姓名3
     zzbz = Column(Text, nullable=False)                                 # 追踪备注    记录电话等沟通信息，强制接收等信息
     zjrq = Column(DateTime, nullable=False)                             # 总检日期
     zjgh = Column(String(16), nullable=False)                           # 总检工号
@@ -872,10 +928,13 @@ class MT_TJ_BGGL(BaseModel):
     jpdyrq = Column(DateTime, nullable=False)                           # 胶片打印日期
     jpdygh = Column(String(16), nullable=False)                         # 胶片打印工号
     jpdyxm = Column(String(16), nullable=False)                         # 胶片打印姓名
-    jpsl = Column(String(16), nullable=False)                           # 胶片数量
+    jpsl = Column(INTEGER, nullable=False)                              # 胶片应打印数量
+    jpdysl = Column(INTEGER, nullable=False)                            # 胶片实际打印数量
     jpjjjl = Column(String(250), nullable=False)                        # 胶片交接记录
-    bgth = Column(CHAR(1), nullable=True)                               # 报告退回          0 审核退回  1审阅退回
+    bgth = Column(CHAR(1), nullable=True)                               # 报告退回    0 审核退回  1审阅退回
     gcbz = Column(Text, nullable=False)                                 # 过程备注    记录领取信息
+    dyzt = Column(CHAR(1), nullable=False)                              # 打印状态    记录打印状态，默认已打印，打印中(0) 打印失败（1）
+    sgd = Column(CHAR(1), nullable=False)                               # 是、否
 
 
 # 获取胶片数数量
@@ -894,7 +953,7 @@ def get_film_num(tjbh):
         WHEN LBBM = '49' THEN JPSL
         ELSE 0 END) AS JPSL
 
-        FROM (SELECT XMBH FROM TJ_TJJLMXB  WHERE tjbh='%s' AND SFZH='1' ) AS A
+        FROM (SELECT XMBH FROM TJ_TJJLMXB  WHERE tjbh='%s' AND SFZH='1' AND qzjs<>'1' ) AS A
 
         INNER JOIN (SELECT XMBH,JPSL,LBBM FROM TJ_XMDM WHERE jpsl is NOT NULL) AS B ON A.XMBH=B.XMBH
     ''' % tjbh
@@ -934,5 +993,5 @@ if __name__ =='__main__':
     # for result in results:
     #     q.put({'tjbh': result[0], 'action': 'pdf'})
     # q.put({'tjbh': '166647427', 'action': 'pdf'})
-    q.put({'tjbh': '165574237', 'action': 'pdf'})
+    q.put({'tjbh': '174560844', 'action': 'pdf'})
     report_run(q)

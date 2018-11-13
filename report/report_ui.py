@@ -12,12 +12,14 @@ from .report_order import ReportOrder
 from .report_equip import ReportEquip
 # 报告进度
 from .report_progress import ReportProgress
+# 胶片打印
+from .film_print import FilmPrint
 
 
 class Report_UI(DirTabWidget):
 
     def __init__(self,title):
-        self.nodes = ['报告追踪', '报告审阅', '报告打印','报告整理','设备报告','报告进度']
+        self.nodes = ['报告追踪', '报告审阅', '报告打印','报告整理','设备报告','报告进度','胶片打印']
         super(Report_UI,self).__init__(title,self.nodes)
         default_menu_name = gol.get_value('menu_child_name','')
         if default_menu_name in self.nodes:
@@ -26,23 +28,19 @@ class Report_UI(DirTabWidget):
     def addTab(self,title):
         super(Report_UI, self).addTab(title)
         if title=='报告追踪':
-
             widget=ReportTrack()
         elif title=='报告审阅':
-
             widget=ReportReview()
         elif title=='报告打印':
-
             widget=ReportPrint()
         elif title=='设备报告':
-
             widget=ReportEquip()
         elif title=='报告进度':
-
             widget=ReportProgress()
-        else:
-
+        elif title=='报告整理':
             widget=ReportOrder()
+        else:
+            widget = FilmPrint()
         self.rwidget.addPage(widget,Icon(title),title)
 
 

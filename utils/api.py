@@ -218,17 +218,20 @@ if __name__=="__main__":
     set_env()
     # # # 网络打印
     # #
-    # session = gol.get_value('tjxt_session_local')
+    session = gol.get_value('tjxt_session_local')
     # # sql = "select jy from tj_tjdjb where tjbh='%s';" % '165582991'
     # # results = session.execute(sql).fetchall()
     # # print(str2(results[0][0]))
     # # raise
     # # 招工自动审阅完成 生成PDF
-    # sql = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' AND TJ_TJDJB.TJLX='1'; "
-    # results = session.execute(sql).fetchall()
-    # for result in results:
-    #     #request_create_report(result[0], 'html')
-    #     request_create_report(result[0], 'pdf')
+    #sql = "SELECT TJ_BGGL.TJBH FROM TJ_BGGL INNER JOIN TJ_TJDJB ON TJ_BGGL.TJBH=TJ_TJDJB.TJBH AND TJ_BGGL.bgzt='1' AND TJ_TJDJB.zhaogong='1' AND TJ_TJDJB.TJLX='1' " \
+    #sql = "SELECT TJBH FROM TJ_TJDJB WHERE SHRQ>='2018-07-01' AND SHRQ<'2018-07-10' AND SUMOVER='1' AND zhaogong='0'  AND (del <> '1' or del is null);"
+    sql = "SELECT TJBH FROM TJ_TJDJB WHERE SHRQ>='2018-07-18' AND SHRQ<'2018-08-01' AND SUMOVER='1'  AND (del <> '1' or del is null) " \
+          "AND TJBH NOT IN (SELECT TJBH FROM TJ_BGGL WHERE SHRQ>='2018-07-18' AND SHRQ<'2018-08-01'); "
+    results = session.execute(sql).fetchall()
+    for result in results:
+        request_create_report(result[0], 'pdf')
+        #request_create_report(result[0], 'pdf')
     #print(get_barcode_wx('测试5','330227199902040663','13736093866'))
-    request_create_report('166773821','pdf')
+    # request_create_report('176570130','pdf')
     #request_post_wx()

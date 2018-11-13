@@ -165,7 +165,10 @@ SYS_MENU_TREE = {   # 系统
              'tip': None,
              'state': True,
              'childs': OrderedDict([
-                 ('OA办公',{'pid': 900, 'sid': 9001, 'title': 'OA办公', 'tip': None, 'state': True, 'icon': 'oa办公', 'is_tool': True,'shortcut':None})
+                 ('OA办公',{'pid': 900, 'sid': 9001, 'title': 'OA办公', 'tip': None, 'state': True, 'icon': 'oa办公', 'is_tool': True,'shortcut':None}),
+                 ('电话平台',{'pid': 900, 'sid': 9002, 'title': '电话平台', 'tip': None, 'state': True, 'icon': '电话', 'is_tool': True,'shortcut':None}),
+                 ('检后健康',{'pid': 900, 'sid': 9003, 'title': '检后健康', 'tip': None, 'state': True, 'icon': '医生', 'is_tool': False,'shortcut':None}),
+                 ('多媒体屏',{'pid': 900, 'sid': 9004, 'title': '多媒体屏', 'tip': None, 'state': True, 'icon': '多媒体', 'is_tool': False,'shortcut':None}),
             ])})
     ])
 }
@@ -236,5 +239,8 @@ SYS_MENU_MODULE_CLASS = {
     8006: {'module': None, 'class': None, 'enabled': False},
     8007: {'module': None, 'class': None, 'enabled': False},
     8008: {'module': None, 'class': None, 'enabled': False},
-    9001: {'module': 'app_interface', 'class': 'OaUI', 'enabled': True}
+    9001: {'module': 'app_interface', 'class': 'OaUI', 'enabled': True},
+    9002: {'module': 'app_interface', 'class': 'PhonePlatUI', 'enabled': True},
+    9003: {'module': 'app_interface', 'class': 'JHJKGLUI', 'enabled': True},
+    9004: {'module': 'app_interface', 'class': 'MediaUI', 'enabled': True}
 }

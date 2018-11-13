@@ -20,7 +20,7 @@ from statistics import DN_MeritPay
 # 体检登记
 from register import RegisterManager
 # OA
-from app_interface import OaUI
+from app_interface import OaUI,PhoneUI,JHJKGLUI,MediaUI
 
 WindowsTitle="明州体检"
 WindowsIcon="mztj"
@@ -46,7 +46,7 @@ class TJ_Main_UI(QMainWindow):
 
         # 启动自动更新线程
         if self.update_auto:
-            self.timer_update_thread = AutoUpdateThread(self.update_timer)
+            self.timer_update_thread = AutoUpdateThread(600)
             self.timer_update_thread.signalPost.connect(self.update_mes, type=Qt.QueuedConnection)
             self.timer_update_thread.start()
 
@@ -84,22 +84,22 @@ class TJ_Main_UI(QMainWindow):
         class_name = action.cls_name   # 必须在上一句后面，因为才赋值
         #print(module,class_name)
         if module and class_name:
-            if class_name=='DN_MeritPay' and self.login_id=='BSSA':
-                mes_about(self,"对不起，您没有该功能权限，请联系管理员！")
-                return
+            # if class_name=='DN_MeritPay' and self.login_id=='BSSA':
+            #     mes_about(self,"对不起，您没有该功能权限，请联系管理员！")
+            #     return
             if not hasattr(self, class_name):
                 module_class = getattr(module, class_name)
                 setattr(self, class_name, module_class())
                 self.mdiArea.addSubWindow(getattr(self, class_name))
                 getattr(self, class_name).showMaximized()
-                if class_name == 'OaUI':
+                if class_name in ['OaUI','PhonePlatUI','JHJKGLUI','MediaUI']:
                     getattr(self, class_name).load()
             elif getattr(getattr(self, class_name), 'status'): # 窗口被关闭了
                 module_class = getattr(module, class_name)
                 setattr(self, class_name, module_class())
                 self.mdiArea.addSubWindow(getattr(self, class_name))
                 getattr(self, class_name).showMaximized()
-                if class_name == 'OaUI':
+                if class_name in ['OaUI','PhonePlatUI','JHJKGLUI','MediaUI']:
                     getattr(self, class_name).load()
             # # 未关闭
             getattr(self, class_name).setFocus()

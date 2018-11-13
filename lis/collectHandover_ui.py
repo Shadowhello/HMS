@@ -11,7 +11,7 @@ class CollectHandover_UI(Widget):
     def initUI(self):
         lt_main = QVBoxLayout()                    # 主布局
         lt_top = QHBoxLayout()                     # 上布局
-        lt_bottom = QHBoxLayout()                  # 下布局
+        lt_bottom = QVBoxLayout()                  # 下布局
 
         ############ 上布局 ########################
         gp_where_search = QGroupBox('条件检索')
@@ -53,16 +53,21 @@ class CollectHandover_UI(Widget):
         # 添加布局
         lt_top.addWidget(gp_where_search)
         # lt_top.addWidget(self.gp_quick_search)
-        ############ 下布局 ########################
+        lt_middle = QHBoxLayout()
+        ############ 中间局 ########################
+        self.collect_sum_cols = OrderedDict([
+                                ("ybzt", "状态"),
+                                ("SGYS", "试管"),
+                                ("SGSL", "数量")
+                            ])
         self.collect_cols = OrderedDict([
                                 ("QSSJ", "开始时间"),
                                 ("JSSJ", "结束时间"),
-                                ("CZQY", "采集区域"),
-                                ("SGYS", "试管颜色"),
-                                ("SGSL", "试管数量"),
+                                ("CZQY", "区域"),
+                                ("SGYS", "试管"),
+                                ("SGSL", "数量"),
                                 ("jjxm", "交接护士"),
                                 ("jjsj", "交接时间"),
-                                ("sjxm", "送检人员"),
                                 ("qsxm", "签收人员"),
                                 ("qssj", "签收时间"),
                             ])
@@ -72,22 +77,35 @@ class CollectHandover_UI(Widget):
                                 ("czsj", "采集时间"),
                                 ("czqy", "采集区域"),
                                 ("czxm", "采集护士"),
-                                ("jlnr", "样本项目")
+                                ("jlnr", "项目明细")
                             ])
-        # 汇总
+        # 样本处理记录
+        self.table_handover = CollectHandoverSTable(self.collect_sum_cols)
+        self.gp_middle_left = QGroupBox('样本汇总')
+        lt_middle_left = QVBoxLayout()
+        lt_middle_left.addWidget(self.table_handover)
+        self.gp_middle_left.setLayout(lt_middle_left)
+        # 交接签收
         self.table_handover_master = CollectHandoverTable(self.collect_cols)
-        self.gp_bottom_left = QGroupBox('样本交接汇总')
-        lt_bottom_left = QVBoxLayout()
-        lt_bottom_left.addWidget(self.table_handover_master)
+        self.gp_middle_middle = QGroupBox('样本交接签收')
+        lt_middle_middle = QVBoxLayout()
+        lt_middle_middle.addWidget(self.table_handover_master)
+        self.gp_middle_middle.setLayout(lt_middle_middle)
+
 
         # 详细
         self.table_handover_detail = CollectHandoverDTable(self.collect_detail_cols)
         self.table_handover_detail.verticalHeader().setVisible(False)  # 列表头
         self.table_handover_detail.horizontalHeader().setStretchLastSection(True)
-        self.gp_bottom_right = QGroupBox('样本交接明细')
-        lt_bottom_right = QHBoxLayout()
-        lt_bottom_right.addWidget(self.table_handover_detail)
-        self.gp_bottom_right.setLayout(lt_bottom_right)
+        self.gp_middle_right = QGroupBox('样本采集明细(0)')
+        lt_middle_right = QHBoxLayout()
+        lt_middle_right.addWidget(self.table_handover_detail)
+        self.gp_middle_right.setLayout(lt_middle_right)
+        ######### 添加中间布局
+        lt_middle.addWidget(self.gp_middle_left)
+        lt_middle.addWidget(self.gp_middle_middle)
+        lt_middle.addWidget(self.gp_middle_right)
+        # lt_middle.addStretch()
         ################################################################
         gp_sample_jj_sum = QGroupBox('样本待交接信息')
         gp_sample_jj_sum.setStyleSheet('''QGroupBox:title{font: 75 14pt '微软雅黑';color: rgb(0,128,0);}''')
@@ -110,18 +128,16 @@ class CollectHandover_UI(Widget):
         # 设置列宽
         # self.table_handover.setColumnWidth(0, 40)
         # self.table_handover.setColumnWidth(5, 150)
-        lt_bottom_left.addSpacing(10)
-        lt_bottom_left.addWidget(gp_sample_jj_sum)
-        lt_bottom_left.addSpacing(10)
-        lt_bottom_left.addWidget(gp_sample_qs_sum)
-        lt_bottom_left.addSpacing(10)
-        lt_bottom_left.addWidget(gp_sample_sum)
-        self.gp_bottom_left.setLayout(lt_bottom_left)
-
-        lt_bottom.addWidget(self.gp_bottom_left,3)
-        lt_bottom.addWidget(self.gp_bottom_right,2)
+        lt_bottom.addSpacing(10)
+        lt_bottom.addWidget(gp_sample_jj_sum)
+        lt_bottom.addSpacing(10)
+        lt_bottom.addWidget(gp_sample_qs_sum)
+        lt_bottom.addSpacing(10)
+        lt_bottom.addWidget(gp_sample_sum)
+        # self.gp_bottom_left.setLayout(lt_bottom_left)
 
         # 添加主布局
         lt_main.addLayout(lt_top)
+        lt_main.addLayout(lt_middle)
         lt_main.addLayout(lt_bottom)
         self.setLayout(lt_main)

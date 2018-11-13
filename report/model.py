@@ -33,6 +33,8 @@ class MT_TJ_BGGL(BaseModel):
     zzxm = Column(String(16), nullable=False)                           # 追踪姓名
     zzgh2 = Column(String(16), nullable=False)                          # 追踪工号2   用于双人追踪
     zzxm2 = Column(String(16), nullable=False)                          # 追踪姓名2
+    zzgh3 = Column(String(16), nullable=False)                          # 追踪工号3   用于三人追踪
+    zzxm3 = Column(String(16), nullable=False)                          # 追踪姓名3
     zzbz = Column(Text, nullable=False)                                 # 追踪备注    记录电话等沟通信息，强制接收等信息
     zjrq = Column(DateTime, nullable=False)                             # 总检日期
     zjgh = Column(String(16), nullable=False)                           # 总检工号
@@ -214,7 +216,11 @@ def get_report_tracking_sql(tstart, tend):
                     )
 
     SELECT d.XMZQ,(d.XMZQ-DATEDIFF(DAY, T1.QDRQ, GETDATE())) AS zzjd, '追踪中' AS zzzt,
-    (CASE WHEN TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  ELSE TJ_BGGL.ZZXM END) AS lqry,
+    (CASE 
+    WHEN TJ_BGGL.ZZXM3 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2+','+TJ_BGGL.ZZXM3
+    WHEN TJ_BGGL.ZZXM3 IS NULL AND TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  
+    ELSE TJ_BGGL.ZZXM 
+    END)  AS lqry,
     T1.*,d.wjxm FROM T1 
 
 	INNER JOIN TJ_BGGL ON T1.TJBH = TJ_BGGL.TJBH AND TJ_BGGL.BGZT='0'
@@ -380,7 +386,12 @@ def get_quick_search_sql(where_str):
                 WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH IS NULL AND (SELECT wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) IS NULL THEN '追踪完成' 
                 ELSE '' END
 				) AS zzzt,
-            (CASE WHEN TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  ELSE TJ_BGGL.ZZXM END) AS lqry,
+            (CASE 
+                WHEN TJ_BGGL.ZZXM3 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2+','+TJ_BGGL.ZZXM3
+                WHEN TJ_BGGL.ZZXM3 IS NULL AND TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  
+                ELSE TJ_BGGL.ZZXM 
+                END
+                ) AS lqry,
             T1.*,
 				(CASE
 					WHEN T1.TJZT='审核退回' THEN (SELECT TOP 1 '退回时间('+substring(convert(char,CZSJ,120),1,19)+')，退回人('+CZXM+')，退回原因：'+CAST(JLNR AS VARCHAR) FROM TJ_CZJLB WHERE TJBH = T1.TJBH AND JLLX='0103')
@@ -646,17 +657,16 @@ def get_report_print_sql():
 def get_report_print2_sql():
     return '''
                 SELECT
-                    (CASE TJ_TJDJB.TJZT
-                            WHEN '0' THEN '取消登记'
-                            WHEN '1' THEN '已登记'
-                            WHEN '2' THEN '已预约'
-                            WHEN '3' THEN '已签到'
-                            WHEN '4' THEN '已收单'
-                            WHEN '5' THEN '已追踪'
-                            WHEN '6' THEN '已总检'
-                            WHEN '7' THEN '已审核'
-                            WHEN '8' THEN '已审阅'
-                            ELSE '' END 
+                    (CASE 
+                        WHEN TJ_TJDJB.TJZT='8' THEN '已审阅'
+                        WHEN TJ_TJDJB.SUMOVER='1' OR TJ_TJDJB.TJZT='7' THEN '已审核'
+                        WHEN TJ_TJDJB.SUMOVER='9' OR TJ_TJDJB.TJZT='6' THEN '已总检'
+                        WHEN TJ_TJDJB.SUMOVER='0' AND TJ_TJDJB.TJZT='5' THEN '审核退回'
+                        WHEN TJ_TJDJB.QD='1' AND TJ_TJDJB.TJZT='4' THEN '已收单'
+                        WHEN TJ_TJDJB.QD='1' THEN '已签到'
+                        WHEN (QD IS NULL OR QD <> '1') THEN '已登记'
+                        WHEN del='1' THEN '取消体检'
+                      ELSE '' END
                     ) AS TJZT,
                     (CASE 
                         WHEN TJ_BGGL.BGZT = '0' THEN '追踪中'
@@ -813,7 +823,13 @@ def get_report_shth_sql():
         0 AS XMZQ,
         0 AS zzjd,
         '审核退回' AS zzzt,
-        (SELECT ZZXM FROM TJ_BGGL WHERE TJBH =TJ_TJDJB.TJBH)  AS lqry, 
+        (SELECT 
+        (CASE 
+            WHEN TJ_BGGL.ZZXM3 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2+','+TJ_BGGL.ZZXM3
+            WHEN TJ_BGGL.ZZXM3 IS NULL AND TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  
+            ELSE TJ_BGGL.ZZXM 
+            END) 
+         FROM TJ_BGGL WHERE TJBH =TJ_TJDJB.TJBH)  AS lqry, 
 		(CASE TJZT
 				WHEN '0' THEN '取消登记'
 				WHEN '1' THEN '已登记'
@@ -858,7 +874,8 @@ FROM TJ_TJDJB INNER JOIN TJ_TJDAB ON TJ_TJDJB.DABH = TJ_TJDAB.DABH
 def get_report_syth_sql():
     return '''
         SELECT 
-		0 AS XMZQ,0 AS zzjd,'审阅退回' AS zzzt,ZZXM AS lqry, 
+		0 AS XMZQ,0 AS zzjd,'审阅退回' AS zzzt,
+		(CASE WHEN TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  ELSE TJ_BGGL.ZZXM END) AS lqry, 
 		(CASE TJZT
 				WHEN '0' THEN '取消登记'
 				WHEN '1' THEN '已登记'
@@ -992,7 +1009,11 @@ def get_report_track_myself_sql(tstart,tend,yggh):
 					WHEN TJ_BGGL.ZZXM IS NOT NULL AND TJ_BGGL.BGZT ='0' AND TJ_BGGL.BGTH IS NULL AND (SELECT wjxm FROM T3 WHERE T3.TJBH=T1.TJBH) IS NULL THEN '追踪完成' 
 					ELSE '' END
 				) AS zzzt,
-        (CASE WHEN TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  ELSE TJ_BGGL.ZZXM END) AS lqry,
+           (CASE 
+            WHEN TJ_BGGL.ZZXM3 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2+','+TJ_BGGL.ZZXM3
+            WHEN TJ_BGGL.ZZXM3 IS NULL AND TJ_BGGL.ZZXM2 IS NOT NULL THEN TJ_BGGL.ZZXM+','+TJ_BGGL.ZZXM2  
+            ELSE TJ_BGGL.ZZXM 
+            END)  AS lqry,
         T1.*,
 				(CASE
 					WHEN TJ_BGGL.BGZT<>'0' THEN '' 

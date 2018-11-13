@@ -599,6 +599,23 @@ class CollectHistoryTable(TableWidget):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
 
+# 样本汇总
+class CollectHandoverSTable(TableWidget):
+
+    def __init__(self, heads, parent=None):
+        super(CollectHandoverSTable, self).__init__(heads, parent)
+
+    # 具体载入逻辑实现
+    def load_set(self, datas, heads=None):
+        # list 实现
+        for row_index, row_data in enumerate(datas):
+            # 插入一行
+            self.insertRow(row_index)
+            for col_index, col_value in enumerate(row_data):
+                item = QTableWidgetItem(col_value)
+                self.setItem(row_index, col_index, item)
+
+
 # 抽血交接记录表 汇总
 class CollectHandoverTable(TableWidget):
 
@@ -647,7 +664,16 @@ class CollectHandoverTable(TableWidget):
 
         self.setColumnWidth(0, 70)
         self.setColumnWidth(1, 70)
-        self.setColumnWidth(4, 60)
+        # self.setColumnWidth(2, 60)
+        self.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        # self.setColumnWidth(3, 80)
+        self.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        self.setColumnWidth(4, 40)
+        self.setColumnWidth(5, 70)
+        self.setColumnWidth(6, 80)
+        self.setColumnWidth(7, 70)
+        self.setColumnWidth(8, 80)
+        # self.horizontalHeader().setStretchLastSection(True)
 
     # 获取各状态数据
     def status(self):
@@ -2175,6 +2201,55 @@ class WhereSearchGroup(QGridLayout):
     def get_date_text(self):
         return self.s_date.jsrq.currentText()
 
+class WhereSearchFilmGroup(QGridLayout):
+
+    def __init__(self,diff=-3):
+        super(WhereSearchFilmGroup,self).__init__()
+
+        self.s_date = DateGroup(diff)
+        self.s_dwbh = TUintGroup({},{})
+        self.s_report_state = ReportStateGroup()
+
+        ###################基本信息  第一行##################################
+        self.addItem(self.s_date, 0, 0, 1, 3)
+
+        ###################基本信息  第二行##################################
+        self.addItem(self.s_dwbh, 1, 0, 1, 3)
+        self.addItem(self.s_report_state, 1, 3, 1, 2)
+
+        self.setHorizontalSpacing(10)  # 设置水平间距
+        self.setVerticalSpacing(10)  # 设置垂直间距
+        self.setContentsMargins(10, 10, 10, 10)  # 设置外间距
+        self.setColumnStretch(13, 1)  # 设置列宽，添加空白项的
+
+    @property
+    def date_range(self):
+        return self.s_date.get_date_range
+
+    @property
+    def where_dwmc(self):
+        return self.s_dwbh.where_dwmc
+
+    @property
+    def where_dwbh(self):
+        return self.s_dwbh.where_dwbh
+
+    @property
+    def where_bgzt(self):
+        return self.s_report_state.where_state2
+
+    @property
+    def where_bgzt_text(self):
+        return self.s_report_state.text
+
+    def addStates(self,states,is_check=False):
+        self.s_report_state.addStates(states)
+        if is_check:
+            self.s_report_state.setChecked()
+
+    def get_date_text(self):
+        return self.s_date.jsrq.currentText()
+
 # 快速检索组 体检编号、姓名、手机号码、身份证号
 class QuickSearchGroup(QGroupBox):
 
@@ -2411,8 +2486,6 @@ class UserBaseGroup(QVBoxLayout):
         self.lb_yzjys.setMinimumWidth(50)
         self.lb_yshys = Lable()         # 责任审核医生
         self.lb_yshys.setMinimumWidth(50)
-        self.btn_xjjy = QPushButton(Icon('小结建议'),'小结建议')
-        self.btn_zdbl = QPushButton(Icon('病历'), '重点病历')
         # 添加布局
         lt_suggest.addWidget(QLabel('实际总检：'))
         lt_suggest.addWidget(self.lb_sjzj)
@@ -2426,8 +2499,6 @@ class UserBaseGroup(QVBoxLayout):
         lt_suggest.addWidget(self.lb_yzjys)
         lt_suggest.addWidget(QLabel('责任审核：'))
         lt_suggest.addWidget(self.lb_yshys)
-        lt_suggest.addWidget(self.btn_xjjy)
-        lt_suggest.addWidget(self.btn_zdbl)
         # lt_inspect.addStretch()                  #设置列宽，添加空白项的
         gp_suggest.setLayout(lt_suggest)
         ########################报告信息#####################################
@@ -2435,8 +2506,6 @@ class UserBaseGroup(QVBoxLayout):
         self.lb_bgsy = Lable()          # 审阅
         self.lb_bgdy = Lable()          # 打印
         self.lb_bgzl = Lable()          # 整理
-        self.btn_browse = QPushButton(Icon('报告'),'报告浏览')          # 查看
-        self.btn_down = QPushButton(Icon('报告'),'报告下载')          # 下载
         # 添加布局
         lt_report.addWidget(QLabel('报告追踪：'))
         lt_report.addWidget(self.lb_bgzz)
@@ -2447,8 +2516,6 @@ class UserBaseGroup(QVBoxLayout):
         lt_report.addWidget(QLabel('报告整理：'))
         lt_report.addWidget(self.lb_bgzl)
         lt_report.addSpacing(20)
-        lt_report.addWidget(self.btn_browse)
-        lt_report.addWidget(self.btn_down)
         gp_report.setLayout(lt_report)
         self.addWidget(gp_user)
         self.addWidget(gp_inspect)

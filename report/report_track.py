@@ -104,8 +104,8 @@ class ReportTrack(ReportTrackUI):
             item7 = menu.addAction(Icon("编辑"), "修改备注")
             item8 = menu.addAction(Icon("报告中心"), "浏览HTML报告")
             item9 = menu.addAction(Icon("报告中心"), "浏览PDF报告")
-            item10 = menu.addAction(Icon("发送"), "发送医生总检")
-            item11 = menu.addAction(Icon("发送"), "发送护理审阅")
+            # item10 = menu.addAction(Icon("发送"), "发送医生总检")
+            # item11 = menu.addAction(Icon("发送"), "发送护理审阅")
             action = menu.exec_(self.table_track.mapToGlobal(pos))
             # 获取变量
             tjbh = self.table_track.getCurItemValueOfKey('tjbh')
@@ -230,9 +230,10 @@ class ReportTrack(ReportTrackUI):
                     # 优先打开 新系统生成的
                     result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
                     if result:
-                        filename = os.path.join(result.bglj, '%s.pdf' % tjbh).replace('D:/activefile/', '')
-                        url = gol.get_value('api_pdf_new_show') % filename
-                        webbrowser.open(url)
+                        if result.bglj:
+                            filename = os.path.join(result.bglj, '%s.pdf' % tjbh).replace('D:/activefile/', '')
+                            url = gol.get_value('api_pdf_new_show') % filename
+                            webbrowser.open(url)
                     else:
                         try:
                             self.cxk_session = gol.get_value('cxk_session')
@@ -250,37 +251,37 @@ class ReportTrack(ReportTrackUI):
                     mes_about(self,'该顾客报告还未被审阅过，不能查看！')
                     return
 
-            elif action == item10:
-                if zzzt in ['审核退回','审阅退回']:
-                    # 取消审核退回
-                    sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
-                    sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
-                    try:
-                        self.session.execute(sql1)
-                        self.session.execute(sql2)
-                        self.session.commit()
-                    except Exception as e:
-                        self.session.rollback()
-                        mes_about(self,'处理失败，错误信息：%s' %e)
-
-                else:
-                    mes_about(self, "只有审阅退回/审核退回的报告才能使用此功能！")
-
-            elif action == item11:
-                if zzzt in ['审核退回', '审阅退回']:
-                    # 取消审阅
-                    sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
-                    sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
-                    try:
-                        self.session.execute(sql1)
-                        self.session.execute(sql2)
-                        self.session.commit()
-                    except Exception as e:
-                        self.session.rollback()
-                        mes_about(self, '处理失败，错误信息：%s' % e)
-
-                else:
-                    mes_about(self, "只有审阅退回/审核退回的报告才能使用此功能！")
+            # elif action == item10:
+            #     if zzzt in ['审核退回','审阅退回']:
+            #         # 取消审核退回
+            #         sql1 = "UPDATE TJ_TJDJB SET TJZT='4',SUMOVER='0' WHERE TJBH='%s';" % tjbh
+            #         sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
+            #         try:
+            #             self.session.execute(sql1)
+            #             self.session.execute(sql2)
+            #             self.session.commit()
+            #         except Exception as e:
+            #             self.session.rollback()
+            #             mes_about(self,'处理失败，错误信息：%s' %e)
+            #
+            #     else:
+            #         mes_about(self, "只有审阅退回/审核退回的报告才能使用此功能！")
+            #
+            # elif action == item11:
+            #     if zzzt in ['审核退回', '审阅退回']:
+            #         # 取消审阅
+            #         sql1 = "UPDATE TJ_TJDJB SET TJZT='7' WHERE TJBH='%s';" % tjbh
+            #         sql2 = "UPDATE TJ_BGGL SET BGZT='0',BGTH=NULL,SYGH=NULL,SYXM=NULL,SHRQ=NULL,SYBZ=NULL WHERE TJBH='%s';" % tjbh
+            #         try:
+            #             self.session.execute(sql1)
+            #             self.session.execute(sql2)
+            #             self.session.commit()
+            #         except Exception as e:
+            #             self.session.rollback()
+            #             mes_about(self, '处理失败，错误信息：%s' % e)
+            #
+            #     else:
+            #         mes_about(self, "只有审阅退回/审核退回的报告才能使用此功能！")
 
     # 手动接收结果
     def on_btn_receive_click(self):
@@ -430,7 +431,7 @@ class ReportTrack(ReportTrackUI):
                 sql = get_report_syth_sql()
 
 
-        # print(sql)
+        print(sql)
         # 执行查询
         self.execQuery(sql)
         # 进度条
@@ -604,72 +605,137 @@ class ReportTrack(ReportTrackUI):
             pass
 
     # 追踪任务领取
-    def on_btn_task_click(self,is_two=True):
+    def on_btn_task_click(self,flag:int,ygxx:dict):
         tmp = []
         rows = self.table_track.isSelectRows()
         button = mes_warn(self, "您确认领取当前选择的 %s 份体检报告？" %len(rows))
         if button != QMessageBox.Yes:
             return
-        if is_two:
-            text, ok = QInputDialog.getText(self, '明州体检', '请输入另一位同事工号：', QLineEdit.Normal, '')
-            if ok and text:
-                result = self.session.query(MT_TJ_YGDM).filter(MT_TJ_YGDM.yggh == str(text)).scalar()
-                if result:
-                    other_yggh = str(text)
-                    other_ygxm = str2(result.ygxm)
-                    # 双人领取
-                    for row in rows:
-                        if not self.table_track.getItemValueOfKey(row, 'lqry'):
-                            tjbh = self.table_track.getItemValueOfKey(row, 'tjbh')
-                            jlnr = self.table_track.getItemValueOfKey(row, 'wjxm')
-                            data_obj = {
-                                'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
-                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                                'jlnr': jlnr,'bz': '双人追踪'
-                                }
-                            data_obj2 = {
-                                'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
-                                'czgh': str(text), 'czxm':other_ygxm , 'czqy': self.login_area,
-                                'jlnr': jlnr,'bz': '双人追踪'
-                                }
-                            tmp.append(data_obj)
-                            tmp.append(data_obj2)
-                            self.table_track.item(row, 2).setText('追踪中')
-                            self.table_track.item(row, 3).setText('%s,%s' %(self.login_name,other_ygxm))
-                            #
-                            result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
-                            if result:
-                                self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
-                                    {
-                                        MT_TJ_BGGL.zzxm: self.login_name,
-                                        MT_TJ_BGGL.zzgh: self.login_id,
-                                        MT_TJ_BGGL.zzxm2: other_ygxm,
-                                        MT_TJ_BGGL.zzgh2: other_yggh,
-                                        MT_TJ_BGGL.zzrq: cur_datetime(),
-                                        MT_TJ_BGGL.bgzt: '0',
-                                    }
-                                )
-                            else:
-                                self.session.bulk_insert_mappings(MT_TJ_BGGL, [
-                                    {'tjbh': tjbh, 'bgzt': '0', 'zzxm': self.login_name, 'zzgh': self.login_id,'zzxm2': other_ygxm, 'zzgh2': other_yggh,'zzrq': cur_datetime()}
-                                ])
-                            self.session.commit()
+        if flag:
+            for row in rows:
+                if not self.table_track.getItemValueOfKey(row, 'lqry'):
+                    # 临时变量
+                    ygxm_tmp = []
+                    zzxm2 = None
+                    zzgh2 = None
+                    zzxm3 = None
+                    zzgh3 = None
+                    tjbh = self.table_track.getItemValueOfKey(row, 'tjbh')
+                    jlnr = self.table_track.getItemValueOfKey(row, 'wjxm')
+                    data_obj = {
+                        'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
+                        'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                        'jlnr': jlnr, 'bz': '多人追踪'
+                    }
+                    ygxm_tmp.append(self.login_name)
+                    tmp.append(data_obj)
+                    for i,yggh in enumerate(list(ygxx.keys())):
+                        if i==0:
+                            zzxm2 = ygxx[yggh]
+                            zzgh2 = yggh
+                        elif i == 1:
+                            zzxm3 = ygxx[yggh]
+                            zzgh3 = yggh
+                        data_obj = {
+                            'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
+                            'czgh': yggh, 'czxm': ygxx[yggh], 'czqy': self.login_area,
+                            'jlnr': jlnr, 'bz': '多人追踪'}
+                        ygxm_tmp.append(ygxx[yggh])
+                        tmp.append(data_obj)
+                    self.table_track.item(row, 2).setText('追踪中')
+                    self.table_track.item(row, 3).setText(','.join(ygxm_tmp))
+                    # 更新数据库
+                    result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
+                    if result:
+                        self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                            {
+                                MT_TJ_BGGL.zzxm: self.login_name,
+                                MT_TJ_BGGL.zzgh: self.login_id,
+                                MT_TJ_BGGL.zzxm2: zzxm2,
+                                MT_TJ_BGGL.zzgh2: zzgh2,
+                                MT_TJ_BGGL.zzxm3: zzxm3,
+                                MT_TJ_BGGL.zzgh3: zzgh3,
+                                MT_TJ_BGGL.zzrq: cur_datetime(),
+                                MT_TJ_BGGL.bgzt: '0',
+                            }
+                        )
+                    else:
+                        self.session.bulk_insert_mappings(MT_TJ_BGGL, [
+                            {'tjbh': tjbh, 'bgzt': '0', 'zzxm': self.login_name, 'zzgh': self.login_id,'zzxm2': zzxm2, 'zzgh2': zzgh2,'zzxm3': zzxm3, 'zzgh3': zzgh3,'zzrq': cur_datetime()}
+                        ])
+                    self.session.commit()
 
-                            if len(rows) == 1:
-                                mes_about(self, '领取成功！')
-                    if tmp:
-                        try:
-                            self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
-                            self.session.commit()
-                            if len(rows) > 1:
-                                mes_about(self, '领取成功！')
-                        except Exception as e:
-                            self.session.rollback()
-                            mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
-                else:
-                    mes_about(self,'该工号不存在，请确认后重新输入！')
-            else:
-                pass
+                    if len(rows) == 1:
+                        mes_about(self, '领取成功！')
+            if tmp:
+                try:
+                    self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
+                    self.session.commit()
+                    if len(rows) > 1:
+                        mes_about(self, '领取成功！')
+                except Exception as e:
+                    self.session.rollback()
+                    mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
+            ##########################双人的 变成多人后 弃用###########################################
+            # text, ok = QInputDialog.getText(self, '明州体检', '请输入另一位同事工号：', QLineEdit.Normal, '')
+            # if ok and text:
+            #     result = self.session.query(MT_TJ_YGDM).filter(MT_TJ_YGDM.yggh == str(text)).scalar()
+            #     if result:
+            #         other_yggh = str(text)
+            #         other_ygxm = str2(result.ygxm)
+            #         # 双人领取
+            #         for row in rows:
+            #             if not self.table_track.getItemValueOfKey(row, 'lqry'):
+            #                 tjbh = self.table_track.getItemValueOfKey(row, 'tjbh')
+            #                 jlnr = self.table_track.getItemValueOfKey(row, 'wjxm')
+            #                 data_obj = {
+            #                     'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
+            #                     'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+            #                     'jlnr': jlnr,'bz': '双人追踪'
+            #                     }
+            #                 data_obj2 = {
+            #                     'jllx': '0030', 'jlmc': '报告追踪', 'tjbh': tjbh, 'mxbh': '',
+            #                     'czgh': str(text), 'czxm':other_ygxm , 'czqy': self.login_area,
+            #                     'jlnr': jlnr,'bz': '双人追踪'
+            #                     }
+            #                 tmp.append(data_obj)
+            #                 tmp.append(data_obj2)
+            #                 self.table_track.item(row, 2).setText('追踪中')
+            #                 self.table_track.item(row, 3).setText('%s,%s' %(self.login_name,other_ygxm))
+            #                 #
+            #                 result = self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).scalar()
+            #                 if result:
+            #                     self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+            #                         {
+            #                             MT_TJ_BGGL.zzxm: self.login_name,
+            #                             MT_TJ_BGGL.zzgh: self.login_id,
+            #                             MT_TJ_BGGL.zzxm2: other_ygxm,
+            #                             MT_TJ_BGGL.zzgh2: other_yggh,
+            #                             MT_TJ_BGGL.zzrq: cur_datetime(),
+            #                             MT_TJ_BGGL.bgzt: '0',
+            #                         }
+            #                     )
+            #                 else:
+            #                     self.session.bulk_insert_mappings(MT_TJ_BGGL, [
+            #                         {'tjbh': tjbh, 'bgzt': '0', 'zzxm': self.login_name, 'zzgh': self.login_id,'zzxm2': other_ygxm, 'zzgh2': other_yggh,'zzrq': cur_datetime()}
+            #                     ])
+            #                 self.session.commit()
+            #
+            #                 if len(rows) == 1:
+            #                     mes_about(self, '领取成功！')
+            #         if tmp:
+            #             try:
+            #                 self.session.bulk_insert_mappings(MT_TJ_CZJLB, tmp)
+            #                 self.session.commit()
+            #                 if len(rows) > 1:
+            #                     mes_about(self, '领取成功！')
+            #             except Exception as e:
+            #                 self.session.rollback()
+            #                 mes_about(self, '插入 TJ_CZJLB 记录失败！错误代码：%s' % e)
+            #     else:
+            #         mes_about(self,'该工号不存在，请确认后重新输入！')
+            # else:
+            #     pass
         else:
             for row in rows:
                 if not self.table_track.getItemValueOfKey(row,'lqry'):
@@ -876,7 +942,6 @@ class ResultReceiveDialog(Dialog):
     def on_thread_exit(self,status:bool,error:str):
         self.on_btn_stop_click()
         self.result_receive_thread = None
-
         mes_about(self,error)
 
     def closeEvent(self, QCloseEvent):

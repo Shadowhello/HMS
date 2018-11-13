@@ -1,5 +1,5 @@
 # 首页信息
-pdf_html_home_page= '''
+pdf_html_home_page_new= '''
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -96,8 +96,8 @@ pdf_html_home_page= '''
 
 # '''
 
-# 首页信息：历史
-pdf_html_home_page2= '''
+# 首页信息
+pdf_html_home_page= '''
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -109,7 +109,8 @@ pdf_html_home_page2= '''
 <body style="background-image:url(${user['head_pic']});
              background-repeat:no-repeat;
              background-size:1240px 1680px;
-             background-position:top center;">
+             background-position:top center;"
+             ">
 <div class="sum">
     <div>
         <div class="user">
@@ -120,23 +121,29 @@ pdf_html_home_page2= '''
                         <td colspan="3" class="user_td_value2"><img src=${user['tm']} /></td>
                     </tr>
                     <tr>
-                        <td class="user_td_label">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;</td>
+                        <td class="user_td_label">姓&nbsp;　&nbsp;　&nbsp;名&nbsp;</td>
                         <td class="user_td_value">${user['xm']}</td>
-                        <td class="user_td_label">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别&nbsp;&nbsp;</td>
+                        <td class="user_td_label">性&nbsp;　&nbsp;　&nbsp;别&nbsp;</td>
                         <td class="user_td_value">${user['xb']}</td>
                     </tr>
                     <tr>
-                        <td class="user_td_label">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄&nbsp;&nbsp;</td>
+                        <td class="user_td_label">年&nbsp;　&nbsp;　&nbsp;龄&nbsp;</td>
                         <td class="user_td_value">${user['nl']}</td>
-                        <td class="user_td_label">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话&nbsp;&nbsp;</td>
+                        <td class="user_td_label">电&nbsp;　&nbsp;　&nbsp;话&nbsp;</td>
                         <td class="user_td_value">${user['sjhm']}</td>
                     </tr>
                     <tr>
-                        <td class="user_td_label">体&nbsp;检&nbsp;日&nbsp;期 &nbsp;<hr class="line2" /></td>
-                        <td colspan="3" class="user_td_value">${user['qdrq']}</td>
+                        <td class="user_td_label">体&nbsp;检&nbsp;日&nbsp;期&nbsp;</td>
+                        % if user['film']:
+                            <td class="user_td_value">${user['qdrq']}</td>
+                            <td class="user_td_label">胶&nbsp;　&nbsp;　&nbsp;片&nbsp;</td>
+                            <td class="user_td_value"><img src=${user['film']} /></td>  
+                        % else:
+                            <td colspan="3" class="user_td_value">${user['qdrq']}</td>
+                        % endif   
                     </tr>
                     <tr>
-                        <td class="user_td_label">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位&nbsp;&nbsp;</td>
+                        <td class="user_td_label">单&nbsp;　&nbsp;　&nbsp;位&nbsp;</td>
                         <td colspan="3" class="user_td_value">${user['dwmc']}</td>
                     </tr>
                 </table>
