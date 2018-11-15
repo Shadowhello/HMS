@@ -1716,3 +1716,11 @@ WHERE [TJ_TJJLMXB].tjbh = %(tjbh_1)s AND [TJ_TJJLMXB].sfzh = %(sfzh_1)s AND [TJ_
 [2018-11-15 10:12:00] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
 [2018-11-15 10:12:00] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
 [2018-11-15 10:12:00] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-11-15 10:50:31] INFO [utils.config_log:23] 程序启动......
+[2018-11-15 10:50:31] INFO [utils.config_log:25] 读取配置(mztj.ini)文件成功
+[2018-11-15 10:50:31] INFO [utils.config_log:27] 读取配置(parse.ini)文件成功
+[2018-11-15 10:50:31] INFO [utils.config_log:29] 读取配置(custom.ini)文件成功
+[2018-11-15 10:50:31] INFO [utils.config_log:31] 读取配置(version.ini)文件成功
+[2018-11-15 10:50:31] INFO [utils.config_log:33] 读取配置(database.ini)文件成功
+[2018-11-15 10:50:41] INFO [utils.config_log:188] 写入配置(custom.ini)文件成功
+[2018-11-15 10:50:41] INFO [utils.config_log:189] 用户：管理员(BSSA) 登陆成功！
