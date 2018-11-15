@@ -94,13 +94,10 @@ class ReportEquip(ReportEquipUI):
         url = gol.get_value('api_equip_show','')
         if url:
             self.wv_report_equip.load(url %fpath)
-
             # self.wv_report_equip.show()
 
         else:
             mes_about(self,'未配置：api_equip_show 参数！')
-
-
 
     # 快速检索
     def on_quick_search(self, p1_str, p2_str):

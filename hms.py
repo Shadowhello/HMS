@@ -87,12 +87,7 @@ def start_run():
 
     cef.Shutdown()
 
-def get_system():
-    system = platform.platform()
-    if 'Windows-7' in system:
-        return 'win7'
-    else:
-        return 'winxp'
+
 
 
 def run_exe(module,function):

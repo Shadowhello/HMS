@@ -3,6 +3,7 @@ from smb.SMBHandler import SMBHandler
 import urllib.request
 from utils import gol
 from string import Template
+import platform
 from collections import OrderedDict
 # funcName = sys._getframe().f_back.f_code.co_name  #获取调用函数名
 # lineNumber = sys._getframe().f_back.f_lineno      #获取行号
@@ -67,6 +68,21 @@ EquipActionName={
 def desktop():
     key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders',)
     return winreg.QueryValueEx(key, "Desktop")[0]
+
+def get_system():
+    # 根据系统版本 不靠谱
+    # system = platform.platform()
+    # if 'Windows-7' in system:
+    #     return 'win7'
+    # elif 'Windows-XP' in system:
+    #     return 'winxp'
+    # else:
+    #     return False
+    # 根据python版本 3.4 XP  3.5及以上win7
+    if '3.4' in platform.python_version():
+        return 'winxp'
+    else:
+        return 'win7'
 
 def hostname():
     try:

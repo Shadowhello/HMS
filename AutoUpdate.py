@@ -108,16 +108,14 @@ class AutoUpdateUI(QWidget):
 
     def on_thread_exit(self):
         self.update_thread = None
+        dirname, filename = os.path.split(os.path.abspath(sys.argv[0]))
+        version_name = os.path.join(dirname, 'version.ini')
         # 更新版本信息
         update_version(version_name, self.version)
         mes_about(self,'更新完成！')
         self.close()
-        # 启动主进程
-        # print(main_process_name)
-        # process = QProcess()
-        # process.start(main_process_name)
 
-# 打印线程
+# 线程
 class AutoUpdateThread(QThread):
 
     signalCur = pyqtSignal(bool,str)        # 处理过程：成功/失败

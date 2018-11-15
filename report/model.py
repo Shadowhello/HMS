@@ -618,6 +618,7 @@ def get_report_print_sql():
                     TJ_TJDAB.SFZH,
                     TJ_TJDAB.SJHM,
                     substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) as QDRQ,
+                    (select YGXM from TJ_YGDM where YGGH=TJ_TJDJB.ywy ) as YWY,
                     substring(convert(char,(CASE WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN TJ_TJDJB.BGRQ ELSE TJ_BGGL.DYRQ END ),120),1,10) AS DYRQ,
                     (CASE 
                         WHEN TJ_BGGL.DYXM IS NULL AND dybj='1' THEN (select ygxm from tj_ygdm where yggh=TJ_TJDJB.CPAINTER ) 
@@ -714,6 +715,7 @@ def get_report_print2_sql():
                     TJ_TJDAB.SFZH,
                     TJ_TJDAB.SJHM,
                     substring(convert(char,TJ_TJDJB.QDRQ,120),1,10) as QDRQ,
+                    (select YGXM from TJ_YGDM where YGGH=TJ_TJDJB.ywy ) as YWY,
                     substring(convert(char,(CASE WHEN TJ_BGGL.DYRQ IS NULL AND dybj='1' THEN TJ_TJDJB.BGRQ ELSE TJ_BGGL.DYRQ END ),120),1,10) AS DYRQ,
                     (CASE 
                         WHEN TJ_BGGL.DYXM IS NULL AND dybj='1' THEN (select ygxm from tj_ygdm where yggh=TJ_TJDJB.CPAINTER ) 

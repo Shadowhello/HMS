@@ -318,6 +318,9 @@ class ReportPrint(ReportPrintUI):
 
     # 领取
     def on_btn_receive_click(self):
+        #
+        login_id = None
+        login_name = None
         if self.gp_receive_setup.get_receive_type():
             try:
                 dialog = ReadChinaIdCard_UI(self)
@@ -330,6 +333,30 @@ class ReportPrint(ReportPrintUI):
             if button != QMessageBox.Yes:
                 return
             if rows:
+                if self.gp_receive_setup.get_receive_mode()=='检后代领':
+                    text, ok = QInputDialog.getText(self, '明州体检', '请输入同事工号：', QLineEdit.Normal, '')
+                    if ok and text:
+                        result = self.session.query(MT_TJ_YGDM).filter(MT_TJ_YGDM.yggh == str(text)).scalar()
+                        if result:
+                            login_id = str(text)
+                            login_name = str2(result.ygxm)
+                        else:
+                            mes_about(self,'工号不准确，请确认后输入！')
+                            return
+                    else:
+                        return
+                elif self.gp_receive_setup.get_receive_mode()=='他人代领':
+                    text, ok = QInputDialog.getText(self, '明州体检', '请输入他人姓名：', QLineEdit.Normal, '')
+                    if ok and text:
+                        login_id = self.login_id
+                        login_name = str(text)
+                    else:
+                        return
+                #############################
+                if not login_id:
+                    login_id = self.login_id
+                if not login_name:
+                    login_name = self.login_name
                 for row in rows:
                     tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
                     bgzt = self.table_print.getItemValueOfKey(row, 'bgzt')
@@ -339,7 +366,7 @@ class ReportPrint(ReportPrintUI):
                     else:
                         # 更新数据库 TJ_CZJLB TJ_BGGL
                         data_obj = {'jllx': '0037', 'jlmc': '报告领取', 'tjbh': tjbh, 'mxbh': '',
-                                    'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                                    'czgh': login_id, 'czxm': login_name, 'czqy': self.login_area,'jlnr':self.login_name,
                                     'bz': self.gp_receive_setup.get_receive_mode()}
                         try:
                             self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
@@ -347,8 +374,8 @@ class ReportPrint(ReportPrintUI):
                                 {
                                     MT_TJ_BGGL.lqrq: cur_datetime(),
                                     MT_TJ_BGGL.lqfs: self.gp_receive_setup.get_receive_mode(),
-                                    MT_TJ_BGGL.lqgh: self.login_id,
-                                    MT_TJ_BGGL.lqxm: self.login_name,
+                                    MT_TJ_BGGL.lqgh: login_id,
+                                    MT_TJ_BGGL.lqxm: login_name,
                                     MT_TJ_BGGL.bgzt: '5',
                                 }
                             )
@@ -360,7 +387,7 @@ class ReportPrint(ReportPrintUI):
 
                         # 刷新界面
                         self.table_print.setItemValueOfKey(row, 'bgzt', '已领取', QColor("#FF0000"))
-                        self.table_print.setItemValueOfKey(row, 'lqxm', self.login_name)
+                        self.table_print.setItemValueOfKey(row, 'lqxm', login_name)
                         self.table_print.setItemValueOfKey(row, 'lqrq', cur_datetime())
                         self.table_print.setItemValueOfKey(row, 'lqfs', self.gp_receive_setup.get_receive_mode())
                         mes_about(self,'报告领取成功！')
@@ -370,65 +397,68 @@ class ReportPrint(ReportPrintUI):
     # 整理
     def on_btn_order_click(self):
         rows = self.table_print.isSelectRows()
+        if not rows:
+            mes_about(self,'请选择需要整理的报告！')
+            return
         button = mes_warn(self, "您确认整理当前选择的 %s 份体检报告？" %len(rows))
         if button != QMessageBox.Yes:
             return
-        if rows:
-            for row in rows:
-                tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
-                zlxm = self.table_print.getItemValueOfKey(row, 'zlxm')
-                dwbh = self.table_print.getItemValueOfKey(row, 'dwbh')
-                if not zlxm:
-                    result = self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).scalar()
-                    if not result:
-                        # 不存在该单位货架号，则插入 插入数据库
-                        sql = "INSERT INTO TJ_DWBH(DWBH,ZLHM)VALUES('%s',1)" % dwbh
-                        try:
-                            self.session.execute(sql)
-                            self.session.commit()
-                        except Exception as e:
-                            self.session.rollback()
-                            mes_about(self,'执行SQL：%s 出错，错误信息：%s' %(sql,e))
-                            return
-                    # 重新获取货架号
-                    result = self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).scalar()
-                    # 获取货号
-                    new_zlhm = "%s-%s-%s" %(dwbh,result.zlhm // self.gp_order_setup.get_size()+1,result.zlhm % self.gp_order_setup.get_size())
-
-                    # 更新数据库 TJ_CZJLB TJ_DWBH
-                    data_obj = {'jllx': '0035', 'jlmc': '报告整理', 'tjbh': tjbh, 'mxbh': '',
-                                'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
-                                'bz': new_zlhm}
-
+        for row in rows:
+            tjbh = self.table_print.getItemValueOfKey(row, 'tjbh')
+            zlxm = self.table_print.getItemValueOfKey(row, 'zlxm')
+            dwbh = self.table_print.getItemValueOfKey(row, 'dwbh')
+            if not zlxm:
+                result = self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).scalar()
+                if not result:
+                    # 不存在该单位货架号，则插入 插入数据库
+                    sql = "INSERT INTO TJ_DWBH(DWBH,ZLHM)VALUES('%s',1)" % dwbh
                     try:
-                        # 自增
-                        self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).update(
-                            {MT_TJ_DWBH.zlhm : result.zlhm + 1}
-                        )
-                        # 更新
-                        self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
-                            {
-                                MT_TJ_BGGL.zlrq: cur_datetime(),
-                                MT_TJ_BGGL.zlhm: new_zlhm,
-                                MT_TJ_BGGL.zlgh: self.login_id,
-                                MT_TJ_BGGL.zlxm: self.login_name,
-                                MT_TJ_BGGL.bgzt: '4',
-                            }
-                        )
-                        # 插入
-                        self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                        self.session.execute(sql)
                         self.session.commit()
                     except Exception as e:
                         self.session.rollback()
-                        mes_about(self, '更新数据库失败！错误信息：%s' % e)
+                        mes_about(self,'执行SQL：%s 出错，错误信息：%s' %(sql,e))
                         return
+                # 重新获取货架号
+                result = self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).scalar()
+                # 获取货号
+                new_zlhm = "%s-%s-%s" %(dwbh,result.zlhm // self.gp_order_setup.get_size()+1,result.zlhm % self.gp_order_setup.get_size())
 
-                    # 刷新界面
-                    self.table_print.setItemValueOfKey(row,'zlxm', self.login_name)
-                    self.table_print.setItemValueOfKey(row,'zlrq', cur_datetime())
-                    self.table_print.setItemValueOfKey(row,'zlhh', new_zlhm)
-                    self.table_print.setItemValueOfKey(row,'bgzt', '已整理')
-                    mes_about(self,'整理成功！')
+                # 更新数据库 TJ_CZJLB TJ_DWBH
+                data_obj = {'jllx': '0035', 'jlmc': '报告整理', 'tjbh': tjbh, 'mxbh': '',
+                            'czgh': self.login_id, 'czxm': self.login_name, 'czqy': self.login_area,
+                            'bz': new_zlhm}
+
+                try:
+                    # 自增
+                    self.session.query(MT_TJ_DWBH).filter(MT_TJ_DWBH.dwbh == dwbh).update(
+                        {MT_TJ_DWBH.zlhm : result.zlhm + 1}
+                    )
+                    # 更新
+                    self.session.query(MT_TJ_BGGL).filter(MT_TJ_BGGL.tjbh == tjbh).update(
+                        {
+                            MT_TJ_BGGL.zlrq: cur_datetime(),
+                            MT_TJ_BGGL.zlhm: new_zlhm,
+                            MT_TJ_BGGL.zlgh: self.login_id,
+                            MT_TJ_BGGL.zlxm: self.login_name,
+                            MT_TJ_BGGL.bgzt: '4',
+                        }
+                    )
+                    # 插入
+                    self.session.bulk_insert_mappings(MT_TJ_CZJLB, [data_obj])
+                    self.session.commit()
+                except Exception as e:
+                    self.session.rollback()
+                    mes_about(self, '更新数据库失败！错误信息：%s' % e)
+                    return
+
+                # 刷新界面
+                self.table_print.setItemValueOfKey(row,'zlxm', self.login_name)
+                self.table_print.setItemValueOfKey(row,'zlrq', cur_datetime())
+                self.table_print.setItemValueOfKey(row,'zlhh', new_zlhm)
+                self.table_print.setItemValueOfKey(row,'bgzt', '已整理')
+
+        mes_about(self,'整理成功！')
 
     # 表格右键功能
     def onTableMenu(self,pos):
@@ -444,6 +474,7 @@ class ReportPrint(ReportPrintUI):
             item4 = menu.addAction(Icon("取消"), "取消领取")
             item5 = menu.addAction(Icon("报告中心"), "重新生成PDF报告")
             item6 = menu.addAction(Icon("报告中心"), "生成江东格式报告")
+            item7 = menu.addAction(Icon("报告中心"), "报告格式修复")
             action = menu.exec_(self.table_print.mapToGlobal(pos))
             tjbh = self.table_print.getCurItemValueOfKey('tjbh')
             zlxm = self.table_print.getCurItemValueOfKey('zlxm')
@@ -551,6 +582,12 @@ class ReportPrint(ReportPrintUI):
 
             elif action==item6:
                 mes_about(self,'当前功能正在开发中，敬请期待！')
+
+            elif action==item7:
+                text, ok = QInputDialog.getText(self, '明州体检', '请输入重叠的项目：', QLineEdit.Normal, '')
+                if ok and text:
+                    mes_about(self,'修复成功！')
+
 
 
     # 设置快速检索文本

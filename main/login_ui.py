@@ -67,6 +67,12 @@ class Login_UI(QDialog):
         self.is_equip=QCheckBox("进入设备接口")
         self.is_equip.setStyleSheet(self.login_font)
 
+        # 版本号
+        self.lb_version = QLabel(self)
+        self.lb_version.setText('当前版本：%s' %str(gol.get_value('system_version', '读取失败')))
+        self.lb_version.setStyleSheet(self.login_font)
+        self.lb_version.setGeometry(QRect(400, 360, 100, 30))
+
         if gol.get_value('login_auto_record',0)==0:
             self.is_rem.setChecked(False)
         else:

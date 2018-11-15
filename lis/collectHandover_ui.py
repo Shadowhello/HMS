@@ -56,9 +56,12 @@ class CollectHandover_UI(Widget):
         lt_middle = QHBoxLayout()
         ############ 中间局 ########################
         self.collect_sum_cols = OrderedDict([
-                                ("ybzt", "状态"),
-                                ("SGYS", "试管"),
-                                ("SGSL", "数量")
+                                ("sgys", "试管"),
+                                ("cjsl", "总采集"),
+                                ("djj", "待交接"),
+                                ("yjj", "已交接"),
+                                ("dqs", "待签收"),
+                                ("yqs", "已签收")
                             ])
         self.collect_cols = OrderedDict([
                                 ("QSSJ", "开始时间"),
@@ -87,7 +90,7 @@ class CollectHandover_UI(Widget):
         self.gp_middle_left.setLayout(lt_middle_left)
         # 交接签收
         self.table_handover_master = CollectHandoverTable(self.collect_cols)
-        self.gp_middle_middle = QGroupBox('样本交接签收')
+        self.gp_middle_middle = QGroupBox('样本交接签收明细')
         lt_middle_middle = QVBoxLayout()
         lt_middle_middle.addWidget(self.table_handover_master)
         self.gp_middle_middle.setLayout(lt_middle_middle)
@@ -139,5 +142,5 @@ class CollectHandover_UI(Widget):
         # 添加主布局
         lt_main.addLayout(lt_top)
         lt_main.addLayout(lt_middle)
-        lt_main.addLayout(lt_bottom)
+        # lt_main.addLayout(lt_bottom)
         self.setLayout(lt_main)

@@ -607,16 +607,21 @@ class CollectHandoverSTable(TableWidget):
 
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
-        # list 实现
         for row_index, row_data in enumerate(datas):
-            # 插入一行
-            self.insertRow(row_index)
-            for col_index, col_value in enumerate(row_data):
-                item = QTableWidgetItem(col_value)
+            self.insertRow(row_index)                # 插入一行
+            for col_index, col_name in enumerate(heads.keys()):
+                item = QTableWidgetItem(str(row_data[col_name]))
+                item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
 
+        self.setColumnWidth(1, 50)
+        self.setColumnWidth(2, 50)
+        self.setColumnWidth(3, 50)
+        self.setColumnWidth(4, 50)
+        self.setColumnWidth(5, 50)
 
-# 抽血交接记录表 汇总
+
+# 抽血交接签收
 class CollectHandoverTable(TableWidget):
 
     def __init__(self, heads, parent=None):
@@ -625,42 +630,66 @@ class CollectHandoverTable(TableWidget):
     # 具体载入逻辑实现
     def load_set(self, datas, heads=None):
         # 特殊变量
-        self.simple_jj_sum = OrderedDict()         # 待交接情况
-        self.simple_qs_sum = OrderedDict()         # 待签收情况
-        self.simple_done_sum = OrderedDict()       # 完成签收情况
-        self.simple_all = OrderedDict()            # 总体完成情况
+        # 2018-11-14 zhufd 设置表格数据
+        self.collect_simples = []
+        # self.simple_jj_sum = OrderedDict()         # 待交接情况
+        # self.simple_qs_sum = OrderedDict()         # 待签收情况
+        # self.simple_done_sum = OrderedDict()       # 完成签收情况
+        # self.simple_all = OrderedDict()            # 总体完成情况
         # 载入数据到表格
         for row_index, row_data in enumerate(datas):
             self.insertRow(row_index)  # 插入一行
+            self.collect_simple = {'sgys': None, 'cjsl': 0, 'djj': 0, 'yjj': 0, 'dqs': 0, 'yqs':0}
             for col_index, col_value in enumerate(row_data):
                 item = QTableWidgetItem(str2(col_value))
                 item.setTextAlignment(Qt.AlignCenter)
                 self.setItem(row_index, col_index, item)
                 # 额外处理 特殊需求
-                if col_index ==3:   #试管颜色
+                # 2018-11-14 新增
+                if col_index ==3:
+                    #试管颜色
+                    self.collect_simple['sgys'] = str2(col_value)
+                    # 采集数量
+                    self.collect_simple['cjsl'] = self.collect_simple['cjsl'] + row_data[4]
                     # 待交接
                     if not row_data[5]:
-                        # 判断是否已存在字典
-                        if str2(col_value) in list(self.simple_jj_sum.keys()):
-                            self.simple_jj_sum[str2(col_value)] = self.simple_jj_sum[str2(col_value)] + row_data[4]
-                        else:
-                            self.simple_jj_sum[str2(col_value)] = row_data[4]
+                        self.collect_simple['djj'] = self.collect_simple['djj'] + row_data[4]
                     # 已交接
                     else:
+                        self.collect_simple['yjj'] = self.collect_simple['yjj'] + row_data[4]
                         # 未签收
                         if not row_data[8]:
-                            # 判断是否已存在字典
-                            if str2(col_value) in list(self.simple_qs_sum.keys()):
-                                self.simple_qs_sum[str2(col_value)] = self.simple_qs_sum[str2(col_value)] + row_data[4]
-                            else:
-                                self.simple_qs_sum[str2(col_value)] = row_data[4]
+                            self.collect_simple['dqs'] = self.collect_simple['dqs'] + row_data[4]
                         # 已签收
                         else:
-                            # 判断是否已存在字典
-                            if str2(col_value) in list(self.simple_done_sum.keys()):
-                                self.simple_done_sum[str2(col_value)] = self.simple_done_sum[str2(col_value)] + row_data[4]
-                            else:
-                                self.simple_done_sum[str2(col_value)] = row_data[4]
+                            self.collect_simple['yqs'] = self.collect_simple['yqs'] + row_data[4]
+                    print(self.collect_simple)
+                    self.collect_simples.append(self.collect_simple)
+                # 历史修改
+                # if col_index ==3:   #试管颜色
+                #     # 待交接
+                #     if not row_data[5]:
+                #         # 判断是否已存在字典
+                #         if str2(col_value) in list(self.simple_jj_sum.keys()):
+                #             self.simple_jj_sum[str2(col_value)] = self.simple_jj_sum[str2(col_value)] + row_data[4]
+                #         else:
+                #             self.simple_jj_sum[str2(col_value)] = row_data[4]
+                #     # 已交接
+                #     else:
+                #         # 未签收
+                #         if not row_data[8]:
+                #             # 判断是否已存在字典
+                #             if str2(col_value) in list(self.simple_qs_sum.keys()):
+                #                 self.simple_qs_sum[str2(col_value)] = self.simple_qs_sum[str2(col_value)] + row_data[4]
+                #             else:
+                #                 self.simple_qs_sum[str2(col_value)] = row_data[4]
+                #         # 已签收
+                #         else:
+                #             # 判断是否已存在字典
+                #             if str2(col_value) in list(self.simple_done_sum.keys()):
+                #                 self.simple_done_sum[str2(col_value)] = self.simple_done_sum[str2(col_value)] + row_data[4]
+                #             else:
+                #                 self.simple_done_sum[str2(col_value)] = row_data[4]
 
         self.setColumnWidth(0, 70)
         self.setColumnWidth(1, 70)
@@ -677,7 +706,8 @@ class CollectHandoverTable(TableWidget):
 
     # 获取各状态数据
     def status(self):
-        return self.simple_jj_sum,self.simple_qs_sum,self.simple_done_sum
+        return self.collect_simples
+        # return self.simple_jj_sum,self.simple_qs_sum,self.simple_done_sum
 
 
 # 抽血交接记录表 详细
